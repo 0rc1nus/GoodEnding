@@ -8,7 +8,6 @@ import net.orcinus.goodending.GoodEnding;
 
 public class GoodEndingBlockTags {
 
-    public static final TagKey<Block> SWAMP_LOGS = registerBlockTag("swamp_logs");
     public static final TagKey<Block> CYPRESS_LOGS = registerBlockTag("cypress_logs");
     public static final TagKey<Block> CYPRESS_REPLACEABLES = registerBlockTag("cypress_replaceables");
 

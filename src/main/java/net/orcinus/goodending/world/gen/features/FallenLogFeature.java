@@ -54,7 +54,7 @@ public class FallenLogFeature extends Feature<FallenLogConfig> {
             }
             for (BlockPos pos : decorationPoses) {
                 if (world.getBlockState(pos.up()).isAir() && random.nextInt(5) == 0) {
-                    world.setBlockState(pos.up(), GoodEndingBlocks.PURPLE_MUSHROOM.getDefaultState(), 2);
+                    world.setBlockState(pos.up(), Blocks.BROWN_MUSHROOM.getDefaultState(), 2);
                 }
                 for (Direction directions : Direction.Type.HORIZONTAL) {
                     if (world.getBlockState(pos.offset(directions)).isAir() && random.nextInt(5) == 0) {

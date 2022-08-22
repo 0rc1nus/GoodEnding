@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_column",
-  "textures": {
-    "end": "goodending:block/swamp_log",
-    "side": "goodending:block/swamp_log"
-  }
-}

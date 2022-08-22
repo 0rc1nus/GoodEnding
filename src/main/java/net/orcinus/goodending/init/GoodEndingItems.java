@@ -18,11 +18,8 @@ public class GoodEndingItems {
     public static final Map<Identifier, Item> ITEMS = Maps.newLinkedHashMap();
 
     public static final Item DUCKWEED = registerItem("duckweed", new PlaceableOnWaterItem(GoodEndingBlocks.DUCKWEED, new Item.Settings().group(GoodEnding.TAB)));
-//    public static final Item SWAMP_BOAT = registerItem("swamp_boat", new GoodEndingBoatItem(false, GoodEndingBoatEntity.BoatType.SWAMP, new Item.Settings().maxCount(1).group(GoodEnding.TAB)));
 //    public static final Item CYPRESS_BOAT = registerItem("cypress_boat", new GoodEndingBoatItem(false, GoodEndingBoatEntity.BoatType.CYPRESS, new Item.Settings().maxCount(1).group(GoodEnding.TAB)));
-//    public static final Item SWAMP_CHEST_BOAT = registerItem("swamp_chest_boat", new GoodEndingBoatItem(true, GoodEndingBoatEntity.BoatType.SWAMP, new Item.Settings().maxCount(1).group(GoodEnding.TAB)));
 //    public static final Item CYPRESS_CHEST_BOAT = registerItem("cypress_chest_boat", new GoodEndingBoatItem(true, GoodEndingBoatEntity.BoatType.CYPRESS, new Item.Settings().maxCount(1).group(GoodEnding.TAB)));
-    public static final Item SWAMP_SIGN_ITEM = registerItem("swamp_sign", new SignItem(new Item.Settings().maxCount(16).group(GoodEnding.TAB), GoodEndingBlocks.SWAMP_SIGN, GoodEndingBlocks.SWAMP_WALL_SIGN));
     public static final Item CYPRESS_SIGN_ITEM = registerItem("cypress_sign", new SignItem(new Item.Settings().maxCount(16).group(GoodEnding.TAB), GoodEndingBlocks.CYPRESS_SIGN, GoodEndingBlocks.CYPRESS_WALL_SIGN));
     public static final Item FIREFLY_BOTTLE = registerItem("firefly_bottle", new FireflyBottleItem(new FabricItemSettings().maxCount(16).group(GoodEnding.TAB)));
 //    public static final Item MARSH_SPAWN_EGG = registerItem("marsh_spawn_egg", new SpawnEggItem(GoodEndingEntityTypes.MARSH, 3423006, 6979129, new Item.Settings().group(GoodEnding.TAB)));

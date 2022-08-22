@@ -23,19 +23,12 @@ public class GoodEndingClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(),
-                GoodEndingBlocks.PURPLE_MUSHROOM,
                 GoodEndingBlocks.CATTAIL,
                 GoodEndingBlocks.DUCKWEED,
-                GoodEndingBlocks.SWAMP_LEAVES,
-                GoodEndingBlocks.SWAMP_DOOR,
                 GoodEndingBlocks.CYPRESS_DOOR,
                 GoodEndingBlocks.CYPRESS_TRAPDOOR,
-                GoodEndingBlocks.SWAMP_TRAPDOOR,
-                GoodEndingBlocks.SWAMP_SAPLING,
                 GoodEndingBlocks.CYPRESS_SAPLING,
-                GoodEndingBlocks.POTTED_SWAMP_SAPLING,
-                GoodEndingBlocks.POTTED_CYPRESS_SAPLING,
-                GoodEndingBlocks.POTTED_PURPLE_MUSHROOM
+                GoodEndingBlocks.POTTED_CYPRESS_SAPLING
         );
 
         ParticleFactoryRegistry.getInstance().register(GoodEndingParticleTypes.FIREFLY, FireflyParticle.Factory::new);
@@ -48,16 +41,14 @@ public class GoodEndingClient implements ClientModInitializer {
                     }
                     return BiomeColors.getFoliageColor(world, pos);
                 },
-                GoodEndingBlocks.CYPRESS_LEAVES,
-                GoodEndingBlocks.SWAMP_LEAVES
+                GoodEndingBlocks.CYPRESS_LEAVES
         );
 
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
                     BlockState blockState = ((BlockItem)stack.getItem()).getBlock().getDefaultState();
                     return blockColor.get(((BlockItem)stack.getItem()).getBlock()).getColor(blockState, null, null, tintIndex);
                 },
-                GoodEndingBlocks.CYPRESS_LEAVES,
-                GoodEndingBlocks.SWAMP_LEAVES
+                GoodEndingBlocks.CYPRESS_LEAVES
         );
 
     }

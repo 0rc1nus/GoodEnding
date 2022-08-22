@@ -44,7 +44,6 @@ public class GoodEnding implements ModInitializer {
 		Util.make(ImmutableMap.<RegistryEntry<PlacedFeature>, GenerationStep.Feature>builder(),map -> {
 			map.put(GoodEndingWorldGen.DISK_MUD_PLACED, GenerationStep.Feature.UNDERGROUND_ORES);
 			map.put(GoodEndingWorldGen.SHALLOW_WATER_MUD_PLACED, GenerationStep.Feature.UNDERGROUND_ORES);
-			map.put(GoodEndingWorldGen.PURPLE_MUSHROOM_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
 			map.put(GoodEndingWorldGen.CATTAIL_PATCH_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
 			map.put(GoodEndingWorldGen.SWAMP_FALLEN_LOG_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
 			map.put(GoodEndingWorldGen.CYPRESS_TREE_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
@@ -61,16 +60,12 @@ public class GoodEnding implements ModInitializer {
 
 		BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.SWAMP), SpawnGroup.AMBIENT, GoodEndingEntityTypes.FIREFLY_SWARM, 20, 8, 8);
 
-		StrippableBlockRegistry.register(GoodEndingBlocks.SWAMP_LOG, GoodEndingBlocks.STRIPPED_SWAMP_LOG);
 		StrippableBlockRegistry.register(GoodEndingBlocks.CYPRESS_LOG, GoodEndingBlocks.STRIPPED_CYPRESS_LOG);
 
 		CompostingChanceRegistry compostingChanceRegistry = CompostingChanceRegistry.INSTANCE;
-		compostingChanceRegistry.add(GoodEndingBlocks.SWAMP_LEAVES, 0.3F);
 		compostingChanceRegistry.add(GoodEndingBlocks.CYPRESS_LEAVES, 0.3F);
 		compostingChanceRegistry.add(GoodEndingBlocks.DUCKWEED, 0.5F);
-		compostingChanceRegistry.add(GoodEndingBlocks.PURPLE_MUSHROOM, 0.65F);
 		compostingChanceRegistry.add(GoodEndingBlocks.CATTAIL, 0.3F);
-		compostingChanceRegistry.add(GoodEndingBlocks.SWAMP_SAPLING, 0.3F);
 		compostingChanceRegistry.add(GoodEndingBlocks.CYPRESS_SAPLING, 0.3F);
 	}
 
