@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "axis=x": [
+      {
+        "model": "goodending:block/swamp_log",
+        "x": 90,
+        "y": 90
+      }
+    ],
+    "axis=y": [
+      {
+        "model": "goodending:block/swamp_log"
+      }
+    ],
+    "axis=z": [
+      {
+        "model": "goodending:block/swamp_log",
+        "x": 90
+      }
+    ]
+  }
+}

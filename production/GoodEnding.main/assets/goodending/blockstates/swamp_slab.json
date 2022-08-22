@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "goodending:block/swamp_slab"
+    },
+    "type=double": {
+      "model": "goodending:block/swamp_planks"
+    },
+    "type=top": {
+      "model": "goodending:block/swamp_slab_top"
+    }
+  }
+}
