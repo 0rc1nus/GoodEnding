@@ -16,8 +16,8 @@ import net.orcinus.goodending.GoodEnding;
 import net.orcinus.goodending.entities.FireflyEntity;
 
 public class GoodEndingEntityTypes {
-    public static final EntityType<FireflyEntity> FIREFLY = register(
-            "firefly",
+    public static final EntityType<FireflyEntity> FIREFLY_SWARM = register(
+            "firefly_swarm",
             FabricEntityTypeBuilder.createMob()
                     .entityFactory(FireflyEntity::new)
                     .defaultAttributes(FireflyEntity::createFireflyAttributes)
@@ -25,7 +25,7 @@ public class GoodEndingEntityTypes {
                     .spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.WORLD_SURFACE_WG, FireflyEntity::canSpawn)
                     .dimensions(EntityDimensions.changing(1F, 1F))
                     .trackRangeBlocks(8),
-            new int[]{ 5120804, 15204180 }
+            new int[]{ 0x000000, 0xFFF4A4 }
     );
 
     @SuppressWarnings("unchecked")

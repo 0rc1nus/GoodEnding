@@ -49,9 +49,10 @@
   "item.goodending.effect_tool.status_effect": "Status Effect:",
   "item.goodending.marsh_spawn_egg": "Marsh Spawn Egg",
   "item.goodending.firefly_bottle": "Firefly Bottle",
-  "item.goodending.firefly_spawn_egg": "Firefly Spawn Egg",
+  "item.goodending.firefly_swarm_spawn_egg": "Firefly Swarm Spawn Egg",
   "enchantment.goodending.relocation": "Relocation",
   "entity.goodending.chest_boat": "Boat with Chest",
   "entity.goodending.boat": "Boat",
+  "entity.goodending.firefly_swarm": "Firefly Swarm",
   "entity.goodending.marsh": "Marsh"
 }

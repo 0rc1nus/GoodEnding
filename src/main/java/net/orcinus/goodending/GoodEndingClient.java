@@ -39,7 +39,7 @@ public class GoodEndingClient implements ClientModInitializer {
         );
 
         ParticleFactoryRegistry.getInstance().register(GoodEndingParticleTypes.FIREFLY, FireflyParticle.Factory::new);
-        EntityRendererRegistry.register(GoodEndingEntityTypes.FIREFLY, FireflyRenderer::new);
+        EntityRendererRegistry.register(GoodEndingEntityTypes.FIREFLY_SWARM, FireflyRenderer::new);
 
         ColorProviderRegistry<Block, BlockColorProvider> blockColor = ColorProviderRegistry.BLOCK;
         blockColor.register((state, world, pos, tintIndex) -> {

@@ -59,7 +59,7 @@ public class GoodEnding implements ModInitializer {
 			}
 		});
 
-		BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.SWAMP), SpawnGroup.AMBIENT, GoodEndingEntityTypes.FIREFLY, 20, 8, 8);
+		BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.SWAMP), SpawnGroup.AMBIENT, GoodEndingEntityTypes.FIREFLY_SWARM, 20, 8, 8);
 
 		StrippableBlockRegistry.register(GoodEndingBlocks.SWAMP_LOG, GoodEndingBlocks.STRIPPED_SWAMP_LOG);
 		StrippableBlockRegistry.register(GoodEndingBlocks.CYPRESS_LOG, GoodEndingBlocks.STRIPPED_CYPRESS_LOG);

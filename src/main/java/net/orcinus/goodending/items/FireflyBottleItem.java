@@ -37,7 +37,7 @@ public class FireflyBottleItem extends Item {
             if (!playerEntity.getInventory().insertStack(new ItemStack(Items.GLASS_BOTTLE))) {
                 playerEntity.giveItemStack(new ItemStack(Items.GLASS_BOTTLE));
             }
-            FireflyEntity fireflyEntity = GoodEndingEntityTypes.FIREFLY.create(world);
+            FireflyEntity fireflyEntity = GoodEndingEntityTypes.FIREFLY_SWARM.create(world);
             fireflyEntity.setPos(blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5);
             fireflyEntity.setCount(1);
             world.playSound(null, blockPos, SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.NEUTRAL, 1.0F, 1.0F);
