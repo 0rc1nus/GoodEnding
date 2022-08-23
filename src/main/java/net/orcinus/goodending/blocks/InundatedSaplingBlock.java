@@ -8,30 +8,34 @@ import net.minecraft.block.sapling.SaplingGenerator;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
 public class InundatedSaplingBlock extends SaplingBlock implements Waterloggable {
-    public static final IntProperty AGE = Properties.AGE_4;
     private static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
 
     public InundatedSaplingBlock(SaplingGenerator generator, Settings settings) {
         super(generator, settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(WATERLOGGED, false).with(AGE, 0));
+        this.setDefaultState(this.stateManager.getDefaultState().with(WATERLOGGED, false));
+    }
+
+    @Override
+    public void generate(ServerWorld world, BlockPos pos, BlockState state, Random random) {
+        super.generate(world, pos, state, random);
     }
 
     @Nullable
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        FluidState fluidState = ctx.getWorld().getFluidState(ctx.getBlockPos());
-        boolean bl = fluidState.getFluid() == Fluids.WATER;
-        return super.getPlacementState(ctx).with(WATERLOGGED, bl).with(AGE, 4);
+        return this.getDefaultState().with(WATERLOGGED, ctx.getWorld().getFluidState(ctx.getBlockPos()).getFluid() == Fluids.WATER);
     }
 
     @Override
@@ -49,6 +53,7 @@ public class InundatedSaplingBlock extends SaplingBlock implements Waterloggable
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(STAGE, AGE, WATERLOGGED);
+        super.appendProperties(builder);
+        builder.add(WATERLOGGED);
     }
 }

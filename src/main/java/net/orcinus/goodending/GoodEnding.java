@@ -1,19 +1,27 @@
 package net.orcinus.goodending;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.biome.v1.ModificationPhase;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.registry.CompostingChanceRegistry;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.BiomeKeys;
@@ -28,12 +36,19 @@ import net.orcinus.goodending.init.GoodEndingWorldGen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Optional;
 
 public class GoodEnding implements ModInitializer {
 	public static final String MODID = "goodending";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
 	public static final ItemGroup TAB = FabricItemGroupBuilder.create(new Identifier(MODID, MODID)).icon(() -> new ItemStack(Items.LILY_PAD)).build();
+
+	//-7697642187085846839
+	//-5973 63 417692
+
+	//2634269655997717243
+	//-2121 72 -116
 
 	@Override
 	public void onInitialize() {
@@ -67,6 +82,26 @@ public class GoodEnding implements ModInitializer {
 		compostingChanceRegistry.add(GoodEndingBlocks.DUCKWEED, 0.5F);
 		compostingChanceRegistry.add(GoodEndingBlocks.CATTAIL, 0.3F);
 		compostingChanceRegistry.add(GoodEndingBlocks.CYPRESS_SAPLING, 0.3F);
+
+		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
+			BlockPos blockPos = hitResult.getBlockPos();
+			ItemStack stack = player.getStackInHand(hand);
+			if (world.getBlockState(blockPos).isOf(Blocks.LILY_PAD) && stack.isOf(Items.BONE_MEAL) && !world.isClient()) {
+				if (!player.getAbilities().creativeMode) {
+					stack.decrement(1);
+				}
+				List<Block> list = Util.make(Lists.newArrayList(), block -> {
+					block.add(GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD);
+					block.add(GoodEndingBlocks.PINK_FLOWERING_LILY_PAD);
+					block.add(GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD);
+				});
+				world.setBlockState(blockPos, list.get(world.getRandom().nextInt(list.size())).getDefaultState(), 2);
+				world.playSound(null, blockPos, SoundEvents.ITEM_BONE_MEAL_USE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				return ActionResult.SUCCESS;
+			}
+			return ActionResult.PASS;
+		});
+
 	}
 
 }

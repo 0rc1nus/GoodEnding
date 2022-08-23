@@ -16,6 +16,7 @@ import net.orcinus.goodending.world.gen.features.ShallowWaterFeature;
 import net.orcinus.goodending.world.gen.features.SwampTreeFeature;
 import net.orcinus.goodending.world.gen.features.config.FallenLogConfig;
 import net.orcinus.goodending.world.gen.features.config.HalfWaterloggedDecorationConfig;
+import net.orcinus.goodending.world.gen.features.config.WaterTreeFeatureConfig;
 
 import java.util.Map;
 
@@ -26,7 +27,7 @@ public class GoodEndingFeatures {
     public static final Feature<FallenLogConfig> FALLEN_LOG = registerFeature("fallen_log", new FallenLogFeature(FallenLogConfig.CODEC));
     public static final Feature<HalfWaterloggedDecorationConfig> HALF_WATERLOGGED_DECORATION = registerFeature("half_waterlogged_decoration", new HalfWaterloggedDecorationFeature(HalfWaterloggedDecorationConfig.CODEC));
     public static final Feature<DefaultFeatureConfig> SHALLOW_WATER = registerFeature("shallow_water", new ShallowWaterFeature(DefaultFeatureConfig.CODEC));
-    public static final Feature<TreeFeatureConfig> CYPRESS_TREE = registerFeature("cypress_tree", new CypressTreeFeature(TreeFeatureConfig.CODEC));
+    public static final Feature<WaterTreeFeatureConfig> CYPRESS_TREE = registerFeature("cypress_tree", new CypressTreeFeature(WaterTreeFeatureConfig.CODEC));
     public static final Feature<DefaultFeatureConfig> DUCKWEED_PATCH = registerFeature("duckweed_patch", new DuckweedFeature(DefaultFeatureConfig.CODEC));
     public static final Feature<TreeFeatureConfig> SWAMP_TREE = registerFeature("swamp_tree", new SwampTreeFeature(TreeFeatureConfig.CODEC));
 

@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.color.block.BlockColorProvider;
 import net.minecraft.client.color.world.BiomeColors;
 import net.minecraft.client.color.world.FoliageColors;
@@ -57,6 +58,7 @@ public class GoodEndingClient implements ClientModInitializer {
                 GoodEndingBlocks.HANGING_OAK_LEAVES_PLANT,
                 GoodEndingBlocks.HANGING_DARK_OAK_LEAVES,
                 GoodEndingBlocks.HANGING_DARK_OAK_LEAVES_PLANT,
+                Blocks.LILY_PAD,
                 GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD,
                 GoodEndingBlocks.PINK_FLOWERING_LILY_PAD,
                 GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD
@@ -66,6 +68,7 @@ public class GoodEndingClient implements ClientModInitializer {
                     BlockState blockState = ((BlockItem)stack.getItem()).getBlock().getDefaultState();
                     return blockColor.get(((BlockItem)stack.getItem()).getBlock()).getColor(blockState, null, null, tintIndex);
                 },
+                Blocks.LILY_PAD,
                 GoodEndingBlocks.CYPRESS_LEAVES,
                 GoodEndingBlocks.HANGING_OAK_LEAVES,
                 GoodEndingBlocks.HANGING_DARK_OAK_LEAVES

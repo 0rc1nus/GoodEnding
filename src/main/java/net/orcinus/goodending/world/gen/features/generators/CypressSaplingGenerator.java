@@ -11,6 +11,6 @@ public class CypressSaplingGenerator extends SaplingGenerator {
     @Nullable
     @Override
     protected RegistryEntry<? extends ConfiguredFeature<?, ?>> getTreeFeature(Random random, boolean bees) {
-        return GoodEndingWorldGen.CYPRESS_TREE;
+        return GoodEndingWorldGen.CYPRESS_TREE_PLANTED;
     }
 }

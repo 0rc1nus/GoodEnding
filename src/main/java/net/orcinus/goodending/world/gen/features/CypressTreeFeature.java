@@ -7,7 +7,11 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.block.PillarBlock;
+import net.minecraft.block.SaplingBlock;
 import net.minecraft.block.VineBlock;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
@@ -22,13 +26,14 @@ import net.minecraft.world.gen.feature.util.DripstoneHelper;
 import net.minecraft.world.gen.feature.util.FeatureContext;
 import net.orcinus.goodending.init.GoodEndingBlockTags;
 import net.orcinus.goodending.init.GoodEndingBlocks;
+import net.orcinus.goodending.world.gen.features.config.WaterTreeFeatureConfig;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class CypressTreeFeature extends Feature<TreeFeatureConfig> {
+public class CypressTreeFeature extends Feature<WaterTreeFeatureConfig> {
 
-    public CypressTreeFeature(Codec<TreeFeatureConfig> configCodec) {
+    public CypressTreeFeature(Codec<WaterTreeFeatureConfig> configCodec) {
         super(configCodec);
     }
 
@@ -42,16 +47,19 @@ public class CypressTreeFeature extends Feature<TreeFeatureConfig> {
     }
 
     @Override
-    public boolean generate(FeatureContext<TreeFeatureConfig> context) {
+    public boolean generate(FeatureContext<WaterTreeFeatureConfig> context) {
         StructureWorldAccess world = context.getWorld();
         BlockPos blockPos = context.getOrigin();
         Random random = context.getRandom();
-        blockPos = moveUpIfNecessary(world, blockPos);
         List<BlockPos> list = Lists.newArrayList();
         List<BlockPos> leavePoses = Lists.newArrayList();
         List<BlockPos> branchPoses = Lists.newArrayList();
         int height = MathHelper.nextInt(random, 10, 15);
         Block cypressLog = GoodEndingBlocks.CYPRESS_LOG;
+        boolean flag = !context.getConfig().isPlanted && !world.getBlockState(blockPos).isOf(Blocks.WATER);
+        if (flag || !world.getBlockState(blockPos.down()).isIn(BlockTags.DIRT)) {
+            return false;
+        }
         BlockState cypressLogDefaultState = cypressLog.getDefaultState();
         for (int i = 0; i <= height; i++) {
             if (world.getBlockState(blockPos.up(i)).getMaterial().isReplaceable() || world.getBlockState(blockPos.up(i)).isIn(GoodEndingBlockTags.CYPRESS_REPLACEABLES) || world.getBlockState(blockPos.up(i)).isOf(Blocks.MUD)) {
