@@ -24,6 +24,7 @@ public class GoodEndingClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(),
+                GoodEndingBlocks.BIRCH_MUSHROOM,
                 GoodEndingBlocks.CATTAIL,
                 GoodEndingBlocks.LARGE_LILY_PAD,
                 GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD,
