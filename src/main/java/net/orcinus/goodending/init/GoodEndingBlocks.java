@@ -33,6 +33,7 @@ import net.orcinus.goodending.blocks.HangingLeavesBlock;
 import net.orcinus.goodending.blocks.HangingDarkOakLeavesPlantBlock;
 import net.orcinus.goodending.blocks.HangingOakLeavesPlantBlock;
 import net.orcinus.goodending.blocks.InundatedSaplingBlock;
+import net.orcinus.goodending.blocks.WildflowersBlock;
 import net.orcinus.goodending.world.gen.features.generators.CypressSaplingGenerator;
 
 import java.util.Map;
@@ -59,6 +60,10 @@ public class GoodEndingBlocks {
     public static final Block PURPLE_FLOWERING_LILY_PAD = registerNoTabBlock("purple_flowering_lily_pad", new LilyPadBlock(AbstractBlock.Settings.copy(Blocks.LILY_PAD)));
     public static final Block PINK_FLOWERING_LILY_PAD = registerNoTabBlock("pink_flowering_lily_pad", new LilyPadBlock(AbstractBlock.Settings.copy(Blocks.LILY_PAD)));
     public static final Block YELLOW_FLOWERING_LILY_PAD = registerNoTabBlock("yellow_flowering_lily_pad", new LilyPadBlock(AbstractBlock.Settings.copy(Blocks.LILY_PAD)));
+    public static final Block PASTEL_WILDFLOWERS = registerBlock("pastel_wildflowers", new WildflowersBlock(AbstractBlock.Settings.copy(Blocks.POPPY).offsetType(AbstractBlock.OffsetType.XYZ)));
+    public static final Block TWILIGHT_WILDFLOWERS = registerBlock("twilight_wildflowers", new WildflowersBlock(AbstractBlock.Settings.copy(Blocks.POPPY).offsetType(AbstractBlock.OffsetType.XYZ)));
+    public static final Block SPICY_WILDFLOWERS = registerBlock("spicy_wildflowers", new WildflowersBlock(AbstractBlock.Settings.copy(Blocks.POPPY).offsetType(AbstractBlock.OffsetType.XYZ)));
+    public static final Block BALMY_WILDFLOWERS = registerBlock("balmy_wildflowers", new WildflowersBlock(AbstractBlock.Settings.copy(Blocks.POPPY).offsetType(AbstractBlock.OffsetType.XYZ)));
     public static final Block HANGING_OAK_LEAVES_PLANT = registerNoTabBlock("hanging_oak_leaves_plant", new HangingOakLeavesPlantBlock(AbstractBlock.Settings.copy(Blocks.OAK_LEAVES).noCollision().breakInstantly().sounds(BlockSoundGroup.MOSS_CARPET)));
     public static final Block HANGING_OAK_LEAVES = registerBlock("hanging_oak_leaves", new HangingLeavesBlock(AbstractBlock.Settings.copy(Blocks.OAK_LEAVES).ticksRandomly().noCollision().breakInstantly().sounds(BlockSoundGroup.MOSS_CARPET), HANGING_OAK_LEAVES_PLANT));
     public static final Block HANGING_DARK_OAK_LEAVES_PLANT = registerNoTabBlock("hanging_dark_oak_leaves_plant", new HangingDarkOakLeavesPlantBlock(AbstractBlock.Settings.copy(Blocks.OAK_LEAVES).noCollision().breakInstantly().sounds(BlockSoundGroup.MOSS_CARPET)));

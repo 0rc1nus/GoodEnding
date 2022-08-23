@@ -1,5 +1,5 @@
 {
-  "itemGroup.goodending.goodending": "Inundated",
+  "itemGroup.goodending.goodending": "Good Ending",
   "goodending.commands.locate.revamped_witch_hut": "Use /locate structure goodending:revamped_witch_hut",
   "block.goodending.hanging_oak_leaves": "Hanging Oak Leaves",
   "block.goodending.hanging_oak_leaves_plant": "Hanging Oak Leaves Plant",
@@ -8,6 +8,10 @@
   "block.goodending.purple_flowering_lily_pad": "Purple Flowering Lily Pad",
   "block.goodending.pink_flowering_lily_pad": "Pink Flowering Lily Pad",
   "block.goodending.yellow_flowering_lily_pad": "Yellow Flowering Lily Pad",
+  "block.goodending.pastel_wildflowers": "Pastel Wildflowers",
+  "block.goodending.twilight_wildflowers": "Twilight Wildflowers",
+  "block.goodending.spicy_wildflowers": "Spicy Wildflowers",
+  "block.goodending.balmy_wildflowers": "Balmy Wildflowers",
   "block.goodending.cattail": "Cattail",
   "block.goodending.duckweed": "Duckweed",
   "block.goodending.cypress_log": "Cypress Log",
