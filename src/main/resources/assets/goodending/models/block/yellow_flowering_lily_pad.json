@@ -1,0 +1,6 @@
+{
+	"parent": "goodending:block/flowering_lily_pad_template",
+	"textures": {
+		"flower": "goodending:block/yellow_flowering_lily_pad"
+	}
+}

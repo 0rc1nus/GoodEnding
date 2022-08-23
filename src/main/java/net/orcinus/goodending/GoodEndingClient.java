@@ -24,6 +24,9 @@ public class GoodEndingClient implements ClientModInitializer {
     public void onInitializeClient() {
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(),
                 GoodEndingBlocks.CATTAIL,
+                GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD,
+                GoodEndingBlocks.PINK_FLOWERING_LILY_PAD,
+                GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD,
                 GoodEndingBlocks.DUCKWEED,
                 GoodEndingBlocks.HANGING_OAK_LEAVES,
                 GoodEndingBlocks.HANGING_OAK_LEAVES_PLANT,
@@ -49,7 +52,10 @@ public class GoodEndingClient implements ClientModInitializer {
                 GoodEndingBlocks.HANGING_OAK_LEAVES,
                 GoodEndingBlocks.HANGING_OAK_LEAVES_PLANT,
                 GoodEndingBlocks.HANGING_DARK_OAK_LEAVES,
-                GoodEndingBlocks.HANGING_DARK_OAK_LEAVES_PLANT
+                GoodEndingBlocks.HANGING_DARK_OAK_LEAVES_PLANT,
+                GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD,
+                GoodEndingBlocks.PINK_FLOWERING_LILY_PAD,
+                GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD
         );
 
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
@@ -59,6 +65,15 @@ public class GoodEndingClient implements ClientModInitializer {
                 GoodEndingBlocks.CYPRESS_LEAVES,
                 GoodEndingBlocks.HANGING_OAK_LEAVES,
                 GoodEndingBlocks.HANGING_DARK_OAK_LEAVES
+        );
+
+        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
+                BlockState blockState = ((BlockItem)stack.getItem()).getBlock().getDefaultState();
+                return tintIndex > 0 ? -1 : blockColor.get(((BlockItem)stack.getItem()).getBlock()).getColor(blockState, null, null, tintIndex);
+            },
+            GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD,
+            GoodEndingBlocks.PINK_FLOWERING_LILY_PAD,
+            GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD
         );
 
     }

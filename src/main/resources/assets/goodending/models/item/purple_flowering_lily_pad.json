@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "block/lily_pad",
+    "layer1": "goodending:item/purple_flowering_lily_pad"
+  }
+}
