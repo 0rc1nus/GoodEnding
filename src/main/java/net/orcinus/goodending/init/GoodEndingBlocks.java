@@ -30,6 +30,7 @@ import net.minecraft.util.registry.Registry;
 import net.orcinus.goodending.GoodEnding;
 import net.orcinus.goodending.blocks.BirchMushroomPlantBlock;
 import net.orcinus.goodending.blocks.CattailBlock;
+import net.orcinus.goodending.blocks.DenseBirchLeavesBlock;
 import net.orcinus.goodending.blocks.HangingLeavesBlock;
 import net.orcinus.goodending.blocks.HangingDarkOakLeavesPlantBlock;
 import net.orcinus.goodending.blocks.HangingOakLeavesPlantBlock;
@@ -67,6 +68,7 @@ public class GoodEndingBlocks {
     public static final Block TWILIGHT_WILDFLOWERS = registerBlock("twilight_wildflowers", new WildflowersBlock(AbstractBlock.Settings.copy(Blocks.POPPY).offsetType(AbstractBlock.OffsetType.XYZ)));
     public static final Block SPICY_WILDFLOWERS = registerBlock("spicy_wildflowers", new WildflowersBlock(AbstractBlock.Settings.copy(Blocks.POPPY).offsetType(AbstractBlock.OffsetType.XYZ)));
     public static final Block BALMY_WILDFLOWERS = registerBlock("balmy_wildflowers", new WildflowersBlock(AbstractBlock.Settings.copy(Blocks.POPPY).offsetType(AbstractBlock.OffsetType.XYZ)));
+    public static final Block DENSE_BIRCH_LEAVES = registerBlock("dense_birch_leaves", new DenseBirchLeavesBlock(AbstractBlock.Settings.copy(Blocks.BIRCH_LEAVES)));
     public static final Block BIRCH_MUSHROOM = registerBlock("birch_mushroom", new BirchMushroomPlantBlock(AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM).noCollision().breakInstantly()));
     public static final Block HANGING_OAK_LEAVES_PLANT = registerNoTabBlock("hanging_oak_leaves_plant", new HangingOakLeavesPlantBlock(AbstractBlock.Settings.copy(Blocks.OAK_LEAVES).noCollision().breakInstantly().sounds(BlockSoundGroup.MOSS_CARPET)));
     public static final Block HANGING_OAK_LEAVES = registerBlock("hanging_oak_leaves", new HangingLeavesBlock(AbstractBlock.Settings.copy(Blocks.OAK_LEAVES).ticksRandomly().noCollision().breakInstantly().sounds(BlockSoundGroup.MOSS_CARPET), HANGING_OAK_LEAVES_PLANT));

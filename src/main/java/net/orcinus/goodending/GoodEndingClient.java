@@ -13,6 +13,7 @@ import net.minecraft.client.color.world.BiomeColors;
 import net.minecraft.client.color.world.FoliageColors;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.item.BlockItem;
+import net.orcinus.goodending.client.particles.BirchLeafParticle;
 import net.orcinus.goodending.client.particles.FireflyParticle;
 import net.orcinus.goodending.client.renderer.FireflyRenderer;
 import net.orcinus.goodending.init.GoodEndingBlocks;
@@ -46,6 +47,7 @@ public class GoodEndingClient implements ClientModInitializer {
         );
 
         ParticleFactoryRegistry.getInstance().register(GoodEndingParticleTypes.FIREFLY, FireflyParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(GoodEndingParticleTypes.BIRCH_LEAF, BirchLeafParticle.Factory::new);
         EntityRendererRegistry.register(GoodEndingEntityTypes.FIREFLY_SWARM, FireflyRenderer::new);
 
         ColorProviderRegistry<Block, BlockColorProvider> blockColor = ColorProviderRegistry.BLOCK;
@@ -66,11 +68,20 @@ public class GoodEndingClient implements ClientModInitializer {
                 GoodEndingBlocks.PINK_FLOWERING_LILY_PAD,
                 GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD
         );
+        blockColor.register((state, world, pos, tintIndex) -> {
+                if (world == null || pos == null) {
+                    return FoliageColors.getDefaultColor();
+                }
+                return FoliageColors.getBirchColor();
+            },
+            GoodEndingBlocks.DENSE_BIRCH_LEAVES
+        );
 
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
                     BlockState blockState = ((BlockItem)stack.getItem()).getBlock().getDefaultState();
                     return blockColor.get(((BlockItem)stack.getItem()).getBlock()).getColor(blockState, null, null, tintIndex);
                 },
+                GoodEndingBlocks.DENSE_BIRCH_LEAVES,
                 GoodEndingBlocks.LARGE_LILY_PAD,
                 Blocks.LILY_PAD,
                 GoodEndingBlocks.CYPRESS_LEAVES,

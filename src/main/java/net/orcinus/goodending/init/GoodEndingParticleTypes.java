@@ -9,5 +9,6 @@ import net.orcinus.goodending.GoodEnding;
 public class GoodEndingParticleTypes {
 
     public static final DefaultParticleType FIREFLY = Registry.register(Registry.PARTICLE_TYPE, new Identifier(GoodEnding.MODID, "firefly"), FabricParticleTypes.simple());
+    public static final DefaultParticleType BIRCH_LEAF = Registry.register(Registry.PARTICLE_TYPE, new Identifier(GoodEnding.MODID, "birch_leaf"), FabricParticleTypes.simple());
 
 }
