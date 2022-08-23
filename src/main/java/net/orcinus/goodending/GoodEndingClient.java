@@ -25,6 +25,10 @@ public class GoodEndingClient implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(),
                 GoodEndingBlocks.CATTAIL,
                 GoodEndingBlocks.DUCKWEED,
+                GoodEndingBlocks.HANGING_OAK_LEAVES,
+                GoodEndingBlocks.HANGING_OAK_LEAVES_PLANT,
+                GoodEndingBlocks.HANGING_DARK_OAK_LEAVES,
+                GoodEndingBlocks.HANGING_DARK_OAK_LEAVES_PLANT,
                 GoodEndingBlocks.CYPRESS_DOOR,
                 GoodEndingBlocks.CYPRESS_TRAPDOOR,
                 GoodEndingBlocks.CYPRESS_SAPLING,
@@ -41,14 +45,20 @@ public class GoodEndingClient implements ClientModInitializer {
                     }
                     return BiomeColors.getFoliageColor(world, pos);
                 },
-                GoodEndingBlocks.CYPRESS_LEAVES
+                GoodEndingBlocks.CYPRESS_LEAVES,
+                GoodEndingBlocks.HANGING_OAK_LEAVES,
+                GoodEndingBlocks.HANGING_OAK_LEAVES_PLANT,
+                GoodEndingBlocks.HANGING_DARK_OAK_LEAVES,
+                GoodEndingBlocks.HANGING_DARK_OAK_LEAVES_PLANT
         );
 
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
                     BlockState blockState = ((BlockItem)stack.getItem()).getBlock().getDefaultState();
                     return blockColor.get(((BlockItem)stack.getItem()).getBlock()).getColor(blockState, null, null, tintIndex);
                 },
-                GoodEndingBlocks.CYPRESS_LEAVES
+                GoodEndingBlocks.CYPRESS_LEAVES,
+                GoodEndingBlocks.HANGING_OAK_LEAVES,
+                GoodEndingBlocks.HANGING_DARK_OAK_LEAVES
         );
 
     }

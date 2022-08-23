@@ -1,6 +1,10 @@
 {
   "itemGroup.goodending.goodending": "Inundated",
   "goodending.commands.locate.revamped_witch_hut": "Use /locate structure goodending:revamped_witch_hut",
+  "block.goodending.hanging_oak_leaves": "Hanging Oak Leaves",
+  "block.goodending.hanging_oak_leaves_plant": "Hanging Oak Leaves Plant",
+  "block.goodending.hanging_dark_oak_leaves": "Hanging Dark Oak Leaves",
+  "block.goodending.hanging_dark_oak_leaves_plant": "Hanging Dark Oak Leaves Plant",
   "block.goodending.cattail": "Cattail",
   "block.goodending.duckweed": "Duckweed",
   "block.goodending.cypress_log": "Cypress Log",

@@ -29,6 +29,9 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.orcinus.goodending.GoodEnding;
 import net.orcinus.goodending.blocks.CattailBlock;
+import net.orcinus.goodending.blocks.HangingLeavesBlock;
+import net.orcinus.goodending.blocks.HangingDarkOakLeavesPlantBlock;
+import net.orcinus.goodending.blocks.HangingOakLeavesPlantBlock;
 import net.orcinus.goodending.blocks.InundatedSaplingBlock;
 import net.orcinus.goodending.world.gen.features.generators.CypressSaplingGenerator;
 
@@ -53,11 +56,16 @@ public class GoodEndingBlocks {
     public static final Block CYPRESS_TRAPDOOR = registerBlock("cypress_trapdoor", new TrapdoorBlock(AbstractBlock.Settings.of(Material.WOOD, MapColor.TERRACOTTA_BROWN).strength(3.0f).sounds(BlockSoundGroup.WOOD).nonOpaque().allowsSpawning((state, world, pos, type) -> false)));
     public static final Block CYPRESS_SAPLING = registerBlock("cypress_sapling", new InundatedSaplingBlock(new CypressSaplingGenerator(), AbstractBlock.Settings.of(Material.PLANT).noCollision().ticksRandomly().breakInstantly().sounds(BlockSoundGroup.GRASS)));
     public static final Block CYPRESS_LEAVES = registerBlock("cypress_leaves", new LeavesBlock(FabricBlockSettings.copyOf(Blocks.OAK_LEAVES)));
+    public static final Block HANGING_OAK_LEAVES_PLANT = registerNoTabBlock("hanging_oak_leaves_plant", new HangingOakLeavesPlantBlock(AbstractBlock.Settings.copy(Blocks.OAK_LEAVES).noCollision().breakInstantly().sounds(BlockSoundGroup.MOSS_CARPET)));
+    public static final Block HANGING_OAK_LEAVES = registerBlock("hanging_oak_leaves", new HangingLeavesBlock(AbstractBlock.Settings.copy(Blocks.OAK_LEAVES).ticksRandomly().noCollision().breakInstantly().sounds(BlockSoundGroup.MOSS_CARPET), HANGING_OAK_LEAVES_PLANT));
+    public static final Block HANGING_DARK_OAK_LEAVES_PLANT = registerNoTabBlock("hanging_dark_oak_leaves_plant", new HangingDarkOakLeavesPlantBlock(AbstractBlock.Settings.copy(Blocks.OAK_LEAVES).noCollision().breakInstantly().sounds(BlockSoundGroup.MOSS_CARPET)));
+    public static final Block HANGING_DARK_OAK_LEAVES = registerBlock("hanging_dark_oak_leaves", new HangingLeavesBlock(AbstractBlock.Settings.copy(Blocks.OAK_LEAVES).ticksRandomly().noCollision().breakInstantly().sounds(BlockSoundGroup.MOSS_CARPET), HANGING_DARK_OAK_LEAVES_PLANT));
     public static final Block DUCKWEED = registerNoTabBlock("duckweed", new LilyPadBlock(AbstractBlock.Settings.of(Material.REPLACEABLE_PLANT).breakInstantly().sounds(BlockSoundGroup.MOSS_CARPET).noCollision().nonOpaque()));
     public static final Block CATTAIL = registerBlock("cattail", new CattailBlock(AbstractBlock.Settings.of(Material.PLANT).noCollision().breakInstantly().sounds(BlockSoundGroup.SMALL_DRIPLEAF).offsetType(AbstractBlock.OffsetType.XYZ)));
     public static final Block POTTED_CYPRESS_SAPLING = registerNoTabBlock("potted_cypress_sapling", new FlowerPotBlock(CYPRESS_SAPLING, AbstractBlock.Settings.of(Material.DECORATION).breakInstantly().nonOpaque()));
     public static final Block CYPRESS_SIGN = registerNoTabBlock("cypress_sign", new SignBlock(FabricBlockSettings.of(Material.WOOD, CYPRESS_LOG.getDefaultMapColor()).noCollision().strength(1.0F).sounds(BlockSoundGroup.WOOD), GoodEndingSignTypes.CYPRESS));
     public static final Block CYPRESS_WALL_SIGN = registerNoTabBlock("cypress_wall_sign", new WallSignBlock(AbstractBlock.Settings.of(Material.WOOD, CYPRESS_LOG.getDefaultMapColor()).noCollision().strength(1.0F).sounds(BlockSoundGroup.WOOD).dropsLike(CYPRESS_SIGN), GoodEndingSignTypes.CYPRESS));
+
 
     public static <B extends Block> B registerBlock(String name, B block) {
         Identifier id = new Identifier(GoodEnding.MODID, name);
