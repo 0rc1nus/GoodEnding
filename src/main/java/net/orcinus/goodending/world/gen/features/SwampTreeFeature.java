@@ -58,11 +58,8 @@ public class SwampTreeFeature extends Feature<TreeFeatureConfig> {
                             }
                         }
                     }
-                    if (y == 1) {
-                        eliminateFactor = 8;
-                    }
-                    else if (y == 2) {
-                        eliminateFactor = 4;
+                    if (y > 0) {
+                        eliminateFactor = eliminateFactor / (y * 2);
                     }
                     if (x * x + z * z <= eliminateFactor) {
                         world.setBlockState(pos, config.foliageProvider.getBlockState(random, pos).with(Properties.DISTANCE_1_7, 1), 19);
