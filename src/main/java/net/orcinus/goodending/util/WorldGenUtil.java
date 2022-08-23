@@ -1,17 +1,42 @@
 package net.orcinus.goodending.util;
 
+import net.minecraft.block.AbstractPlantStemBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.VineBlock;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.StructureWorldAccess;
+import net.orcinus.goodending.init.GoodEndingBlocks;
 
 import java.util.List;
 
 public class WorldGenUtil {
 
-    public static void generate(StructureWorldAccess world, float probability, Random random, List<BlockPos> leavePositions) {
+    public static void generateHangingVines(StructureWorldAccess world, float probability, Random random, List<BlockPos> leavePositions) {
+        leavePositions.forEach((pos) -> {
+            BlockPos.Mutable mutable = pos.mutableCopy();
+            if (random.nextFloat() < probability) {
+                int length = MathHelper.nextInt(random, 2, 4);
+                for (int i = 0; i <= length; i++) {
+                    if (world.isAir(mutable)) {
+                        if (i == length || !world.isAir(mutable.down())) {
+                            world.setBlockState(mutable, GoodEndingBlocks.HANGING_OAK_LEAVES.getDefaultState().with(AbstractPlantStemBlock.AGE, MathHelper.nextInt(random, 17, 25)), Block.NOTIFY_LISTENERS);
+                            break;
+                        }
+                        world.setBlockState(mutable, GoodEndingBlocks.HANGING_OAK_LEAVES_PLANT.getDefaultState(), Block.NOTIFY_LISTENERS);
+                    }
+                    mutable.move(Direction.DOWN);
+                }
+            }
+        });
+    }
+
+    public static void generateVines(StructureWorldAccess world, float probability, Random random, List<BlockPos> leavePositions) {
         leavePositions.forEach((pos) -> {
             BlockPos blockPos;
             if (random.nextFloat() < probability) {
