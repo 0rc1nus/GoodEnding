@@ -25,6 +25,7 @@ public class GoodEndingClient implements ClientModInitializer {
     public void onInitializeClient() {
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(),
                 GoodEndingBlocks.CATTAIL,
+                GoodEndingBlocks.LARGE_LILY_PAD,
                 GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD,
                 GoodEndingBlocks.PINK_FLOWERING_LILY_PAD,
                 GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD,
@@ -59,6 +60,7 @@ public class GoodEndingClient implements ClientModInitializer {
                 GoodEndingBlocks.HANGING_DARK_OAK_LEAVES,
                 GoodEndingBlocks.HANGING_DARK_OAK_LEAVES_PLANT,
                 Blocks.LILY_PAD,
+                GoodEndingBlocks.LARGE_LILY_PAD,
                 GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD,
                 GoodEndingBlocks.PINK_FLOWERING_LILY_PAD,
                 GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD
@@ -68,6 +70,7 @@ public class GoodEndingClient implements ClientModInitializer {
                     BlockState blockState = ((BlockItem)stack.getItem()).getBlock().getDefaultState();
                     return blockColor.get(((BlockItem)stack.getItem()).getBlock()).getColor(blockState, null, null, tintIndex);
                 },
+                GoodEndingBlocks.LARGE_LILY_PAD,
                 Blocks.LILY_PAD,
                 GoodEndingBlocks.CYPRESS_LEAVES,
                 GoodEndingBlocks.HANGING_OAK_LEAVES,

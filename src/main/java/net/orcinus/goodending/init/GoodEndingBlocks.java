@@ -33,6 +33,7 @@ import net.orcinus.goodending.blocks.HangingLeavesBlock;
 import net.orcinus.goodending.blocks.HangingDarkOakLeavesPlantBlock;
 import net.orcinus.goodending.blocks.HangingOakLeavesPlantBlock;
 import net.orcinus.goodending.blocks.InundatedSaplingBlock;
+import net.orcinus.goodending.blocks.LargeLilyPadBlock;
 import net.orcinus.goodending.blocks.WildflowersBlock;
 import net.orcinus.goodending.world.gen.features.generators.CypressSaplingGenerator;
 
@@ -57,6 +58,7 @@ public class GoodEndingBlocks {
     public static final Block CYPRESS_TRAPDOOR = registerBlock("cypress_trapdoor", new TrapdoorBlock(AbstractBlock.Settings.of(Material.WOOD, MapColor.TERRACOTTA_BROWN).strength(3.0f).sounds(BlockSoundGroup.WOOD).nonOpaque().allowsSpawning((state, world, pos, type) -> false)));
     public static final Block CYPRESS_SAPLING = registerBlock("cypress_sapling", new InundatedSaplingBlock(new CypressSaplingGenerator(), AbstractBlock.Settings.of(Material.PLANT).noCollision().ticksRandomly().breakInstantly().sounds(BlockSoundGroup.GRASS)));
     public static final Block CYPRESS_LEAVES = registerBlock("cypress_leaves", new LeavesBlock(FabricBlockSettings.copyOf(Blocks.OAK_LEAVES)));
+    public static final Block LARGE_LILY_PAD = registerNoTabBlock("large_lily_pad", new LargeLilyPadBlock(AbstractBlock.Settings.copy(Blocks.LILY_PAD)));
     public static final Block PURPLE_FLOWERING_LILY_PAD = registerNoTabBlock("purple_flowering_lily_pad", new LilyPadBlock(AbstractBlock.Settings.copy(Blocks.LILY_PAD)));
     public static final Block PINK_FLOWERING_LILY_PAD = registerNoTabBlock("pink_flowering_lily_pad", new LilyPadBlock(AbstractBlock.Settings.copy(Blocks.LILY_PAD)));
     public static final Block YELLOW_FLOWERING_LILY_PAD = registerNoTabBlock("yellow_flowering_lily_pad", new LilyPadBlock(AbstractBlock.Settings.copy(Blocks.LILY_PAD)));

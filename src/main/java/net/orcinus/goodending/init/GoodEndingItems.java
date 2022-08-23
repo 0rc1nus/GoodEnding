@@ -5,11 +5,11 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.Item;
 import net.minecraft.item.PlaceableOnWaterItem;
 import net.minecraft.item.SignItem;
-import net.minecraft.item.SpawnEggItem;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.orcinus.goodending.GoodEnding;
 import net.orcinus.goodending.items.FireflyBottleItem;
+import net.orcinus.goodending.items.PlaceableUnderWaterItem;
 
 import java.util.Map;
 
@@ -18,6 +18,7 @@ public class GoodEndingItems {
     public static final Map<Identifier, Item> ITEMS = Maps.newLinkedHashMap();
 
     public static final Item DUCKWEED = registerItem("duckweed", new PlaceableOnWaterItem(GoodEndingBlocks.DUCKWEED, new Item.Settings().group(GoodEnding.TAB)));
+    public static final Item LARGE_LILY_PAD = registerItem("large_lily_pad", new PlaceableUnderWaterItem(GoodEndingBlocks.LARGE_LILY_PAD, new Item.Settings().group(GoodEnding.TAB)));
     public static final Item PURPLE_FLOWERING_LILY_PAD = registerItem("purple_flowering_lily_pad", new PlaceableOnWaterItem(GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD, new Item.Settings().group(GoodEnding.TAB)));
     public static final Item PINK_FLOWERING_LILY_PAD = registerItem("pink_flowering_lily_pad", new PlaceableOnWaterItem(GoodEndingBlocks.PINK_FLOWERING_LILY_PAD, new Item.Settings().group(GoodEnding.TAB)));
     public static final Item YELLOW_FLOWERING_LILY_PAD = registerItem("yellow_flowering_lily_pad", new PlaceableOnWaterItem(GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD, new Item.Settings().group(GoodEnding.TAB)));
