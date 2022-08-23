@@ -68,7 +68,6 @@ public class SwampTreeFeature extends Feature<TreeFeatureConfig> {
                 }
             }
         }
-        WorldGenUtil.generateVines(world, 0.25F, random, leavePoses);
         WorldGenUtil.generateHangingVines(world, 0.25F, random, leavePoses);
         return true;
     }
