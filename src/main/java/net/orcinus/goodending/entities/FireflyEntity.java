@@ -1,8 +1,10 @@
 package net.orcinus.goodending.entities;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.Flutterer;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.control.FlightMoveControl;
@@ -23,6 +25,7 @@ import net.minecraft.item.ItemUsage;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -39,7 +42,7 @@ import net.orcinus.goodending.init.GoodEndingItems;
 import net.orcinus.goodending.init.GoodEndingParticleTypes;
 import org.jetbrains.annotations.Nullable;
 
-public class FireflyEntity extends PathAwareEntity {
+public class FireflyEntity extends PathAwareEntity implements Flutterer {
     private static final TrackedData<Integer> COUNT = DataTracker.registerData(FireflyEntity.class, TrackedDataHandlerRegistry.INTEGER);
 
     public FireflyEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
@@ -164,5 +167,34 @@ public class FireflyEntity extends PathAwareEntity {
     @SuppressWarnings("unused")
     public static boolean canSpawn(EntityType<FireflyEntity> entity, ServerWorldAccess world, SpawnReason reason, BlockPos pos, Random random) {
         return world.getLightLevel(pos) < UniformIntProvider.create(0, 7).get(random);
+    }
+
+    @Override
+    protected void pushAway(Entity entity) {
+    }
+
+    @Override
+    protected void tickCramming() {
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return null;
+    }
+
+    @Override
+    public boolean damage(DamageSource source, float amount) {
+        return false;
+    }
+
+    @Override
+    public boolean isInAir() {
+        return !this.onGround;
+    }
+
+    @Override
+    public boolean occludeVibrationSignals() {
+        return true;
     }
 }
