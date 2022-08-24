@@ -20,7 +20,7 @@ public class DenseBirchLeavesBlock extends LeavesBlock {
         int k = pos.getZ();
         BlockPos.Mutable mutable = new BlockPos.Mutable();
         for (int l = 0; l < 4; ++l) {
-            mutable.set(i + MathHelper.nextInt(random, -10, 10), j - random.nextInt(10), k + MathHelper.nextInt(random, -10, 10));
+            mutable.set(i + MathHelper.nextInt(random, -6, 6), j - random.nextInt(6), k + MathHelper.nextInt(random, -6, 6));
             BlockState blockState = world.getBlockState(mutable);
             if (blockState.isFullCube(world, mutable)) continue;
             world.addParticle(GoodEndingParticleTypes.BIRCH_LEAF, (double)mutable.getX() + random.nextDouble(), (double)mutable.getY() + random.nextDouble(), (double)mutable.getZ() + random.nextDouble(), 0.0, 0.0, 0.0);

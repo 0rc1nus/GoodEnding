@@ -14,6 +14,7 @@ import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.util.DripstoneHelper;
 import net.minecraft.world.gen.feature.util.FeatureContext;
+import net.orcinus.goodending.blocks.BirchMushroomPlantBlock;
 import net.orcinus.goodending.init.GoodEndingBlocks;
 import net.orcinus.goodending.world.gen.features.config.FallenLogConfig;
 
@@ -32,37 +33,37 @@ public class FallenLogFeature extends Feature<FallenLogConfig> {
         Random random = context.getRandom();
         Direction direction = Direction.Type.HORIZONTAL.random(random);
         int logLength = MathHelper.nextInt(random, 3, 6);
-        if (!world.getBlockState(blockPos.down()).isIn(BlockTags.DIRT)) {
-            return false;
-        } else {
-            BlockPos.Mutable mut = blockPos.mutableCopy();
-            List<BlockPos> decorationPoses = Lists.newArrayList();
-            for (int i = 0; i <= logLength; i++) {
-                boolean flag = world.getBlockState(mut).getMaterial().isReplaceable() || world.testBlockState(mut, state -> state.isAir() || state.isOf(Blocks.WATER) || state.isIn(BlockTags.FLOWERS));
-                if (world.getBlockState(mut.down()).getMaterial().isReplaceable() || world.testBlockState(mut.down(), DripstoneHelper::canGenerate)) {
-                    mut.move(Direction.DOWN);
-                    if (flag) {
-                        world.setBlockState(mut, context.getConfig().log.getBlockState(random, mut.toImmutable()).with(PillarBlock.AXIS, direction.getAxis()), 2);
-                        decorationPoses.add(mut.toImmutable());
-                    }
-                }
+        BlockPos.Mutable mut = blockPos.mutableCopy();
+        List<BlockPos> decorationPoses = Lists.newArrayList();
+        for (int i = 0; i <= logLength; i++) {
+            boolean flag = world.getBlockState(mut).getMaterial().isReplaceable() || world.testBlockState(mut, state -> state.isAir() || state.isOf(Blocks.WATER) || state.isIn(BlockTags.FLOWERS));
+            if (world.getBlockState(mut.down()).getMaterial().isReplaceable() || world.testBlockState(mut.down(), DripstoneHelper::canGenerate)) {
+                mut.move(Direction.DOWN);
                 if (flag) {
                     world.setBlockState(mut, context.getConfig().log.getBlockState(random, mut.toImmutable()).with(PillarBlock.AXIS, direction.getAxis()), 2);
                     decorationPoses.add(mut.toImmutable());
                 }
-                mut.move(direction);
             }
-            for (BlockPos pos : decorationPoses) {
-                if (world.getBlockState(pos.up()).isAir() && random.nextInt(5) == 0) {
-                    world.setBlockState(pos.up(), Blocks.BROWN_MUSHROOM.getDefaultState(), 2);
-                }
-                for (Direction directions : Direction.Type.HORIZONTAL) {
-                    if (world.getBlockState(pos.offset(directions)).isAir() && random.nextInt(5) == 0) {
-                        world.setBlockState(pos.offset(directions), Blocks.VINE.getDefaultState().with(VineBlock.getFacingProperty(directions.getOpposite()), true), 2);
-                    }
-                }
+            if (flag) {
+                world.setBlockState(mut, context.getConfig().log.getBlockState(random, mut.toImmutable()).with(PillarBlock.AXIS, direction.getAxis()), 2);
+                decorationPoses.add(mut.toImmutable());
             }
-            return true;
+            mut.move(direction);
         }
+        for (BlockPos pos : decorationPoses) {
+            if (world.getBlockState(pos.up()).isAir() && random.nextInt(5) == 0) {
+                world.setBlockState(pos.up(), Blocks.BROWN_MUSHROOM.getDefaultState(), 2);
+            }
+            for (Direction directions : Direction.Type.HORIZONTAL) {
+                if (world.getBlockState(pos.offset(directions)).isAir() && random.nextInt(5) == 0) {
+                    world.setBlockState(pos.offset(directions), Blocks.VINE.getDefaultState().with(VineBlock.getFacingProperty(directions.getOpposite()), true), 2);
+                }
+            }
+            Direction dir = Direction.Type.HORIZONTAL.random(random);
+            if (world.isAir(pos.offset(dir)) && random.nextInt(3) == 0 && context.getConfig().shelf_mushroom) {
+                world.setBlockState(pos.offset(dir), GoodEndingBlocks.BIRCH_MUSHROOM.getDefaultState().with(BirchMushroomPlantBlock.FACING, dir), 2);
+            }
+        }
+        return true;
     }
 }

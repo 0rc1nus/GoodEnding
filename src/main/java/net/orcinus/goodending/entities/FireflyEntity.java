@@ -145,11 +145,16 @@ public class FireflyEntity extends PathAwareEntity implements Flutterer {
     }
 
     @Override
-    public void tick() {
-        super.tick();
-        if (this.world.isDay()) {
+    public void tickMovement() {
+        super.tickMovement();
+        if (this.world.isDay() && !this.world.isClient()) {
             this.discard();
         }
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
         if (this.isAlive()) {
             int count = this.getCount();
             BlockPos.Mutable mutable = new BlockPos.Mutable();

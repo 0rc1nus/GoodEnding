@@ -21,7 +21,7 @@ public class WorldGenUtil {
         leavePositions.forEach((pos) -> {
             BlockPos.Mutable mutable = pos.mutableCopy();
             if (random.nextFloat() < probability) {
-                int length = MathHelper.nextInt(random, 2, 4);
+                int length = MathHelper.nextInt(random, 1, 2);
                 for (int i = 0; i <= length; i++) {
                     if (world.isAir(mutable)) {
                         if (i == length || !world.isAir(mutable.down())) {

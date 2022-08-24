@@ -66,9 +66,9 @@ public class GoodEndingClient implements ClientModInitializer {
                 GoodEndingBlocks.LARGE_LILY_PAD,
                 GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD,
                 GoodEndingBlocks.PINK_FLOWERING_LILY_PAD,
-                GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD,
-                GoodEndingBlocks.DENSE_BIRCH_LEAVES
+                GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD
         );
+        blockColor.register((state, world, pos, tintIndex) -> FoliageColors.getBirchColor(), GoodEndingBlocks.DENSE_BIRCH_LEAVES);
 
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
                     BlockState blockState = ((BlockItem)stack.getItem()).getBlock().getDefaultState();
