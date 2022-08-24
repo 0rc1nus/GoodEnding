@@ -7,11 +7,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.block.PillarBlock;
-import net.minecraft.block.SaplingBlock;
-import net.minecraft.block.VineBlock;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
@@ -19,13 +14,12 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.gen.feature.DefaultFeatureConfig;
 import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.TreeFeatureConfig;
 import net.minecraft.world.gen.feature.util.DripstoneHelper;
 import net.minecraft.world.gen.feature.util.FeatureContext;
 import net.orcinus.goodending.init.GoodEndingBlockTags;
 import net.orcinus.goodending.init.GoodEndingBlocks;
+import net.orcinus.goodending.util.WorldGenUtil;
 import net.orcinus.goodending.world.gen.features.config.WaterTreeFeatureConfig;
 
 import java.util.Arrays;
@@ -117,38 +111,7 @@ public class CypressTreeFeature extends Feature<WaterTreeFeatureConfig> {
                 }
             }
         });
-        leavePoses.forEach((pos) -> {
-            BlockPos vinePos;
-            double probability = 0.25F;
-            if (random.nextFloat() < probability) {
-                vinePos = pos.west();
-                if (world.isAir(vinePos)) {
-                    placeVines(vinePos, VineBlock.EAST, world);
-                }
-            }
-
-            if (random.nextFloat() < probability) {
-                vinePos = pos.east();
-                if (world.isAir(vinePos)) {
-                    placeVines(vinePos, VineBlock.WEST, world);
-                }
-            }
-
-            if (random.nextFloat() < probability) {
-                vinePos = pos.north();
-                if (world.isAir(vinePos)) {
-                    placeVines(vinePos, VineBlock.SOUTH, world);
-                }
-            }
-
-            if (random.nextFloat() < probability) {
-                vinePos = pos.south();
-                if (world.isAir(vinePos)) {
-                    placeVines(vinePos, VineBlock.NORTH, world);
-                }
-            }
-
-        });
+        WorldGenUtil.generateVines(world, 0.25F, random, leavePoses);
         return true;
     }
 

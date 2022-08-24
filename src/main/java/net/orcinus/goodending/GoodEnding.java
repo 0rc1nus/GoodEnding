@@ -81,6 +81,10 @@ public class GoodEnding implements ModInitializer {
 			BiomeModifications.addFeature(BiomeSelectors.tag(biomeTagKey), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureRegistryKey);
 		}));
 
+		GoodEndingWorldGen.PATCH_PINK_FLOWERED_LILY_PLACED.getKey().ifPresent(placedFeatureRegistryKey -> {
+			BiomeModifications.addFeature(BiomeSelectors.includeByKey(BiomeKeys.MANGROVE_SWAMP), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureRegistryKey);
+		});
+
 		BiomeModifications.create(new Identifier(GoodEnding.MODID, "replace_swamp_trees")).add(ModificationPhase.REPLACEMENTS, BiomeSelectors.includeByKey(BiomeKeys.SWAMP), biomeModificationContext -> {
 			Optional<RegistryKey<PlacedFeature>> key = GoodEndingWorldGen.SWAMP_TREE_PLACED.getKey();
 			if (key.isPresent() && biomeModificationContext.getGenerationSettings().removeBuiltInFeature(VegetationPlacedFeatures.TREES_SWAMP.value())) {

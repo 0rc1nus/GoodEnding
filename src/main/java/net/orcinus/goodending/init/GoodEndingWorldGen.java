@@ -25,6 +25,7 @@ import net.minecraft.world.gen.feature.RandomPatchFeatureConfig;
 import net.minecraft.world.gen.feature.SimpleBlockFeatureConfig;
 import net.minecraft.world.gen.feature.TreeConfiguredFeatures;
 import net.minecraft.world.gen.feature.TreeFeatureConfig;
+import net.minecraft.world.gen.feature.VegetationConfiguredFeatures;
 import net.minecraft.world.gen.feature.VegetationPlacedFeatures;
 import net.minecraft.world.gen.feature.size.ThreeLayersFeatureSize;
 import net.minecraft.world.gen.feature.size.TwoLayersFeatureSize;
@@ -96,6 +97,10 @@ public class GoodEndingWorldGen {
     public static final RegistryEntry<PlacedFeature> TALL_BIRCH_TREE_FILTERED = register("tall_birch_tree_filtered", TALL_BIRCH_TREE, PlacedFeatures.wouldSurvive(Blocks.BIRCH_SAPLING));
     public static final RegistryEntry<ConfiguredFeature<RandomFeatureConfig, ?>> TALL_BIRCH_VEGETATION = register("tall_birch_vegetation", Feature.RANDOM_SELECTOR, new RandomFeatureConfig(List.of(new RandomFeatureEntry(BIRCH_FALLEN_LOG_PLACED, 0.25F), new RandomFeatureEntry(TALL_BIRCH_TREE_FILTERED, 0.5F), new RandomFeatureEntry(PlacedFeatures.createEntry(PATCH_PASTEL_WILDFLOWERS), 0.5F), new RandomFeatureEntry(PlacedFeatures.createEntry(PATCH_TWILIGHT_WILDFLOWERS), 0.5F)), PlacedFeatures.createEntry(PATCH_BALMY_WILDFLOWERS)));
     public static final RegistryEntry<PlacedFeature> TALL_BIRCH_VEGETATION_PLACED = register("tall_birch_vegetation", TALL_BIRCH_VEGETATION, CountPlacementModifier.of(16), SquarePlacementModifier.of(), VegetationPlacedFeatures.NOT_IN_SURFACE_WATER_MODIFIER, PlacedFeatures.OCEAN_FLOOR_HEIGHTMAP, BiomePlacementModifier.of());
+
+    public static final RegistryEntry<ConfiguredFeature<RandomPatchFeatureConfig, ?>> PATCH_PINK_FLOWERED_LILY = register("patch_pink_flowered_lily", Feature.RANDOM_PATCH, new RandomPatchFeatureConfig(10, 7, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(BlockStateProvider.of(GoodEndingBlocks.PINK_FLOWERING_LILY_PAD)))));
+    public static final RegistryEntry<PlacedFeature> PATCH_PINK_FLOWERED_LILY_PLACED = register("patch_pink_flowered_lily_placed", PATCH_PINK_FLOWERED_LILY, VegetationPlacedFeatures.modifiers(4));
+
     public static <FC extends FeatureConfig, F extends Feature<FC>> RegistryEntry<ConfiguredFeature<FC, ?>> register(String id, F feature, FC config) {
         return BuiltinRegistries.addCasted(BuiltinRegistries.CONFIGURED_FEATURE, new Identifier(GoodEnding.MODID, id).toString(), new ConfiguredFeature<>(feature, config));
     }
