@@ -22,8 +22,10 @@ public class DenseBirchLeaveDecorator extends TreeDecorator {
 
     @Override
     public void generate(Generator generator) {
-        BlockPos blockPos = generator.getLeavesPositions().stream().filter(pos -> generator.getWorld().testBlockState(pos, blockState -> blockState.isOf(Blocks.BIRCH_LEAVES))).toList().get(generator.getRandom().nextInt(generator.getLeavesPositions().size()));
-        generator.replace(blockPos, GoodEndingBlocks.DENSE_BIRCH_LEAVES.getDefaultState());
+        BlockPos blockPos = generator.getLeavesPositions().get(generator.getRandom().nextInt(generator.getLeavesPositions().size()));
+        if (generator.getWorld().testBlockState(blockPos, blockState -> blockState.isOf(Blocks.BIRCH_LEAVES))) {
+            generator.replace(blockPos, GoodEndingBlocks.DENSE_BIRCH_LEAVES.getDefaultState());
+        }
     }
 
 }
