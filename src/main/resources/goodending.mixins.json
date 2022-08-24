@@ -4,8 +4,11 @@
   "package": "net.orcinus.goodending.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "ConfiguredFeaturesMixin",
     "SaplingBlockMixin",
-    "SignTypeInvoker"
+    "SignTypeInvoker",
+    "TreeDecoratorTypeInvoker",
+    "TreeFeatureConfigMixin"
   ],
   "client": [
   ],

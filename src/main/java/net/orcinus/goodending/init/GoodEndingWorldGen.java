@@ -1,5 +1,6 @@
 package net.orcinus.goodending.init;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.block.Blocks;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.tag.BlockTags;
@@ -8,6 +9,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.intprovider.ConstantIntProvider;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.minecraft.util.registry.BuiltinRegistries;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.world.gen.blockpredicate.BlockPredicate;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
@@ -40,11 +42,16 @@ import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier;
 import net.minecraft.world.gen.placementmodifier.SurfaceWaterDepthFilterPlacementModifier;
 import net.minecraft.world.gen.stateprovider.BlockStateProvider;
 import net.minecraft.world.gen.stateprovider.PredicatedStateProvider;
+import net.minecraft.world.gen.treedecorator.LeavesVineTreeDecorator;
+import net.minecraft.world.gen.treedecorator.TreeDecorator;
+import net.minecraft.world.gen.treedecorator.TreeDecoratorType;
 import net.minecraft.world.gen.trunk.DarkOakTrunkPlacer;
 import net.orcinus.goodending.GoodEnding;
+import net.orcinus.goodending.mixin.TreeDecoratorTypeInvoker;
 import net.orcinus.goodending.world.gen.features.config.FallenLogConfig;
 import net.orcinus.goodending.world.gen.features.config.HalfWaterloggedDecorationConfig;
 import net.orcinus.goodending.world.gen.features.config.WaterTreeFeatureConfig;
+import net.orcinus.goodending.world.gen.features.decorators.DenseBirchLeaveDecorator;
 
 import java.util.List;
 import java.util.OptionalInt;
@@ -87,6 +94,8 @@ public class GoodEndingWorldGen {
     public static final RegistryEntry<PlacedFeature> PATCH_TWILIGHT_WILDFLOWERS_PLACED = PlacedFeatures.register("patch_twilight_wildflowers_placed", PATCH_TWILIGHT_WILDFLOWERS, RarityFilterPlacementModifier.of(30), CountPlacementModifier.of(3), SquarePlacementModifier.of(), PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP, BiomePlacementModifier.of());
     public static final RegistryEntry<PlacedFeature> PATCH_SPICY_WILDFLOWERS_PLACED = PlacedFeatures.register("patch_spicy_wildflowers_placed", PATCH_SPICY_WILDFLOWERS, RarityFilterPlacementModifier.of(30), CountPlacementModifier.of(3), SquarePlacementModifier.of(), PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP, BiomePlacementModifier.of());
     public static final RegistryEntry<PlacedFeature> PATCH_BALMY_WILDFLOWERS_PLACED = PlacedFeatures.register("patch_balmy_wildflowers_placed", PATCH_BALMY_WILDFLOWERS, RarityFilterPlacementModifier.of(30), CountPlacementModifier.of(3), SquarePlacementModifier.of(), PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP, BiomePlacementModifier.of());
+
+    public static final TreeDecoratorType<DenseBirchLeaveDecorator> DENSE_BIRCH_LEAVES = TreeDecoratorTypeInvoker.callRegister(new Identifier(GoodEnding.MODID, "dense_birch_leaves").toString(), DenseBirchLeaveDecorator.CODEC);
 
     public static <FC extends FeatureConfig, F extends Feature<FC>> RegistryEntry<ConfiguredFeature<FC, ?>> register(String id, F feature, FC config) {
         return BuiltinRegistries.addCasted(BuiltinRegistries.CONFIGURED_FEATURE, new Identifier(GoodEnding.MODID, id).toString(), new ConfiguredFeature<>(feature, config));

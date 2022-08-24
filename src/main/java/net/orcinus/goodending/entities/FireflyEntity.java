@@ -53,7 +53,7 @@ public class FireflyEntity extends PathAwareEntity implements Flutterer {
     @Nullable
     @Override
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
-        this.setCount(random.nextBetween(1,3));
+        this.setCount(this.getRandom().nextBetween(1,3));
         return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
     }
 
@@ -147,6 +147,9 @@ public class FireflyEntity extends PathAwareEntity implements Flutterer {
     @Override
     public void tick() {
         super.tick();
+        if (this.world.isDay()) {
+            this.discard();
+        }
         if (this.isAlive()) {
             int count = this.getCount();
             BlockPos.Mutable mutable = new BlockPos.Mutable();

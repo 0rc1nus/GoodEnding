@@ -29,6 +29,6 @@ public class PlaceableUnderWaterItem extends BlockItem {
         BlockHitResult blockHitResult = PlaceableOnWaterItem.raycast(world, user, RaycastContext.FluidHandling.SOURCE_ONLY);
         BlockHitResult blockHitResult2 = blockHitResult.withBlockPos(blockHitResult.getBlockPos());
         ActionResult actionResult = super.useOnBlock(new ItemUsageContext(user, hand, blockHitResult2));
-        return new TypedActionResult<ItemStack>(actionResult, user.getStackInHand(hand));
+        return new TypedActionResult<>(actionResult, user.getStackInHand(hand));
     }
 }
