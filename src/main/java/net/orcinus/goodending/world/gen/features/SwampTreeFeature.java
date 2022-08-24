@@ -45,7 +45,7 @@ public class SwampTreeFeature extends Feature<TreeFeatureConfig> {
                         world.setBlockState(blockPos.up(i).offset(direction, branchLength), config.trunkProvider.getBlockState(random, blockPos.up(i).offset(direction, branchLength)).with(PillarBlock.AXIS, direction.getAxis()), 19);
                     }
                 }
-                if (world.testBlockState(blockPos.up(i), blockState -> blockState.isAir() || blockState.isIn(BlockTags.LEAVES) || blockState.isOf(Blocks.WATER))){
+                if (world.testBlockState(blockPos.up(i), blockState -> blockState.isAir() || blockState.isIn(BlockTags.LEAVES) || blockState.isOf(Blocks.WATER) || blockState.isIn(BlockTags.LOGS))){
                     world.setBlockState(blockPos.up(i), config.trunkProvider.getBlockState(random, blockPos.up(i)), 2);
                 }
                 continue;
