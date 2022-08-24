@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class TexturedRenderLayersMixin {
 
     @Inject(at = @At("HEAD"), method = "createSignTextureId", cancellable = true)
-    private static void onCreateSignTextureId(SignType type, CallbackInfoReturnable<SpriteIdentifier> cir) {
+    private static void GE$createSignTextureId(SignType type, CallbackInfoReturnable<SpriteIdentifier> cir) {
         if (type instanceof GoodEndingSignType signType) {
             cir.setReturnValue(new SpriteIdentifier(TexturedRenderLayers.SIGNS_ATLAS_TEXTURE, new Identifier(GoodEnding.MODID, "entity/signs/%s".formatted(signType.getId()))));
         }

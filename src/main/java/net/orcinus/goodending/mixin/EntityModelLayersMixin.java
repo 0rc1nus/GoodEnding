@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class EntityModelLayersMixin {
 
     @Inject(at = @At("HEAD"), method = "createSign", cancellable = true)
-    private static void createSign(SignType type, CallbackInfoReturnable<EntityModelLayer> cir) {
+    private static void GE$createSign(SignType type, CallbackInfoReturnable<EntityModelLayer> cir) {
         if (type instanceof GoodEndingSignType signType) {
             cir.setReturnValue(new EntityModelLayer(new Identifier(GoodEnding.MODID, "entity/signs/%s".formatted(signType.getId())), "main"));
         }

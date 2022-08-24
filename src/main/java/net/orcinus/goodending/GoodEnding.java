@@ -32,9 +32,12 @@ import net.minecraft.world.gen.feature.PlacedFeature;
 import net.minecraft.world.gen.feature.VegetationPlacedFeatures;
 import net.orcinus.goodending.init.GoodEndingBiomeTags;
 import net.orcinus.goodending.init.GoodEndingBlocks;
+import net.orcinus.goodending.init.GoodEndingEnchantments;
 import net.orcinus.goodending.init.GoodEndingEntityTypes;
 import net.orcinus.goodending.init.GoodEndingFeatures;
 import net.orcinus.goodending.init.GoodEndingItems;
+import net.orcinus.goodending.init.GoodEndingPotions;
+import net.orcinus.goodending.init.GoodEndingStatusEffects;
 import net.orcinus.goodending.init.GoodEndingWorldGen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +63,10 @@ public class GoodEnding implements ModInitializer {
 	public void onInitialize() {
 		GoodEndingItems.init();
 		GoodEndingBlocks.init();
+		GoodEndingEnchantments.init();
 		GoodEndingFeatures.init();
+		GoodEndingStatusEffects.init();
+		GoodEndingPotions.init();
 
 		Util.make(ImmutableMap.<RegistryEntry<PlacedFeature>, GenerationStep.Feature>builder(),map -> {
 			map.put(GoodEndingWorldGen.DISK_MUD_PLACED, GenerationStep.Feature.UNDERGROUND_ORES);
@@ -108,6 +114,18 @@ public class GoodEnding implements ModInitializer {
 		compostingChanceRegistry.add(GoodEndingBlocks.DUCKWEED, 0.5F);
 		compostingChanceRegistry.add(GoodEndingBlocks.CATTAIL, 0.3F);
 		compostingChanceRegistry.add(GoodEndingBlocks.CYPRESS_SAPLING, 0.3F);
+		compostingChanceRegistry.add(GoodEndingBlocks.PASTEL_WILDFLOWERS, 0.65F);
+		compostingChanceRegistry.add(GoodEndingBlocks.TWILIGHT_WILDFLOWERS, 0.65F);
+		compostingChanceRegistry.add(GoodEndingBlocks.SPICY_WILDFLOWERS, 0.65F);
+		compostingChanceRegistry.add(GoodEndingBlocks.BALMY_WILDFLOWERS, 0.65F);
+		compostingChanceRegistry.add(GoodEndingBlocks.BIRCH_MUSHROOM, 0.65F);
+		compostingChanceRegistry.add(GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD, 0.65F);
+		compostingChanceRegistry.add(GoodEndingBlocks.PINK_FLOWERING_LILY_PAD, 0.65F);
+		compostingChanceRegistry.add(GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD, 0.65F);
+		compostingChanceRegistry.add(GoodEndingBlocks.LARGE_LILY_PAD, 0.65F);
+		compostingChanceRegistry.add(GoodEndingBlocks.DENSE_BIRCH_LEAVES, 0.3F);
+		compostingChanceRegistry.add(GoodEndingBlocks.HANGING_OAK_LEAVES, 0.3F);
+		compostingChanceRegistry.add(GoodEndingBlocks.HANGING_DARK_OAK_LEAVES, 0.65F);
 
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
 			BlockPos blockPos = hitResult.getBlockPos();
@@ -130,9 +148,9 @@ public class GoodEnding implements ModInitializer {
 
 	}
 
-	private void addFeatureToBiome(RegistryEntry<PlacedFeature> patchPinkFloweredLilyPlaced, RegistryKey<Biome> mangroveSwamp) {
-		patchPinkFloweredLilyPlaced.getKey().ifPresent(placedFeatureRegistryKey -> {
-			BiomeModifications.addFeature(BiomeSelectors.includeByKey(mangroveSwamp), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureRegistryKey);
+	private void addFeatureToBiome(RegistryEntry<PlacedFeature> placedFeatureRegistryEntry, RegistryKey<Biome> biomeRegistryKey) {
+		placedFeatureRegistryEntry.getKey().ifPresent(placedFeatureRegistryKey -> {
+			BiomeModifications.addFeature(BiomeSelectors.includeByKey(biomeRegistryKey), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureRegistryKey);
 		});
 	}
 
