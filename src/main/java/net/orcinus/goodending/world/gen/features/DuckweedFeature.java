@@ -38,15 +38,10 @@ public class DuckweedFeature extends Feature<DefaultFeatureConfig> {
     public static void generateDuckweed(StructureWorldAccess world, BlockPos blockPos, Random random) {
         BlockPos.Mutable spreadPos = new BlockPos.Mutable();
         int tries = UniformIntProvider.create(30, 80).get(random);
-        List<Block> blocks = Util.make(Lists.newArrayList(), list -> {
-            list.add(GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD);
-            list.add(GoodEndingBlocks.PINK_FLOWERING_LILY_PAD);
-            list.add(GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD);
-        });
         for (int i = 0; i < tries; i++) {
             spreadPos.set(blockPos, random.nextInt(3) - random.nextInt(3), 0, random.nextInt(3) - random.nextInt(3));
             if (random.nextFloat() < 0.23242F && world.getBlockState(spreadPos).getMaterial().isReplaceable() && world.getBlockState(spreadPos.down()).isOf(Blocks.WATER)) {
-                world.setBlockState(spreadPos, random.nextInt(30) == 0 ? blocks.get(random.nextInt(blocks.size())).getDefaultState() : GoodEndingBlocks.DUCKWEED.getDefaultState(), 2);
+                world.setBlockState(spreadPos, random.nextInt(25) == 0 ? GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD.getDefaultState() : GoodEndingBlocks.DUCKWEED.getDefaultState(), 2);
             }
         }
     }

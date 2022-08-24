@@ -4,11 +4,14 @@
   "package": "net.orcinus.goodending.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "BlockEntityTypeMixin",
     "SaplingBlockMixin",
     "SignTypeInvoker",
     "TreeDecoratorTypeInvoker"
   ],
   "client": [
+    "EntityModelLayersMixin",
+    "TexturedRenderLayersMixin"
   ],
   "injectors": {
     "defaultRequire": 1

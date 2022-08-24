@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class GoodEndingSignTypes {
 
-    public static final GoodEndingSignType SWAMP = registerSign("swamp");
     public static final GoodEndingSignType CYPRESS = registerSign("cypress");
 
     @NotNull
