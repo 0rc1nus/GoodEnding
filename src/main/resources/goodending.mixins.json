@@ -6,8 +6,7 @@
   "mixins": [
     "BlockEntityTypeMixin",
     "SaplingBlockMixin",
-    "SignTypeInvoker",
-    "TreeDecoratorTypeInvoker"
+    "SignTypeInvoker"
   ],
   "client": [
     "EntityModelLayersMixin",

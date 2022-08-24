@@ -81,9 +81,9 @@ public class GoodEnding implements ModInitializer {
 			BiomeModifications.addFeature(BiomeSelectors.tag(biomeTagKey), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureRegistryKey);
 		}));
 
-		GoodEndingWorldGen.PATCH_PINK_FLOWERED_LILY_PLACED.getKey().ifPresent(placedFeatureRegistryKey -> {
-			BiomeModifications.addFeature(BiomeSelectors.includeByKey(BiomeKeys.MANGROVE_SWAMP), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureRegistryKey);
-		});
+		this.addFeatureToBiome(GoodEndingWorldGen.PATCH_PINK_FLOWERED_LILY_PLACED, BiomeKeys.MANGROVE_SWAMP);
+
+		this.addFeatureToBiome(GoodEndingWorldGen.BIRCH_FALLEN_LOG_PLACED, BiomeKeys.OLD_GROWTH_BIRCH_FOREST);
 
 		BiomeModifications.create(new Identifier(GoodEnding.MODID, "replace_swamp_trees")).add(ModificationPhase.REPLACEMENTS, BiomeSelectors.includeByKey(BiomeKeys.SWAMP), biomeModificationContext -> {
 			Optional<RegistryKey<PlacedFeature>> key = GoodEndingWorldGen.SWAMP_TREE_PLACED.getKey();
@@ -128,6 +128,12 @@ public class GoodEnding implements ModInitializer {
 			return ActionResult.PASS;
 		});
 
+	}
+
+	private void addFeatureToBiome(RegistryEntry<PlacedFeature> patchPinkFloweredLilyPlaced, RegistryKey<Biome> mangroveSwamp) {
+		patchPinkFloweredLilyPlaced.getKey().ifPresent(placedFeatureRegistryKey -> {
+			BiomeModifications.addFeature(BiomeSelectors.includeByKey(mangroveSwamp), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureRegistryKey);
+		});
 	}
 
 }

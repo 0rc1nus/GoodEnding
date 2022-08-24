@@ -55,8 +55,9 @@ public class SwampTreeFeature extends Feature<TreeFeatureConfig> {
             }
         }
         for (int y = -1; y <= 2; y++) {
-            for (int x = -4; x <= 4; x++) {
-                for (int z = -4; z <= 4; z++) {
+            int radius = 4;
+            for (int x = -radius; x <= radius; x++) {
+                for (int z = -radius; z <= radius; z++) {
                     BlockPos pos = new BlockPos(blockPos.getX() + x, blockPos.getY() + y + treeHeight, blockPos.getZ() + z);
                     int eliminateFactor = 16;
                     if (y == -1) {
