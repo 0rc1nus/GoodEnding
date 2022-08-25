@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "goodending:block/pollenflake_bottom"
+    },
+    "half=upper": {
+      "model": "goodending:block/pollenflake_top"
+    }
+  }
+}

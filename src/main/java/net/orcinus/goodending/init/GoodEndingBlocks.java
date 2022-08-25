@@ -18,6 +18,7 @@ import net.minecraft.block.PressurePlateBlock;
 import net.minecraft.block.SignBlock;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.block.StairsBlock;
+import net.minecraft.block.TallFlowerBlock;
 import net.minecraft.block.TrapdoorBlock;
 import net.minecraft.block.WallSignBlock;
 import net.minecraft.block.WoodenButtonBlock;
@@ -64,6 +65,7 @@ public class GoodEndingBlocks {
     public static final Block PURPLE_FLOWERING_LILY_PAD = registerNoTabBlock("purple_flowering_lily_pad", new LilyPadBlock(AbstractBlock.Settings.copy(Blocks.LILY_PAD)));
     public static final Block PINK_FLOWERING_LILY_PAD = registerNoTabBlock("pink_flowering_lily_pad", new LilyPadBlock(AbstractBlock.Settings.copy(Blocks.LILY_PAD)));
     public static final Block YELLOW_FLOWERING_LILY_PAD = registerNoTabBlock("yellow_flowering_lily_pad", new LilyPadBlock(AbstractBlock.Settings.copy(Blocks.LILY_PAD)));
+    public static final Block POLLENFLAKE = registerBlock("pollenflake", new TallFlowerBlock(AbstractBlock.Settings.copy(Blocks.PEONY)));
     public static final Block PASTEL_WILDFLOWERS = registerBlock("pastel_wildflowers", new WildflowersBlock(AbstractBlock.Settings.copy(Blocks.POPPY).offsetType(AbstractBlock.OffsetType.XYZ)));
     public static final Block TWILIGHT_WILDFLOWERS = registerBlock("twilight_wildflowers", new WildflowersBlock(AbstractBlock.Settings.copy(Blocks.POPPY).offsetType(AbstractBlock.OffsetType.XYZ)));
     public static final Block SPICY_WILDFLOWERS = registerBlock("spicy_wildflowers", new WildflowersBlock(AbstractBlock.Settings.copy(Blocks.POPPY).offsetType(AbstractBlock.OffsetType.XYZ)));
