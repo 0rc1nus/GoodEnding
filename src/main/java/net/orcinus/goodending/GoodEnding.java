@@ -16,6 +16,7 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.recipe.BrewingRecipeRegistry;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.tag.TagKey;
@@ -25,6 +26,7 @@ import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.world.WorldEvents;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.gen.GenerationStep;
@@ -59,6 +61,9 @@ public class GoodEnding implements ModInitializer {
 	//1519091418833411884
 	//387 82 272
 
+	//-866439392768082315
+	//-2752 63 -3572
+
 	@Override
 	public void onInitialize() {
 		GoodEndingItems.init();
@@ -77,15 +82,12 @@ public class GoodEnding implements ModInitializer {
 			map.put(GoodEndingWorldGen.SWAMP_VEGETATION_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
 			map.put(GoodEndingWorldGen.DUCKWEED_PATCH_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
 		}).build().forEach((placedFeatureRegistryEntry, feature) -> placedFeatureRegistryEntry.getKey().ifPresent(placedFeatureRegistryKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(BiomeKeys.SWAMP), feature, placedFeatureRegistryKey)));
-
 		Util.make(ImmutableMap.<TagKey<Biome>, RegistryEntry<PlacedFeature>>builder(), map -> {
 			map.put(GoodEndingBiomeTags.PASTEL_WILDFLOWER_GENERATES, GoodEndingWorldGen.PATCH_PASTEL_WILDFLOWERS_PLACED);
 			map.put(GoodEndingBiomeTags.TWILIGHT_WILDFLOWER_GENERATES, GoodEndingWorldGen.PATCH_TWILIGHT_WILDFLOWERS_PLACED);
 			map.put(GoodEndingBiomeTags.SPICY_WILDFLOWER_GENERATES, GoodEndingWorldGen.PATCH_SPICY_WILDFLOWERS_PLACED);
 			map.put(GoodEndingBiomeTags.BALMY_WILDFLOWER_GENERATES, GoodEndingWorldGen.PATCH_BALMY_WILDFLOWERS_PLACED);
-		}).build().forEach((biomeTagKey, placedFeatureRegistryEntry) -> placedFeatureRegistryEntry.getKey().ifPresent(placedFeatureRegistryKey -> {
-			BiomeModifications.addFeature(BiomeSelectors.tag(biomeTagKey), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureRegistryKey);
-		}));
+		}).build().forEach((biomeTagKey, placedFeatureRegistryEntry) -> placedFeatureRegistryEntry.getKey().ifPresent(placedFeatureRegistryKey -> BiomeModifications.addFeature(BiomeSelectors.tag(biomeTagKey), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureRegistryKey)));
 
 		this.addFeatureToBiome(GoodEndingWorldGen.PATCH_PINK_FLOWERED_LILY_PLACED, BiomeKeys.MANGROVE_SWAMP);
 
@@ -126,6 +128,7 @@ public class GoodEnding implements ModInitializer {
 		compostingChanceRegistry.add(GoodEndingBlocks.DENSE_BIRCH_LEAVES, 0.3F);
 		compostingChanceRegistry.add(GoodEndingBlocks.HANGING_OAK_LEAVES, 0.3F);
 		compostingChanceRegistry.add(GoodEndingBlocks.HANGING_DARK_OAK_LEAVES, 0.65F);
+		compostingChanceRegistry.add(GoodEndingBlocks.POLLENFLAKE, 0.65F);
 
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
 			BlockPos blockPos = hitResult.getBlockPos();
@@ -141,6 +144,7 @@ public class GoodEnding implements ModInitializer {
 				});
 				world.setBlockState(blockPos, list.get(world.getRandom().nextInt(list.size())).getDefaultState(), 2);
 				world.playSound(null, blockPos, SoundEvents.ITEM_BONE_MEAL_USE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				world.syncWorldEvent(WorldEvents.BONE_MEAL_USED, blockPos, 0);
 				return ActionResult.SUCCESS;
 			}
 			return ActionResult.PASS;
@@ -149,9 +153,7 @@ public class GoodEnding implements ModInitializer {
 	}
 
 	private void addFeatureToBiome(RegistryEntry<PlacedFeature> placedFeatureRegistryEntry, RegistryKey<Biome> biomeRegistryKey) {
-		placedFeatureRegistryEntry.getKey().ifPresent(placedFeatureRegistryKey -> {
-			BiomeModifications.addFeature(BiomeSelectors.includeByKey(biomeRegistryKey), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureRegistryKey);
-		});
+		placedFeatureRegistryEntry.getKey().ifPresent(placedFeatureRegistryKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(biomeRegistryKey), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureRegistryKey));
 	}
 
 }

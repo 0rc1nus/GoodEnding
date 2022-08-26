@@ -2,10 +2,14 @@ package net.orcinus.goodending.init;
 
 import com.google.common.collect.Maps;
 import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.item.Items;
 import net.minecraft.potion.Potion;
+import net.minecraft.potion.Potions;
+import net.minecraft.recipe.BrewingRecipeRegistry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.orcinus.goodending.GoodEnding;
+import net.orcinus.goodending.mixin.BrewingRecipeRegistryAccessor;
 
 import java.util.Map;
 
@@ -24,5 +28,9 @@ public class GoodEndingPotions {
         for (Identifier id : POTIONS.keySet()) {
             Registry.register(Registry.POTION, id, POTIONS.get(id));
         }
+
+        BrewingRecipeRegistryAccessor.callRegisterPotionRecipe(Potions.AWKWARD, GoodEndingBlocks.BIRCH_MUSHROOM.asItem(), IMMUNITY);
+        BrewingRecipeRegistryAccessor.callRegisterPotionRecipe(IMMUNITY, Items.REDSTONE, LONG_IMMUNITY);
     }
 }
+    

@@ -41,7 +41,7 @@ public class DuckweedFeature extends Feature<DefaultFeatureConfig> {
         for (int i = 0; i < tries; i++) {
             spreadPos.set(blockPos, random.nextInt(3) - random.nextInt(3), 0, random.nextInt(3) - random.nextInt(3));
             if (random.nextFloat() < 0.23242F && world.getBlockState(spreadPos).getMaterial().isReplaceable() && world.getBlockState(spreadPos.down()).isOf(Blocks.WATER)) {
-                world.setBlockState(spreadPos, random.nextInt(25) == 0 ? GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD.getDefaultState() : GoodEndingBlocks.DUCKWEED.getDefaultState(), 2);
+                world.setBlockState(spreadPos, random.nextInt(50) == 0 ? GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD.getDefaultState() : GoodEndingBlocks.DUCKWEED.getDefaultState(), 2);
             }
         }
     }

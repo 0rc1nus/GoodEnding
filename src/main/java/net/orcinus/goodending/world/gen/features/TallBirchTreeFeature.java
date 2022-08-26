@@ -3,6 +3,7 @@ package net.orcinus.goodending.world.gen.features;
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
 import net.minecraft.block.BeehiveBlock;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.block.PillarBlock;
@@ -19,6 +20,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.gen.blockpredicate.BlockPredicate;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.TreeFeature;
 import net.minecraft.world.gen.feature.TreeFeatureConfig;
 import net.minecraft.world.gen.feature.util.DripstoneHelper;
 import net.minecraft.world.gen.feature.util.FeatureContext;
@@ -38,7 +40,8 @@ public class TallBirchTreeFeature extends Feature<TreeFeatureConfig> {
         StructureWorldAccess world = context.getWorld();
         BlockPos blockPos = context.getOrigin();
         Random random = context.getRandom();
-        int height = UniformIntProvider.create(5, 11).get(random);
+        int height = UniformIntProvider.create(6, 12).get(random);
+        TreeFeatureConfig config = context.getConfig();
         List<BlockPos> decorationPoses = Lists.newArrayList();
         List<BlockPos> branchPoses = Lists.newArrayList();
         List<BlockPos> leavePoses = Lists.newArrayList();
@@ -47,20 +50,24 @@ public class TallBirchTreeFeature extends Feature<TreeFeatureConfig> {
         }
         for (int i = 0; i <= height; i++) {
             if (world.testBlockState(blockPos.up(i), blockState -> blockState.isAir() || blockState.isOf(Blocks.WATER) || blockState.isIn(BlockTags.LEAVES))) {
-                world.setBlockState(blockPos.up(i), Blocks.BIRCH_LOG.getDefaultState(), 19);
+                world.setBlockState(blockPos.up(i), config.trunkProvider.getBlockState(random, blockPos.up(i)), 19);
                 decorationPoses.add(blockPos.up(i));
                 if (i >= height / 2) {
                     branchPoses.add(blockPos.up(i));
                 }
             }
         }
-        for (int y = -1; y <= 2; y++) {
-            int radius = y >= 1 ? 1 : 2;
+        for (int y = -3; y <= 2; y++) {
+            int radius = y <= -2 ? 1 : (y >= 1 ? 1 : 2);
             for (int x = -radius; x <= radius; x++) {
                 for (int z = -radius; z <= radius; z++) {
                     BlockPos leavePos = blockPos.add(x, y + height, z);
                     if (world.testBlockState(leavePos, DripstoneHelper::canGenerate)) {
-                        world.setBlockState(leavePos, Blocks.BIRCH_LEAVES.getDefaultState().with(LeavesBlock.DISTANCE, 1), 19);
+                        boolean flag = (x == radius || x == -radius) && (z == radius || z == -radius);
+                        if (flag) {
+                            if ((y >= -1 && y < 1) || y == 2 || y == -3) continue;
+                        }
+                        world.setBlockState(leavePos, config.foliageProvider.getBlockState(random, leavePos).with(LeavesBlock.DISTANCE, 1), 19);
                         leavePoses.add(leavePos);
                     }
                 }
@@ -77,8 +84,8 @@ public class TallBirchTreeFeature extends Feature<TreeFeatureConfig> {
         branchPoses.forEach(branchPos -> {
             Direction randomDirection = Direction.Type.HORIZONTAL.random(random);
             BlockPos offsetPos = branchPos.offset(randomDirection);
-            if (random.nextInt(5) == 0 && world.isAir(offsetPos)) {
-                world.setBlockState(offsetPos, Blocks.BIRCH_LOG.getDefaultState().with(PillarBlock.AXIS, randomDirection.getAxis()), 19);
+            if (random.nextInt(5) == 0 && world.isAir(offsetPos) && world.isAir(offsetPos.down())) {
+                world.setBlockState(offsetPos, config.trunkProvider.getBlockState(random, offsetPos).with(PillarBlock.AXIS, randomDirection.getAxis()), 19);
                 if (world.isAir(offsetPos.down()) && random.nextFloat() < 0.01F) {
                     this.setBeehive(world, random, offsetPos);
                 }

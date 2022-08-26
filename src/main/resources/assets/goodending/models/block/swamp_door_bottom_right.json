@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom_right",
+  "textures": {
+    "bottom": "goodending:block/swamp_door_bottom",
+    "top": "goodending:block/swamp_door_top"
+  }
+}

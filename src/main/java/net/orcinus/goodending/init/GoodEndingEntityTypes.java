@@ -14,8 +14,13 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Heightmap;
 import net.orcinus.goodending.GoodEnding;
 import net.orcinus.goodending.entities.FireflyEntity;
+import net.orcinus.goodending.entities.GoodEndingBoatEntity;
+import net.orcinus.goodending.entities.GoodEndingChestBoatEntity;
+import net.orcinus.goodending.entities.MarshEntity;
 
 public class GoodEndingEntityTypes {
+    public static final EntityType<GoodEndingBoatEntity> BOAT = register("boat", FabricEntityTypeBuilder.<GoodEndingBoatEntity>create().entityFactory(GoodEndingBoatEntity::new).spawnGroup(SpawnGroup.MISC).dimensions(EntityDimensions.fixed(1.375f, 0.5625f)).trackRangeChunks(10), null);
+    public static final EntityType<GoodEndingChestBoatEntity> CHEST_BOAT = register("chest_boat", FabricEntityTypeBuilder.<GoodEndingChestBoatEntity>create().entityFactory(GoodEndingChestBoatEntity::new).spawnGroup(SpawnGroup.MISC).dimensions(EntityDimensions.fixed(1.375f, 0.5625f)).trackRangeChunks(10), null);
     public static final EntityType<FireflyEntity> FIREFLY_SWARM = register(
             "firefly_swarm",
             FabricEntityTypeBuilder.createMob()
@@ -26,6 +31,15 @@ public class GoodEndingEntityTypes {
                     .dimensions(EntityDimensions.changing(1F, 1F))
                     .trackRangeBlocks(8),
             new int[]{ 0x000000, 0xFFF4A4 }
+    );
+    public static final EntityType<MarshEntity> MARSH = register(
+            "marsh",
+            FabricEntityTypeBuilder.createMob()
+                    .entityFactory(MarshEntity::new)
+                    .defaultAttributes(MarshEntity::createMarshAttributes)
+                    .spawnGroup(SpawnGroup.CREATURE)
+                    .dimensions(EntityDimensions.fixed(0.5F, 1.4F)),
+            new int[]{ 3423006, 6979129 }
     );
 
     @SuppressWarnings("unchecked")

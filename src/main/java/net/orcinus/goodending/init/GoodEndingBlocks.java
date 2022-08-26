@@ -39,6 +39,7 @@ import net.orcinus.goodending.blocks.InundatedSaplingBlock;
 import net.orcinus.goodending.blocks.LargeLilyPadBlock;
 import net.orcinus.goodending.blocks.WildflowersBlock;
 import net.orcinus.goodending.world.gen.features.generators.CypressSaplingGenerator;
+import net.orcinus.goodending.world.gen.features.generators.SwampSaplingGenerator;
 
 import java.util.Map;
 
@@ -46,6 +47,21 @@ public class GoodEndingBlocks {
 
     private static final Map<Identifier, Block> BLOCKS = Maps.newLinkedHashMap();
 
+    public static final Block SWAMP_LOG = registerBlock("swamp_log", new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, state -> state.get(PillarBlock.AXIS) == Direction.Axis.Y ? MapColor.GREEN : MapColor.GRAY).strength(2.0F).sounds(BlockSoundGroup.WOOD)));
+    public static final Block STRIPPED_SWAMP_LOG = registerBlock("stripped_swamp_log", new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, MapColor.GREEN).strength(2.0F).sounds(BlockSoundGroup.WOOD)));
+    public static final Block SWAMP_WOOD = registerBlock("swamp_wood", new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, MapColor.GRAY).strength(2.0f).sounds(BlockSoundGroup.WOOD)));
+    public static final Block STRIPPED_SWAMP_WOOD = registerBlock("stripped_swamp_wood", new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, MapColor.GREEN).strength(2.0f).sounds(BlockSoundGroup.WOOD)));
+    public static final Block SWAMP_PLANKS = registerBlock("swamp_planks", new Block(AbstractBlock.Settings.of(Material.WOOD, MapColor.DARK_GREEN).strength(2.0f, 3.0f).sounds(BlockSoundGroup.WOOD)));
+    public static final Block SWAMP_SLAB = registerBlock("swamp_slab", new SlabBlock(AbstractBlock.Settings.of(Material.WOOD, MapColor.DARK_GREEN).strength(2.0f, 3.0f).sounds(BlockSoundGroup.WOOD)));
+    public static final Block SWAMP_STAIRS = registerBlock("swamp_stairs", new StairsBlock(SWAMP_PLANKS.getDefaultState(), AbstractBlock.Settings.copy(SWAMP_PLANKS)));
+    public static final Block SWAMP_BUTTON = registerBlock("swamp_button", new WoodenButtonBlock(AbstractBlock.Settings.of(Material.DECORATION).noCollision().strength(0.5f).sounds(BlockSoundGroup.WOOD)));
+    public static final Block SWAMP_PRESSURE_PLATE = registerBlock("swamp_pressure_plate", new PressurePlateBlock(PressurePlateBlock.ActivationRule.EVERYTHING, AbstractBlock.Settings.of(Material.WOOD, SWAMP_PLANKS.getDefaultMapColor()).noCollision().strength(0.5f).sounds(BlockSoundGroup.WOOD)));
+    public static final Block SWAMP_DOOR = registerBlock("swamp_door", new DoorBlock(AbstractBlock.Settings.of(Material.WOOD, SWAMP_PLANKS.getDefaultMapColor()).strength(3.0f).sounds(BlockSoundGroup.WOOD).nonOpaque()));
+    public static final Block SWAMP_FENCE = registerBlock("swamp_fence", new FenceBlock(AbstractBlock.Settings.of(Material.WOOD, SWAMP_PLANKS.getDefaultMapColor()).strength(3.0f).sounds(BlockSoundGroup.WOOD).nonOpaque()));
+    public static final Block SWAMP_FENCE_GATE = registerBlock("swamp_fence_gate", new FenceGateBlock(AbstractBlock.Settings.of(Material.WOOD, SWAMP_PLANKS.getDefaultMapColor()).strength(3.0f).sounds(BlockSoundGroup.WOOD).nonOpaque()));
+    public static final Block SWAMP_TRAPDOOR = registerBlock("swamp_trapdoor", new TrapdoorBlock(AbstractBlock.Settings.of(Material.WOOD, MapColor.DARK_GREEN).strength(3.0f).sounds(BlockSoundGroup.WOOD).nonOpaque().allowsSpawning((state, world, pos, type) -> false)));
+    public static final Block SWAMP_SAPLING = registerBlock("swamp_sapling", new InundatedSaplingBlock(new SwampSaplingGenerator(), AbstractBlock.Settings.of(Material.PLANT).noCollision().ticksRandomly().breakInstantly().sounds(BlockSoundGroup.GRASS)));
+    public static final Block SWAMP_LEAVES = registerBlock("swamp_leaves", new LeavesBlock(FabricBlockSettings.copyOf(Blocks.OAK_LEAVES)));
     public static final Block CYPRESS_LOG = registerBlock("cypress_log", new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, state -> state.get(PillarBlock.AXIS) == Direction.Axis.Y ? MapColor.BROWN : MapColor.LIGHT_GRAY).strength(2.0F).sounds(BlockSoundGroup.WOOD)));
     public static final Block STRIPPED_CYPRESS_LOG = registerBlock("stripped_cypress_log", new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, MapColor.BROWN).strength(2.0F).sounds(BlockSoundGroup.WOOD)));
     public static final Block CYPRESS_WOOD = registerBlock("cypress_wood", new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, MapColor.LIGHT_GRAY).strength(2.0f).sounds(BlockSoundGroup.WOOD)));

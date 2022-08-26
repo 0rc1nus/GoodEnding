@@ -8,6 +8,7 @@ import net.orcinus.goodending.GoodEnding;
 
 public class GoodEndingItemTags {
 
+    public static final TagKey<Item> SWAMP_LOGS = registerItemTag("swamp_logs");
     public static final TagKey<Item> CYPRESS_LOGS = registerItemTag("cypress_logs");
 
     private static TagKey<Item> registerItemTag(String key) {

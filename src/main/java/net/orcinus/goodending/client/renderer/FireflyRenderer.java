@@ -2,6 +2,7 @@ package net.orcinus.goodending.client.renderer;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.render.Frustum;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.util.Identifier;
@@ -16,6 +17,11 @@ public class FireflyRenderer<T extends FireflyEntity> extends EntityRenderer<T> 
         super(ctx);
         this.shadowOpacity = 0.0F;
         this.shadowRadius = 0.0F;
+    }
+
+    @Override
+    public boolean shouldRender(T entity, Frustum frustum, double x, double y, double z) {
+        return super.shouldRender(entity, frustum, x, y, z);
     }
 
     @Override

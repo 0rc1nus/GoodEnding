@@ -44,15 +44,11 @@ public class BirchMushroomPlantBlock extends PlantBlock {
         };
     }
 
-    private boolean canPlaceOn(BlockView world, BlockPos pos) {
-        BlockState blockState = world.getBlockState(pos);
-        return blockState.isIn(BlockTags.BIRCH_LOGS);
-    }
-
     @Override
     public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
         Direction direction = state.get(FACING);
-        return this.canPlaceOn(world, pos.offset(direction.getOpposite()));
+        BlockPos offset = pos.offset(direction.getOpposite());
+        return world.getBlockState(offset).isSideSolidFullSquare(world, offset, direction);
     }
 
     @Override

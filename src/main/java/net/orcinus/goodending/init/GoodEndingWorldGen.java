@@ -1,12 +1,16 @@
 package net.orcinus.goodending.init;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.collection.DataPool;
+import net.minecraft.util.dynamic.Range;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.intprovider.ConstantIntProvider;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
+import net.minecraft.util.math.noise.DoublePerlinNoiseSampler;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.world.gen.blockpredicate.BlockPredicate;
@@ -25,6 +29,7 @@ import net.minecraft.world.gen.feature.RandomPatchFeatureConfig;
 import net.minecraft.world.gen.feature.SimpleBlockFeatureConfig;
 import net.minecraft.world.gen.feature.TreeConfiguredFeatures;
 import net.minecraft.world.gen.feature.TreeFeatureConfig;
+import net.minecraft.world.gen.feature.VegetationConfiguredFeatures;
 import net.minecraft.world.gen.feature.VegetationPlacedFeatures;
 import net.minecraft.world.gen.feature.size.ThreeLayersFeatureSize;
 import net.minecraft.world.gen.feature.size.TwoLayersFeatureSize;
@@ -39,7 +44,9 @@ import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier;
 import net.minecraft.world.gen.placementmodifier.SquarePlacementModifier;
 import net.minecraft.world.gen.placementmodifier.SurfaceWaterDepthFilterPlacementModifier;
 import net.minecraft.world.gen.stateprovider.BlockStateProvider;
+import net.minecraft.world.gen.stateprovider.DualNoiseBlockStateProvider;
 import net.minecraft.world.gen.stateprovider.PredicatedStateProvider;
+import net.minecraft.world.gen.stateprovider.WeightedBlockStateProvider;
 import net.minecraft.world.gen.trunk.DarkOakTrunkPlacer;
 import net.minecraft.world.gen.trunk.StraightTrunkPlacer;
 import net.orcinus.goodending.GoodEnding;
@@ -64,7 +71,7 @@ public class GoodEndingWorldGen {
     public static final RegistryEntry<ConfiguredFeature<RandomFeatureConfig, ?>> CYPRESS_TREE_FILTERED = register("cypress_tree_filtered", Feature.RANDOM_SELECTOR, new RandomFeatureConfig(List.of(new RandomFeatureEntry(CYPRESS_TREE_CHECKED, 0.8F)), CYPRESS_TREE_CHECKED));
     public static final RegistryEntry<PlacedFeature> CYPRESS_TREE_PLACED = register("cypress_tree_placed", CYPRESS_TREE_FILTERED, SquarePlacementModifier.of(), SurfaceWaterDepthFilterPlacementModifier.of(8), PlacedFeatures.createCountExtraModifier(4, 0.5F, 4), PlacedFeatures.OCEAN_FLOOR_HEIGHTMAP, BiomePlacementModifier.of());
 
-    public static final RegistryEntry<ConfiguredFeature<TreeFeatureConfig, ?>> SWAMP_TREE = register("swamp_tree", GoodEndingFeatures.SWAMP_TREE, new TreeFeatureConfig.Builder(BlockStateProvider.of(Blocks.OAK_LOG), new DarkOakTrunkPlacer(6, 2, 1), BlockStateProvider.of(Blocks.OAK_LEAVES), new DarkOakFoliagePlacer(ConstantIntProvider.create(0), ConstantIntProvider.create(0)), new ThreeLayersFeatureSize(1, 1, 0, 1, 2, OptionalInt.empty())).build());
+    public static final RegistryEntry<ConfiguredFeature<TreeFeatureConfig, ?>> SWAMP_TREE = register("swamp_tree", GoodEndingFeatures.SWAMP_TREE, new TreeFeatureConfig.Builder(BlockStateProvider.of(GoodEndingBlocks.SWAMP_LOG), new DarkOakTrunkPlacer(6, 2, 1), BlockStateProvider.of(Blocks.OAK_LEAVES), new DarkOakFoliagePlacer(ConstantIntProvider.create(0), ConstantIntProvider.create(0)), new ThreeLayersFeatureSize(1, 1, 0, 1, 2, OptionalInt.empty())).build());
     public static final RegistryEntry<PlacedFeature> SWAMP_TREE_PLACED = register("swamp_tree", SWAMP_TREE, CountPlacementModifier.of(1), SquarePlacementModifier.of(), PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP, EnvironmentScanPlacementModifier.of(Direction.DOWN, BlockPredicate.matchingBlockTag(BlockTags.DIRT), BlockPredicate.IS_AIR, 12), BiomePlacementModifier.of());
 
     public static final RegistryEntry<ConfiguredFeature<HalfWaterloggedDecorationConfig, ?>> CATTAIL_PATCH = register("cattail_patch", GoodEndingFeatures.HALF_WATERLOGGED_DECORATION, new HalfWaterloggedDecorationConfig(BlockStateProvider.of(GoodEndingBlocks.CATTAIL), UniformIntProvider.create(6, 8)));
@@ -92,9 +99,11 @@ public class GoodEndingWorldGen {
     public static final RegistryEntry<PlacedFeature> PATCH_SPICY_WILDFLOWERS_PLACED = register("patch_spicy_wildflowers", PATCH_SPICY_WILDFLOWERS, RarityFilterPlacementModifier.of(30), CountPlacementModifier.of(3), SquarePlacementModifier.of(), PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP, BiomePlacementModifier.of());
     public static final RegistryEntry<PlacedFeature> PATCH_BALMY_WILDFLOWERS_PLACED = register("patch_balmy_wildflowers", PATCH_BALMY_WILDFLOWERS, RarityFilterPlacementModifier.of(30), CountPlacementModifier.of(3), SquarePlacementModifier.of(), PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP, BiomePlacementModifier.of());
 
+    public static final RegistryEntry<ConfiguredFeature<RandomPatchFeatureConfig, ?>> PATCH_TALL_GRASS = register("patch_tall_grass", Feature.RANDOM_PATCH, new RandomPatchFeatureConfig(32, 7, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(new WeightedBlockStateProvider(DataPool.<BlockState>builder().add(Blocks.GRASS.getDefaultState(), 10).add(Blocks.TALL_GRASS.getDefaultState(), 20).add(GoodEndingBlocks.POLLENFLAKE.getDefaultState(), 3).add(Blocks.AZURE_BLUET.getDefaultState(), 1).add(Blocks.OXEYE_DAISY.getDefaultState(), 1))), BlockPredicate.bothOf(BlockPredicate.IS_AIR, BlockPredicate.not(BlockPredicate.matchingBlocks(Direction.DOWN.getVector(), Blocks.PODZOL))))));
+
     public static final RegistryEntry<ConfiguredFeature<TreeFeatureConfig, ?>> TALL_BIRCH_TREE = register("tall_birch_tree", GoodEndingFeatures.TALL_BIRCH_TREE, new TreeFeatureConfig.Builder(BlockStateProvider.of(Blocks.BIRCH_LOG), new StraightTrunkPlacer(5, 2, 1), BlockStateProvider.of(Blocks.BIRCH_LEAVES), new DarkOakFoliagePlacer(ConstantIntProvider.create(0), ConstantIntProvider.create(0)), new TwoLayersFeatureSize(0,0,0)).build());
     public static final RegistryEntry<PlacedFeature> TALL_BIRCH_TREE_FILTERED = register("tall_birch_tree_filtered", TALL_BIRCH_TREE, PlacedFeatures.wouldSurvive(Blocks.BIRCH_SAPLING));
-    public static final RegistryEntry<ConfiguredFeature<RandomFeatureConfig, ?>> TALL_BIRCH_VEGETATION = register("tall_birch_vegetation", Feature.RANDOM_SELECTOR, new RandomFeatureConfig(List.of(new RandomFeatureEntry(TALL_BIRCH_TREE_FILTERED, 0.5F), new RandomFeatureEntry(PlacedFeatures.createEntry(PATCH_PASTEL_WILDFLOWERS), 0.5F), new RandomFeatureEntry(PlacedFeatures.createEntry(PATCH_TWILIGHT_WILDFLOWERS), 0.5F)), PlacedFeatures.createEntry(PATCH_BALMY_WILDFLOWERS)));
+    public static final RegistryEntry<ConfiguredFeature<RandomFeatureConfig, ?>> TALL_BIRCH_VEGETATION = register("tall_birch_vegetation", Feature.RANDOM_SELECTOR, new RandomFeatureConfig(List.of(new RandomFeatureEntry(TALL_BIRCH_TREE_FILTERED, 0.5F)), PlacedFeatures.createEntry(PATCH_TALL_GRASS)));
     public static final RegistryEntry<PlacedFeature> TALL_BIRCH_VEGETATION_PLACED = register("tall_birch_vegetation", TALL_BIRCH_VEGETATION, CountPlacementModifier.of(16), SquarePlacementModifier.of(), VegetationPlacedFeatures.NOT_IN_SURFACE_WATER_MODIFIER, PlacedFeatures.OCEAN_FLOOR_HEIGHTMAP, BiomePlacementModifier.of());
 
     public static final RegistryEntry<ConfiguredFeature<RandomPatchFeatureConfig, ?>> PATCH_PINK_FLOWERED_LILY = register("patch_pink_flowered_lily", Feature.RANDOM_PATCH, new RandomPatchFeatureConfig(10, 7, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(BlockStateProvider.of(GoodEndingBlocks.PINK_FLOWERING_LILY_PAD)))));

@@ -30,6 +30,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.minecraft.util.math.random.Random;
@@ -41,6 +42,8 @@ import net.orcinus.goodending.entities.ai.FlyAroundGoal;
 import net.orcinus.goodending.init.GoodEndingItems;
 import net.orcinus.goodending.init.GoodEndingParticleTypes;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 public class FireflyEntity extends PathAwareEntity implements Flutterer {
     private static final TrackedData<Integer> COUNT = DataTracker.registerData(FireflyEntity.class, TrackedDataHandlerRegistry.INTEGER);
@@ -148,7 +151,7 @@ public class FireflyEntity extends PathAwareEntity implements Flutterer {
     public void tickMovement() {
         super.tickMovement();
         if (this.world.isDay() && !this.world.isClient()) {
-            this.discard();
+            this.world.getNonSpectatingEntities(PlayerEntity.class, new Box(this.getBlockPos()).expand(16.0D)).stream().filter(Objects::isNull).forEach(player -> this.discard());
         }
     }
 
