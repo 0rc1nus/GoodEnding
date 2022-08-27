@@ -135,4 +135,34 @@ public interface WoodpeckerAnimations {
                                                      new Keyframe(0f, method_41829(-45f, 0f, 0f), Transformation.Interpolations.field_37884))
                                                  )
                                                  .build();
+
+    Animation WOODPECKER_STANDING = Animation.Builder.create(0f)
+                                                     .addBoneAnimation("head", new Transformation(Transformation.Targets.TRANSLATE, 
+                                                         new Keyframe(0f, method_41823(0f, -0.5f, -5f), Transformation.Interpolations.field_37884))
+                                                     )
+                                                     .addBoneAnimation("head", new Transformation(Transformation.Targets.ROTATE, 
+                                                         new Keyframe(0f, method_41829(-37.5f, 0f, 0f), Transformation.Interpolations.field_37884))
+                                                     )
+                                                     .addBoneAnimation("body", new Transformation(Transformation.Targets.TRANSLATE, 
+                                                         new Keyframe(0f, method_41823(0f, 0f, -6.15f), Transformation.Interpolations.field_37884))
+                                                     )
+                                                     .addBoneAnimation("body", new Transformation(Transformation.Targets.ROTATE, 
+                                                         new Keyframe(0f, method_41829(-45f, 0f, 0f), Transformation.Interpolations.field_37884))
+                                                     )
+                                                     .addBoneAnimation("leftWing", new Transformation(Transformation.Targets.ROTATE,
+                                                         new Keyframe(0f, method_41829(0f, 0f, 0f), Transformation.Interpolations.field_37884))
+                                                     )
+                                                     .addBoneAnimation("rightWing", new Transformation(Transformation.Targets.ROTATE, 
+                                                         new Keyframe(0f, method_41829(0f, 0f, 0f), Transformation.Interpolations.field_37884))
+                                                     )
+                                                     .addBoneAnimation("tail", new Transformation(Transformation.Targets.ROTATE, 
+                                                         new Keyframe(0f, method_41829(-52.5f, 0f, 0f), Transformation.Interpolations.field_37884))
+                                                     )
+                                                     .addBoneAnimation("leftLeg", new Transformation(Transformation.Targets.ROTATE, 
+                                                         new Keyframe(0f, method_41829(-45f, 0f, 0f), Transformation.Interpolations.field_37884))
+                                                     )
+                                                     .addBoneAnimation("rightLeg", new Transformation(Transformation.Targets.ROTATE, 
+                                                         new Keyframe(0f, method_41829(-45f, 0f, 0f), Transformation.Interpolations.field_37884))
+                                                     )
+                                                     .build();
 }
