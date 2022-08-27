@@ -52,6 +52,7 @@ public class GoodEndingClient implements ClientModInitializer {
                 GoodEndingBlocks.SWAMP_DOOR,
                 GoodEndingBlocks.CYPRESS_DOOR,
                 GoodEndingBlocks.CYPRESS_TRAPDOOR,
+                GoodEndingBlocks.SWAMP_SAPLING,
                 GoodEndingBlocks.CYPRESS_SAPLING,
                 GoodEndingBlocks.POTTED_CYPRESS_SAPLING,
                 GoodEndingBlocks.POLLENFLAKE
@@ -87,7 +88,8 @@ public class GoodEndingClient implements ClientModInitializer {
                 GoodEndingBlocks.LARGE_LILY_PAD,
                 GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD,
                 GoodEndingBlocks.PINK_FLOWERING_LILY_PAD,
-                GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD
+                GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD,
+                GoodEndingBlocks.SWAMP_LEAVES
         );
         blockColor.register((state, world, pos, tintIndex) -> FoliageColors.getBirchColor(), GoodEndingBlocks.DENSE_BIRCH_LEAVES);
 
@@ -100,7 +102,8 @@ public class GoodEndingClient implements ClientModInitializer {
                 Blocks.LILY_PAD,
                 GoodEndingBlocks.CYPRESS_LEAVES,
                 GoodEndingBlocks.HANGING_OAK_LEAVES,
-                GoodEndingBlocks.HANGING_DARK_OAK_LEAVES
+                GoodEndingBlocks.HANGING_DARK_OAK_LEAVES,
+                GoodEndingBlocks.SWAMP_LEAVES
         );
 
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {

@@ -41,8 +41,9 @@ public class SwampTreeFeature extends Feature<TreeFeatureConfig> {
             Direction direction = Direction.Type.HORIZONTAL.random(random);
             if (random.nextInt(2) == 0 && i >= treeHeight / 2) {
                 for (int branchLength = 0; branchLength <= MathHelper.nextInt(random, 1, 2); branchLength++) {
-                    if (world.testBlockState(blockPos.up(i).offset(direction, branchLength), blockState -> blockState.isAir() || blockState.isIn(BlockTags.LEAVES) || blockState.isOf(Blocks.WATER))){
-                        world.setBlockState(blockPos.up(i).offset(direction, branchLength), config.trunkProvider.getBlockState(random, blockPos.up(i).offset(direction, branchLength)).with(PillarBlock.AXIS, direction.getAxis()), 19);
+                    BlockPos branchPos = blockPos.up(i).offset(direction, branchLength);
+                    if (world.testBlockState(branchPos.down(), DripstoneHelper::canGenerate) && world.testBlockState(branchPos, blockState -> blockState.isAir() || blockState.isIn(BlockTags.LEAVES) || blockState.isOf(Blocks.WATER))){
+                        world.setBlockState(branchPos, config.trunkProvider.getBlockState(random, branchPos).with(PillarBlock.AXIS, direction.getAxis()), 19);
                     }
                 }
                 if (world.testBlockState(blockPos.up(i), blockState -> blockState.isAir() || blockState.isIn(BlockTags.LEAVES) || blockState.isOf(Blocks.WATER) || blockState.isIn(BlockTags.LOGS))){
