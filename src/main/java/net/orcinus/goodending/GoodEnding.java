@@ -2,6 +2,7 @@ package net.orcinus.goodending;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import com.google.common.reflect.Reflection;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
@@ -16,7 +17,6 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.recipe.BrewingRecipeRegistry;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.tag.TagKey;
@@ -39,6 +39,7 @@ import net.orcinus.goodending.init.GoodEndingEntityTypes;
 import net.orcinus.goodending.init.GoodEndingFeatures;
 import net.orcinus.goodending.init.GoodEndingItems;
 import net.orcinus.goodending.init.GoodEndingPotions;
+import net.orcinus.goodending.init.GoodEndingSoundEvents;
 import net.orcinus.goodending.init.GoodEndingStatusEffects;
 import net.orcinus.goodending.init.GoodEndingWorldGen;
 import org.slf4j.Logger;
@@ -64,14 +65,20 @@ public class GoodEnding implements ModInitializer {
 	//-866439392768082315
 	//-2752 63 -3572
 
+	@SuppressWarnings("UnstableApiUsage")
 	@Override
 	public void onInitialize() {
+
+		Reflection.initialize(
+		GoodEndingSoundEvents.class
+		);
 		GoodEndingItems.init();
 		GoodEndingBlocks.init();
 		GoodEndingEnchantments.init();
 		GoodEndingFeatures.init();
 		GoodEndingStatusEffects.init();
 		GoodEndingPotions.init();
+
 
 		Util.make(ImmutableMap.<RegistryEntry<PlacedFeature>, GenerationStep.Feature>builder(),map -> {
 			map.put(GoodEndingWorldGen.DISK_MUD_PLACED, GenerationStep.Feature.UNDERGROUND_ORES);

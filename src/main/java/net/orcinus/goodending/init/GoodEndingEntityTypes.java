@@ -17,6 +17,7 @@ import net.orcinus.goodending.entities.FireflyEntity;
 import net.orcinus.goodending.entities.GoodEndingBoatEntity;
 import net.orcinus.goodending.entities.GoodEndingChestBoatEntity;
 import net.orcinus.goodending.entities.MarshEntity;
+import net.orcinus.goodending.entities.WoodpeckerEntity;
 
 public class GoodEndingEntityTypes {
     public static final EntityType<GoodEndingBoatEntity> BOAT = register("boat", FabricEntityTypeBuilder.<GoodEndingBoatEntity>create().entityFactory(GoodEndingBoatEntity::new).spawnGroup(SpawnGroup.MISC).dimensions(EntityDimensions.fixed(1.375f, 0.5625f)).trackRangeChunks(10), null);
@@ -40,6 +41,16 @@ public class GoodEndingEntityTypes {
                     .spawnGroup(SpawnGroup.CREATURE)
                     .dimensions(EntityDimensions.fixed(0.5F, 1.4F)),
             new int[]{ 3423006, 6979129 }
+    );
+
+    public static final EntityType<WoodpeckerEntity> WOODPECKER = register(
+        "woodpecker",
+        FabricEntityTypeBuilder.createMob()
+                               .entityFactory(WoodpeckerEntity::new)
+                               .defaultAttributes(WoodpeckerEntity::createWoodPeckerAttributes)
+                               .spawnGroup(SpawnGroup.CREATURE)
+                               .dimensions(EntityDimensions.changing(0.25F, 0.5F)),
+        new int[]{ 0xCB4613, 0xFFFFFF }
     );
 
     @SuppressWarnings("unchecked")

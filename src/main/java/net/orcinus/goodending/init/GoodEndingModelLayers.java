@@ -8,6 +8,7 @@ import net.orcinus.goodending.entities.GoodEndingBoatEntity;
 public class GoodEndingModelLayers {
 
     public static final EntityModelLayer MARSH = new EntityModelLayer(new Identifier(GoodEnding.MODID, "marsh"), "main");
+    public static final EntityModelLayer WOODPECKER = new EntityModelLayer(new Identifier(GoodEnding.MODID, "woodpecker"), "main");
 
     public static EntityModelLayer createChestBoat(GoodEndingBoatEntity.BoatType type) {
         return create("chest_boat/" + type.getName(), "main");

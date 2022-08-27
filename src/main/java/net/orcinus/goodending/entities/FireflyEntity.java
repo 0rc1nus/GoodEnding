@@ -101,10 +101,6 @@ public class FireflyEntity extends PathAwareEntity implements Flutterer {
     }
 
     @Override
-    protected void playStepSound(BlockPos pos, BlockState state) {
-    }
-
-    @Override
     protected void fall(double heightDifference, boolean onGround, BlockState state, BlockPos landedPosition) {
     }
 

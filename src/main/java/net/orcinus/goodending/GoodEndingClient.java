@@ -16,11 +16,13 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.BoatEntityModel;
 import net.minecraft.item.BlockItem;
 import net.orcinus.goodending.client.models.MarshEntityModel;
+import net.orcinus.goodending.client.models.WoodPeckerEntityModel;
 import net.orcinus.goodending.client.particles.BirchLeafParticle;
 import net.orcinus.goodending.client.particles.FireflyParticle;
 import net.orcinus.goodending.client.renderer.FireflyRenderer;
 import net.orcinus.goodending.client.renderer.GoodEndingBoatEntityRenderer;
 import net.orcinus.goodending.client.renderer.MarshRenderer;
+import net.orcinus.goodending.client.renderer.WoodpeckerRenderer;
 import net.orcinus.goodending.entities.GoodEndingBoatEntity;
 import net.orcinus.goodending.init.GoodEndingBlocks;
 import net.orcinus.goodending.init.GoodEndingEntityTypes;
@@ -65,12 +67,14 @@ public class GoodEndingClient implements ClientModInitializer {
         EntityRendererRegistry.register(GoodEndingEntityTypes.CHEST_BOAT, ctx -> new GoodEndingBoatEntityRenderer(ctx, true));
         EntityRendererRegistry.register(GoodEndingEntityTypes.FIREFLY_SWARM, FireflyRenderer::new);
         EntityRendererRegistry.register(GoodEndingEntityTypes.MARSH, MarshRenderer::new);
+        EntityRendererRegistry.register(GoodEndingEntityTypes.WOODPECKER, WoodpeckerRenderer::new);
 
         Arrays.stream(GoodEndingBoatEntity.BoatType.values()).forEach(type -> {
             EntityModelLayerRegistry.registerModelLayer(GoodEndingModelLayers.createBoat(type), () -> BoatEntityModel.getTexturedModelData(false));
             EntityModelLayerRegistry.registerModelLayer(GoodEndingModelLayers.createChestBoat(type), () -> BoatEntityModel.getTexturedModelData(true));
         });
         EntityModelLayerRegistry.registerModelLayer(GoodEndingModelLayers.MARSH, MarshEntityModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(GoodEndingModelLayers.WOODPECKER, WoodPeckerEntityModel::getTexturedModelData);
 
         ColorProviderRegistry<Block, BlockColorProvider> blockColor = ColorProviderRegistry.BLOCK;
         blockColor.register((state, world, pos, tintIndex) -> {

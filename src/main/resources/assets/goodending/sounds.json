@@ -1,0 +1,36 @@
+{
+  "entity.woodpecker.fly": {
+    "sounds": [
+      "goodending:entity/woodpecker/fly1",
+      "goodending:entity/woodpecker/fly2",
+      "goodending:entity/woodpecker/fly3",
+      "goodending:entity/woodpecker/fly4",
+      "goodending:entity/woodpecker/fly5",
+      "goodending:entity/woodpecker/fly6"
+    ],
+    "subtitle": "subtitles.goodending.entity.woodpecker.fly"
+  },
+  "entity.woodpecker.idle": {
+    "sounds": [
+      "goodending:entity/woodpecker/idle1",
+      "goodending:entity/woodpecker/idle2",
+      "goodending:entity/woodpecker/idle3",
+      "goodending:entity/woodpecker/idle4"
+    ],
+    "subtitle": "subtitles.goodending.entity.woodpecker.idle"
+  },
+  "entity.woodpecker.hurt": {
+    "sounds": [
+      "goodending:entity/woodpecker/hurt1",
+      "goodending:entity/woodpecker/hurt2",
+      "goodending:entity/woodpecker/hurt3"
+    ],
+    "subtitle": "subtitles.goodending.entity.woodpecker.hurt"
+  },
+  "entity.woodpecker.death": {
+    "sounds": [
+      "goodending:entity/woodpecker/death"
+    ],
+    "subtitle": "subtitles.goodending.entity.woodpecker.death"
+  }
+}

@@ -42,6 +42,7 @@
   "item.goodending.marsh_spawn_egg": "Marsh Spawn Egg",
   "item.goodending.firefly_bottle": "Firefly Bottle",
   "item.goodending.firefly_swarm_spawn_egg": "Firefly Swarm Spawn Egg",
+  "item.goodending.woodpecker_spawn_egg": "Woodpecker Spawn Egg",
   "effect.goodending.strong_immunity": "Strong Immunity",
   "effect.goodending.contemporary_immunity": "Contemporary Immunity",
   "effect.goodending.shattered_immunity": "Shattered Immunity",
@@ -49,5 +50,6 @@
   "entity.goodending.chest_boat": "Boat with Chest",
   "entity.goodending.boat": "Boat",
   "entity.goodending.firefly_swarm": "Firefly Swarm",
+  "entity.goodending.woodpecker": "Woodpecker",
   "entity.goodending.marsh": "Marsh"
 }
