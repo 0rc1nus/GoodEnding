@@ -41,6 +41,9 @@ public class TallBirchTreeFeature extends Feature<TreeFeatureConfig> {
         BlockPos blockPos = context.getOrigin();
         Random random = context.getRandom();
         int height = UniformIntProvider.create(6, 12).get(random);
+        if (random.nextInt(3) == 0 && height <= 10) {
+            height *= 1.25;
+        }
         TreeFeatureConfig config = context.getConfig();
         List<BlockPos> decorationPoses = Lists.newArrayList();
         List<BlockPos> branchPoses = Lists.newArrayList();
@@ -86,16 +89,19 @@ public class TallBirchTreeFeature extends Feature<TreeFeatureConfig> {
             BlockPos offsetPos = branchPos.offset(randomDirection);
             if (random.nextInt(5) == 0 && world.isAir(offsetPos) && world.isAir(offsetPos.down())) {
                 world.setBlockState(offsetPos, config.trunkProvider.getBlockState(random, offsetPos).with(PillarBlock.AXIS, randomDirection.getAxis()), 19);
-                if (world.isAir(offsetPos.down()) && random.nextFloat() < 0.01F) {
-                    this.setBeehive(world, random, offsetPos);
+                if (world.isAir(offsetPos.down()) && random.nextFloat() < 0.02F) {
+                    this.setBeehive(world, random, offsetPos, randomDirection);
                 }
             }
         });
         return false;
     }
 
-    private void setBeehive(StructureWorldAccess world, Random random, BlockPos offsetPos) {
-        world.setBlockState(offsetPos.down(), Blocks.BEE_NEST.getDefaultState().with(BeehiveBlock.FACING, Direction.SOUTH), 2);
+    private void setBeehive(StructureWorldAccess world, Random random, BlockPos offsetPos, Direction direction) {
+        if (world.getBlockState(offsetPos.offset(direction)).isIn(BlockTags.LOGS)) {
+            direction = direction.getOpposite();
+        }
+        world.setBlockState(offsetPos.down(), Blocks.BEE_NEST.getDefaultState().with(BeehiveBlock.FACING, direction), 2);
         world.getBlockEntity(offsetPos.down(), BlockEntityType.BEEHIVE).ifPresent(blockEntity -> {
             int i = 2 + random.nextInt(2);
             for (int j = 0; j < i; ++j) {
