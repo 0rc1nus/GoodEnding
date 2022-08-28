@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:block/leaves",
+  "parent": "minecraft:block/cube_all",
   "textures": {
     "all": "goodending:block/swamp_planks"
   }

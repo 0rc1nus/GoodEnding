@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/tinted_cross",
+  "textures": {
+    "cross": "goodending:block/hanging_oak_leaves_plant"
+  }
+}

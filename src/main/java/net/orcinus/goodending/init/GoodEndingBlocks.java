@@ -98,7 +98,6 @@ public class GoodEndingBlocks {
     public static final Block CYPRESS_SIGN = registerNoTabBlock("cypress_sign", new SignBlock(FabricBlockSettings.of(Material.WOOD, CYPRESS_LOG.getDefaultMapColor()).noCollision().strength(1.0F).sounds(BlockSoundGroup.WOOD), GoodEndingSignTypes.CYPRESS));
     public static final Block CYPRESS_WALL_SIGN = registerNoTabBlock("cypress_wall_sign", new WallSignBlock(AbstractBlock.Settings.of(Material.WOOD, CYPRESS_LOG.getDefaultMapColor()).noCollision().strength(1.0F).sounds(BlockSoundGroup.WOOD).dropsLike(CYPRESS_SIGN), GoodEndingSignTypes.CYPRESS));
 
-
     public static <B extends Block> B registerBlock(String name, B block) {
         Identifier id = new Identifier(GoodEnding.MODID, name);
         BLOCKS.put(id, block);

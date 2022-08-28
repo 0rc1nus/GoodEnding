@@ -54,7 +54,7 @@ public class MarshEntity extends PathAwareEntity {
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
         nbt.putInt("BurpingTicks", this.getBurpingTicks());
-        nbt.putString("StoredPotion", Registry.POTION.getId(this.getStoredPotion()).toString());
+        nbt.putString("Potion", Registry.POTION.getId(this.getStoredPotion()).toString());
     }
 
     @Override

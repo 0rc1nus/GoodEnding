@@ -1,6 +1,7 @@
 package net.orcinus.goodending.entities;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Flutterer;
 import net.minecraft.entity.ai.FuzzyTargeting;
@@ -16,9 +17,14 @@ import net.minecraft.entity.ai.pathing.PathNodeType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.entity.mob.ShulkerEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.tag.BlockTags;
@@ -27,6 +33,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.orcinus.goodending.entities.ai.AttachToWood;
 import net.orcinus.goodending.init.GoodEndingSoundEvents;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,6 +44,11 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
     public float prevFlapProgress;
     private float flapSpeed = 1.0f;
     private float field_28640 = 1.0f;
+    protected static final TrackedData<Direction> ATTACHED_FACE = DataTracker.registerData(WoodpeckerEntity.class, TrackedDataHandlerRegistry.FACING);
+    private static final TrackedData<Boolean> ATTACHED_WOOD = DataTracker.registerData(WoodpeckerEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private boolean isAttachedWood;
+    public final AnimationState woodpecker_peck = new AnimationState();
+    public final AnimationState standing = new AnimationState();
 
     public WoodpeckerEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
         super(entityType, world);
@@ -46,10 +58,37 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
     }
 
     @Override
+    public void tick() {
+        super.tick();
+        if (this.world.isClient()) {
+            boolean attachedWood = this.isAttachedWood();
+             if (attachedWood) {
+//                this.standing.startIfNotRunning(this.age);
+                this.woodpecker_peck.startIfNotRunning(this.age);
+            } else {
+//                this.standing.stop();
+                this.woodpecker_peck.stop();
+            }
+        }
+    }
+
+    private boolean shouldWalk() {
+        return this.onGround && this.getVelocity().horizontalLengthSquared() > 1.0E-6 && !this.isInsideWaterOrBubbleColumn();
+    }
+
+    @Override
+    protected void initDataTracker() {
+        super.initDataTracker();
+        this.dataTracker.startTracking(ATTACHED_FACE, Direction.DOWN);
+        this.dataTracker.startTracking(ATTACHED_WOOD, false);
+    }
+
+    @Override
     protected void initGoals() {
         this.goalSelector.add(0, new EscapeDangerGoal(this, 1.25));
         this.goalSelector.add(0, new SwimGoal(this));
         this.goalSelector.add(1, new FlyOntoBranchGoal(this, 1.0f));
+        this.goalSelector.add(1, new AttachToWood(this));
         this.goalSelector.add(3, new WanderAroundFarGoal(this, 1.0f));
         this.goalSelector.add(2, new LookAtEntityGoal(this, PlayerEntity.class, 8.0f));
     }
@@ -62,12 +101,56 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
     }
 
     @Override
+    public void setVelocity(Vec3d velocity) {
+        if (this.isAttachedWood()) {
+            return;
+        }
+        super.setVelocity(velocity);
+    }
+
+    @Override
+    public Vec3d getVelocity() {
+        return this.isAttachedWood() ? Vec3d.ZERO : super.getVelocity();
+    }
+
+    @Override
     protected EntityNavigation createNavigation(World world) {
         BirdNavigation birdNavigation = new BirdNavigation(this, world);
         birdNavigation.setCanPathThroughDoors(false);
         birdNavigation.setCanSwim(true);
         birdNavigation.setCanEnterOpenDoors(true);
         return birdNavigation;
+    }
+
+    @Override
+    public void readCustomDataFromNbt(NbtCompound nbt) {
+        super.readCustomDataFromNbt(nbt);
+        this.setAttachedFace(Direction.byId(nbt.getByte("AttachFace")));
+        this.setAttachedWood(nbt.getBoolean("AttachedToWood"));
+    }
+
+    @Override
+    public void writeCustomDataToNbt(NbtCompound nbt) {
+        super.writeCustomDataToNbt(nbt);
+        nbt.putByte("AttachFace", (byte)this.getAttachedFace().getId());
+        nbt.putBoolean("AttachedToWood", this.isAttachedWood());
+    }
+
+    public boolean isAttachedWood() {
+        return this.dataTracker.get(ATTACHED_WOOD);
+    }
+
+    public void setAttachedWood(boolean isAttachedWood) {
+        this.dataTracker.set(ATTACHED_WOOD, isAttachedWood);
+    }
+
+    public Direction getAttachedFace() {
+        Direction direction = this.dataTracker.get(ATTACHED_FACE);
+        return direction;
+    }
+
+    public void setAttachedFace(Direction face) {
+        this.dataTracker.set(ATTACHED_FACE, face);
     }
 
     @Override
@@ -173,7 +256,7 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
             BlockPos.Mutable mutable2 = new BlockPos.Mutable();
             Iterable<BlockPos> iterable = BlockPos.iterate(MathHelper.floor(this.mob.getX() - 3.0), MathHelper.floor(this.mob.getY() - 6.0), MathHelper.floor(this.mob.getZ() - 3.0), MathHelper.floor(this.mob.getX() + 3.0), MathHelper.floor(this.mob.getY() + 6.0), MathHelper.floor(this.mob.getZ() + 3.0));
             for (BlockPos blockPos2 : iterable) {
-                BlockPos blockPos3 = new BlockPos(blockPos2.getX(), blockPos2.getY() + 1, blockPos2.getZ()) ;
+                BlockPos blockPos3 = new BlockPos(blockPos2.getX() + 0.5D, blockPos2.getY() + 1, blockPos2.getZ() + 0.5D) ;
                 if (blockPos.equals(blockPos2) || !this.mob.world.getBlockState(mutable2.set(blockPos2, Direction.DOWN)).isIn(BlockTags.LOGS) || !this.mob.world.isAir(blockPos2) || !this.mob.world.isAir(mutable.set(blockPos2, Direction.UP))) continue;
                 return Vec3d.of(blockPos3);
             }

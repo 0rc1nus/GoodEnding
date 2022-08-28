@@ -4,9 +4,18 @@
   "package": "net.orcinus.goodending.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "BlockEntityTypeMixin",
+    "BoatEntityAccessor",
+    "BrewingRecipeRegistryAccessor",
+    "ItemMixin",
+    "LilyPadBlockMixin",
+    "LivingEntityMixin",
+    "SaplingBlockMixin",
     "SignTypeInvoker"
   ],
   "client": [
+    "EntityModelLayersMixin",
+    "TexturedRenderLayersMixin"
   ],
   "injectors": {
     "defaultRequire": 1

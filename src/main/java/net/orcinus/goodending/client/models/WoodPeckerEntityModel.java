@@ -8,6 +8,7 @@ import net.minecraft.client.model.ModelTransform;
 import net.minecraft.client.model.TexturedModelData;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.entity.mob.PathAwareEntity;
+import net.orcinus.goodending.client.animations.WoodpeckerAnimations;
 import net.orcinus.goodending.entities.WoodpeckerEntity;
 
 import static net.minecraft.client.render.entity.model.EntityModelPartNames.*;
@@ -121,6 +122,8 @@ public class WoodPeckerEntityModel<W extends PathAwareEntity> extends SinglePart
         head.yaw = headYaw * ((float) Math.PI / 180f);
 
         this.getPart().traverse().forEach(ModelPart::resetTransform);
+        this.updateAnimation(entity.woodpecker_peck, WoodpeckerAnimations.WOODPECKER_PECK, animationProgress);
+        this.updateAnimation(entity.standing, WoodpeckerAnimations.WOODPECKER_STANDING, animationProgress);
 
         if (entity.isOnGround()) {
             leftWing.roll = 0F;
