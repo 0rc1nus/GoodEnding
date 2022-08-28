@@ -36,16 +36,15 @@ public class AttachToWood extends Goal {
         if (blockPos != null) {
             this.woodpeckerEntity.getMoveControl().moveTo(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 1.0F);
             this.woodpeckerEntity.getLookControl().lookAt(blockPos.getX(), blockPos.getY(), blockPos.getZ());
-            boolean isClose = this.woodpeckerEntity.getBlockPos().isWithinDistance(blockPos, 1.05D);
-            if (isClose) {
+            double distance = Math.sqrt(this.woodpeckerEntity.squaredDistanceTo(blockPos.getX(), blockPos.getY(), blockPos.getZ()));
+            if (distance < 1.01D) {
                 this.woodpeckerEntity.setAttachedWood(true);
                 Direction direction = this.findDirection();
-                if (this.woodpeckerEntity.world.getBlockState(blockPos).isIn(BlockTags.LOGS) && blockPos.getY() == this.woodpeckerEntity.getY() && direction != null) {
+                if (this.woodpeckerEntity.world.getBlockState(blockPos).isIn(BlockTags.LOGS) && direction != null) {
                     BlockPos relativePos = blockPos.add(direction.getOffsetX(), direction.getOffsetY(), direction.getOffsetZ());
                     this.woodpeckerEntity.setAttachedFace(direction);
-                    {
-                        this.woodpeckerEntity.getMoveControl().moveTo(relativePos.getX(), relativePos.getY(), relativePos.getZ(), 1.0F);
-                    }
+                    this.woodpeckerEntity.getNavigation().startMovingTo(relativePos.getX(), relativePos.getY(), relativePos.getZ(), 1.0F);
+                    this.woodpeckerEntity.getLookControl().lookAt(relativePos.getX(), relativePos.getY(), relativePos.getZ());
                 }
             }
         }
@@ -74,9 +73,10 @@ public class AttachToWood extends Goal {
                 }
             }
         }
+
         if (poses.isEmpty()) return null;
 
-        return poses.get(this.woodpeckerEntity.world.getRandom().nextInt(poses.size()));
+        return poses.get(0);
     }
     
 }

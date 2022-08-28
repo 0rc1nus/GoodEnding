@@ -4,6 +4,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Flutterer;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.FuzzyTargeting;
 import net.minecraft.entity.ai.control.FlightMoveControl;
 import net.minecraft.entity.ai.goal.EscapeDangerGoal;
@@ -22,7 +23,6 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.entity.mob.ShulkerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundEvent;
@@ -46,7 +46,8 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
     private float field_28640 = 1.0f;
     protected static final TrackedData<Direction> ATTACHED_FACE = DataTracker.registerData(WoodpeckerEntity.class, TrackedDataHandlerRegistry.FACING);
     private static final TrackedData<Boolean> ATTACHED_WOOD = DataTracker.registerData(WoodpeckerEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-    private boolean isAttachedWood;
+    @Nullable
+    private BlockPos woodPos;
     public final AnimationState woodpecker_peck = new AnimationState();
     public final AnimationState standing = new AnimationState();
 
@@ -89,8 +90,8 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
         this.goalSelector.add(0, new SwimGoal(this));
         this.goalSelector.add(1, new FlyOntoBranchGoal(this, 1.0f));
         this.goalSelector.add(1, new AttachToWood(this));
-        this.goalSelector.add(3, new WanderAroundFarGoal(this, 1.0f));
-        this.goalSelector.add(2, new LookAtEntityGoal(this, PlayerEntity.class, 8.0f));
+        this.goalSelector.add(3, new WanderGoal(this, 1.0f));
+        this.goalSelector.add(2, new LookGoal(this, PlayerEntity.class, 8.0f));
     }
 
     public static DefaultAttributeContainer.Builder createWoodPeckerAttributes() {
@@ -134,6 +135,14 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
         super.writeCustomDataToNbt(nbt);
         nbt.putByte("AttachFace", (byte)this.getAttachedFace().getId());
         nbt.putBoolean("AttachedToWood", this.isAttachedWood());
+    }
+
+    public void setWoodPos(BlockPos blockPos) {
+        this.woodPos = blockPos;
+    }
+
+    public BlockPos getWoodPos() {
+        return this.woodPos;
     }
 
     public boolean isAttachedWood() {
@@ -261,6 +270,34 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
                 return Vec3d.of(blockPos3);
             }
             return null;
+        }
+    }
+
+    public static class LookGoal extends LookAtEntityGoal {
+        private final WoodpeckerEntity woodpeckerEntity;
+
+        public LookGoal(WoodpeckerEntity mob, Class<? extends LivingEntity> targetType, float range) {
+            super(mob, targetType, range);
+            this.woodpeckerEntity = mob;
+        }
+
+        @Override
+        public boolean canStart() {
+            return !this.woodpeckerEntity.isAttachedWood() && super.canStart();
+        }
+    }
+
+    public static class WanderGoal extends WanderAroundFarGoal {
+        private final WoodpeckerEntity woodpeckerEntity;
+
+        public WanderGoal(WoodpeckerEntity pathAwareEntity, double d) {
+            super(pathAwareEntity, d);
+            this.woodpeckerEntity = pathAwareEntity;
+        }
+
+        @Override
+        public boolean canStart() {
+            return !this.woodpeckerEntity.isAttachedWood() && super.canStart();
         }
     }
 }
