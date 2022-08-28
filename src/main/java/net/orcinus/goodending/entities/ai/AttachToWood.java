@@ -10,15 +10,15 @@ import net.orcinus.goodending.entities.WoodpeckerEntity;
 import java.util.List;
 
 public class AttachToWood extends Goal {
-    private final WoodpeckerEntity woodpeckerEntity;
+    private final WoodpeckerEntity woodpecker;
 
     public AttachToWood(WoodpeckerEntity woodpeckerEntity) {
-        this.woodpeckerEntity = woodpeckerEntity;
+        this.woodpecker = woodpeckerEntity;
     }
 
     @Override
     public boolean canStart() {
-        return !this.woodpeckerEntity.isAttachedWood() && this.findWood() != null;
+        return !this.woodpecker.isAttachedWood() && this.findWood() != null;
     }
 
     @Override
@@ -32,27 +32,28 @@ public class AttachToWood extends Goal {
     @Override
     public void tick() {
         super.tick();
-        BlockPos blockPos = this.findWood();
-        if (blockPos != null) {
-            this.woodpeckerEntity.getNavigation().startMovingTo(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 1.0F);
-            this.woodpeckerEntity.getLookControl().lookAt(blockPos.getX(), blockPos.getY(), blockPos.getZ());
-            double distance = Math.sqrt(this.woodpeckerEntity.squaredDistanceTo(blockPos.getX(), blockPos.getY(), blockPos.getZ()));
-            if (distance < 1D) {
-                this.woodpeckerEntity.setAttachedWood(true);
-                Direction direction = this.findDirection();
-                if (this.woodpeckerEntity.world.getBlockState(blockPos).isIn(BlockTags.LOGS) && direction != null) {
-                    BlockPos relativePos = blockPos.add(direction.getOffsetX(), direction.getOffsetY(), direction.getOffsetZ());
-                    this.woodpeckerEntity.setAttachedFace(direction);
-                    this.woodpeckerEntity.getNavigation().startMovingTo(relativePos.getX(), relativePos.getY(), relativePos.getZ(), 1.0F);
-                    this.woodpeckerEntity.getLookControl().lookAt(relativePos.getX(), relativePos.getY(), relativePos.getZ());
-                }
+        BlockPos woodPos = new BlockPos(this.findWood().getX() + 0.5F,this.findWood().getY() + 0.5F,this.findWood().getZ() + 0.5F);
+        if (woodPos != null) {
+            this.woodpecker.getNavigation().startMovingTo(woodPos.getX(), woodPos.getY(), woodPos.getZ(), 1.0F);
+            this.woodpecker.getLookControl().lookAt(woodPos.getX(), woodPos.getY(), woodPos.getZ());
+            double distance = Math.sqrt(this.woodpecker.squaredDistanceTo(woodPos.getX(), woodPos.getY(), woodPos.getZ()));
+            if (distance < 0.75D) {
+                this.woodpecker.setAttachedWood(true);
+
+                //Direction direction = this.findDirection();
+                //if (this.woodpeckerEntity.world.getBlockState(woodPos).isIn(BlockTags.LOGS) && direction != null) {
+                //    BlockPos relativePos = woodPos.add(direction.getOffsetX(), direction.getOffsetY(), direction.getOffsetZ());
+                //    this.woodpeckerEntity.setAttachedFace(direction);
+                //    this.woodpeckerEntity.getNavigation().startMovingTo(relativePos.getX(), relativePos.getY(), relativePos.getZ(), 1.0F);
+                //    this.woodpeckerEntity.getLookControl().lookAt(relativePos.getX(), relativePos.getY(), relativePos.getZ());
+                //}
             }
         }
     }
 
     public Direction findDirection() {
         for (Direction direction : Direction.Type.HORIZONTAL) {
-            if (!this.woodpeckerEntity.world.getBlockState(this.findWood().offset(direction)).isAir()) {
+            if (!this.woodpecker.world.getBlockState(this.findWood().offset(direction)).isAir()) {
                 continue;
             }
             return direction;
@@ -66,8 +67,8 @@ public class AttachToWood extends Goal {
         for (int x = -radius; x <= radius; x++) {
             for (int z = -radius; z <= radius; z++) {
                 for (int y = -radius; y <= radius; y++) {
-                    BlockPos blockPos = new BlockPos(this.woodpeckerEntity.getX() + x, this.woodpeckerEntity.getY() + y, this.woodpeckerEntity.getZ() + z);
-                    if (this.woodpeckerEntity.world.getBlockState(blockPos).isIn(BlockTags.LOGS)) {
+                    BlockPos blockPos = new BlockPos(this.woodpecker.getX() + x, this.woodpecker.getY() + y, this.woodpecker.getZ() + z);
+                    if (this.woodpecker.world.getBlockState(blockPos).isIn(BlockTags.LOGS)) {
                         poses.add(blockPos);
                     }
                 }
@@ -78,5 +79,5 @@ public class AttachToWood extends Goal {
 
         return poses.get(0);
     }
-    
+
 }

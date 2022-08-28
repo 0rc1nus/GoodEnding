@@ -64,11 +64,9 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
         if (this.world.isClient()) {
             boolean attachedWood = this.isAttachedWood();
              if (attachedWood) {
-//                this.standing.startIfNotRunning(this.age);
-                this.woodpecker_peck.startIfNotRunning(this.age);
+                this.standing.startIfNotRunning(this.age);
             } else {
-//                this.standing.stop();
-                this.woodpecker_peck.stop();
+                this.standing.stop();
             }
         }
     }
@@ -88,7 +86,7 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
     protected void initGoals() {
         this.goalSelector.add(0, new EscapeDangerGoal(this, 1.25));
         this.goalSelector.add(0, new SwimGoal(this));
-        this.goalSelector.add(1, new FlyOntoBranchGoal(this, 1.0f));
+        //this.goalSelector.add(1, new FlyOntoBranchGoal(this, 1.0f));
         this.goalSelector.add(1, new AttachToWood(this));
         this.goalSelector.add(3, new WanderGoal(this, 1.0f));
         this.goalSelector.add(2, new LookGoal(this, PlayerEntity.class, 8.0f));
@@ -285,6 +283,11 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
         public boolean canStart() {
             return !this.woodpeckerEntity.isAttachedWood() && super.canStart();
         }
+
+        @Override
+        public boolean shouldContinue() {
+            return !this.woodpeckerEntity.isAttachedWood() && super.shouldContinue();
+        }
     }
 
     public static class WanderGoal extends WanderAroundFarGoal {
@@ -298,6 +301,11 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
         @Override
         public boolean canStart() {
             return !this.woodpeckerEntity.isAttachedWood() && super.canStart();
+        }
+
+        @Override
+        public boolean shouldContinue() {
+            return !this.woodpeckerEntity.isAttachedWood() && super.shouldContinue();
         }
     }
 }
