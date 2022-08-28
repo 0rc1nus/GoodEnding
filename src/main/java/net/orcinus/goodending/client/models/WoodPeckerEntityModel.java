@@ -118,40 +118,40 @@ public class WoodPeckerEntityModel<W extends PathAwareEntity> extends SinglePart
         float speed = 1.0f;
         float degree = 1.0f;
         float tilt = Math.min(limbDistance / 0.3f, 1.0f);
-        head.pitch = headPitch * ((float) Math.PI / 180f);
-        head.yaw = headYaw * ((float) Math.PI / 180f);
-
-        this.getPart().traverse().forEach(ModelPart::resetTransform);
-        this.updateAnimation(entity.woodpecker_peck, WoodpeckerAnimations.WOODPECKER_PECK, animationProgress);
-        this.updateAnimation(entity.standing, WoodpeckerAnimations.WOODPECKER_STANDING, animationProgress);
-
-        if (entity.isOnGround()) {
-            leftWing.roll = 0F;
-            leftWing.yaw = 0F;
-            rightWing.pitch = 0.45f;
-            leftWing.pitch = 0.45f;
-            rightWing.roll = 0F;
-            rightWing.yaw = 0F;
-            body.pivotY = 21F;
-            head.pivotY = 18F;
-            leftLeg.pitch = 0F;
-            rightLeg.pitch = 0F;
-        } else{
-            leftWing.roll = cos(animationProgress * speed * 1.2F) * degree * 4F * 0.25F - 1F;
-            leftWing.yaw = cos(animationProgress * speed * 1.2F + (float) Math.PI / 2) * degree * 0.5F * 0.25F;
-            rightWing.roll = cos(animationProgress * speed * 1.2F + (float) Math.PI) * degree * 4F * 0.25F + 1F;
-            rightWing.yaw = cos(animationProgress * speed * 1.2F + (float) Math.PI + (float) Math.PI / 2) * degree * 0.5F * 0.25F;
-            body.pivotY = cos(animationProgress * speed * 0.6F + (float) Math.PI + (float) Math.PI / 2) * degree * 0.5F * 0.25F + 21F;
-            head.pivotY = cos(animationProgress * speed * 0.6F) * degree * 0.5F * 0.25F + 18F;
-            leftLeg.pitch = cos(animationProgress * speed * 0.3F) * degree * -0.25F;
-            rightLeg.pitch = cos(animationProgress * speed * 0.3F + 0.9F) * degree * -0.25F;
+        if (entity.isAttachedWood()) {
+            this.getPart().traverse().forEach(ModelPart::resetTransform);
+            this.updateAnimation(entity.woodpecker_peck, WoodpeckerAnimations.WOODPECKER_PECK, animationProgress);
+            this.updateAnimation(entity.standing, WoodpeckerAnimations.WOODPECKER_STANDING, animationProgress);
+        } else {
+            head.pitch = headPitch * ((float) Math.PI / 180f);
+            head.yaw = headYaw * ((float) Math.PI / 180f);
+            if (entity.isOnGround()) {
+                leftWing.roll = 0F;
+                leftWing.yaw = 0F;
+                leftWing.pitch = 0.45f;
+                rightWing.pitch = 0.45f;
+                rightWing.roll = 0F;
+                rightWing.yaw = 0F;
+                body.pivotY = 21F;
+                body.pivotZ = 1F;
+                head.pivotY = 18F;
+                leftLeg.pitch = 0F;
+                rightLeg.pitch = 0F;
+            } else {
+                leftWing.roll = cos(animationProgress * speed * 1.2F) * degree * 4F * 0.25F - 1F;
+                leftWing.yaw = cos(animationProgress * speed * 1.2F + (float) Math.PI / 2) * degree * 0.5F * 0.25F;
+                rightWing.roll = cos(animationProgress * speed * 1.2F + (float) Math.PI) * degree * 4F * 0.25F + 1F;
+                rightWing.yaw = cos(animationProgress * speed * 1.2F + (float) Math.PI + (float) Math.PI / 2) * degree * 0.5F * 0.25F;
+                body.pivotY = cos(animationProgress * speed * 0.6F + (float) Math.PI + (float) Math.PI / 2) * degree * 0.5F * 0.25F + 21F;
+                head.pivotY = cos(animationProgress * speed * 0.6F) * degree * 0.5F * 0.25F + 18F;
+                leftLeg.pitch = cos(animationProgress * speed * 0.3F) * degree * -0.25F;
+                rightLeg.pitch = cos(animationProgress * speed * 0.3F + 0.9F) * degree * -0.25F;
+            }
+            body.pitch = tilt * 0.7f;
+            head.pivotZ = tilt * -2.5f + 1.0F;
+            head.pivotY += tilt * 0.5f;
+            tail.pitch = tilt * -1f;
         }
-        body.pitch = tilt * 0.7f;
-        rightWing.pitch += tilt * 0.7f;
-        leftWing.pitch += tilt * 0.7f;
-        head.pivotZ = tilt * -2.5f + 1.0F;
-        head.pivotY += tilt * 0.5f;
-        tail.pitch = tilt * -1f;
     }
 
     @Override
