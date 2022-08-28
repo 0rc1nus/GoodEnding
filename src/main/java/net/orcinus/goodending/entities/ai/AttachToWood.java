@@ -34,10 +34,10 @@ public class AttachToWood extends Goal {
         super.tick();
         BlockPos blockPos = this.findWood();
         if (blockPos != null) {
-            this.woodpeckerEntity.getMoveControl().moveTo(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 1.0F);
+            this.woodpeckerEntity.getNavigation().startMovingTo(blockPos.getX(), blockPos.getY(), blockPos.getZ(), 1.0F);
             this.woodpeckerEntity.getLookControl().lookAt(blockPos.getX(), blockPos.getY(), blockPos.getZ());
             double distance = Math.sqrt(this.woodpeckerEntity.squaredDistanceTo(blockPos.getX(), blockPos.getY(), blockPos.getZ()));
-            if (distance < 1.01D) {
+            if (distance < 1D) {
                 this.woodpeckerEntity.setAttachedWood(true);
                 Direction direction = this.findDirection();
                 if (this.woodpeckerEntity.world.getBlockState(blockPos).isIn(BlockTags.LOGS) && direction != null) {

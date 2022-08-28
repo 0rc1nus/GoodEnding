@@ -49,7 +49,7 @@ public class GoodEndingEntityTypes {
                                .entityFactory(WoodpeckerEntity::new)
                                .defaultAttributes(WoodpeckerEntity::createWoodPeckerAttributes)
                                .spawnGroup(SpawnGroup.CREATURE)
-                               .dimensions(EntityDimensions.changing(0.25F, 0.5F)),
+                               .dimensions(EntityDimensions.changing(0.35F, 0.65F)),
         new int[]{ 0xCB4613, 0xFFFFFF }
     );
 
