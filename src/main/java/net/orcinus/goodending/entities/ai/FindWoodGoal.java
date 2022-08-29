@@ -70,12 +70,10 @@ public class FindWoodGoal extends Goal {
         this.woodpeckerEntity.getNavigation().startMovingAlong(this.woodpeckerEntity.getNavigation().findPathTo(vec3d.x, vec3d.y, vec3d.z, 0), 1.0F);
         this.woodpeckerEntity.getLookControl().lookAt(vec3d);
 
-        for (PlayerEntity player : this.woodpeckerEntity.world.getPlayers()) {
-            if (hitResult.getSide() != Direction.UP && hitResult.getSide() != Direction.DOWN) {
-                BlockPos relativePosition = new BlockPos(vec3d).offset(hitResult.getSide());
-                if (MathHelper.sqrt((float) this.woodpeckerEntity.squaredDistanceTo(new Vec3d(relativePosition.getX(), relativePosition.getY(), relativePosition.getZ()))) <= 1.3D) {
-                    this.woodpeckerEntity.teleport(relativePosition.getX() + 0.5D, relativePosition.getY(), relativePosition.getZ() + 0.5D);
-                }
+        if (hitResult.getSide() != Direction.UP && hitResult.getSide() != Direction.DOWN) {
+            BlockPos relativePosition = new BlockPos(vec3d).offset(hitResult.getSide());
+            if (MathHelper.sqrt((float) this.woodpeckerEntity.squaredDistanceTo(new Vec3d(relativePosition.getX(), relativePosition.getY(), relativePosition.getZ()))) <= 1.3D) {
+                this.woodpeckerEntity.teleport(relativePosition.getX() + 0.5D, relativePosition.getY(), relativePosition.getZ() + 0.5D);
             }
         }
     }
