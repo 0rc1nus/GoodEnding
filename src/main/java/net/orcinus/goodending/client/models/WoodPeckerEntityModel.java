@@ -7,6 +7,7 @@ import net.minecraft.client.model.ModelPartData;
 import net.minecraft.client.model.ModelTransform;
 import net.minecraft.client.model.TexturedModelData;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
+import net.minecraft.entity.EntityPose;
 import net.orcinus.goodending.client.animations.WoodpeckerAnimations;
 import net.orcinus.goodending.entities.WoodpeckerEntity;
 
@@ -122,7 +123,8 @@ public class WoodPeckerEntityModel extends SinglePartEntityModel<WoodpeckerEntit
         this.updateAnimation(entity.peckingAnimationState, WoodpeckerAnimations.WOODPECKER_PECK, animationProgress);
         this.updateAnimation(entity.standingAnimationState, WoodpeckerAnimations.WOODPECKER_STANDING, animationProgress);
 
-        if (!entity.hasWoodPos()) {
+//        if (!entity.hasWoodPos()) {
+        if (entity.getPose() != EntityPose.STANDING) {
             head.pitch = headPitch * ((float) Math.PI / 180f);
             head.yaw = headYaw * ((float) Math.PI / 180f);
             if (entity.isOnGround()) {
@@ -137,7 +139,8 @@ public class WoodPeckerEntityModel extends SinglePartEntityModel<WoodpeckerEntit
                 head.pivotY = 18F;
                 leftLeg.pitch = 0F;
                 rightLeg.pitch = 0F;
-            } else {
+            }
+            else {
                 leftWing.roll = cos(animationProgress * speed * 1.2F) * degree * 4F * 0.25F - 1F;
                 leftWing.yaw = cos(animationProgress * speed * 1.2F + (float) Math.PI / 2) * degree * 0.5F * 0.25F;
                 rightWing.roll = cos(animationProgress * speed * 1.2F + (float) Math.PI) * degree * 4F * 0.25F + 1F;

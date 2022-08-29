@@ -2,6 +2,7 @@ package net.orcinus.goodending.entities;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.AnimationState;
+import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Flutterer;
 import net.minecraft.entity.LivingEntity;
@@ -70,13 +71,24 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
             this.woodAttachingCooldownTicks--;
         }
         if (this.world.isClient()) {
-            boolean attachedWood = this.hasWoodPos();
-             if (attachedWood) {
+            boolean b = this.getPose() == EntityPose.STANDING;
+            System.out.println(b);
+            if (b) {
                 this.standingAnimationState.startIfNotRunning(this.age);
             } else {
                 this.standingAnimationState.stop();
             }
         }
+    }
+
+    @Override
+    public void onTrackedDataSet(TrackedData<?> data) {
+        if (POSE.equals(data)) {
+            if (this.getPose() == EntityPose.STANDING) {
+                this.standingAnimationState.start(this.age);
+            }
+        }
+        super.onTrackedDataSet(data);
     }
 
     @Override
