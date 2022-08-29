@@ -72,8 +72,14 @@ public class FindWoodGoal extends Goal {
 
         if (hitResult.getSide() != Direction.UP && hitResult.getSide() != Direction.DOWN) {
             BlockPos relativePosition = new BlockPos(vec3d).offset(hitResult.getSide());
-            if (MathHelper.sqrt((float) this.woodpeckerEntity.squaredDistanceTo(new Vec3d(relativePosition.getX(), relativePosition.getY(), relativePosition.getZ()))) <= 1.3D) {
-                this.woodpeckerEntity.teleport(relativePosition.getX() + 0.5D, relativePosition.getY(), relativePosition.getZ() + 0.5D);
+            if (MathHelper.sqrt((float) this.woodpeckerEntity.squaredDistanceTo(new Vec3d(relativePosition.getX(), relativePosition.getY(), relativePosition.getZ()))) <= 1D) {
+                if (hitResult.getSide() == Direction.NORTH) this.woodpeckerEntity.teleport(relativePosition.getX() + 0.5D, relativePosition.getY() + 0.25D, relativePosition.getZ() + 0.825D);
+                if (hitResult.getSide() == Direction.SOUTH) this.woodpeckerEntity.teleport(relativePosition.getX() + 0.5D, relativePosition.getY() + 0.25D, relativePosition.getZ() + 0.175D);
+                if (hitResult.getSide() == Direction.EAST) this.woodpeckerEntity.teleport(relativePosition.getX() + 0.175D, relativePosition.getY() + 0.25D, relativePosition.getZ() + 0.5D);
+                if (hitResult.getSide() == Direction.WEST) this.woodpeckerEntity.teleport(relativePosition.getX() + 0.825D, relativePosition.getY() + 0.25D, relativePosition.getZ() + 0.5D);
+
+                System.out.println(this.woodpeckerEntity.getWoodPos());
+                this.woodpeckerEntity.setAttachedFace(hitResult.getSide());
             }
         }
     }
