@@ -51,5 +51,7 @@
   "entity.goodending.boat": "Boat",
   "entity.goodending.firefly_swarm": "Firefly Swarm",
   "entity.goodending.woodpecker": "Woodpecker",
-  "entity.goodending.marsh": "Marsh"
+  "entity.goodending.marsh": "Marsh",
+  "subtitles.goodending.entity.woodpecker.idle": "Woodpecker chips",
+  "subtitles.goodending.entity.woodpecker.fly": "Woodpecker flops"
 }

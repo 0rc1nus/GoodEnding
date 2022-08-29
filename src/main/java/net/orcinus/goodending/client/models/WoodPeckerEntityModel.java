@@ -119,11 +119,10 @@ public class WoodPeckerEntityModel<W extends PathAwareEntity> extends SinglePart
         float degree = 1.0f;
         float tilt = Math.min(limbDistance / 0.3f, 1.0f);
         this.getPart().traverse().forEach(ModelPart::resetTransform);
-        this.updateAnimation(entity.woodpecker_peck, WoodpeckerAnimations.WOODPECKER_PECK, animationProgress);
-        this.updateAnimation(entity.standing, WoodpeckerAnimations.WOODPECKER_STANDING, animationProgress);
+        this.updateAnimation(entity.peckingAnimationState, WoodpeckerAnimations.WOODPECKER_PECK, animationProgress);
+        this.updateAnimation(entity.standingAnimationState, WoodpeckerAnimations.WOODPECKER_STANDING, animationProgress);
 
-
-        if (!entity.isAttachedWood()) {
+        if (!entity.hasWoodPos()) {
             head.pitch = headPitch * ((float) Math.PI / 180f);
             head.yaw = headYaw * ((float) Math.PI / 180f);
             if (entity.isOnGround()) {
