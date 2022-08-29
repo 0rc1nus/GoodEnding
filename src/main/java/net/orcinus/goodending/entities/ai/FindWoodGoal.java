@@ -87,22 +87,11 @@ public class FindWoodGoal extends Goal {
             List<WoodpeckerEntity> woodpeckerEntities = this.woodpeckerEntity.world.getNonSpectatingEntities(WoodpeckerEntity.class, new Box(relativePosition));
             if (woodpeckerEntities.size() == 1 && dist <= 1.3D) {
                 this.woodpeckerEntity.setPose(EntityPose.STANDING);
-                if (direction == Direction.NORTH) {
-                    this.woodpeckerEntity.teleport(relativePosition.getX() + 0.5D, relativePosition.getY() + 0.25D, relativePosition.getZ() + 0.825D);
-//                    this.woodpeckerEntity.setWoodPos(new BlockPos(relativePosition.getX() + 0.5D, relativePosition.getY() + 0.25D, relativePosition.getZ() + 0.825D));
-                }
-                if (direction == Direction.SOUTH) {
-                    this.woodpeckerEntity.teleport(relativePosition.getX() + 0.5D, relativePosition.getY() + 0.25D, relativePosition.getZ() + 0.175D);
-//                    this.woodpeckerEntity.setWoodPos(new BlockPos(relativePosition.getX() + 0.5D, relativePosition.getY() + 0.25D, relativePosition.getZ() + 0.175D));
-                }
-                if (direction == Direction.EAST) {
-                    this.woodpeckerEntity.teleport(relativePosition.getX() + 0.175D, relativePosition.getY() + 0.25D, relativePosition.getZ() + 0.5D);
-//                    this.woodpeckerEntity.setWoodPos(new BlockPos(relativePosition.getX() + 0.175D, relativePosition.getY() + 0.25D, relativePosition.getZ() + 0.5D));
-                }
-                if (direction == Direction.WEST) {
-                    this.woodpeckerEntity.teleport(relativePosition.getX() + 0.825D, relativePosition.getY() + 0.25D, relativePosition.getZ() + 0.5D);
-//                    this.woodpeckerEntity.setWoodPos(new BlockPos(relativePosition.getX() + 0.825D, relativePosition.getY() + 0.25D, relativePosition.getZ() + 0.5D));
-                }
+                double axisDirection = direction.getDirection() == Direction.AxisDirection.POSITIVE ? 0.175D : 0.825D;
+                double xPosition = relativePosition.getX() + (direction.getAxis() == Direction.Axis.Z ? 0.5D : axisDirection);
+                double zPosition = relativePosition.getZ() + (direction.getAxis() == Direction.Axis.X ? 0.5D : axisDirection);
+                double yPosition = relativePosition.getY() + 0.25D;
+                this.woodpeckerEntity.teleport(xPosition, yPosition, zPosition);
             }
         }
     }
