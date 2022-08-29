@@ -51,6 +51,7 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
     private float field_28640 = 1.0f;
     @Nullable
     private BlockPos woodPos;
+    public int woodAttachingCooldownTicks;
     public final AnimationState peckingAnimationState = new AnimationState();
     public final AnimationState standingAnimationState = new AnimationState();
 
@@ -65,6 +66,9 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
     @Override
     public void tick() {
         super.tick();
+        if (this.woodAttachingCooldownTicks > 0) {
+            this.woodAttachingCooldownTicks--;
+        }
         if (this.world.isClient()) {
             boolean attachedWood = this.hasWoodPos();
              if (attachedWood) {
@@ -99,20 +103,6 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
     }
 
     @Override
-    public void setVelocity(Vec3d velocity) {
-//        if (this.hasWoodPos()) {
-//            return;
-//        }
-        super.setVelocity(velocity);
-    }
-
-    @Override
-    public Vec3d getVelocity() {
-//        return this.hasWoodPos() ? Vec3d.ZERO : super.getVelocity();
-        return super.getVelocity();
-    }
-
-    @Override
     protected EntityNavigation createNavigation(World world) {
         BirdNavigation birdNavigation = new BirdNavigation(this, world);
         birdNavigation.setCanPathThroughDoors(false);
@@ -125,6 +115,7 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
         this.setAttachedFace(Direction.byId(nbt.getByte("AttachFace")));
+        this.woodAttachingCooldownTicks = nbt.getInt("WoodAttachingCooldownTicks");
         if (nbt.contains("WoodPos")) {
             this.setWoodPos(NbtHelper.toBlockPos(nbt.getCompound("WoodPos")));
         }
@@ -133,6 +124,7 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
+        nbt.putInt("WoodAttachingCooldownTicks", this.woodAttachingCooldownTicks);
         nbt.putByte("AttachFace", (byte)this.getAttachedFace().getId());
         if (this.getWoodPos() != null) {
             nbt.put("WoodPos", NbtHelper.fromBlockPos(this.getWoodPos()));

@@ -53,5 +53,9 @@
   "entity.goodending.woodpecker": "Woodpecker",
   "entity.goodending.marsh": "Marsh",
   "subtitles.goodending.entity.woodpecker.idle": "Woodpecker chips",
+  "subtitles.goodending.entity.woodpecker.drum": "Woodpecker drums",
+  "subtitles.goodending.entity.woodpecker.woody_idle": "Woodpecker laughs",
+  "subtitles.goodending.entity.woodpecker.hurt": "Woodpecker hurt",
+  "subtitles.goodending.entity.woodpecker.death": "Woodpecker dies",
   "subtitles.goodending.entity.woodpecker.fly": "Woodpecker flops"
 }
