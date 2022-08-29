@@ -8,6 +8,7 @@ import net.orcinus.goodending.GoodEnding;
 public class GoodEndingSoundEvents {
 
     public static final SoundEvent ENTITY_WOODPECKER_IDLE = woodpecker("idle");
+    public static final SoundEvent ENTITY_WOODPECKER_WOODY_IDLE = woodpecker("woody_idle");
     public static final SoundEvent ENTITY_WOODPECKER_DEATH = woodpecker("death");
     public static final SoundEvent ENTITY_WOODPECKER_HURT = woodpecker("hurt");
     public static final SoundEvent ENTITY_WOODPECKER_FLY = woodpecker("fly");

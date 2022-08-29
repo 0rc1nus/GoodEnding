@@ -30,6 +30,7 @@ import net.minecraft.nbt.NbtHelper;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.tag.BlockTags;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
@@ -206,6 +207,10 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
+        if (this.hasCustomName()) {
+            String string = Formatting.strip(this.getName().getString());
+            if ("woody".equalsIgnoreCase(string)) return GoodEndingSoundEvents.ENTITY_WOODPECKER_WOODY_IDLE;
+        }
         return GoodEndingSoundEvents.ENTITY_WOODPECKER_IDLE;
     }
 

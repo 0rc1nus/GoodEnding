@@ -19,6 +19,14 @@
     ],
     "subtitle": "subtitles.goodending.entity.woodpecker.idle"
   },
+  "entity.woodpecker.woody_idle": {
+    "sounds": [
+      "goodending:entity/woodpecker/woody_idle1",
+      "goodending:entity/woodpecker/woody_idle2",
+      "goodending:entity/woodpecker/woody_idle3"
+    ],
+    "subtitle": "subtitles.goodending.entity.woodpecker.woody_idle"
+  },
   "entity.woodpecker.hurt": {
     "sounds": [
       "goodending:entity/woodpecker/hurt1",
