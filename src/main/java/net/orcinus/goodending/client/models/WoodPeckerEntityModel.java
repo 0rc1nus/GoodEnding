@@ -122,39 +122,21 @@ public class WoodPeckerEntityModel extends SinglePartEntityModel<WoodpeckerEntit
         this.getPart().traverse().forEach(ModelPart::resetTransform);
         this.updateAnimation(entity.peckingAnimationState, WoodpeckerAnimations.WOODPECKER_PECK, animationProgress);
         this.updateAnimation(entity.standingAnimationState, WoodpeckerAnimations.WOODPECKER_STANDING, animationProgress);
+        this.updateAnimation(entity.flyingAnimationState, WoodpeckerAnimations.WOODPECKER_FLY, animationProgress);
 
-//        if (!entity.hasWoodPos()) {
-        if (entity.getPose() != EntityPose.STANDING) {
+        if (entity.getPose() != EntityPose.STANDING && entity.getPose() != EntityPose.DIGGING) {
             head.pitch = headPitch * ((float) Math.PI / 180f);
             head.yaw = headYaw * ((float) Math.PI / 180f);
-            if (entity.isOnGround()) {
-                leftWing.roll = 0F;
-                leftWing.yaw = 0F;
-                leftWing.pitch = 0.45f;
-                rightWing.pitch = 0.45f;
-                rightWing.roll = 0F;
-                rightWing.yaw = 0F;
-                body.pivotY = 21F;
-                body.pivotZ = 1F;
-                head.pivotY = 18F;
-                leftLeg.pitch = 0F;
-                rightLeg.pitch = 0F;
-            }
-            else {
-                leftWing.roll = cos(animationProgress * speed * 1.2F) * degree * 4F * 0.25F - 1F;
-                leftWing.yaw = cos(animationProgress * speed * 1.2F + (float) Math.PI / 2) * degree * 0.5F * 0.25F;
-                rightWing.roll = cos(animationProgress * speed * 1.2F + (float) Math.PI) * degree * 4F * 0.25F + 1F;
-                rightWing.yaw = cos(animationProgress * speed * 1.2F + (float) Math.PI + (float) Math.PI / 2) * degree * 0.5F * 0.25F;
-                body.pivotY = cos(animationProgress * speed * 0.6F + (float) Math.PI + (float) Math.PI / 2) * degree * 0.5F * 0.25F + 21F;
-                head.pivotY = cos(animationProgress * speed * 0.6F) * degree * 0.5F * 0.25F + 18F;
-                leftLeg.pitch = cos(animationProgress * speed * 0.3F) * degree * -0.25F;
-                rightLeg.pitch = cos(animationProgress * speed * 0.3F + 0.9F) * degree * -0.25F;
-            }
-            body.pitch = tilt * 0.7f;
-            head.pivotZ = tilt * -2.5f + 1.0F;
-            head.pivotY += tilt * 0.5f;
-            tail.pitch = tilt * -1f;
         }
+        else {
+            head.pitch = 0;
+            head.yaw = 0;
+        }
+
+        //body.pitch = tilt * 0.7f;
+        //head.pivotZ = tilt * -2.5f + 1.0F;
+        //head.pivotY += tilt * 0.5f;
+        //tail.pitch = tilt * -1f;
     }
 
     @Override

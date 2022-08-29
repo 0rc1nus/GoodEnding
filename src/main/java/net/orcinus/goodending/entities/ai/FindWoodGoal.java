@@ -66,7 +66,7 @@ public class FindWoodGoal extends Goal {
         super.stop();
         this.running = false;
         this.woodpeckerEntity.woodAttachingCooldownTicks = 20 * 90;
-        this.woodpeckerEntity.setPose(EntityPose.STANDING);
+        this.woodpeckerEntity.setPose(EntityPose.FALL_FLYING);
     }
 
     @Override
@@ -86,8 +86,8 @@ public class FindWoodGoal extends Goal {
             float dist = MathHelper.sqrt((float) this.woodpeckerEntity.squaredDistanceTo(new Vec3d(relativePosition.getX(), relativePosition.getY(), relativePosition.getZ())));
             List<WoodpeckerEntity> woodpeckerEntities = this.woodpeckerEntity.world.getNonSpectatingEntities(WoodpeckerEntity.class, new Box(relativePosition));
             if (woodpeckerEntities.size() == 1 && dist <= 1.3D) {
+                this.woodpeckerEntity.setPose(EntityPose.STANDING);
                 if (direction == Direction.NORTH) {
-                    this.woodpeckerEntity.setPose(EntityPose.STANDING);
                     this.woodpeckerEntity.teleport(relativePosition.getX() + 0.5D, relativePosition.getY() + 0.25D, relativePosition.getZ() + 0.825D);
 //                    this.woodpeckerEntity.setWoodPos(new BlockPos(relativePosition.getX() + 0.5D, relativePosition.getY() + 0.25D, relativePosition.getZ() + 0.825D));
                 }

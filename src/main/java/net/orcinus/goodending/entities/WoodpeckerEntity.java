@@ -55,11 +55,13 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
     public int woodAttachingCooldownTicks;
     public final AnimationState peckingAnimationState = new AnimationState();
     public final AnimationState standingAnimationState = new AnimationState();
+    public final AnimationState flyingAnimationState = new AnimationState();
 
     public WoodpeckerEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
         super(entityType, world);
-        this.moveControl = new WoodpeckerFlightMoveControl(this, 10, false);
+        this.moveControl = new WoodpeckerFlightMoveControl(this, 10, true);
         this.lookControl = new WoodpeckerLookControl(this);
+        this.setPose(EntityPose.FALL_FLYING);
         this.setPathfindingPenalty(PathNodeType.DANGER_FIRE, -1.0f);
         this.setPathfindingPenalty(PathNodeType.DAMAGE_FIRE, -1.0f);
     }
@@ -72,12 +74,13 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
         }
         if (this.world.isClient()) {
             boolean b = this.getPose() == EntityPose.STANDING;
-            System.out.println(b);
-            if (b) {
-                this.standingAnimationState.startIfNotRunning(this.age);
-            } else {
-                this.standingAnimationState.stop();
-            }
+            boolean d = this.getPose() == EntityPose.FALL_FLYING;
+
+            if (b) this.standingAnimationState.startIfNotRunning(this.age);
+            else this.standingAnimationState.stop();
+
+            if (d) this.flyingAnimationState.startIfNotRunning(this.age);
+            else this.flyingAnimationState.stop();
         }
     }
 
@@ -128,9 +131,7 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
         super.readCustomDataFromNbt(nbt);
         this.setAttachedFace(Direction.byId(nbt.getByte("AttachFace")));
         this.woodAttachingCooldownTicks = nbt.getInt("WoodAttachingCooldownTicks");
-        if (nbt.contains("WoodPos")) {
-            this.setWoodPos(NbtHelper.toBlockPos(nbt.getCompound("WoodPos")));
-        }
+        if (nbt.contains("WoodPos")) this.setWoodPos(NbtHelper.toBlockPos(nbt.getCompound("WoodPos")));
     }
 
     @Override
@@ -138,9 +139,7 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
         super.writeCustomDataToNbt(nbt);
         nbt.putInt("WoodAttachingCooldownTicks", this.woodAttachingCooldownTicks);
         nbt.putByte("AttachFace", (byte)this.getAttachedFace().getId());
-        if (this.getWoodPos() != null) {
-            nbt.put("WoodPos", NbtHelper.fromBlockPos(this.getWoodPos()));
-        }
+        if (this.getWoodPos() != null) nbt.put("WoodPos", NbtHelper.fromBlockPos(this.getWoodPos()));
     }
 
     public void setWoodPos(BlockPos blockPos) {
@@ -163,7 +162,6 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
     public void tickMovement() {
         super.tickMovement();
         this.flapWings();
-        if (!this.isNavigating()) this.setVelocity(this.getVelocity().multiply(1.0, 0.6, 1.0));
     }
 
     @Override
