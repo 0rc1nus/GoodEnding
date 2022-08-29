@@ -24,10 +24,10 @@ public class MarshRenderer extends MobEntityRenderer<MarshEntity, MarshEntityMod
 
     @Override
     public Identifier getTexture(MarshEntity entity) {
-        if ("Bad Piggy".equals(Formatting.strip(entity.getName().getString()))) {
-            return entity.getBurpingTicks() > 0 ? BAD_PIGGY_BURP_TEXTURE : BAD_PIGGY_TEXTURE;
-        } else {
-            return entity.getBurpingTicks() > 0 ? BURP_TEXTURE : TEXTURE;
+        if (entity.hasCustomName()) {
+            String string = Formatting.strip(entity.getName().getString());
+            if ("bad piggy".equalsIgnoreCase(string)) return entity.getBurpingTicks() > 0 ? BAD_PIGGY_BURP_TEXTURE : BAD_PIGGY_TEXTURE;
         }
+        return entity.getBurpingTicks() > 0 ? BURP_TEXTURE : TEXTURE;
     }
 }

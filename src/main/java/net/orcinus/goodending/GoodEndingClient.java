@@ -73,7 +73,7 @@ public class GoodEndingClient implements ClientModInitializer {
             EntityModelLayerRegistry.registerModelLayer(GoodEndingModelLayers.createBoat(type), () -> BoatEntityModel.getTexturedModelData(false));
             EntityModelLayerRegistry.registerModelLayer(GoodEndingModelLayers.createChestBoat(type), () -> BoatEntityModel.getTexturedModelData(true));
         });
-        EntityModelLayerRegistry.registerModelLayer(GoodEndingModelLayers.MARSH, MarshEntityModel::createBodyLayer);
+        EntityModelLayerRegistry.registerModelLayer(GoodEndingModelLayers.MARSH, MarshEntityModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(GoodEndingModelLayers.WOODPECKER, WoodPeckerEntityModel::getTexturedModelData);
 
         ColorProviderRegistry<Block, BlockColorProvider> blockColor = ColorProviderRegistry.BLOCK;

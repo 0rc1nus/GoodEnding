@@ -1,7 +1,8 @@
 package net.orcinus.goodending.entities;
 
-import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.goal.EscapeDangerGoal;
+import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.data.DataTracker;
@@ -19,7 +20,6 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.potion.Potions;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.registry.Registry;
@@ -28,20 +28,20 @@ import net.minecraft.world.World;
 public class MarshEntity extends PathAwareEntity {
     private static final TrackedData<Integer> BURPING_TICKS = DataTracker.registerData(MarshEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private Potion potion = Potions.EMPTY;
-    public AnimationState idlingAnimationState = new AnimationState();
-    public AnimationState walkingAnimationState = new AnimationState();
 
     public MarshEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
         super(entityType, world);
     }
 
     public static DefaultAttributeContainer.Builder createMarshAttributes() {
-        return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 20.0).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.1f);
+        return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 16.0).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25);
     }
 
     @Override
     protected void initGoals() {
         super.initGoals();
+        this.goalSelector.add(2, new EscapeDangerGoal(this, 1.25f));
+        this.goalSelector.add(3, new WanderAroundFarGoal(this, 1.0f));
     }
 
     @Override
@@ -67,21 +67,7 @@ public class MarshEntity extends PathAwareEntity {
     @Override
     public void tick() {
         super.tick();
-        if (this.world.isClient()) {
-            if (this.shouldWalk()) {
-                this.idlingAnimationState.stop();
-                this.walkingAnimationState.startIfNotRunning(this.age);
-            }
-            else {
-                this.walkingAnimationState.stop();
-                this.idlingAnimationState.startIfNotRunning(this.age);
-            }
-        }
         this.setBurpingTicks(this.getBurpingTicks() - 1);
-    }
-
-    private boolean shouldWalk() {
-        return this.onGround && this.getVelocity().horizontalLengthSquared() > 1.0E-6 && !this.isInsideWaterOrBubbleColumn();
     }
 
     public int getBurpingTicks() {

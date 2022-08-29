@@ -12,11 +12,11 @@ import net.orcinus.goodending.entities.WoodpeckerEntity;
 import net.orcinus.goodending.init.GoodEndingModelLayers;
 
 @Environment(EnvType.CLIENT)
-public class WoodpeckerRenderer extends MobEntityRenderer<WoodpeckerEntity, WoodPeckerEntityModel<WoodpeckerEntity>> {
+public class WoodpeckerRenderer extends MobEntityRenderer<WoodpeckerEntity, WoodPeckerEntityModel> {
     private static final Identifier TEXTURE = new Identifier(GoodEnding.MODID, "textures/entity/woodpecker/woodpecker.png");
 
     public WoodpeckerRenderer(EntityRendererFactory.Context context) {
-        super(context, new WoodPeckerEntityModel<>(context.getPart(GoodEndingModelLayers.WOODPECKER)), 0.25F);
+        super(context, new WoodPeckerEntityModel(context.getPart(GoodEndingModelLayers.WOODPECKER)), 0.25F);
     }
 
     @Override
