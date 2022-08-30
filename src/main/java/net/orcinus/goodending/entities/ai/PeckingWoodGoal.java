@@ -56,6 +56,7 @@ public class PeckingWoodGoal extends Goal {
             this.peckingTicks--;
             BlockPos woodPos = this.woodpeckerEntity.getWoodPos();
             Random random = this.woodpeckerEntity.getRandom();
+            if (this.peckingTicks < 0 && this.peckingTicks > 50) this.woodpeckerEntity.setPose(EntityPose.STANDING);
 
             if (woodPos != null) {
                 double lookX = this.woodpeckerEntity.getLookControl().getLookX();
@@ -69,14 +70,12 @@ public class PeckingWoodGoal extends Goal {
 
                     this.woodpeckerEntity.playSound(GoodEndingSoundEvents.ENTITY_WOODPECKER_DRUM, 1.0F, 1.0F);
                     this.peckingCooldownTicks = 20 * 10 + random.nextInt(20 * 15);
-                    this.woodpeckerEntity.setPose(EntityPose.DIGGING);
                 }
-//                if (this.peckingTicks < 0 && this.peckingTicks > 50) this.woodpeckerEntity.setPose(EntityPose.DIGGING);
-                if (this.peckingTicks > 20 && this.peckingTicks < 40) {
-                    this.addDigParticles(woodPos);
-                } else {
-                    this.woodpeckerEntity.setPose(EntityPose.STANDING);
-                }
+            }
+            if (this.peckingTicks > 0 && this.peckingTicks < 50) this.woodpeckerEntity.setPose(EntityPose.DIGGING);
+
+            if (this.peckingTicks > 25 && this.peckingTicks < 40) {
+                this.addDigParticles(woodPos);
             }
         }
     }
