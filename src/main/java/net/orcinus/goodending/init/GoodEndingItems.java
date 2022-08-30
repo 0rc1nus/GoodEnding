@@ -40,9 +40,11 @@ public class GoodEndingItems {
     //Cypress wood set
     public static final Item CYPRESS_PLANKS = register("cypress_planks", new BlockItem(GoodEndingBlocks.CYPRESS_PLANKS, new FabricItemSettings().group(TAB)));
     public static final Item CYPRESS_LOG = register("cypress_log", new BlockItem(GoodEndingBlocks.CYPRESS_LOG, new FabricItemSettings().group(TAB)));
+    public static final Item CYPRESS_SAPLING = register("cypress_sapling", new BlockItem(GoodEndingBlocks.CYPRESS_SAPLING, new FabricItemSettings().group(TAB)));
     public static final Item STRIPPED_CYPRESS_LOG = register("stripped_cypress_log", new BlockItem(GoodEndingBlocks.STRIPPED_CYPRESS_LOG, new FabricItemSettings().group(TAB)));
     public static final Item STRIPPED_CYPRESS_WOOD = register("stripped_cypress_wood", new BlockItem(GoodEndingBlocks.STRIPPED_CYPRESS_WOOD, new FabricItemSettings().group(TAB)));
     public static final Item CYPRESS_WOOD = register("cypress_wood", new BlockItem(GoodEndingBlocks.CYPRESS_WOOD, new FabricItemSettings().group(TAB)));
+    public static final Item CYPRESS_LEAVES = register("cypress_leaves", new BlockItem(GoodEndingBlocks.CYPRESS_LEAVES, new FabricItemSettings().group(TAB)));
     public static final Item CYPRESS_SLAB = register("cypress_slab", new BlockItem(GoodEndingBlocks.CYPRESS_SLAB, new FabricItemSettings().group(TAB)));
     public static final Item CYPRESS_FENCE = register("cypress_fence", new BlockItem(GoodEndingBlocks.CYPRESS_FENCE, new FabricItemSettings().group(TAB)));
     public static final Item CYPRESS_STAIRS = register("cypress_stairs", new BlockItem(GoodEndingBlocks.CYPRESS_STAIRS, new FabricItemSettings().group(TAB)));
