@@ -14,7 +14,6 @@ import net.minecraft.entity.ai.goal.EscapeDangerGoal;
 import net.minecraft.entity.ai.goal.FlyGoal;
 import net.minecraft.entity.ai.goal.LookAtEntityGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
 import net.minecraft.entity.ai.pathing.BirdNavigation;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
 import net.minecraft.entity.ai.pathing.PathNodeType;
@@ -65,8 +64,6 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
 
     public WoodpeckerEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
         super(entityType, world);
-        this.moveControl = new WoodpeckerFlightMoveControl(this, 10, true);
-        this.lookControl = new WoodpeckerLookControl(this);
         this.setPose(EntityPose.FALL_FLYING);
         this.setPathfindingPenalty(PathNodeType.DANGER_FIRE, -1.0f);
         this.setPathfindingPenalty(PathNodeType.DAMAGE_FIRE, -1.0f);
@@ -314,6 +311,7 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
     }
 
     static class FlyOntoBranchGoal extends FlyGoal {
+
         public FlyOntoBranchGoal(PathAwareEntity pathAwareEntity, double d) {
             super(pathAwareEntity, d);
         }
@@ -381,35 +379,6 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
         @Override
         public boolean shouldContinue() {
             return !this.woodpeckerEntity.hasWoodPos() && super.shouldContinue();
-        }
-    }
-
-    public class WoodpeckerFlightMoveControl extends FlightMoveControl {
-
-        public WoodpeckerFlightMoveControl(MobEntity entity, int maxPitchChange, boolean noGravity) {
-            super(entity, maxPitchChange, noGravity);
-        }
-
-        @Override
-        public void tick() {
-//            if (!WoodpeckerEntity.this.hasWoodPos()) {
-                super.tick();
-//            }
-        }
-
-    }
-
-    public class WoodpeckerLookControl extends LookControl {
-
-        public WoodpeckerLookControl(MobEntity entity) {
-            super(entity);
-        }
-
-        @Override
-        public void tick() {
-//            if (!WoodpeckerEntity.this.hasWoodPos()) {
-//            }
-            super.tick();
         }
     }
 
