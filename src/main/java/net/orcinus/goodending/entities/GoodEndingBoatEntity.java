@@ -43,8 +43,7 @@ public class GoodEndingBoatEntity extends BoatEntity {
 
     @Override
     public Item asItem() {
-//        return this.getGoodEndingBoatType() == BoatType.SWAMP ? GoodEndingItems.SWAMP_BOAT : GoodEndingItems.CYPRESS_BOAT;
-        return GoodEndingItems.CYPRESS_BOAT;
+        return this.getGoodEndingBoatType() == BoatType.MUDDY_OAK ? GoodEndingItems.MUDDY_OAK_BOAT : GoodEndingItems.CYPRESS_BOAT;
     }
 
     @Override
@@ -105,7 +104,7 @@ public class GoodEndingBoatEntity extends BoatEntity {
     }
 
     public enum BoatType {
-        SWAMP(GoodEndingBlocks.SWAMP_PLANKS, "swamp"),
+        MUDDY_OAK(GoodEndingBlocks.MUDDY_OAK_PLANKS, "muddy_oak"),
         CYPRESS(GoodEndingBlocks.CYPRESS_PLANKS, "cypress");
 
         private final String name;
@@ -124,6 +123,7 @@ public class GoodEndingBoatEntity extends BoatEntity {
             return this.planks;
         }
 
+        @Override
         public String toString() {
             return this.name;
         }

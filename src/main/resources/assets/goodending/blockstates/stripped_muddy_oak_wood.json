@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "goodending:block/stripped_muddy_oak_wood",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "goodending:block/stripped_muddy_oak_wood"
+    },
+    "axis=z": {
+      "model": "goodending:block/stripped_muddy_oak_wood",
+      "x": 90
+    }
+  }
+}

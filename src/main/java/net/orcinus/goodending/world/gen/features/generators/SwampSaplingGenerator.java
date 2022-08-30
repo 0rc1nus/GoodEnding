@@ -12,7 +12,7 @@ public class SwampSaplingGenerator extends SaplingGenerator {
     @Nullable
     @Override
     protected RegistryEntry<? extends ConfiguredFeature<?, ?>> getTreeFeature(Random random, boolean bees) {
-        return GoodEndingWorldGen.SWAMP_TREE;
+        return GoodEndingWorldGen.MUDDY_OAK_TREE;
     }
 
 }

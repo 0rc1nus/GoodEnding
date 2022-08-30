@@ -98,8 +98,7 @@ public class GoodEndingChestBoatEntity extends GoodEndingBoatEntity implements R
 
     @Override
     public Item asItem() {
-//        return this.getGoodEndingBoatType() == BoatType.SWAMP ? GoodEndingItems.SWAMP_CHEST_BOAT : GoodEndingItems.CYPRESS_CHEST_BOAT;
-        return GoodEndingItems.CYPRESS_CHEST_BOAT;
+        return this.getGoodEndingBoatType() == BoatType.MUDDY_OAK ? GoodEndingItems.MUDDY_OAK_CHEST_BOAT : GoodEndingItems.CYPRESS_CHEST_BOAT;
     }
 
     @Override

@@ -26,7 +26,10 @@ public class GoodEndingItems {
     public static final Item YELLOW_FLOWERING_LILY_PAD = registerItem("yellow_flowering_lily_pad", new PlaceableOnWaterItem(GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD, new Item.Settings().group(GoodEnding.TAB)));
     public static final Item CYPRESS_BOAT = registerItem("cypress_boat", new GoodEndingBoatItem(false, GoodEndingBoatEntity.BoatType.CYPRESS, new Item.Settings().maxCount(1).group(GoodEnding.TAB)));
     public static final Item CYPRESS_CHEST_BOAT = registerItem("cypress_chest_boat", new GoodEndingBoatItem(true, GoodEndingBoatEntity.BoatType.CYPRESS, new Item.Settings().maxCount(1).group(GoodEnding.TAB)));
+    public static final Item MUDDY_OAK_BOAT = registerItem("muddy_oak_boat", new GoodEndingBoatItem(false, GoodEndingBoatEntity.BoatType.MUDDY_OAK, new Item.Settings().maxCount(1).group(GoodEnding.TAB)));
+    public static final Item MUDDY_OAK_CHEST_BOAT = registerItem("muddy_oak_chest_boat", new GoodEndingBoatItem(true, GoodEndingBoatEntity.BoatType.MUDDY_OAK, new Item.Settings().maxCount(1).group(GoodEnding.TAB)));
     public static final Item CYPRESS_SIGN_ITEM = registerItem("cypress_sign", new SignItem(new Item.Settings().maxCount(16).group(GoodEnding.TAB), GoodEndingBlocks.CYPRESS_SIGN, GoodEndingBlocks.CYPRESS_WALL_SIGN));
+    public static final Item MUDDY_OAK_SIGN_ITEM = registerItem("muddy_oak_sign", new SignItem(new Item.Settings().maxCount(16).group(GoodEnding.TAB), GoodEndingBlocks.MUDDY_OAK_SIGN, GoodEndingBlocks.MUDDY_OAK_WALL_SIGN));
     public static final Item FIREFLY_BOTTLE = registerItem("firefly_bottle", new FireflyBottleItem(new FabricItemSettings().maxCount(16).group(GoodEnding.TAB)));
 //    public static final Item MARSH_SPAWN_EGG = registerItem("marsh_spawn_egg", new SpawnEggItem(GoodEndingEntityTypes.MARSH, 3423006, 6979129, new Item.Settings().group(GoodEnding.TAB)));
 

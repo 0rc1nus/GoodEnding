@@ -47,21 +47,21 @@ public class GoodEndingBlocks {
 
     private static final Map<Identifier, Block> BLOCKS = Maps.newLinkedHashMap();
 
-    public static final Block SWAMP_LOG = registerBlock("swamp_log", new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, state -> state.get(PillarBlock.AXIS) == Direction.Axis.Y ? MapColor.GREEN : MapColor.GRAY).strength(2.0F).sounds(BlockSoundGroup.WOOD)));
-    public static final Block STRIPPED_SWAMP_LOG = registerBlock("stripped_swamp_log", new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, MapColor.GREEN).strength(2.0F).sounds(BlockSoundGroup.WOOD)));
-    public static final Block SWAMP_WOOD = registerBlock("swamp_wood", new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, MapColor.GRAY).strength(2.0f).sounds(BlockSoundGroup.WOOD)));
-    public static final Block STRIPPED_SWAMP_WOOD = registerBlock("stripped_swamp_wood", new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, MapColor.GREEN).strength(2.0f).sounds(BlockSoundGroup.WOOD)));
-    public static final Block SWAMP_PLANKS = registerBlock("swamp_planks", new Block(AbstractBlock.Settings.of(Material.WOOD, MapColor.DARK_GREEN).strength(2.0f, 3.0f).sounds(BlockSoundGroup.WOOD)));
-    public static final Block SWAMP_SLAB = registerBlock("swamp_slab", new SlabBlock(AbstractBlock.Settings.of(Material.WOOD, MapColor.DARK_GREEN).strength(2.0f, 3.0f).sounds(BlockSoundGroup.WOOD)));
-    public static final Block SWAMP_STAIRS = registerBlock("swamp_stairs", new StairsBlock(SWAMP_PLANKS.getDefaultState(), AbstractBlock.Settings.copy(SWAMP_PLANKS)));
-    public static final Block SWAMP_BUTTON = registerBlock("swamp_button", new WoodenButtonBlock(AbstractBlock.Settings.of(Material.DECORATION).noCollision().strength(0.5f).sounds(BlockSoundGroup.WOOD)));
-    public static final Block SWAMP_PRESSURE_PLATE = registerBlock("swamp_pressure_plate", new PressurePlateBlock(PressurePlateBlock.ActivationRule.EVERYTHING, AbstractBlock.Settings.of(Material.WOOD, SWAMP_PLANKS.getDefaultMapColor()).noCollision().strength(0.5f).sounds(BlockSoundGroup.WOOD)));
-    public static final Block SWAMP_DOOR = registerBlock("swamp_door", new DoorBlock(AbstractBlock.Settings.of(Material.WOOD, SWAMP_PLANKS.getDefaultMapColor()).strength(3.0f).sounds(BlockSoundGroup.WOOD).nonOpaque()));
-    public static final Block SWAMP_FENCE = registerBlock("swamp_fence", new FenceBlock(AbstractBlock.Settings.of(Material.WOOD, SWAMP_PLANKS.getDefaultMapColor()).strength(3.0f).sounds(BlockSoundGroup.WOOD).nonOpaque()));
-    public static final Block SWAMP_FENCE_GATE = registerBlock("swamp_fence_gate", new FenceGateBlock(AbstractBlock.Settings.of(Material.WOOD, SWAMP_PLANKS.getDefaultMapColor()).strength(3.0f).sounds(BlockSoundGroup.WOOD).nonOpaque()));
-    public static final Block SWAMP_TRAPDOOR = registerBlock("swamp_trapdoor", new TrapdoorBlock(AbstractBlock.Settings.of(Material.WOOD, MapColor.DARK_GREEN).strength(3.0f).sounds(BlockSoundGroup.WOOD).nonOpaque().allowsSpawning((state, world, pos, type) -> false)));
-    public static final Block SWAMP_SAPLING = registerBlock("swamp_sapling", new InundatedSaplingBlock(new SwampSaplingGenerator(), AbstractBlock.Settings.of(Material.PLANT).noCollision().ticksRandomly().breakInstantly().sounds(BlockSoundGroup.GRASS)));
-    public static final Block SWAMP_LEAVES = registerBlock("swamp_leaves", new LeavesBlock(FabricBlockSettings.copyOf(Blocks.OAK_LEAVES)));
+    public static final Block MUDDY_OAK_LOG = registerBlock("muddy_oak_log", new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, state -> state.get(PillarBlock.AXIS) == Direction.Axis.Y ? MapColor.GREEN : MapColor.GRAY).strength(2.0F).sounds(BlockSoundGroup.WOOD)));
+    public static final Block STRIPPED_MUDDY_OAK_LOG = registerBlock("stripped_muddy_oak_log", new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, MapColor.GREEN).strength(2.0F).sounds(BlockSoundGroup.WOOD)));
+    public static final Block MUDDY_OAK_WOOD = registerBlock("muddy_oak_wood", new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, MapColor.GRAY).strength(2.0f).sounds(BlockSoundGroup.WOOD)));
+    public static final Block STRIPPED_MUDDY_OAK_WOOD = registerBlock("stripped_muddy_oak_wood", new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, MapColor.GREEN).strength(2.0f).sounds(BlockSoundGroup.WOOD)));
+    public static final Block MUDDY_OAK_PLANKS = registerBlock("muddy_oak_planks", new Block(AbstractBlock.Settings.of(Material.WOOD, MapColor.DARK_GREEN).strength(2.0f, 3.0f).sounds(BlockSoundGroup.WOOD)));
+    public static final Block MUDDY_OAK_SLAB = registerBlock("muddy_oak_slab", new SlabBlock(AbstractBlock.Settings.of(Material.WOOD, MapColor.DARK_GREEN).strength(2.0f, 3.0f).sounds(BlockSoundGroup.WOOD)));
+    public static final Block MUDDY_OAK_STAIRS = registerBlock("muddy_oak_stairs", new StairsBlock(MUDDY_OAK_PLANKS.getDefaultState(), AbstractBlock.Settings.copy(MUDDY_OAK_PLANKS)));
+    public static final Block MUDDY_OAK_BUTTON = registerBlock("muddy_oak_button", new WoodenButtonBlock(AbstractBlock.Settings.of(Material.DECORATION).noCollision().strength(0.5f).sounds(BlockSoundGroup.WOOD)));
+    public static final Block MUDDY_OAK_PRESSURE_PLATE = registerBlock("muddy_oak_pressure_plate", new PressurePlateBlock(PressurePlateBlock.ActivationRule.EVERYTHING, AbstractBlock.Settings.of(Material.WOOD, MUDDY_OAK_PLANKS.getDefaultMapColor()).noCollision().strength(0.5f).sounds(BlockSoundGroup.WOOD)));
+    public static final Block MUDDY_OAK_DOOR = registerBlock("muddy_oak_door", new DoorBlock(AbstractBlock.Settings.of(Material.WOOD, MUDDY_OAK_PLANKS.getDefaultMapColor()).strength(3.0f).sounds(BlockSoundGroup.WOOD).nonOpaque()));
+    public static final Block MUDDY_OAK_FENCE = registerBlock("muddy_oak_fence", new FenceBlock(AbstractBlock.Settings.of(Material.WOOD, MUDDY_OAK_PLANKS.getDefaultMapColor()).strength(3.0f).sounds(BlockSoundGroup.WOOD).nonOpaque()));
+    public static final Block MUDDY_OAK_FENCE_GATE = registerBlock("muddy_oak_fence_gate", new FenceGateBlock(AbstractBlock.Settings.of(Material.WOOD, MUDDY_OAK_PLANKS.getDefaultMapColor()).strength(3.0f).sounds(BlockSoundGroup.WOOD).nonOpaque()));
+    public static final Block MUDDY_OAK_TRAPDOOR = registerBlock("muddy_oak_trapdoor", new TrapdoorBlock(AbstractBlock.Settings.of(Material.WOOD, MapColor.DARK_GREEN).strength(3.0f).sounds(BlockSoundGroup.WOOD).nonOpaque().allowsSpawning((state, world, pos, type) -> false)));
+    public static final Block MUDDY_OAK_SIGN = registerNoTabBlock("muddy_oak_sign", new SignBlock(FabricBlockSettings.of(Material.WOOD, MUDDY_OAK_LOG.getDefaultMapColor()).noCollision().strength(1.0F).sounds(BlockSoundGroup.WOOD), GoodEndingSignTypes.MUDDY_OAK));
+    public static final Block MUDDY_OAK_WALL_SIGN = registerNoTabBlock("muddy_oak_wall_sign", new WallSignBlock(AbstractBlock.Settings.of(Material.WOOD, MUDDY_OAK_LOG.getDefaultMapColor()).noCollision().strength(1.0F).sounds(BlockSoundGroup.WOOD).dropsLike(MUDDY_OAK_SIGN), GoodEndingSignTypes.MUDDY_OAK));
     public static final Block CYPRESS_LOG = registerBlock("cypress_log", new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, state -> state.get(PillarBlock.AXIS) == Direction.Axis.Y ? MapColor.BROWN : MapColor.LIGHT_GRAY).strength(2.0F).sounds(BlockSoundGroup.WOOD)));
     public static final Block STRIPPED_CYPRESS_LOG = registerBlock("stripped_cypress_log", new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, MapColor.BROWN).strength(2.0F).sounds(BlockSoundGroup.WOOD)));
     public static final Block CYPRESS_WOOD = registerBlock("cypress_wood", new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, MapColor.LIGHT_GRAY).strength(2.0f).sounds(BlockSoundGroup.WOOD)));
@@ -77,6 +77,8 @@ public class GoodEndingBlocks {
     public static final Block CYPRESS_TRAPDOOR = registerBlock("cypress_trapdoor", new TrapdoorBlock(AbstractBlock.Settings.of(Material.WOOD, MapColor.TERRACOTTA_BROWN).strength(3.0f).sounds(BlockSoundGroup.WOOD).nonOpaque().allowsSpawning((state, world, pos, type) -> false)));
     public static final Block CYPRESS_SAPLING = registerBlock("cypress_sapling", new InundatedSaplingBlock(new CypressSaplingGenerator(), AbstractBlock.Settings.of(Material.PLANT).noCollision().ticksRandomly().breakInstantly().sounds(BlockSoundGroup.GRASS)));
     public static final Block CYPRESS_LEAVES = registerBlock("cypress_leaves", new LeavesBlock(FabricBlockSettings.copyOf(Blocks.OAK_LEAVES)));
+    public static final Block CYPRESS_SIGN = registerNoTabBlock("cypress_sign", new SignBlock(FabricBlockSettings.of(Material.WOOD, CYPRESS_LOG.getDefaultMapColor()).noCollision().strength(1.0F).sounds(BlockSoundGroup.WOOD), GoodEndingSignTypes.CYPRESS));
+    public static final Block CYPRESS_WALL_SIGN = registerNoTabBlock("cypress_wall_sign", new WallSignBlock(AbstractBlock.Settings.of(Material.WOOD, CYPRESS_LOG.getDefaultMapColor()).noCollision().strength(1.0F).sounds(BlockSoundGroup.WOOD).dropsLike(CYPRESS_SIGN), GoodEndingSignTypes.CYPRESS));
     public static final Block LARGE_LILY_PAD = registerNoTabBlock("large_lily_pad", new LargeLilyPadBlock(AbstractBlock.Settings.copy(Blocks.LILY_PAD)));
     public static final Block PURPLE_FLOWERING_LILY_PAD = registerNoTabBlock("purple_flowering_lily_pad", new LilyPadBlock(AbstractBlock.Settings.copy(Blocks.LILY_PAD)));
     public static final Block PINK_FLOWERING_LILY_PAD = registerNoTabBlock("pink_flowering_lily_pad", new LilyPadBlock(AbstractBlock.Settings.copy(Blocks.LILY_PAD)));
@@ -95,8 +97,6 @@ public class GoodEndingBlocks {
     public static final Block DUCKWEED = registerNoTabBlock("duckweed", new LilyPadBlock(AbstractBlock.Settings.of(Material.REPLACEABLE_PLANT).breakInstantly().sounds(BlockSoundGroup.MOSS_CARPET).noCollision().nonOpaque()));
     public static final Block CATTAIL = registerBlock("cattail", new CattailBlock(AbstractBlock.Settings.of(Material.PLANT).noCollision().breakInstantly().sounds(BlockSoundGroup.SMALL_DRIPLEAF).offsetType(AbstractBlock.OffsetType.XYZ)));
     public static final Block POTTED_CYPRESS_SAPLING = registerNoTabBlock("potted_cypress_sapling", new FlowerPotBlock(CYPRESS_SAPLING, AbstractBlock.Settings.of(Material.DECORATION).breakInstantly().nonOpaque()));
-    public static final Block CYPRESS_SIGN = registerNoTabBlock("cypress_sign", new SignBlock(FabricBlockSettings.of(Material.WOOD, CYPRESS_LOG.getDefaultMapColor()).noCollision().strength(1.0F).sounds(BlockSoundGroup.WOOD), GoodEndingSignTypes.CYPRESS));
-    public static final Block CYPRESS_WALL_SIGN = registerNoTabBlock("cypress_wall_sign", new WallSignBlock(AbstractBlock.Settings.of(Material.WOOD, CYPRESS_LOG.getDefaultMapColor()).noCollision().strength(1.0F).sounds(BlockSoundGroup.WOOD).dropsLike(CYPRESS_SIGN), GoodEndingSignTypes.CYPRESS));
 
     public static <B extends Block> B registerBlock(String name, B block) {
         Identifier id = new Identifier(GoodEnding.MODID, name);

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/leaves",
+  "textures": {
+    "all": "goodending:block/muddy_oak_leaves"
+  }
+}

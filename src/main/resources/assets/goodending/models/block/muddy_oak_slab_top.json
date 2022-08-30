@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "goodending:block/muddy_oak_planks",
+    "top": "goodending:block/muddy_oak_planks",
+    "side": "goodending:block/muddy_oak_planks"
+  }
+}
