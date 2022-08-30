@@ -3,11 +3,16 @@ package net.orcinus.goodending.entities;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.control.FlightMoveControl;
+import net.minecraft.entity.ai.pathing.BirdNavigation;
+import net.minecraft.entity.ai.pathing.EntityNavigation;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtHelper;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Formatting;
@@ -15,6 +20,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.orcinus.goodending.entities.ai.FindWoodGoal;
+import net.orcinus.goodending.entities.ai.MoveToWoodGoal;
 import net.orcinus.goodending.init.GoodEndingSoundEvents;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,12 +32,15 @@ public class WoodpeckerEntity extends PathAwareEntity {
     public float prevFlapProgress;
     private float flapSpeed = 1.0f;
     private float field_28640 = 1.0f;
+    @Nullable
+    public BlockPos woodPos;
     public final AnimationState peckingAnimationState = new AnimationState();
     public final AnimationState standingAnimationState = new AnimationState();
     public final AnimationState flyingAnimationState = new AnimationState();
 
     public WoodpeckerEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
         super(entityType, world);
+        this.moveControl = new FlightMoveControl(this, 20, true);
     }
 
     public static DefaultAttributeContainer.Builder createWoodPeckerAttributes() {
@@ -41,9 +51,62 @@ public class WoodpeckerEntity extends PathAwareEntity {
     }
 
     @Override
+    public void readCustomDataFromNbt(NbtCompound nbt) {
+        this.setWoodPos(null);
+        if (nbt.contains("WoodPos")) {
+            this.setWoodPos(NbtHelper.toBlockPos(nbt.getCompound("WoodPos")));
+        }
+        super.readCustomDataFromNbt(nbt);
+    }
+
+    @Override
+    public void writeCustomDataToNbt(NbtCompound nbt) {
+        super.writeCustomDataToNbt(nbt);
+        if (this.hasWood()) {
+            nbt.put("WoodPos", NbtHelper.fromBlockPos(this.getBlockPos()));
+        }
+    }
+
+    public boolean hasWood() {
+        return this.getWoodPos() != null;
+    }
+
+    public void setWoodPos(BlockPos blockPos) {
+        this.woodPos = blockPos;
+    }
+
+    @Nullable
+    public BlockPos getWoodPos() {
+        return this.woodPos;
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (!this.world.isClient) {
+
+        }
+    }
+
+    @Override
+    protected EntityNavigation createNavigation(World world) {
+        BirdNavigation birdNavigation = new BirdNavigation(this, world);
+        birdNavigation.setCanPathThroughDoors(false);
+        birdNavigation.setCanSwim(true);
+        birdNavigation.setCanEnterOpenDoors(true);
+        return birdNavigation;
+    }
+
+    @Override
     public void tickMovement() {
         super.tickMovement();
         this.flapWings();
+    }
+
+    @Override
+    protected void initGoals() {
+        this.goalSelector.add(1, new FindWoodGoal(this));
+        this.goalSelector.add(2, new MoveToWoodGoal(this));
     }
 
     private void flapWings() {
