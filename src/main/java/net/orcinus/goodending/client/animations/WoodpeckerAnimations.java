@@ -9,10 +9,10 @@ import net.minecraft.client.render.entity.animation.Transformation;
 import static net.minecraft.client.render.entity.animation.AnimationHelper.*;
 
 @Environment(EnvType.CLIENT)
-public interface WoodpeckerAnimations {
+public class WoodpeckerAnimations {
 
 
-    Animation WOODPECKER_PECK = Animation.Builder.create(2.5416666666666665f)
+    public static final Animation WOODPECKER_PECK = Animation.Builder.create(2.5416666666666665f)
                                                  .addBoneAnimation("head", new Transformation(Transformation.Targets.TRANSLATE,
                                                      new Keyframe(0f, method_41823(0f, -0.5f, 1f), Transformation.Interpolations.field_37884),
                                                      new Keyframe(0.8333333333333334f, method_41823(0f, -0.5f, 2.5f), Transformation.Interpolations.field_37885),
@@ -135,7 +135,7 @@ public interface WoodpeckerAnimations {
                                                  )
                                                  .build();
 
-    Animation WOODPECKER_STANDING = Animation.Builder.create(0f)
+    public static final Animation WOODPECKER_STANDING = Animation.Builder.create(0f)
                                                  .addBoneAnimation("head", new Transformation(Transformation.Targets.TRANSLATE,
                                                      new Keyframe(0f, method_41823(0f, -0.5f, 1f), Transformation.Interpolations.field_37884))
                                                  )
@@ -165,7 +165,7 @@ public interface WoodpeckerAnimations {
                                                  )
                                                  .build();
 
-    Animation WOODPECKER_FLY = Animation.Builder.create(1f)
+    public static final Animation WOODPECKER_FLY = Animation.Builder.create(1f)
                                                 .looping()
                                                 .addBoneAnimation("head", new Transformation(Transformation.Targets.TRANSLATE,
                                                     new Keyframe(0f, method_41823(0f, 0f, -1f), Transformation.Interpolations.field_37884),

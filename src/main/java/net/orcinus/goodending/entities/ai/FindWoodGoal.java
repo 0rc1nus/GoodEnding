@@ -1,8 +1,12 @@
 package net.orcinus.goodending.entities.ai;
 
+import com.google.common.collect.Lists;
 import net.minecraft.entity.EntityPose;
+import net.minecraft.entity.ai.brain.task.LookTargetUtil;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tag.BlockTags;
+import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -12,12 +16,13 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BlockStateRaycastContext;
 import net.orcinus.goodending.entities.WoodpeckerEntity;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 public class FindWoodGoal extends Goal {
     private final WoodpeckerEntity woodpeckerEntity;
-    private boolean running;
+    private int findingTicks;
+    private BlockPos woodPos;
 
     public FindWoodGoal(WoodpeckerEntity woodpeckerEntity) {
         this.woodpeckerEntity = woodpeckerEntity;
@@ -25,95 +30,92 @@ public class FindWoodGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        if (this.woodpeckerEntity.getWoodPos() != null) {
-            return false;
-        }
-        if (this.woodpeckerEntity.woodAttachingCooldownTicks > 0) {
-            return false;
-        }
-        Optional<BlockPos> woodPos = this.getNearbyWood();
-        if (woodPos.isPresent()) {
-            this.woodpeckerEntity.setWoodPos(woodPos.get());
-//            this.woodpeckerEntity.getNavigation().startMovingTo((double)this.woodpeckerEntity.getWoodPos().getX() + 0.5, (double)this.woodpeckerEntity.getWoodPos().getY() + 0.5, (double)this.woodpeckerEntity.getWoodPos().getZ() + 0.5, 1.2f);
-            return true;
+        if (this.woodpeckerEntity.getWoodPos() == null && this.getWoodPos() != null) {
+            this.woodPos = this.getWoodPos();
+            return this.woodPos != null && this.woodpeckerEntity.woodAttachingCooldownTicks == 0;
         }
         return false;
     }
 
     @Override
     public boolean shouldContinue() {
-        if (!this.running) {
-            return false;
-        }
-        if (!this.woodpeckerEntity.hasWoodPos()) {
-            return false;
-        }
-//        if (this.woodpeckerEntity.age % 20 == 0 && !this.woodpeckerEntity.world.getBlockState(this.woodpeckerEntity.getWoodPos()).isIn(BlockTags.LOGS)) {
-//            this.woodpeckerEntity.setWoodPos(null);
-//            return false;
-//        }
-        return true;
+        return this.findingTicks > 0 && this.woodpeckerEntity.getWoodPos() == null && this.woodPos != null && super.shouldContinue();
     }
 
     @Override
     public void start() {
         super.start();
-        this.running = true;
+        this.findingTicks = 20 * 20;
     }
 
     @Override
     public void stop() {
         super.stop();
-        this.running = false;
         this.woodpeckerEntity.woodAttachingCooldownTicks = 20 * 90;
-        this.woodpeckerEntity.setPose(EntityPose.FALL_FLYING);
+        if (this.woodpeckerEntity.getWoodPos() != null) {
+            this.woodpeckerEntity.getLookControl().lookAt(Vec3d.ofBottomCenter(this.woodpeckerEntity.getWoodPos()));
+        }
+        this.findingTicks = 0;
     }
 
     @Override
     public void tick() {
-        super.tick();
-
-        Vec3d vec3d = Vec3d.ofBottomCenter(this.woodpeckerEntity.getWoodPos());
-
-        BlockHitResult hitResult = this.woodpeckerEntity.world.raycast(new BlockStateRaycastContext(this.woodpeckerEntity.getSyncedPos(), vec3d, state -> state.isIn(BlockTags.LOGS)));
-
-        this.woodpeckerEntity.getNavigation().startMovingAlong(this.woodpeckerEntity.getNavigation().findPathTo(vec3d.x, vec3d.y, vec3d.z, 0), 1.0F);
-        this.woodpeckerEntity.getLookControl().lookAt(vec3d);
-
-        Direction direction = hitResult.getSide();
-        if (direction != Direction.UP && direction != Direction.DOWN) {
-            BlockPos relativePosition = new BlockPos(vec3d).offset(direction);
-            float dist = MathHelper.sqrt((float) this.woodpeckerEntity.squaredDistanceTo(new Vec3d(relativePosition.getX(), relativePosition.getY(), relativePosition.getZ())));
-            List<WoodpeckerEntity> woodpeckerEntities = this.woodpeckerEntity.world.getNonSpectatingEntities(WoodpeckerEntity.class, new Box(relativePosition));
-            if (woodpeckerEntities.size() == 1 && dist <= 1.3D) {
-                this.woodpeckerEntity.setPose(EntityPose.STANDING);
-                double axisDirection = direction.getDirection() == Direction.AxisDirection.POSITIVE ? 0.175D : 0.825D;
-                double xPosition = relativePosition.getX() + (direction.getAxis() == Direction.Axis.Z ? 0.5D : axisDirection);
-                double zPosition = relativePosition.getZ() + (direction.getAxis() == Direction.Axis.X ? 0.5D : axisDirection);
-                double yPosition = relativePosition.getY() + 0.25D;
-                this.woodpeckerEntity.teleport(xPosition, yPosition, zPosition);
-            }
+        if (this.findingTicks > 0) {
+            this.findingTicks--;
         }
-    }
+        final BlockPos finalPos = this.woodPos;
+        if (finalPos != null && this.findingTicks > 0) {
+            Vec3d vec3d = Vec3d.ofBottomCenter(finalPos);
 
-    private Optional<BlockPos> getNearbyWood() {
-        BlockPos blockPos = this.woodpeckerEntity.getBlockPos();
-        BlockPos.Mutable mutable = new BlockPos.Mutable();
-        double searchDistance = 5.0D;
-        for(int y = 0; (double)y <= searchDistance; y = y > 0 ? -y : 1 - y) {
-            for(int j = 0; (double)j < searchDistance; ++j) {
-                for(int x = 0; x <= j; x = x > 0 ? -x : 1 - x) {
-                    for(int z = x < j && x > -j ? j : 0; z <= j; z = z > 0 ? -z : 1 - z) {
-                        mutable.set(blockPos, x, y - 1, z);
-                        if (blockPos.isWithinDistance(mutable, searchDistance) && this.woodpeckerEntity.world.getBlockState(mutable).isIn(BlockTags.LOGS)) {
-                            return Optional.of(mutable);
+            BlockHitResult hitResult = this.woodpeckerEntity.world.raycast(new BlockStateRaycastContext(this.woodpeckerEntity.getSyncedPos(), vec3d, state -> state.isIn(BlockTags.LOGS)));
+
+//            this.woodpeckerEntity.getNavigation().startMovingAlong(this.woodpeckerEntity.getNavigation().findPathTo(vec3d.x, vec3d.y, vec3d.z, 0), 1.0F);
+            this.woodpeckerEntity.getNavigation().startMovingTo(vec3d.x, vec3d.y, vec3d.z, 1.0F);
+            this.woodpeckerEntity.getLookControl().lookAt(vec3d);
+
+            Direction direction = hitResult.getSide();
+            if (direction != Direction.UP && direction != Direction.DOWN) {
+                BlockPos relativePosition = new BlockPos(vec3d).offset(direction);
+                if (this.woodpeckerEntity.world.isAir(relativePosition)) {
+                    float dist = (float) Math.floor(MathHelper.sqrt((float) this.woodpeckerEntity.squaredDistanceTo(new Vec3d(relativePosition.getX(), relativePosition.getY(), relativePosition.getZ()))));
+                    List<WoodpeckerEntity> woodpeckerEntities = this.woodpeckerEntity.world.getNonSpectatingEntities(WoodpeckerEntity.class, new Box(relativePosition));
+                    if (woodpeckerEntities.size() == 1 && dist <= 1.3D) {
+                        double axisDirection = direction.getDirection() == Direction.AxisDirection.POSITIVE ? 0.175D : 0.825D;
+                        double xPosition = relativePosition.getX() + (direction.getAxis() == Direction.Axis.Z ? 0.5D : axisDirection);
+                        double zPosition = relativePosition.getZ() + (direction.getAxis() == Direction.Axis.X ? 0.5D : axisDirection);
+                        double yPosition = relativePosition.getY() + 0.25D;
+                        this.woodpeckerEntity.getLookControl().lookAt(xPosition, yPosition, zPosition);
+                        this.woodpeckerEntity.setAttachedPos(new BlockPos(xPosition, yPosition, zPosition));
+                        if (dist <= 1.005D) {
+                            this.woodpeckerEntity.setPos(xPosition, yPosition, zPosition);
+                            BlockPos offset = new BlockPos(xPosition, yPosition, zPosition).offset(direction.getOpposite());
+                            this.woodpeckerEntity.setWoodPos(offset);
+                            this.woodpeckerEntity.setPose(EntityPose.STANDING);
                         }
                     }
                 }
             }
         }
+    }
 
-        return Optional.empty();
+    public BlockPos getWoodPos() {
+        List<BlockPos> poses = Lists.newArrayList();
+        int range = 5;
+        BlockPos pos = this.woodpeckerEntity.getBlockPos();
+        for (int x = -range; x <= range; x++) {
+            for (int z = -range; z <= range; z++) {
+                for (int y = -range; y <= range; y++) {
+                    BlockPos add = pos.add(x, y, z);
+                    if (this.woodpeckerEntity.world.getBlockState(add).isIn(BlockTags.LOGS) && this.woodpeckerEntity.getBlockPos().isWithinDistance(add, range)) {
+                        poses.add(add);
+                    }
+                }
+            }
+        }
+        if (poses.isEmpty()) return null;
+
+//        return poses.get(this.woodpeckerEntity.world.getRandom().nextInt(poses.size()));
+        return poses.get(this.woodpeckerEntity.world.getRandom().nextInt(poses.size()));
     }
 
 }

@@ -2,6 +2,7 @@ package net.orcinus.goodending.entities.ai;
 
 import net.minecraft.entity.ai.NoPenaltySolidTargeting;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.orcinus.goodending.entities.FireflyEntity;
@@ -10,9 +11,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EnumSet;
 
 public class FlyAroundGoal extends Goal {
-    private final FireflyEntity fireflyEntity;
+    private final PathAwareEntity fireflyEntity;
 
-    public FlyAroundGoal(FireflyEntity fireflyEntity) {
+    public FlyAroundGoal(PathAwareEntity fireflyEntity) {
         this.fireflyEntity = fireflyEntity;
         this.setControls(EnumSet.of(Control.MOVE));
     }

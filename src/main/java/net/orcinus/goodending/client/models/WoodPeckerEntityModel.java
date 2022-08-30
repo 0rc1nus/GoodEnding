@@ -8,6 +8,7 @@ import net.minecraft.client.model.ModelTransform;
 import net.minecraft.client.model.TexturedModelData;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.entity.EntityPose;
+import net.minecraft.util.math.Direction;
 import net.orcinus.goodending.client.animations.WoodpeckerAnimations;
 import net.orcinus.goodending.entities.WoodpeckerEntity;
 
@@ -120,18 +121,17 @@ public class WoodPeckerEntityModel extends SinglePartEntityModel<WoodpeckerEntit
         float degree = 1.0f;
         float tilt = Math.min(limbDistance / 0.3f, 1.0f);
         this.getPart().traverse().forEach(ModelPart::resetTransform);
-        this.updateAnimation(entity.peckingAnimationState, WoodpeckerAnimations.WOODPECKER_PECK, animationProgress);
         this.updateAnimation(entity.standingAnimationState, WoodpeckerAnimations.WOODPECKER_STANDING, animationProgress);
         this.updateAnimation(entity.flyingAnimationState, WoodpeckerAnimations.WOODPECKER_FLY, animationProgress);
-
-        if (entity.getPose() != EntityPose.STANDING && entity.getPose() != EntityPose.DIGGING) {
-            head.pitch = headPitch * ((float) Math.PI / 180f);
-            head.yaw = headYaw * ((float) Math.PI / 180f);
-        }
-        else {
-            head.pitch = 0;
-            head.yaw = 0;
-        }
+        this.updateAnimation(entity.peckingAnimationState, WoodpeckerAnimations.WOODPECKER_PECK, animationProgress);
+//        head.pitch = headPitch * ((float) Math.PI / 180f);
+//        head.yaw = headYaw * ((float) Math.PI / 180f);
+//        if (entity.getPose() != EntityPose.STANDING && entity.getPose() != EntityPose.DIGGING) {
+//        }
+//        else {
+//            head.pitch = 0;
+//            head.yaw = 0;
+//        }
 
         //body.pitch = tilt * 0.7f;
         //head.pivotZ = tilt * -2.5f + 1.0F;
