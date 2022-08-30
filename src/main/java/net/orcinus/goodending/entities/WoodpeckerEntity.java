@@ -39,7 +39,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.orcinus.goodending.entities.ai.FindWoodGoal;
-import net.orcinus.goodending.entities.ai.FlyAroundGoal;
 import net.orcinus.goodending.entities.ai.PeckingWoodGoal;
 import net.orcinus.goodending.init.GoodEndingSoundEvents;
 import org.jetbrains.annotations.Nullable;

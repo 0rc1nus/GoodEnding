@@ -2,11 +2,8 @@ package net.orcinus.goodending.entities.ai;
 
 import com.google.common.collect.Lists;
 import net.minecraft.entity.EntityPose;
-import net.minecraft.entity.ai.brain.task.LookTargetUtil;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tag.BlockTags;
-import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -16,7 +13,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BlockStateRaycastContext;
 import net.orcinus.goodending.entities.WoodpeckerEntity;
 
-import java.util.Collections;
 import java.util.List;
 
 public class FindWoodGoal extends Goal {
@@ -69,7 +65,6 @@ public class FindWoodGoal extends Goal {
 
             BlockHitResult hitResult = this.woodpeckerEntity.world.raycast(new BlockStateRaycastContext(this.woodpeckerEntity.getSyncedPos(), vec3d, state -> state.isIn(BlockTags.LOGS)));
 
-//            this.woodpeckerEntity.getNavigation().startMovingAlong(this.woodpeckerEntity.getNavigation().findPathTo(vec3d.x, vec3d.y, vec3d.z, 0), 1.0F);
             this.woodpeckerEntity.getNavigation().startMovingTo(vec3d.x, vec3d.y, vec3d.z, 1.0F);
             this.woodpeckerEntity.getLookControl().lookAt(vec3d);
 
@@ -85,8 +80,8 @@ public class FindWoodGoal extends Goal {
                         double zPosition = relativePosition.getZ() + (direction.getAxis() == Direction.Axis.X ? 0.5D : axisDirection);
                         double yPosition = relativePosition.getY() + 0.25D;
                         this.woodpeckerEntity.getLookControl().lookAt(xPosition, yPosition, zPosition);
+                        this.woodpeckerEntity.setPos(xPosition, yPosition, zPosition);
                         if (dist <= 1.005D) {
-                            this.woodpeckerEntity.setPos(xPosition, yPosition, zPosition);
                             BlockPos offset = new BlockPos(xPosition, yPosition, zPosition).offset(direction.getOpposite());
                             this.woodpeckerEntity.setWoodPos(offset);
                             this.woodpeckerEntity.setPose(EntityPose.STANDING);
