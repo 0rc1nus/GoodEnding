@@ -51,7 +51,7 @@ import java.util.Optional;
 public class GoodEnding implements ModInitializer {
 	public static final String MODID = "goodending";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
-	public static final ItemGroup TAB = FabricItemGroupBuilder.create(new Identifier(MODID, MODID)).icon(() -> new ItemStack(Items.LILY_PAD)).build();
+	public static final ItemGroup TAB = FabricItemGroupBuilder.create(new Identifier(MODID, MODID)).icon(() -> new ItemStack(GoodEndingItems.YELLOW_FLOWERING_LILY_PAD)).build();
 
 	//-7697642187085846839
 	//-5973 63 417692
@@ -70,10 +70,12 @@ public class GoodEnding implements ModInitializer {
 	public void onInitialize() {
 
 		Reflection.initialize(
-		GoodEndingSoundEvents.class
+			GoodEndingSoundEvents.class,
+			GoodEndingItems.class,
+			GoodEndingBlocks.class
 		);
-		GoodEndingItems.init();
-		GoodEndingBlocks.init();
+
+
 		GoodEndingEnchantments.init();
 		GoodEndingFeatures.init();
 		GoodEndingStatusEffects.init();
@@ -120,25 +122,6 @@ public class GoodEnding implements ModInitializer {
 
 		StrippableBlockRegistry.register(GoodEndingBlocks.CYPRESS_LOG, GoodEndingBlocks.STRIPPED_CYPRESS_LOG);
 		StrippableBlockRegistry.register(GoodEndingBlocks.CYPRESS_WOOD, GoodEndingBlocks.STRIPPED_CYPRESS_WOOD);
-
-		CompostingChanceRegistry compostingChanceRegistry = CompostingChanceRegistry.INSTANCE;
-		compostingChanceRegistry.add(GoodEndingBlocks.CYPRESS_LEAVES, 0.3F);
-		compostingChanceRegistry.add(GoodEndingBlocks.DUCKWEED, 0.5F);
-		compostingChanceRegistry.add(GoodEndingBlocks.CATTAIL, 0.3F);
-		compostingChanceRegistry.add(GoodEndingBlocks.CYPRESS_SAPLING, 0.3F);
-		compostingChanceRegistry.add(GoodEndingBlocks.PASTEL_WILDFLOWERS, 0.65F);
-		compostingChanceRegistry.add(GoodEndingBlocks.TWILIGHT_WILDFLOWERS, 0.65F);
-		compostingChanceRegistry.add(GoodEndingBlocks.SPICY_WILDFLOWERS, 0.65F);
-		compostingChanceRegistry.add(GoodEndingBlocks.BALMY_WILDFLOWERS, 0.65F);
-		compostingChanceRegistry.add(GoodEndingBlocks.BIRCH_MUSHROOM, 0.65F);
-		compostingChanceRegistry.add(GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD, 0.65F);
-		compostingChanceRegistry.add(GoodEndingBlocks.PINK_FLOWERING_LILY_PAD, 0.65F);
-		compostingChanceRegistry.add(GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD, 0.65F);
-		compostingChanceRegistry.add(GoodEndingBlocks.LARGE_LILY_PAD, 0.65F);
-		compostingChanceRegistry.add(GoodEndingBlocks.DENSE_BIRCH_LEAVES, 0.3F);
-		compostingChanceRegistry.add(GoodEndingBlocks.HANGING_OAK_LEAVES, 0.3F);
-		compostingChanceRegistry.add(GoodEndingBlocks.HANGING_DARK_OAK_LEAVES, 0.65F);
-		compostingChanceRegistry.add(GoodEndingBlocks.POLLENFLAKE, 0.65F);
 
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
 			BlockPos blockPos = hitResult.getBlockPos();
