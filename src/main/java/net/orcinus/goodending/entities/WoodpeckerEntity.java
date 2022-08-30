@@ -54,8 +54,6 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
     private float field_28640 = 1.0f;
     @Nullable
     private BlockPos woodPos;
-    @Nullable
-    private BlockPos attachedPos;
     public int woodAttachingCooldownTicks;
     public int peckingWoodCooldownTicks;
     public final AnimationState peckingAnimationState = new AnimationState();
@@ -180,7 +178,6 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
         this.woodAttachingCooldownTicks = nbt.getInt("WoodAttachingCooldownTicks");
         this.setPeckingWoodCooldownTicks(nbt.getInt("PeckingWoodCooldownTicks"));
         if (nbt.contains("WoodPos")) this.setWoodPos(NbtHelper.toBlockPos(nbt.getCompound("WoodPos")));
-        if (nbt.contains("AttachedPos")) this.attachedPos = NbtHelper.toBlockPos(nbt.getCompound("AttachedPos"));
     }
 
     @Override
@@ -190,15 +187,6 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
         nbt.putInt("PeckingWoodCooldownTicks", this.getPeckingWoodCooldownTicks());
         nbt.putByte("AttachFace", (byte)this.getAttachedFace().getId());
         if (this.getWoodPos() != null) nbt.put("WoodPos", NbtHelper.fromBlockPos(this.getWoodPos()));
-        if (this.attachedPos != null) nbt.put("AttachedPos", NbtHelper.fromBlockPos(this.attachedPos));
-    }
-
-    public BlockPos getAttachedPos() {
-        return this.attachedPos;
-    }
-
-    public void setAttachedPos(BlockPos attachedPos) {
-        this.attachedPos = attachedPos;
     }
 
     public void setPeckingWoodCooldownTicks(int peckingWoodCooldownTicks) {

@@ -85,7 +85,6 @@ public class FindWoodGoal extends Goal {
                         double zPosition = relativePosition.getZ() + (direction.getAxis() == Direction.Axis.X ? 0.5D : axisDirection);
                         double yPosition = relativePosition.getY() + 0.25D;
                         this.woodpeckerEntity.getLookControl().lookAt(xPosition, yPosition, zPosition);
-                        this.woodpeckerEntity.setAttachedPos(new BlockPos(xPosition, yPosition, zPosition));
                         if (dist <= 1.005D) {
                             this.woodpeckerEntity.setPos(xPosition, yPosition, zPosition);
                             BlockPos offset = new BlockPos(xPosition, yPosition, zPosition).offset(direction.getOpposite());
