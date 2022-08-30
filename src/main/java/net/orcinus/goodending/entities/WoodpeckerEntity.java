@@ -9,11 +9,11 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.ai.FuzzyTargeting;
 import net.minecraft.entity.ai.control.FlightMoveControl;
-import net.minecraft.entity.ai.control.LookControl;
 import net.minecraft.entity.ai.goal.EscapeDangerGoal;
 import net.minecraft.entity.ai.goal.FlyGoal;
 import net.minecraft.entity.ai.goal.LookAtEntityGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
 import net.minecraft.entity.ai.pathing.BirdNavigation;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
 import net.minecraft.entity.ai.pathing.PathNodeType;
@@ -62,6 +62,7 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
 
     public WoodpeckerEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
         super(entityType, world);
+        this.moveControl = new FlightMoveControl(this, 10, true);
         this.setPose(EntityPose.FALL_FLYING);
         this.setPathfindingPenalty(PathNodeType.DANGER_FIRE, -1.0f);
         this.setPathfindingPenalty(PathNodeType.DAMAGE_FIRE, -1.0f);
@@ -165,10 +166,7 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
 
     @Override
     public float getPathfindingFavor(BlockPos pos, WorldView world) {
-        if (world.getBlockState(pos).isAir()) {
-            return 10.0f;
-        }
-        return 0.0f;
+        return super.getPathfindingFavor(pos, world);
     }
 
     @Override
@@ -177,6 +175,7 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
         this.setAttachedFace(Direction.byId(nbt.getByte("AttachFace")));
         this.woodAttachingCooldownTicks = nbt.getInt("WoodAttachingCooldownTicks");
         this.setPeckingWoodCooldownTicks(nbt.getInt("PeckingWoodCooldownTicks"));
+        this.setWoodPos(null);
         if (nbt.contains("WoodPos")) this.setWoodPos(NbtHelper.toBlockPos(nbt.getCompound("WoodPos")));
     }
 
@@ -351,11 +350,11 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
         }
     }
 
-    public static class WanderGoal extends FlyAroundGoal {
+    public static class WanderGoal extends WanderAroundFarGoal {
         private final WoodpeckerEntity woodpeckerEntity;
 
         public WanderGoal(WoodpeckerEntity pathAwareEntity) {
-            super(pathAwareEntity);
+            super(pathAwareEntity, 1.0D);
             this.woodpeckerEntity = pathAwareEntity;
         }
 
