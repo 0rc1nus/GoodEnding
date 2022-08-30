@@ -77,7 +77,7 @@ public class FindWoodGoal extends Goal {
             if (direction != Direction.UP && direction != Direction.DOWN) {
                 BlockPos relativePosition = new BlockPos(vec3d).offset(direction);
                 if (this.woodpeckerEntity.world.isAir(relativePosition)) {
-                    float dist = MathHelper.sqrt((float) this.woodpeckerEntity.squaredDistanceTo(new Vec3d(relativePosition.getX(), relativePosition.getY(), relativePosition.getZ())));
+                    float dist = (float) Math.floor(MathHelper.sqrt((float) this.woodpeckerEntity.squaredDistanceTo(new Vec3d(relativePosition.getX(), relativePosition.getY(), relativePosition.getZ()))));
                     List<WoodpeckerEntity> woodpeckerEntities = this.woodpeckerEntity.world.getNonSpectatingEntities(WoodpeckerEntity.class, new Box(relativePosition));
                     if (woodpeckerEntities.size() == 1 && dist <= 1.3D) {
                         double axisDirection = direction.getDirection() == Direction.AxisDirection.POSITIVE ? 0.175D : 0.825D;

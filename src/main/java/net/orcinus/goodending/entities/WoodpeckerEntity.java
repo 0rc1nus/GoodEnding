@@ -140,7 +140,8 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
     @Override
     protected void initGoals() {
         this.goalSelector.add(0, new EscapeDangerGoal(this, 1.25));
-        this.goalSelector.add(1, new SwimGoal(this));
+        this.goalSelector.add(0, new SwimGoal(this));
+        this.goalSelector.add(1, new EscapeDangerGoal(this, 1.5));
         this.goalSelector.add(2, new FindWoodGoal(this));
         this.goalSelector.add(3, new PeckingWoodGoal(this));
         this.goalSelector.add(4, new WanderGoal(this));

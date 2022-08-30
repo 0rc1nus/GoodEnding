@@ -8,7 +8,6 @@ import net.minecraft.client.model.ModelTransform;
 import net.minecraft.client.model.TexturedModelData;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.entity.EntityPose;
-import net.minecraft.util.math.Direction;
 import net.orcinus.goodending.client.animations.WoodpeckerAnimations;
 import net.orcinus.goodending.entities.WoodpeckerEntity;
 
@@ -115,28 +114,26 @@ public class WoodPeckerEntityModel extends SinglePartEntityModel<WoodpeckerEntit
 
     @Override
     public void setAngles(WoodpeckerEntity entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
-        limbDistance = clamp(limbDistance, -0.45F, 0.45F);
-
-        float speed = 1.0f;
-        float degree = 1.0f;
-        float tilt = Math.min(limbDistance / 0.3f, 1.0f);
         this.getPart().traverse().forEach(ModelPart::resetTransform);
+        limbDistance = clamp(limbDistance, -0.45F, 0.45F);
+        if (entity.getPose() != EntityPose.STANDING && entity.getPose() != EntityPose.DIGGING) this.setHeadAngle(headYaw, headPitch);
+        this.setBodyAngles(limbDistance);
         this.updateAnimation(entity.standingAnimationState, WoodpeckerAnimations.WOODPECKER_STANDING, animationProgress);
         this.updateAnimation(entity.flyingAnimationState, WoodpeckerAnimations.WOODPECKER_FLY, animationProgress);
         this.updateAnimation(entity.peckingAnimationState, WoodpeckerAnimations.WOODPECKER_PECK, animationProgress);
-//        head.pitch = headPitch * ((float) Math.PI / 180f);
-//        head.yaw = headYaw * ((float) Math.PI / 180f);
-//        if (entity.getPose() != EntityPose.STANDING && entity.getPose() != EntityPose.DIGGING) {
-//        }
-//        else {
-//            head.pitch = 0;
-//            head.yaw = 0;
-//        }
+    }
 
-        //body.pitch = tilt * 0.7f;
-        //head.pivotZ = tilt * -2.5f + 1.0F;
-        //head.pivotY += tilt * 0.5f;
-        //tail.pitch = tilt * -1f;
+    private void setBodyAngles(float limbDistance) {
+        float tilt = Math.min(limbDistance / 0.3f, 1.0f);
+        body.pitch += tilt * 0.7f;
+        head.pivotZ += tilt * -2.5f + 1.0F;
+        head.pivotY += tilt * 0.5f;
+        tail.pitch += tilt * -1f;
+    }
+
+    private void setHeadAngle(float yaw, float pitch) {
+        this.head.pitch = pitch * ((float)Math.PI / 180);
+        this.head.yaw = yaw * ((float)Math.PI / 180);
     }
 
     @Override

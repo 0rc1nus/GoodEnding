@@ -181,41 +181,35 @@ public class WoodpeckerAnimations {
                                                     new Keyframe(0.75f, method_41823(0f, 0.25f, 0f), Transformation.Interpolations.field_37884),
                                                     new Keyframe(1f, method_41823(0f, 0f, 0f), Transformation.Interpolations.field_37884))
                                                 )
-                                                .addBoneAnimation("body", new Transformation(Transformation.Targets.ROTATE,
-                                                    new Keyframe(0f, method_41829(22.5f, 0f, 0f), Transformation.Interpolations.field_37884))
-                                                )
-                                                .addBoneAnimation("tail", new Transformation(Transformation.Targets.ROTATE,
-                                                    new Keyframe(0f, method_41829(-35f, 0f, 0f), Transformation.Interpolations.field_37884))
-                                                )
                                                 .addBoneAnimation("left_wing", new Transformation(Transformation.Targets.ROTATE,
-                                                    new Keyframe(0f, method_41829(15f, 0f, 0f), Transformation.Interpolations.field_37884),
-                                                    new Keyframe(0.08333333333333333f, method_41829(15f, 0f, -45f), Transformation.Interpolations.field_37884),
-                                                    new Keyframe(0.16666666666666666f, method_41829(15f, 0f, 0f), Transformation.Interpolations.field_37884),
-                                                    new Keyframe(0.25f, method_41829(15f, 0f, -45f), Transformation.Interpolations.field_37884),
-                                                    new Keyframe(0.3333333333333333f, method_41829(15f, 0f, 0f), Transformation.Interpolations.field_37884),
-                                                    new Keyframe(0.4166666666666667f, method_41829(15f, 0f, -45f), Transformation.Interpolations.field_37884),
-                                                    new Keyframe(0.5f, method_41829(15f, 0f, 0f), Transformation.Interpolations.field_37884),
-                                                    new Keyframe(0.5833333333333334f, method_41829(15f, 0f, -45f), Transformation.Interpolations.field_37884),
-                                                    new Keyframe(0.6666666666666666f, method_41829(15f, 0f, 0f), Transformation.Interpolations.field_37884),
-                                                    new Keyframe(0.75f, method_41829(15f, 0f, -45f), Transformation.Interpolations.field_37884),
-                                                    new Keyframe(0.8333333333333334f, method_41829(15f, 0f, 0f), Transformation.Interpolations.field_37884),
-                                                    new Keyframe(0.9166666666666666f, method_41829(15f, 0f, -45f), Transformation.Interpolations.field_37884),
-                                                    new Keyframe(1f, method_41829(15f, 0f, 0f), Transformation.Interpolations.field_37884))
+                                                    new Keyframe(0f, method_41829(0f, 0f, 0f), Transformation.Interpolations.field_37884),
+                                                    new Keyframe(0.08333333333333333f, method_41829(0f, 0f, -45f), Transformation.Interpolations.field_37884),
+                                                    new Keyframe(0.16666666666666666f, method_41829(0f, 0f, 0f), Transformation.Interpolations.field_37884),
+                                                    new Keyframe(0.25f, method_41829(0f, 0f, -45f), Transformation.Interpolations.field_37884),
+                                                    new Keyframe(0.3333333333333333f, method_41829(0f, 0f, 0f), Transformation.Interpolations.field_37884),
+                                                    new Keyframe(0.4166666666666667f, method_41829(0f, 0f, -45f), Transformation.Interpolations.field_37884),
+                                                    new Keyframe(0.5f, method_41829(0f, 0f, 0f), Transformation.Interpolations.field_37884),
+                                                    new Keyframe(0.5833333333333334f, method_41829(0f, 0f, -45f), Transformation.Interpolations.field_37884),
+                                                    new Keyframe(0.6666666666666666f, method_41829(0f, 0f, 0f), Transformation.Interpolations.field_37884),
+                                                    new Keyframe(0.75f, method_41829(0f, 0f, -45f), Transformation.Interpolations.field_37884),
+                                                    new Keyframe(0.8333333333333334f, method_41829(0f, 0f, 0f), Transformation.Interpolations.field_37884),
+                                                    new Keyframe(0.9166666666666666f, method_41829(0f, 0f, -45f), Transformation.Interpolations.field_37884),
+                                                    new Keyframe(1f, method_41829(0f, 0f, 0f), Transformation.Interpolations.field_37884))
                                                 )
                                                 .addBoneAnimation("right_wing", new Transformation(Transformation.Targets.ROTATE,
-                                                    new Keyframe(0f, method_41829(15f, 0f, 0f), Transformation.Interpolations.field_37884),
-                                                    new Keyframe(0.08333333333333333f, method_41829(15f, 0f, 45f), Transformation.Interpolations.field_37884),
-                                                    new Keyframe(0.16666666666666666f, method_41829(15f, 0f, 0f), Transformation.Interpolations.field_37884),
-                                                    new Keyframe(0.25f, method_41829(15f, 0f, 45f), Transformation.Interpolations.field_37884),
-                                                    new Keyframe(0.3333333333333333f, method_41829(15f, 0f, 0f), Transformation.Interpolations.field_37884),
-                                                    new Keyframe(0.4166666666666667f, method_41829(15f, 0f, 45f), Transformation.Interpolations.field_37884),
-                                                    new Keyframe(0.5f, method_41829(15f, 0f, 0f), Transformation.Interpolations.field_37884),
-                                                    new Keyframe(0.5833333333333334f, method_41829(15f, 0f, 45f), Transformation.Interpolations.field_37884),
-                                                    new Keyframe(0.6666666666666666f, method_41829(15f, 0f, 0f), Transformation.Interpolations.field_37884),
-                                                    new Keyframe(0.75f, method_41829(15f, 0f, 45f), Transformation.Interpolations.field_37884),
-                                                    new Keyframe(0.8333333333333334f, method_41829(15f, 0f, 0f), Transformation.Interpolations.field_37884),
-                                                    new Keyframe(0.9166666666666666f, method_41829(15f, 0f, 45f), Transformation.Interpolations.field_37884),
-                                                    new Keyframe(1f, method_41829(15f, 0f, 0f), Transformation.Interpolations.field_37884))
+                                                    new Keyframe(0f, method_41829(0f, 0f, 0f), Transformation.Interpolations.field_37884),
+                                                    new Keyframe(0.08333333333333333f, method_41829(0f, 0f, 45f), Transformation.Interpolations.field_37884),
+                                                    new Keyframe(0.16666666666666666f, method_41829(0f, 0f, 0f), Transformation.Interpolations.field_37884),
+                                                    new Keyframe(0.25f, method_41829(0f, 0f, 45f), Transformation.Interpolations.field_37884),
+                                                    new Keyframe(0.3333333333333333f, method_41829(0f, 0f, 0f), Transformation.Interpolations.field_37884),
+                                                    new Keyframe(0.4166666666666667f, method_41829(0f, 0f, 45f), Transformation.Interpolations.field_37884),
+                                                    new Keyframe(0.5f, method_41829(0f, 0f, 0f), Transformation.Interpolations.field_37884),
+                                                    new Keyframe(0.5833333333333334f, method_41829(0f, 0f, 45f), Transformation.Interpolations.field_37884),
+                                                    new Keyframe(0.6666666666666666f, method_41829(0f, 0f, 0f), Transformation.Interpolations.field_37884),
+                                                    new Keyframe(0.75f, method_41829(0f, 0f, 45f), Transformation.Interpolations.field_37884),
+                                                    new Keyframe(0.8333333333333334f, method_41829(0f, 0f, 0f), Transformation.Interpolations.field_37884),
+                                                    new Keyframe(0.9166666666666666f, method_41829(0f, 0f, 45f), Transformation.Interpolations.field_37884),
+                                                    new Keyframe(1f, method_41829(0f, 0f, 0f), Transformation.Interpolations.field_37884))
                                                 )
                                                 .addBoneAnimation("left_leg", new Transformation(Transformation.Targets.ROTATE,
                                                     new Keyframe(0f, method_41829(0f, 0f, 0f), Transformation.Interpolations.field_37884), 
