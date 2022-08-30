@@ -26,13 +26,13 @@ public class PeckingWoodGoal extends Goal {
 
     @Override
     public boolean canStart() {
+        if (this.woodpeckerEntity.getDamageTracker().wasRecentlyAttacked()) return false;
         return this.woodpeckerEntity.getPeckingWoodCooldownTicks() == 0 && this.woodpeckerEntity.getWoodPos() != null;
     }
 
     @Override
     public boolean shouldContinue() {
-
-        if(this.woodpeckerEntity.getDamageTracker().wasRecentlyAttacked()) return false;
+        if (this.woodpeckerEntity.getDamageTracker().wasRecentlyAttacked()) return false;
         return this.stuckToLogTicks > 0 && this.woodpeckerEntity.getWoodPos() != null && super.shouldContinue();
     }
 
