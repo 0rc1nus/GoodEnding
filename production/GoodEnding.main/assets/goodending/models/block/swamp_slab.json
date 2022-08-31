@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "goodending:block/swamp_planks",
-    "side": "goodending:block/swamp_planks",
-    "top": "goodending:block/swamp_planks"
-  }
-}

@@ -2,36 +2,47 @@ package net.orcinus.goodending.entities;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.AnimationState;
+import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.Flutterer;
 import net.minecraft.entity.ai.control.FlightMoveControl;
+import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.pathing.BirdNavigation;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.entity.mob.ShulkerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.orcinus.goodending.entities.ai.FindWoodGoal;
+import net.orcinus.goodending.entities.ai.FlyAroundGoal;
 import net.orcinus.goodending.entities.ai.MoveToWoodGoal;
 import net.orcinus.goodending.init.GoodEndingSoundEvents;
 import org.jetbrains.annotations.Nullable;
 
-public class WoodpeckerEntity extends PathAwareEntity {
+public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
+    protected static final TrackedData<Direction> ATTACHED_FACE = DataTracker.registerData(WoodpeckerEntity.class, TrackedDataHandlerRegistry.FACING);
     public float flapProgress;
     public float maxWingDeviation;
     public float prevMaxWingDeviation;
     public float prevFlapProgress;
     private float flapSpeed = 1.0f;
     private float field_28640 = 1.0f;
+    private int peckingWoodCooldown;
     @Nullable
     public BlockPos woodPos;
     public final AnimationState peckingAnimationState = new AnimationState();
@@ -41,13 +52,28 @@ public class WoodpeckerEntity extends PathAwareEntity {
     public WoodpeckerEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
         super(entityType, world);
         this.moveControl = new FlightMoveControl(this, 20, true);
+        this.setPose(EntityPose.FALL_FLYING);
     }
 
     public static DefaultAttributeContainer.Builder createWoodPeckerAttributes() {
         return MobEntity.createMobAttributes()
-                        .add(EntityAttributes.GENERIC_MAX_HEALTH, 6.0)
-                        .add(EntityAttributes.GENERIC_FLYING_SPEED, 0.4f)
-                        .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.2f);
+                .add(EntityAttributes.GENERIC_MAX_HEALTH, 6.0)
+                .add(EntityAttributes.GENERIC_FLYING_SPEED, 0.4f)
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.2f);
+    }
+
+    @Override
+    protected void initDataTracker() {
+        super.initDataTracker();
+        this.dataTracker.startTracking(ATTACHED_FACE, Direction.DOWN);
+    }
+
+    public Direction getAttachedFace() {
+        return this.dataTracker.get(ATTACHED_FACE);
+    }
+
+    public void setAttachedFace(Direction attachedFace) {
+        this.dataTracker.set(ATTACHED_FACE, attachedFace);
     }
 
     @Override
@@ -56,6 +82,8 @@ public class WoodpeckerEntity extends PathAwareEntity {
         if (nbt.contains("WoodPos")) {
             this.setWoodPos(NbtHelper.toBlockPos(nbt.getCompound("WoodPos")));
         }
+        this.setAttachedFace(Direction.byId(nbt.getByte("AttachFace")));
+        this.setPeckingWoodCooldown(nbt.getInt("PeckingWoodCooldownTicks"));
         super.readCustomDataFromNbt(nbt);
     }
 
@@ -65,6 +93,16 @@ public class WoodpeckerEntity extends PathAwareEntity {
         if (this.hasWood()) {
             nbt.put("WoodPos", NbtHelper.fromBlockPos(this.getBlockPos()));
         }
+        nbt.putByte("AttachFace", (byte) this.getAttachedFace().getId());
+        nbt.putInt("PeckingWoodCooldownTicks", this.getPeckingWoodCooldown());
+    }
+
+    public int getPeckingWoodCooldown() {
+        return this.peckingWoodCooldown;
+    }
+
+    public void setPeckingWoodCooldown(int peckingWoodCooldown) {
+        this.peckingWoodCooldown = peckingWoodCooldown;
     }
 
     public boolean hasWood() {
@@ -82,10 +120,28 @@ public class WoodpeckerEntity extends PathAwareEntity {
 
     @Override
     public void tick() {
-        super.tick();
-        if (!this.world.isClient) {
-
+        if (this.world.isClient()) {
+            if (this.getPose() == EntityPose.FALL_FLYING) {
+                this.flyingAnimationState.startIfNotRunning(this.age);
+            } else {
+                this.flyingAnimationState.stop();
+            }
+            if (this.getPose() == EntityPose.STANDING) {
+                this.standingAnimationState.startIfNotRunning(this.age);
+            } else {
+                this.standingAnimationState.stop();
+            }
+            if (this.getPose() == EntityPose.DIGGING) {
+                this.peckingAnimationState.startIfNotRunning(this.age);
+            } else {
+                this.peckingAnimationState.stop();
+            }
+        } else {
+            if (this.getPeckingWoodCooldown() > 0) {
+                this.setPeckingWoodCooldown(this.getPeckingWoodCooldown() - 1);
+            }
         }
+        super.tick();
     }
 
     @Override
@@ -105,8 +161,10 @@ public class WoodpeckerEntity extends PathAwareEntity {
 
     @Override
     protected void initGoals() {
-        this.goalSelector.add(1, new FindWoodGoal(this));
-        this.goalSelector.add(2, new MoveToWoodGoal(this));
+        this.goalSelector.add(1, new FlyAroundGoal(this));
+        this.goalSelector.add(2, new SwimGoal(this));
+        this.goalSelector.add(3, new FindWoodGoal(this));
+        this.goalSelector.add(4, new MoveToWoodGoal(this));
     }
 
     private void flapWings() {
@@ -170,4 +228,8 @@ public class WoodpeckerEntity extends PathAwareEntity {
     }
 
 
+    @Override
+    public boolean isInAir() {
+        return !this.onGround;
+    }
 }
