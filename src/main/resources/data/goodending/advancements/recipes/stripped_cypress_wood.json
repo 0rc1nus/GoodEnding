@@ -1,26 +1,23 @@
 {
-  "parent": "goodending:recipes/root",
-  "rewards": {
-    "recipes": [
-      "goodending:stripped_cypress_wood"
-    ]
-  },
+  "parent": "minecraft:recipes/root",
   "criteria": {
     "has_log": {
-      "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "goodending:stripped_cypress_log"
+            "items": [
+              "goodending:stripped_cypress_log"
+            ]
           }
         ]
-      }
+      },
+      "trigger": "minecraft:inventory_changed"
     },
     "has_the_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
       "conditions": {
         "recipe": "goodending:stripped_cypress_wood"
-      }
+      },
+      "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
@@ -28,5 +25,10 @@
       "has_log",
       "has_the_recipe"
     ]
-  ]
+  ],
+  "rewards": {
+    "recipes": [
+      "goodending:stripped_cypress_wood"
+    ]
+  }
 }
