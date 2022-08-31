@@ -9,6 +9,7 @@ import net.minecraft.entity.SpawnRestriction;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.SpawnEggItem;
+import net.minecraft.tag.BlockTags;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.Heightmap;
@@ -49,6 +50,7 @@ public class GoodEndingEntityTypes {
                                .entityFactory(WoodpeckerEntity::new)
                                .defaultAttributes(WoodpeckerEntity::createWoodPeckerAttributes)
                                .spawnGroup(SpawnGroup.CREATURE)
+                               .spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING, (type, world, spawnReason, pos, random) -> world.getBlockState(pos.down()).isIn(BlockTags.PARROTS_SPAWNABLE_ON))
                                .dimensions(EntityDimensions.changing(0.35F, 0.65F)),
         new int[]{ 0xCB4613, 0xFFFFFF }
     );

@@ -17,6 +17,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BlockStateRaycastContext;
 import net.orcinus.goodending.entities.WoodpeckerEntity;
+import net.orcinus.goodending.init.GoodEndingSoundEvents;
 
 import java.util.List;
 
@@ -40,6 +41,9 @@ public class MoveToWoodGoal extends Goal {
                 return false;
             }
         }
+        if (this.woodpecker.getAttacker() != null) {
+            return false;
+        }
         return this.woodpecker.getWoodPos() != null && this.woodpecker.world.getBlockState(this.woodpecker.getWoodPos()).isIn(BlockTags.LOGS) && this.woodpecker.getPeckingWoodCooldown() == 0;
     }
 
@@ -54,6 +58,9 @@ public class MoveToWoodGoal extends Goal {
                 this.woodpecker.setPeckingWoodCooldown(200);
                 return false;
             }
+        }
+        if (this.woodpecker.getAttacker() != null) {
+            return false;
         }
         if (this.cancel) {
             return false;
@@ -70,9 +77,6 @@ public class MoveToWoodGoal extends Goal {
         this.woodpecker.setPeckingWoodCooldown(this.cancel ? 200 : 400);
         this.woodpecker.setPose(EntityPose.FALL_FLYING);
         this.peckingTicks = 100;
-        for (PlayerEntity player : this.woodpecker.world.getPlayers()) {
-            player.sendMessage(Text.translatable("Stopped!"));
-        }
     }
 
     @Override
@@ -83,7 +87,7 @@ public class MoveToWoodGoal extends Goal {
             boolean flag = attachedFace == Direction.UP || attachedFace == Direction.DOWN;
             if (!flag) {
                 Vec3d center = Vec3d.ofBottomCenter(woodPos.offset(attachedFace));
-                this.woodpecker.getLookControl().lookAt(center);
+                this.woodpecker.getLookControl().lookAt(Vec3d.ofCenter(woodPos));
                 if (this.woodpecker.getBlockPos().getSquaredDistance(center) <= 3D) {
                     center = Vec3d.ofBottomCenter(woodPos);
                 }
@@ -91,6 +95,8 @@ public class MoveToWoodGoal extends Goal {
                 double squaredDistance = this.woodpecker.getBlockPos().getSquaredDistance(Vec3d.ofBottomCenter(woodPos));
                 if (squaredDistance <= 3D) {
                     BlockHitResult blockHitResult = this.woodpecker.world.raycast(new BlockStateRaycastContext(this.woodpecker.getPos(), Vec3d.ofCenter(woodPos), state -> state.isIn(BlockTags.LOGS)));
+                    this.woodpecker.setVelocity(Vec3d.ZERO);
+                    this.woodpecker.getLookControl().lookAt(Vec3d.ofCenter(woodPos));
                     if (blockHitResult.getType() == HitResult.Type.BLOCK) {
                         Direction direction = blockHitResult.getSide();
                         List<WoodpeckerEntity> woodpeckerEntities = this.woodpecker.world.getNonSpectatingEntities(WoodpeckerEntity.class, new Box(woodPos.offset(this.woodpecker.getAttachedFace())));
@@ -99,7 +105,6 @@ public class MoveToWoodGoal extends Goal {
                         }
                         BlockPos pos = new BlockPos(Vec3d.ofBottomCenter(woodPos));
                         this.woodpecker.getLookControl().lookAt(Vec3d.ofCenter(pos));
-
                         double xPosition = pos.getX() + (attachedFace.getAxis() == Direction.Axis.Z ? 0.5D : (attachedFace == Direction.WEST ? -0.2D : 1.2D));
                         double yPosition = pos.getY() + 0.25D;
                         double zPosition = pos.getZ() + (attachedFace.getAxis() == Direction.Axis.X ? 0.5D : (attachedFace == Direction.NORTH ? -0.2D : 1.2D));
@@ -119,7 +124,6 @@ public class MoveToWoodGoal extends Goal {
                                 double f = woodPos.getZ() + 0.5D;
                                 ((ServerWorld)this.woodpecker.world).spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, blockState), d, e, f, 1, 0.5, 0.25, 0.5, 0.0);
                             }
-//                      this.woodpecker.playSound(GoodEndingSoundEvents.ENTITY_WOODPECKER_DRUM, 1.0F, 1.0F);
                         }
                     }
                 }

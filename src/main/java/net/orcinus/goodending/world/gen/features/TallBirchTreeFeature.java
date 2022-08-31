@@ -87,7 +87,7 @@ public class TallBirchTreeFeature extends Feature<TreeFeatureConfig> {
         branchPoses.forEach(branchPos -> {
             Direction randomDirection = Direction.Type.HORIZONTAL.random(random);
             BlockPos offsetPos = branchPos.offset(randomDirection);
-            if (random.nextInt(5) == 0 && world.isAir(offsetPos) && world.isAir(offsetPos.down())) {
+            if (random.nextInt(3) == 0 && world.isAir(offsetPos) && world.isAir(offsetPos.down())) {
                 world.setBlockState(offsetPos, config.trunkProvider.getBlockState(random, offsetPos).with(PillarBlock.AXIS, randomDirection.getAxis()), 19);
                 if (world.isAir(offsetPos.down()) && random.nextFloat() < 0.02F) {
                     this.setBeehive(world, random, offsetPos, randomDirection);

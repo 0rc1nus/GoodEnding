@@ -5,7 +5,9 @@ import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Flutterer;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.control.FlightMoveControl;
+import net.minecraft.entity.ai.goal.EscapeDangerGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.pathing.BirdNavigation;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
@@ -17,7 +19,6 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.entity.mob.ShulkerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.sound.SoundEvent;
@@ -27,6 +28,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.intprovider.UniformIntProvider;
+import net.minecraft.util.math.random.Random;
+import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.orcinus.goodending.entities.ai.FindWoodGoal;
 import net.orcinus.goodending.entities.ai.FlyAroundGoal;
@@ -161,10 +165,11 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
 
     @Override
     protected void initGoals() {
-        this.goalSelector.add(1, new FlyAroundGoal(this));
-        this.goalSelector.add(2, new SwimGoal(this));
-        this.goalSelector.add(3, new FindWoodGoal(this));
-        this.goalSelector.add(4, new MoveToWoodGoal(this));
+        this.goalSelector.add(1, new EscapeDangerGoal(this, 2.0));
+        this.goalSelector.add(2, new FlyAroundGoal(this));
+        this.goalSelector.add(3, new SwimGoal(this));
+        this.goalSelector.add(4, new FindWoodGoal(this));
+        this.goalSelector.add(5, new MoveToWoodGoal(this));
     }
 
     private void flapWings() {
@@ -227,9 +232,18 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
         this.field_28640 = this.speed + this.maxWingDeviation / 2.0f;
     }
 
-
     @Override
     public boolean isInAir() {
         return !this.onGround;
     }
+
+    @Override
+    public boolean handleFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource) {
+        return false;
+    }
+
+    @Override
+    protected void fall(double heightDifference, boolean onGround, BlockState state, BlockPos landedPosition) {
+    }
+
 }

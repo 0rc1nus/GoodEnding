@@ -50,36 +50,31 @@ public class FindWoodGoal extends Goal {
         }
         if (!list.isEmpty()) {
             BlockPos listPos = list.get(this.woodpecker.world.getRandom().nextInt(list.size()));
-            for (Direction direction : Direction.Type.HORIZONTAL) {
-                if (!this.woodpecker.world.isAir(listPos.offset(direction))) {
-                    continue;
-                }
-                List<WoodpeckerEntity> southPeckers = this.woodpecker.world.getNonSpectatingEntities(WoodpeckerEntity.class, new Box(listPos.south()));
-                List<WoodpeckerEntity> northPeckers = this.woodpecker.world.getNonSpectatingEntities(WoodpeckerEntity.class, new Box(listPos.north()));
-                List<WoodpeckerEntity> westPeckers = this.woodpecker.world.getNonSpectatingEntities(WoodpeckerEntity.class, new Box(listPos.west()));
-                List<WoodpeckerEntity> eastPeckers = this.woodpecker.world.getNonSpectatingEntities(WoodpeckerEntity.class, new Box(listPos.east()));
-                if (southPeckers.size() == 0) {
-                    this.pos = listPos;
-                    this.woodpecker.setAttachedFace(Direction.SOUTH);
-                    return true;
-                }
-                if (northPeckers.size() == 0) {
-                    this.pos = listPos;
-                    this.woodpecker.setAttachedFace(Direction.NORTH);
-                    return true;
-                }
-                else if (westPeckers.size() == 0) {
-                    this.pos = listPos;
-                    this.woodpecker.setAttachedFace(Direction.WEST);
-                    return true;
-                }
-                else if (eastPeckers.size() == 0) {
-                    this.pos = listPos;
-                    this.woodpecker.setAttachedFace(Direction.EAST);
-                    return true;
-                } else {
-                    return false;
-                }
+            List<WoodpeckerEntity> southPeckers = this.woodpecker.world.getNonSpectatingEntities(WoodpeckerEntity.class, new Box(listPos.south()));
+            List<WoodpeckerEntity> northPeckers = this.woodpecker.world.getNonSpectatingEntities(WoodpeckerEntity.class, new Box(listPos.north()));
+            List<WoodpeckerEntity> westPeckers = this.woodpecker.world.getNonSpectatingEntities(WoodpeckerEntity.class, new Box(listPos.west()));
+            List<WoodpeckerEntity> eastPeckers = this.woodpecker.world.getNonSpectatingEntities(WoodpeckerEntity.class, new Box(listPos.east()));
+            if (southPeckers.size() == 0 && this.woodpecker.world.isAir(listPos.south())) {
+                this.pos = listPos;
+                this.woodpecker.setAttachedFace(Direction.SOUTH);
+                return true;
+            }
+            if (northPeckers.size() == 0 && this.woodpecker.world.isAir(listPos.north())) {
+                this.pos = listPos;
+                this.woodpecker.setAttachedFace(Direction.NORTH);
+                return true;
+            }
+            else if (westPeckers.size() == 0 && this.woodpecker.world.isAir(listPos.west())) {
+                this.pos = listPos;
+                this.woodpecker.setAttachedFace(Direction.WEST);
+                return true;
+            }
+            else if (eastPeckers.size() == 0 && this.woodpecker.world.isAir(listPos.east())) {
+                this.pos = listPos;
+                this.woodpecker.setAttachedFace(Direction.EAST);
+                return true;
+            } else {
+                return false;
             }
         }
         return false;
