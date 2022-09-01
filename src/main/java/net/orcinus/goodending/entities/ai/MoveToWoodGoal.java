@@ -25,8 +25,6 @@ import java.util.List;
 
 public class MoveToWoodGoal extends Goal {
     private final WoodpeckerEntity woodpecker;
-    private boolean canStartPecking = false;
-    private boolean hasReached = false;
     private boolean cancel = false;
     private int peckingTicks = 100;
 
@@ -49,7 +47,6 @@ public class MoveToWoodGoal extends Goal {
         return this.woodpecker.getWoodPos() != null && this.woodpecker.world.getBlockState(this.woodpecker.getWoodPos()).isIn(BlockTags.LOGS) && this.woodpecker.getPeckingWoodCooldown() == 0;
     }
 
-    //TODO: MAKE IT DISCONTINUE
     @Override
     public boolean shouldContinue() {
         BlockPos woodPos = this.woodpecker.getWoodPos();
@@ -110,8 +107,6 @@ public class MoveToWoodGoal extends Goal {
                         double xPosition = pos.getX() + (attachedFace.getAxis() == Direction.Axis.Z ? 0.5D : (attachedFace == Direction.WEST ? -0.2D : 1.2D));
                         double yPosition = pos.getY() + 0.25D;
                         double zPosition = pos.getZ() + (attachedFace.getAxis() == Direction.Axis.X ? 0.5D : (attachedFace == Direction.NORTH ? -0.2D : 1.2D));
-//                            if (this.woodpecker.world.isSpaceEmpty(this.woodpecker, this.woodpecker.getBoundingBox().offset(new BlockPos(xPosition, yPosition, zPosition)))) {
-//                            }
                         this.woodpecker.refreshPositionAndAngles(xPosition, yPosition, zPosition, this.woodpecker.getYaw(), this.woodpecker.getPitch());
                         this.woodpecker.getNavigation().stop();
                         if (this.peckingTicks > 0) {
