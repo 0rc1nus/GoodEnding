@@ -147,15 +147,6 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
             if (this.getPeckingWoodCooldown() > 0) {
                 this.setPeckingWoodCooldown(this.getPeckingWoodCooldown() - 1);
             }
-//            if (this.hasWood() && this.getPose() == EntityPose.DIGGING) {
-//                BlockState blockState = this.world.getBlockState(this.getWoodPos());
-//                for (int i = 0; i < 10; ++i) {
-//                    double d = this.getWoodPos().getX() + 0.5D;
-//                    double e = this.getWoodPos().getY() + 0.5D;
-//                    double f = this.getWoodPos().getZ() + 0.5D;
-//                    ((ServerWorld) this.world).spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, blockState), d, e, f, 1, 0.5, 0.25, 0.5, 0.0);
-//                }
-//            }
         }
         super.tick();
     }
