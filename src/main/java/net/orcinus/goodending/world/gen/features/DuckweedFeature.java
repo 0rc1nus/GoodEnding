@@ -28,7 +28,7 @@ public class DuckweedFeature extends Feature<DefaultFeatureConfig> {
         BlockPos blockPos = context.getOrigin();
         Random random = context.getRandom();
         if (world.getBlockState(blockPos.down()).isOf(Blocks.WATER) && world.getBlockState(blockPos).getMaterial().isReplaceable()) {
-            generateDuckweed(world, blockPos, random);
+            DuckweedFeature.generateDuckweed(world, blockPos, random);
             return true;
         } else {
             return false;
