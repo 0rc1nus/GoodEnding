@@ -7,6 +7,8 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Flutterer;
 import net.minecraft.entity.ai.control.FlightMoveControl;
 import net.minecraft.entity.ai.goal.EscapeDangerGoal;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.PrioritizedGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.pathing.BirdNavigation;
 import net.minecraft.entity.ai.pathing.EntityNavigation;
@@ -18,6 +20,7 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.sound.SoundEvent;
@@ -33,6 +36,8 @@ import net.orcinus.goodending.entities.ai.FlyAroundGoal;
 import net.orcinus.goodending.entities.ai.MoveToWoodGoal;
 import net.orcinus.goodending.init.GoodEndingSoundEvents;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.stream.Collectors;
 
 public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
     protected static final TrackedData<Direction> ATTACHED_FACE = DataTracker.registerData(WoodpeckerEntity.class, TrackedDataHandlerRegistry.FACING);

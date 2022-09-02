@@ -120,6 +120,8 @@ public class GoodEnding implements ModInitializer {
 
 		BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.OLD_GROWTH_BIRCH_FOREST), SpawnGroup.CREATURE, GoodEndingEntityTypes.WOODPECKER, 20, 1, 4);
 
+		StrippableBlockRegistry.register(GoodEndingBlocks.MUDDY_OAK_LOG, GoodEndingBlocks.STRIPPED_MUDDY_OAK_LOG);
+		StrippableBlockRegistry.register(GoodEndingBlocks.MUDDY_OAK_WOOD, GoodEndingBlocks.STRIPPED_MUDDY_OAK_WOOD);
 		StrippableBlockRegistry.register(GoodEndingBlocks.CYPRESS_LOG, GoodEndingBlocks.STRIPPED_CYPRESS_LOG);
 		StrippableBlockRegistry.register(GoodEndingBlocks.CYPRESS_WOOD, GoodEndingBlocks.STRIPPED_CYPRESS_WOOD);
 

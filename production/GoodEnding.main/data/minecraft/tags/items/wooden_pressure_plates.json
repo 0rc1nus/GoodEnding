@@ -2,6 +2,6 @@
     "replace": false,
     "values": [
         "goodending:cypress_pressure_plate",
-        "goodending:muddy_oak_plate"
+        "goodending:muddy_oak_pressure_plate"
     ]
 }

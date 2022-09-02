@@ -2,10 +2,17 @@ package net.orcinus.goodending.entities.ai;
 
 import com.google.common.collect.Lists;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tag.BlockTags;
+import net.minecraft.text.Text;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.RaycastContext;
 import net.orcinus.goodending.entities.WoodpeckerEntity;
 
 import java.util.List;
@@ -34,35 +41,21 @@ public class FindWoodGoal extends Goal {
     }
 
     protected boolean findNearestBlock() {
-        List<BlockPos> list = Lists.newArrayList();
-        int range = 5;
-        for (int x = -range; x <= range; x++) {
-            for (int z = -range; z <= range; z++) {
-                for (int y = -range; y <= range; y++) {
-                    BlockPos blockPos = new BlockPos(this.woodpecker.getX() + x, this.woodpecker.getY() + y, this.woodpecker.getZ() + z);
-                    if (this.woodpecker.world.getBlockState(blockPos).isIn(BlockTags.LOGS)) {
-                        list.add(blockPos);
-                    }
-                }
-            }
-        }
-        if (!list.isEmpty()) {
-            BlockPos listPos = list.get(this.woodpecker.world.getRandom().nextInt(list.size()));
-            Direction direction = Direction.Type.HORIZONTAL.random(this.woodpecker.world.getRandom());
-            List<WoodpeckerEntity> woodpeckerEntities = this.woodpecker.world.getNonSpectatingEntities(WoodpeckerEntity.class, new Box(listPos.offset(direction)));
-            if (woodpeckerEntities.size() == 0 && this.woodpecker.world.isAir(listPos.offset(direction))) {
-                this.pos = listPos;
-                this.woodpecker.setAttachedFace(direction);
+        BlockPos mobPos = this.woodpecker.getBlockPos();
+        for (int i = 0; i < 8; i++) {
+            BlockPos offset = mobPos.add(this.woodpecker.getRandom().nextInt(16) - 8, this.woodpecker.getRandom().nextInt(4) + 1, this.woodpecker.getRandom().nextInt(16) - 8);
+            double x = offset.getX() + 0.5F - this.woodpecker.getX();
+            double z = offset.getZ() + 0.5F - this.woodpecker.getZ();
+            double distance = x * x + z * z;
+            Vec3d blockVec = Vec3d.ofCenter(offset);
+            BlockHitResult result = this.woodpecker.world.raycast(new RaycastContext(this.woodpecker.getEyePos(), blockVec, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, this.woodpecker));
+            if (this.woodpecker.world.getBlockState(result.getBlockPos()).isIn(BlockTags.LOGS) && result.getType() != HitResult.Type.MISS && distance > 4 && result.getSide().getAxis() != Direction.Axis.Y) {
+                this.pos = result.getBlockPos();
+                this.woodpecker.setAttachedFace(result.getSide());
                 return true;
-            } else {
-                return false;
             }
         }
         return false;
-    }
-
-    public boolean canFitIn(BlockPos blockPos, Direction direction) {
-        return this.woodpecker.world.getNonSpectatingEntities(WoodpeckerEntity.class, new Box(blockPos.offset(direction))).size() == 0;
     }
 
 }

@@ -71,6 +71,7 @@ public class MoveToWoodGoal extends Goal {
     public void stop() {
         super.stop();
         this.woodpecker.setWoodPos(null);
+        this.woodpecker.setAttachedFace(Direction.DOWN);
         this.woodpecker.setPeckingWoodCooldown(this.cancel ? 200 : 400);
         this.woodpecker.setPose(EntityPose.FALL_FLYING);
         this.peckingTicks = 100;
