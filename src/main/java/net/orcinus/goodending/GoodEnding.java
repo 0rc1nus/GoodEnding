@@ -18,7 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.tag.BiomeTags;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
@@ -98,7 +97,17 @@ public class GoodEnding implements ModInitializer {
 
 		this.addFeatureToBiome(GoodEndingWorldGen.PATCH_PINK_FLOWERED_LILY_PLACED, BiomeKeys.MANGROVE_SWAMP);
 
+		this.addFeatureToBiome(GoodEndingWorldGen.OAK_FALLEN_LOG_PLACED, BiomeKeys.FOREST);
+		this.addFeatureToBiome(GoodEndingWorldGen.OAK_FALLEN_LOG_PLACED, BiomeKeys.WOODED_BADLANDS);
+		this.addFeatureToBiome(GoodEndingWorldGen.SPRUCE_FALLEN_LOG_PLACED, BiomeKeys.TAIGA);
+		this.addFeatureToBiome(GoodEndingWorldGen.SPRUCE_FALLEN_LOG_PLACED, BiomeKeys.SNOWY_TAIGA);
+		this.addFeatureToBiome(GoodEndingWorldGen.SPRUCE_FALLEN_LOG_PLACED, BiomeKeys.WINDSWEPT_FOREST);
+		this.addFeatureToBiome(GoodEndingWorldGen.SPRUCE_FALLEN_LOG_PLACED, BiomeKeys.GROVE);
+		this.addFeatureToBiome(GoodEndingWorldGen.ACACIA_FALLEN_LOG_PLACED, BiomeKeys.SAVANNA);
+		this.addFeatureToBiome(GoodEndingWorldGen.BIRCH_FALLEN_LOG_PLACED, BiomeKeys.FOREST);
+		this.addFeatureToBiome(GoodEndingWorldGen.BIRCH_FALLEN_LOG_PLACED, BiomeKeys.BIRCH_FOREST);
 		this.addFeatureToBiome(GoodEndingWorldGen.BIRCH_FALLEN_LOG_PLACED, BiomeKeys.OLD_GROWTH_BIRCH_FOREST);
+
 		this.addFeatureToBiome(GoodEndingWorldGen.PATCH_TALL_GRASS_PLACED, BiomeKeys.OLD_GROWTH_BIRCH_FOREST);
 
 		BiomeModifications.create(new Identifier(GoodEnding.MODID, "replace_swamp_trees")).add(ModificationPhase.REPLACEMENTS, BiomeSelectors.includeByKey(BiomeKeys.SWAMP), biomeModificationContext -> {
@@ -149,5 +158,4 @@ public class GoodEnding implements ModInitializer {
 	private void addFeatureToBiome(RegistryEntry<PlacedFeature> placedFeatureRegistryEntry, RegistryKey<Biome> biomeRegistryKey) {
 		placedFeatureRegistryEntry.getKey().ifPresent(placedFeatureRegistryKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(biomeRegistryKey), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureRegistryKey));
 	}
-
 }

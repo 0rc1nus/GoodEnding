@@ -51,7 +51,7 @@ public class FallenLogFeature extends Feature<FallenLogConfig> {
             mut.move(direction);
         }
         for (BlockPos pos : decorationPoses) {
-            if (world.getBlockState(pos.up()).isAir() && random.nextInt(5) == 0) {
+            if (world.getBlockState(pos.up()).isAir() && random.nextInt(5) == 0 && context.getConfig().brown_mushroom) {
                 world.setBlockState(pos.up(), Blocks.BROWN_MUSHROOM.getDefaultState(), 2);
             }
             for (Direction directions : Direction.Type.HORIZONTAL) {
