@@ -51,7 +51,7 @@ public class LargeLilyPadBlock extends PlantBlock implements Waterloggable {
     }
 
     @Override
-    protected boolean canPlantOnTop(BlockState floor, BlockView world, BlockPos pos) {
+    public boolean canPlantOnTop(BlockState floor, BlockView world, BlockPos pos) {
         return (world.getFluidState(pos.up()).isOf(Fluids.WATER) && world.getFluidState(pos.up(2)).isEmpty());
     }
 

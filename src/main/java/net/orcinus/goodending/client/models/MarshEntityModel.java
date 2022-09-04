@@ -111,12 +111,17 @@ public class MarshEntityModel<T extends MarshEntity> extends SinglePartEntityMod
         float speed = 1f;
         float degree = 1.0f;
 
-        rightLeg.pitch = cos(limbAngle * speed * 0.6F) * 1.4F * limbDistance;
-        leftLeg.pitch = cos(limbAngle * speed * 0.6F + (float)Math.PI) * 1.4F * limbDistance;
-        leftEar.yaw = MathHelper.cos(animationProgress * speed * 0.15F) * degree * 0.2F * 0.5F - 0.6109F;
-        rightEar.yaw = MathHelper.cos(animationProgress * speed * 0.15F + (float)Math.PI) * degree * 0.2F * 0.5F + 0.6109F;
-        body.roll = cos(limbAngle * speed * 0.3F) * 0.35F * limbDistance;
-        this.body.pivotY = cos(limbAngle * speed * 1.2F + (float)Math.PI / 2) * 2F * limbDistance + 16.5F;
+        if (entity.isTouchingWater()) {
+            this.rightLeg.pitch = cos(limbAngle * speed * 1.5F) * 1.4F * limbDistance;
+            this.leftLeg.pitch = cos(limbAngle * speed * 1.5F + (float)Math.PI) * 1.4F * limbDistance;
+        } else {
+            this.rightLeg.pitch = cos(limbAngle * speed * 0.6F) * 1.4F * limbDistance;
+            this.leftLeg.pitch = cos(limbAngle * speed * 0.6F + (float)Math.PI) * 1.4F * limbDistance;
+            this.leftEar.yaw = MathHelper.cos(animationProgress * speed * 0.15F) * degree * 0.2F * 0.5F - 0.6109F;
+            this.rightEar.yaw = MathHelper.cos(animationProgress * speed * 0.15F + (float)Math.PI) * degree * 0.2F * 0.5F + 0.6109F;
+            this.body.roll = cos(limbAngle * speed * 0.3F) * 0.35F * limbDistance;
+            this.body.pivotY = cos(limbAngle * speed * 1.2F + (float)Math.PI / 2) * 2F * limbDistance + 16.5F;
+        }
     }
 
     @Override

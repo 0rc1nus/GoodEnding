@@ -11,7 +11,6 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -19,10 +18,10 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
-public class InundatedSaplingBlock extends SaplingBlock implements Waterloggable {
+public class CypressSaplingBlock extends SaplingBlock implements Waterloggable {
     private static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
 
-    public InundatedSaplingBlock(SaplingGenerator generator, Settings settings) {
+    public CypressSaplingBlock(SaplingGenerator generator, Settings settings) {
         super(generator, settings);
         this.setDefaultState(this.stateManager.getDefaultState().with(WATERLOGGED, false));
     }

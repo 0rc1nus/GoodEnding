@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.tag.BiomeTags;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
@@ -32,7 +33,6 @@ import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.feature.PlacedFeature;
 import net.minecraft.world.gen.feature.VegetationPlacedFeatures;
 import net.orcinus.goodending.init.GoodEndingBlocks;
-import net.orcinus.goodending.init.GoodEndingEnchantments;
 import net.orcinus.goodending.init.GoodEndingEntityTypes;
 import net.orcinus.goodending.init.GoodEndingFeatures;
 import net.orcinus.goodending.init.GoodEndingItems;
@@ -74,8 +74,6 @@ public class GoodEnding implements ModInitializer {
 			GoodEndingBlocks.class
 		);
 
-
-		GoodEndingEnchantments.init();
 		GoodEndingFeatures.init();
 		GoodEndingStatusEffects.init();
 		GoodEndingPotions.init();
@@ -88,6 +86,7 @@ public class GoodEnding implements ModInitializer {
 			map.put(GoodEndingWorldGen.CYPRESS_TREE_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
 			map.put(GoodEndingWorldGen.SWAMP_VEGETATION_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
 			map.put(GoodEndingWorldGen.DUCKWEED_PATCH_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
+			map.put(GoodEndingWorldGen.BIG_LILY_PADS_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
 		}).build().forEach((placedFeatureRegistryEntry, feature) -> placedFeatureRegistryEntry.getKey().ifPresent(placedFeatureRegistryKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(BiomeKeys.SWAMP), feature, placedFeatureRegistryKey)));
 
 		Util.make(ImmutableMap.<TagKey<Biome>, RegistryEntry<PlacedFeature>>builder(), map -> {

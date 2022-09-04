@@ -2,6 +2,7 @@ package net.orcinus.goodending.entities;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.EscapeDangerGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -15,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.PotionItem;
 import net.minecraft.item.SwordItem;
+import net.minecraft.item.ToolItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtil;
@@ -24,6 +26,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+import net.orcinus.goodending.entities.ai.DrinkPotionGoal;
 
 public class MarshEntity extends PathAwareEntity {
     private static final TrackedData<Integer> BURPING_TICKS = DataTracker.registerData(MarshEntity.class, TrackedDataHandlerRegistry.INTEGER);
@@ -39,7 +42,8 @@ public class MarshEntity extends PathAwareEntity {
 
     @Override
     protected void initGoals() {
-        super.initGoals();
+        this.goalSelector.add(0, new SwimGoal(this));
+        this.goalSelector.add(1, new DrinkPotionGoal(this));
         this.goalSelector.add(2, new EscapeDangerGoal(this, 1.25f));
         this.goalSelector.add(3, new WanderAroundFarGoal(this, 1.0f));
     }
@@ -91,27 +95,31 @@ public class MarshEntity extends PathAwareEntity {
         ItemStack stack = player.getStackInHand(hand);
         if (stack.getItem() instanceof PotionItem) {
             if (!PotionUtil.getPotion(stack).hasInstantEffect()) {
-                this.setStoredPotion(PotionUtil.getPotion(stack));
-                this.playSound(SoundEvents.ENTITY_GENERIC_DRINK, 1.0F, 1.0F);
-                stack.decrement(1);
-                if (!player.getAbilities().creativeMode) {
-                    if (stack.isEmpty()) {
-                        player.setStackInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
-                    } else if (!player.getInventory().insertStack(new ItemStack(Items.GLASS_BOTTLE))) {
-                        player.dropItem(new ItemStack(Items.GLASS_BOTTLE), false);
+                if (!this.world.isClient()) {
+                    this.setStoredPotion(PotionUtil.getPotion(stack));
+                    stack.decrement(1);
+                    if (!player.getAbilities().creativeMode) {
+                        if (stack.isEmpty()) {
+                            player.setStackInHand(hand, new ItemStack(Items.GLASS_BOTTLE));
+                        } else if (!player.getInventory().insertStack(new ItemStack(Items.GLASS_BOTTLE))) {
+                            player.dropItem(new ItemStack(Items.GLASS_BOTTLE), false);
+                        }
                     }
                 }
-                return ActionResult.success(world.isClient());
+                this.playSound(SoundEvents.ENTITY_GENERIC_DRINK, 1.0F, 1.0F);
+                return ActionResult.SUCCESS;
             }
         }
-        if (stack.getItem() instanceof SwordItem && this.getStoredPotion() != null) {
-            ItemStack copy = stack.copy();
-            PotionUtil.setPotion(copy, this.getStoredPotion());
-            player.setStackInHand(hand, copy);
-            this.setStoredPotion(null);
+        if (stack.getItem() instanceof ToolItem && this.getStoredPotion() != null) {
+            if (!this.world.isClient()) {
+                ItemStack copy = stack.copy();
+                PotionUtil.setPotion(copy, this.getStoredPotion());
+                player.setStackInHand(hand, copy);
+                this.setStoredPotion(Potions.EMPTY);
+                this.setBurpingTicks(20);
+            }
             this.playSound(SoundEvents.ENTITY_PLAYER_BURP, 1.0F, 0.3F);
-            this.setBurpingTicks(20);
-            return ActionResult.success(this.world.isClient());
+            return ActionResult.SUCCESS;
         }
         return super.interactMob(player, hand);
     }

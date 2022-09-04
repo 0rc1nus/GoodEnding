@@ -31,7 +31,7 @@ import net.orcinus.goodending.blocks.DenseBirchLeavesBlock;
 import net.orcinus.goodending.blocks.HangingDarkOakLeavesPlantBlock;
 import net.orcinus.goodending.blocks.HangingLeavesBlock;
 import net.orcinus.goodending.blocks.HangingOakLeavesPlantBlock;
-import net.orcinus.goodending.blocks.InundatedSaplingBlock;
+import net.orcinus.goodending.blocks.CypressSaplingBlock;
 import net.orcinus.goodending.blocks.LargeLilyPadBlock;
 import net.orcinus.goodending.blocks.WildflowersBlock;
 import net.orcinus.goodending.world.gen.features.generators.CypressSaplingGenerator;
@@ -60,7 +60,7 @@ public class GoodEndingBlocks {
     //Cypress wood set
     public static final Block CYPRESS_PLANKS = register("cypress_planks", new Block(AbstractBlock.Settings.of(Material.WOOD, MapColor.TERRACOTTA_BROWN).strength(2.0f, 3.0f).sounds(BlockSoundGroup.WOOD)));
     public static final Block CYPRESS_LOG = register("cypress_log", new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, state -> state.get(PillarBlock.AXIS) == Direction.Axis.Y ? MapColor.BROWN : MapColor.LIGHT_GRAY).strength(2.0F).sounds(BlockSoundGroup.WOOD)));
-    public static final Block CYPRESS_SAPLING = register("cypress_sapling", new InundatedSaplingBlock(new CypressSaplingGenerator(), AbstractBlock.Settings.of(Material.PLANT).noCollision().ticksRandomly().breakInstantly().sounds(BlockSoundGroup.GRASS)));
+    public static final Block CYPRESS_SAPLING = register("cypress_sapling", new CypressSaplingBlock(new CypressSaplingGenerator(), AbstractBlock.Settings.of(Material.PLANT).noCollision().ticksRandomly().breakInstantly().sounds(BlockSoundGroup.GRASS)));
     public static final Block POTTED_CYPRESS_SAPLING = register("potted_cypress_sapling", new FlowerPotBlock(CYPRESS_SAPLING, AbstractBlock.Settings.of(Material.DECORATION).breakInstantly().nonOpaque()));
     public static final Block STRIPPED_CYPRESS_LOG = register("stripped_cypress_log", new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, MapColor.BROWN).strength(2.0F).sounds(BlockSoundGroup.WOOD)));
     public static final Block STRIPPED_CYPRESS_WOOD = register("stripped_cypress_wood", new PillarBlock(AbstractBlock.Settings.of(Material.WOOD, MapColor.BROWN).strength(2.0f).sounds(BlockSoundGroup.WOOD)));

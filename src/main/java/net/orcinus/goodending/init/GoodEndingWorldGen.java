@@ -47,6 +47,7 @@ import net.minecraft.world.gen.stateprovider.WeightedBlockStateProvider;
 import net.minecraft.world.gen.trunk.DarkOakTrunkPlacer;
 import net.minecraft.world.gen.trunk.StraightTrunkPlacer;
 import net.orcinus.goodending.GoodEnding;
+import net.orcinus.goodending.world.gen.features.config.BigLilyPadConfig;
 import net.orcinus.goodending.world.gen.features.config.FallenLogConfig;
 import net.orcinus.goodending.world.gen.features.config.HalfWaterloggedDecorationConfig;
 import net.orcinus.goodending.world.gen.features.config.WaterTreeFeatureConfig;
@@ -107,6 +108,13 @@ public class GoodEndingWorldGen {
     public static final RegistryEntry<PlacedFeature> PATCH_PINK_FLOWERED_LILY_PLACED = register("patch_pink_flowered_lily_placed", PATCH_PINK_FLOWERED_LILY, VegetationPlacedFeatures.modifiers(4));
 
     public static final RegistryEntry<PlacedFeature> PATCH_TALL_GRASS_PLACED = register("patch_tall_grass_placed", VegetationConfiguredFeatures.PATCH_TALL_GRASS, VegetationPlacedFeatures.modifiers(3));
+
+    public static final RegistryEntry<ConfiguredFeature<BigLilyPadConfig, ?>> TWO_WIDE_BIG_LILY_PAD = register("two_wide_big_lily_pad", GoodEndingFeatures.BIG_LILY_PAD, new BigLilyPadConfig(2));
+    public static final RegistryEntry<ConfiguredFeature<BigLilyPadConfig, ?>> THREE_WIDE_BIG_LILY_PAD = register("three_wide_big_lily_pad", GoodEndingFeatures.BIG_LILY_PAD, new BigLilyPadConfig(3));
+
+    public static final RegistryEntry<ConfiguredFeature<RandomBooleanFeatureConfig, ?>> BIG_LILY_PADS = register("big_lily_pads", Feature.RANDOM_BOOLEAN_SELECTOR, new RandomBooleanFeatureConfig(PlacedFeatures.createEntry(TWO_WIDE_BIG_LILY_PAD), PlacedFeatures.createEntry(THREE_WIDE_BIG_LILY_PAD)));
+
+    public static final RegistryEntry<PlacedFeature> BIG_LILY_PADS_PLACED = register("big_lily_pads_placed", BIG_LILY_PADS, CountPlacementModifier.of(2), SquarePlacementModifier.of(), PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
 
     public static <FC extends FeatureConfig, F extends Feature<FC>> RegistryEntry<ConfiguredFeature<FC, ?>> register(String id, F feature, FC config) {
         return BuiltinRegistries.addCasted(BuiltinRegistries.CONFIGURED_FEATURE, new Identifier(GoodEnding.MODID, id).toString(), new ConfiguredFeature<>(feature, config));

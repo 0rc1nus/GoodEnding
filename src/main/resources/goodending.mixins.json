@@ -11,7 +11,9 @@
     "LilyPadBlockMixin",
     "LivingEntityMixin",
     "SaplingBlockMixin",
-    "SignTypeInvoker"
+    "SignTypeInvoker",
+    "TreeConfiguredFeaturesMixin",
+    "WardenEntityMixin"
   ],
   "client": [
     "EntityModelLayersMixin",

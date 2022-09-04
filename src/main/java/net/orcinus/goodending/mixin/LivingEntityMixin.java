@@ -7,30 +7,23 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PotionItem;
+import net.minecraft.item.SwordItem;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.tag.TagKey;
-import net.minecraft.text.Text;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Util;
-import net.minecraft.util.registry.Registry;
 import net.orcinus.goodending.init.GoodEndingStatusEffects;
-import net.orcinus.goodending.util.EffectIntake;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.List;
 
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin {
@@ -39,26 +32,6 @@ public class LivingEntityMixin {
         list.add(GoodEndingStatusEffects.CONTEMPORARY_IMMUNITY);
         list.add(GoodEndingStatusEffects.SHATTERED_IMMUNITY);
     });
-    //ARMOR : KEEP
-    //SWORD / BOW / TRIDENT : EMIT
-
-    @Inject(at = @At("HEAD"), method = "baseTick")
-    private void GE$tick(CallbackInfo ci) {
-        LivingEntity $this = (LivingEntity) (Object) this;
-        NbtCompound nbt = $this.getStackInHand($this.getActiveHand()).getNbt();
-        EffectIntake effectIntake = EffectIntake.KEEP;
-        for (TagKey<Item> tagKey : effectIntake.getItemTagKey()) {
-            if (!$this.getStackInHand($this.getActiveHand()).isIn(tagKey)) {
-                continue;
-            }
-            if (nbt != null && nbt.contains("Potion")) {
-                Potion potion = PotionUtil.getPotion(nbt);
-                List<StatusEffectInstance> effects = potion.getEffects();
-                effects.forEach($this::addStatusEffect);
-            }
-        }
-
-    }
 
     @Inject(at = @At("HEAD"), method = "applyDamage")
     private void GE$damage(DamageSource source, float amount, CallbackInfo ci) {
@@ -66,13 +39,8 @@ public class LivingEntityMixin {
         Entity entity = source.getSource();
         if (entity instanceof PlayerEntity player) {
             ItemStack stack = player.getStackInHand($this.getActiveHand());
-            EffectIntake effectIntake = EffectIntake.EMIT;
-            for (TagKey<Item> tagKey : effectIntake.getItemTagKey()) {
-                if (stack.isIn(tagKey) && stack.getNbt() != null && stack.getNbt().contains("Potion")) {
-                    PotionUtil.getPotion(stack.getNbt()).getEffects().forEach($this::addStatusEffect);
-                    stack.getNbt().remove("Potion");
-                    break;
-                }
+            if (stack.getNbt() != null && stack.getNbt().contains("Potion") && !(stack.getItem() instanceof PotionItem)) {
+                PotionUtil.getPotion(stack.getNbt()).getEffects().stream().filter(statusEffectInstance -> statusEffectInstance.getEffectType().getCategory() == StatusEffectCategory.HARMFUL).toList().forEach($this::addStatusEffect);
             }
         }
     }
