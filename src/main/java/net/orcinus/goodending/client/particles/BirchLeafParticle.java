@@ -7,8 +7,10 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleFactory;
 import net.minecraft.client.particle.ParticleTextureSheet;
 import net.minecraft.client.particle.SpriteProvider;
+import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.particle.DefaultParticleType;
+import net.minecraft.util.math.BlockPos;
 
 @Environment(EnvType.CLIENT)
 public class BirchLeafParticle extends AnimatedParticle {
@@ -34,6 +36,14 @@ public class BirchLeafParticle extends AnimatedParticle {
         this.setSpriteForAge(spriteProvider);
     }
 
+    @Override
+    public int getBrightness(float tint) {
+        BlockPos blockPos = new BlockPos(this.x, this.y, this.z);
+        if (this.world.isChunkLoaded(blockPos)) {
+            return WorldRenderer.getLightmapCoordinates(this.world, blockPos);
+        }
+        return 0;
+    }
 
     @Environment(value = EnvType.CLIENT)
     public record Factory(SpriteProvider spriteProvider) implements ParticleFactory<DefaultParticleType> {
