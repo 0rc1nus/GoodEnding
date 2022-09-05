@@ -25,6 +25,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.tag.BlockTags;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -144,6 +145,12 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
         } else {
             if (this.getPeckingWoodCooldown() > 0) {
                 this.setPeckingWoodCooldown(this.getPeckingWoodCooldown() - 1);
+            }
+            if (this.getWoodPos() == null && this.getAttachedFace() != Direction.DOWN) {
+                this.setAttachedFace(Direction.DOWN);
+            }
+            if (this.getWoodPos() != null && !this.world.getBlockState(this.getWoodPos()).isIn(BlockTags.LOGS)) {
+                this.setWoodPos(null);
             }
         }
         super.tick();

@@ -134,10 +134,13 @@ public class FireflyEntity extends PathAwareEntity implements Flutterer {
             return ActionResult.SUCCESS;
         }
         if (stack.isOf(GoodEndingItems.FIREFLY_BOTTLE) && this.getCount() < 3 && !this.world.isClient()) {
-            this.setCount(this.getCount() + 1);
-            this.emitGameEvent(GameEvent.ENTITY_INTERACT);
-            player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, new ItemStack(Items.GLASS_BOTTLE)));
+            if (!this.world.isClient()) {
+                this.setCount(this.getCount() + 1);
+                this.emitGameEvent(GameEvent.ENTITY_INTERACT);
+                player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, new ItemStack(Items.GLASS_BOTTLE)));
+            }
             this.world.playSound(null, this.getBlockPos(), SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            return ActionResult.SUCCESS;
         }
 
         return super.interactMob(player, hand);

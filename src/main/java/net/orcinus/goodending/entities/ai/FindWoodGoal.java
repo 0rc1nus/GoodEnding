@@ -49,7 +49,7 @@ public class FindWoodGoal extends Goal {
             double distance = x * x + z * z;
             Vec3d blockVec = Vec3d.ofCenter(offset);
             BlockHitResult result = this.woodpecker.world.raycast(new RaycastContext(this.woodpecker.getEyePos(), blockVec, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, this.woodpecker));
-            if (this.woodpecker.world.getBlockState(result.getBlockPos()).isIn(BlockTags.LOGS) && result.getType() != HitResult.Type.MISS && distance > 4 && result.getSide().getAxis() != Direction.Axis.Y) {
+            if (this.woodpecker.world.getBlockState(result.getBlockPos()).isIn(BlockTags.LOGS) && this.woodpecker.world.getBlockState(result.getBlockPos().offset(result.getSide())).isAir() && result.getType() != HitResult.Type.MISS && distance > 4 && result.getSide().getAxis() != Direction.Axis.Y) {
                 this.pos = result.getBlockPos();
                 this.woodpecker.setAttachedFace(result.getSide());
                 return true;
