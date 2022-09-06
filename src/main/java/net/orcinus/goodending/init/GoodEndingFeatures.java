@@ -13,6 +13,7 @@ import net.orcinus.goodending.world.gen.features.CypressTreeFeature;
 import net.orcinus.goodending.world.gen.features.DuckweedFeature;
 import net.orcinus.goodending.world.gen.features.FallenLogFeature;
 import net.orcinus.goodending.world.gen.features.HalfWaterloggedDecorationFeature;
+import net.orcinus.goodending.world.gen.features.MarshMuddyOakTreeFeature;
 import net.orcinus.goodending.world.gen.features.ShallowWaterFeature;
 import net.orcinus.goodending.world.gen.features.MuddyOakTreeFeature;
 import net.orcinus.goodending.world.gen.features.TallBirchTreeFeature;
@@ -32,6 +33,7 @@ public class GoodEndingFeatures {
     public static final Feature<WaterTreeFeatureConfig> CYPRESS_TREE = registerFeature("cypress_tree", new CypressTreeFeature(WaterTreeFeatureConfig.CODEC));
     public static final Feature<DefaultFeatureConfig> DUCKWEED_PATCH = registerFeature("duckweed_patch", new DuckweedFeature(DefaultFeatureConfig.CODEC));
     public static final Feature<TreeFeatureConfig> MUDDY_OAK_TREE_FEATURE = registerFeature("swamp_tree", new MuddyOakTreeFeature(TreeFeatureConfig.CODEC));
+    public static final Feature<TreeFeatureConfig> MARSH_MUDDY_OAK_TREE_FEATURE = registerFeature("marsh_swamp_tree", new MarshMuddyOakTreeFeature(TreeFeatureConfig.CODEC));
     public static final Feature<TreeFeatureConfig> TALL_BIRCH_TREE = registerFeature("tall_birch_tree", new TallBirchTreeFeature(TreeFeatureConfig.CODEC));
     public static final Feature<DefaultFeatureConfig> LARGE_LILY_PADS = registerFeature("large_lily_pad", new LargeLilyPadFeature(DefaultFeatureConfig.CODEC));
 

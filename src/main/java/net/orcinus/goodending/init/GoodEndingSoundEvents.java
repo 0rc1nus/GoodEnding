@@ -15,7 +15,6 @@ public class GoodEndingSoundEvents {
     public static final SoundEvent ENTITY_WOODPECKER_FLY = woodpecker("fly");
     private static SoundEvent woodpecker(String type) { return entity("woodpecker", type); }
 
-
     private static SoundEvent entity(String entity, String type) { return register("entity." + entity + "." + type); }
 
     private static SoundEvent register(String name) {
