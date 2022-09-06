@@ -12,10 +12,12 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.orcinus.goodending.init.GoodEndingBlocks;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LilyPadBlock.class)
 public class LilyPadBlockMixin extends PlantBlock {
@@ -37,6 +39,12 @@ public class LilyPadBlockMixin extends PlantBlock {
     @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;breakBlock(Lnet/minecraft/util/math/BlockPos;ZLnet/minecraft/entity/Entity;)Z"), method = "onEntityCollision", cancellable = true)
     private void GE$onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, CallbackInfo ci) {
         ci.cancel();
+    }
+
+
+    @Inject(at = @At(value = "HEAD"), method = "canPlantOnTop", cancellable = true)
+    private void GE$canPlantOnTop(BlockState floor, BlockView world, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
+        if (world.getBlockState(pos).isOf(GoodEndingBlocks.LARGE_LILY_PAD)) cir.setReturnValue(false);
     }
 
 }
