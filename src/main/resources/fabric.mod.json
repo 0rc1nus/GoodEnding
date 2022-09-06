@@ -16,6 +16,7 @@
 
   "license": "CC0-1.0",
   "icon": "assets/goodending/icon.png",
+  "accessWidener" : "goodending.accesswidener",
 
   "environment": "*",
   "entrypoints": {

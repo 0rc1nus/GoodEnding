@@ -1,4 +1,4 @@
-package net.orcinus.goodending.mixin;
+package net.orcinus.goodending.mixin.accessor;
 
 import net.minecraft.entity.vehicle.BoatEntity;
 import org.spongepowered.asm.mixin.Mixin;

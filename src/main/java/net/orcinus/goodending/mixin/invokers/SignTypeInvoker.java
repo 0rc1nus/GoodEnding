@@ -1,4 +1,4 @@
-package net.orcinus.goodending.mixin;
+package net.orcinus.goodending.mixin.invokers;
 
 import net.minecraft.util.SignType;
 import org.spongepowered.asm.mixin.Mixin;

@@ -1,6 +1,6 @@
 package net.orcinus.goodending.init;
 
-import net.orcinus.goodending.mixin.SignTypeInvoker;
+import net.orcinus.goodending.mixin.invokers.SignTypeInvoker;
 import net.orcinus.goodending.util.GoodEndingSignType;
 import org.jetbrains.annotations.NotNull;
 

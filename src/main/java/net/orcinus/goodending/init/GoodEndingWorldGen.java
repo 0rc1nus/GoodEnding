@@ -2,6 +2,7 @@ package net.orcinus.goodending.init;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.SmallDripleafBlock;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.util.Identifier;
@@ -11,6 +12,7 @@ import net.minecraft.util.math.intprovider.ConstantIntProvider;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.RegistryEntry;
+import net.minecraft.util.registry.RegistryEntryList;
 import net.minecraft.world.gen.blockpredicate.BlockPredicate;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.ConfiguredFeatures;
@@ -25,6 +27,7 @@ import net.minecraft.world.gen.feature.RandomFeatureConfig;
 import net.minecraft.world.gen.feature.RandomFeatureEntry;
 import net.minecraft.world.gen.feature.RandomPatchFeatureConfig;
 import net.minecraft.world.gen.feature.SimpleBlockFeatureConfig;
+import net.minecraft.world.gen.feature.SimpleRandomFeatureConfig;
 import net.minecraft.world.gen.feature.TreeConfiguredFeatures;
 import net.minecraft.world.gen.feature.TreeFeatureConfig;
 import net.minecraft.world.gen.feature.VegetationConfiguredFeatures;
@@ -113,17 +116,17 @@ public class GoodEndingWorldGen {
     public static final RegistryEntry<ConfiguredFeature<RandomFeatureConfig, ?>> TALL_BIRCH_VEGETATION = register("tall_birch_vegetation", Feature.RANDOM_SELECTOR, new RandomFeatureConfig(List.of(new RandomFeatureEntry(TALL_BIRCH_TREE_FILTERED, 0.5F)), PlacedFeatures.createEntry(PATCH_TALL_GRASS)));
     public static final RegistryEntry<PlacedFeature> TALL_BIRCH_VEGETATION_PLACED = register("tall_birch_vegetation", TALL_BIRCH_VEGETATION, CountPlacementModifier.of(16), SquarePlacementModifier.of(), VegetationPlacedFeatures.NOT_IN_SURFACE_WATER_MODIFIER, PlacedFeatures.OCEAN_FLOOR_HEIGHTMAP, BiomePlacementModifier.of());
 
-    public static final RegistryEntry<ConfiguredFeature<RandomPatchFeatureConfig, ?>> PATCH_PINK_FLOWERED_LILY = register("patch_pink_flowered_lily", Feature.RANDOM_PATCH, new RandomPatchFeatureConfig(10, 7, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(BlockStateProvider.of(GoodEndingBlocks.PINK_FLOWERING_LILY_PAD)))));
-    public static final RegistryEntry<PlacedFeature> PATCH_PINK_FLOWERED_LILY_PLACED = register("patch_pink_flowered_lily_placed", PATCH_PINK_FLOWERED_LILY, VegetationPlacedFeatures.modifiers(4));
+    public static final RegistryEntry<ConfiguredFeature<RandomPatchFeatureConfig, ?>> PATCH_PINK_FLOWERED_LILY = register("patch_pink_flowered_lily", Feature.RANDOM_PATCH, new RandomPatchFeatureConfig(6, 2, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(BlockStateProvider.of(GoodEndingBlocks.PINK_FLOWERING_LILY_PAD)))));
+    public static final RegistryEntry<PlacedFeature> PATCH_PINK_FLOWERED_LILY_PLACED = register("patch_pink_flowered_lily_placed", PATCH_PINK_FLOWERED_LILY, VegetationPlacedFeatures.modifiers(2));
 
     public static final RegistryEntry<PlacedFeature> PATCH_TALL_GRASS_PLACED = register("patch_tall_grass_placed", VegetationConfiguredFeatures.PATCH_TALL_GRASS, VegetationPlacedFeatures.modifiers(3));
 
-    public static final RegistryEntry<ConfiguredFeature<BigLilyPadConfig, ?>> TWO_WIDE_BIG_LILY_PAD = register("two_wide_big_lily_pad", GoodEndingFeatures.BIG_LILY_PAD, new BigLilyPadConfig(2));
-    public static final RegistryEntry<ConfiguredFeature<BigLilyPadConfig, ?>> THREE_WIDE_BIG_LILY_PAD = register("three_wide_big_lily_pad", GoodEndingFeatures.BIG_LILY_PAD, new BigLilyPadConfig(3));
+    public static final RegistryEntry<ConfiguredFeature<DefaultFeatureConfig, ?>> LARGE_LILY_PADS = register("large_lily_pads", GoodEndingFeatures.LARGE_LILY_PADS, new DefaultFeatureConfig());
 
-    public static final RegistryEntry<ConfiguredFeature<RandomBooleanFeatureConfig, ?>> BIG_LILY_PADS = register("big_lily_pads", Feature.RANDOM_BOOLEAN_SELECTOR, new RandomBooleanFeatureConfig(PlacedFeatures.createEntry(TWO_WIDE_BIG_LILY_PAD), PlacedFeatures.createEntry(THREE_WIDE_BIG_LILY_PAD)));
+    public static final RegistryEntry<PlacedFeature> BIG_LILY_PADS_PLACED = register("big_lily_pads_placed", LARGE_LILY_PADS, CountPlacementModifier.of(2), SquarePlacementModifier.of(), PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
 
-    public static final RegistryEntry<PlacedFeature> BIG_LILY_PADS_PLACED = register("big_lily_pads_placed", BIG_LILY_PADS, CountPlacementModifier.of(2), SquarePlacementModifier.of(), PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+    public static final RegistryEntry<ConfiguredFeature<RandomPatchFeatureConfig, ?>> PATCH_FLOWERING_WATERLILY = register("patch_flowering_waterlily", Feature.RANDOM_PATCH, new RandomPatchFeatureConfig(10, 7, 3, PlacedFeatures.createEntry(Feature.SIMPLE_RANDOM_SELECTOR, new SimpleRandomFeatureConfig(RegistryEntryList.of(PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(new WeightedBlockStateProvider(DataPool.<BlockState>builder().add(GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD.getDefaultState(), 1).add(GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD.getDefaultState(), 1).add(GoodEndingBlocks.PINK_FLOWERING_LILY_PAD.getDefaultState(), 1))), new PlacementModifier[0]))))));
+    public static final RegistryEntry<PlacedFeature> PATCH_FLOWERING_WATERLILY_PLACED = register("patch_flowering_waterlily", PATCH_FLOWERING_WATERLILY, VegetationPlacedFeatures.modifiers(4));
 
     public static <FC extends FeatureConfig, F extends Feature<FC>> RegistryEntry<ConfiguredFeature<FC, ?>> register(String id, F feature, FC config) {
         return BuiltinRegistries.addCasted(BuiltinRegistries.CONFIGURED_FEATURE, new Identifier(GoodEnding.MODID, id).toString(), new ConfiguredFeature<>(feature, config));

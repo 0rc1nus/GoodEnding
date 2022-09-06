@@ -8,7 +8,7 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.TreeFeatureConfig;
 import net.orcinus.goodending.GoodEnding;
-import net.orcinus.goodending.world.gen.features.BigLilyPadFeature;
+import net.orcinus.goodending.world.gen.features.LargeLilyPadFeature;
 import net.orcinus.goodending.world.gen.features.CypressTreeFeature;
 import net.orcinus.goodending.world.gen.features.DuckweedFeature;
 import net.orcinus.goodending.world.gen.features.FallenLogFeature;
@@ -16,7 +16,6 @@ import net.orcinus.goodending.world.gen.features.HalfWaterloggedDecorationFeatur
 import net.orcinus.goodending.world.gen.features.ShallowWaterFeature;
 import net.orcinus.goodending.world.gen.features.MuddyOakTreeFeature;
 import net.orcinus.goodending.world.gen.features.TallBirchTreeFeature;
-import net.orcinus.goodending.world.gen.features.config.BigLilyPadConfig;
 import net.orcinus.goodending.world.gen.features.config.FallenLogConfig;
 import net.orcinus.goodending.world.gen.features.config.HalfWaterloggedDecorationConfig;
 import net.orcinus.goodending.world.gen.features.config.WaterTreeFeatureConfig;
@@ -34,7 +33,7 @@ public class GoodEndingFeatures {
     public static final Feature<DefaultFeatureConfig> DUCKWEED_PATCH = registerFeature("duckweed_patch", new DuckweedFeature(DefaultFeatureConfig.CODEC));
     public static final Feature<TreeFeatureConfig> MUDDY_OAK_TREE_FEATURE = registerFeature("swamp_tree", new MuddyOakTreeFeature(TreeFeatureConfig.CODEC));
     public static final Feature<TreeFeatureConfig> TALL_BIRCH_TREE = registerFeature("tall_birch_tree", new TallBirchTreeFeature(TreeFeatureConfig.CODEC));
-    public static final Feature<BigLilyPadConfig> BIG_LILY_PAD = registerFeature("big_lily_pad", new BigLilyPadFeature(BigLilyPadConfig.CODEC));
+    public static final Feature<DefaultFeatureConfig> LARGE_LILY_PADS = registerFeature("large_lily_pad", new LargeLilyPadFeature(DefaultFeatureConfig.CODEC));
 
     public static <FC extends FeatureConfig, F extends Feature<FC>> F registerFeature(String name, F feature) {
         FEATURES.put(feature, name);

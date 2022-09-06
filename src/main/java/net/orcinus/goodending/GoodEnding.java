@@ -31,6 +31,7 @@ import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.feature.PlacedFeature;
 import net.minecraft.world.gen.feature.VegetationPlacedFeatures;
+import net.orcinus.goodending.init.GoodEndingBiomes;
 import net.orcinus.goodending.init.GoodEndingBlocks;
 import net.orcinus.goodending.init.GoodEndingEntityTypes;
 import net.orcinus.goodending.init.GoodEndingFeatures;
@@ -73,9 +74,15 @@ public class GoodEnding implements ModInitializer {
 			GoodEndingBlocks.class
 		);
 
+		GoodEndingBiomes.init();
 		GoodEndingFeatures.init();
 		GoodEndingStatusEffects.init();
 		GoodEndingPotions.init();
+
+		Util.make(ImmutableMap.<RegistryEntry<PlacedFeature>, GenerationStep.Feature>builder(), map -> {
+			map.put(GoodEndingWorldGen.BIG_LILY_PADS_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
+			map.put(GoodEndingWorldGen.PATCH_FLOWERING_WATERLILY_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
+		}).build().forEach((placedFeatureRegistryEntry, feature) -> placedFeatureRegistryEntry.getKey().ifPresent(placedFeatureRegistryKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(GoodEndingBiomes.MARSHY_SWAMP_KEY), feature, placedFeatureRegistryKey)));
 
 		Util.make(ImmutableMap.<RegistryEntry<PlacedFeature>, GenerationStep.Feature>builder(),map -> {
 			map.put(GoodEndingWorldGen.DISK_MUD_PLACED, GenerationStep.Feature.UNDERGROUND_ORES);
@@ -85,7 +92,6 @@ public class GoodEnding implements ModInitializer {
 			map.put(GoodEndingWorldGen.CYPRESS_TREE_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
 			map.put(GoodEndingWorldGen.SWAMP_VEGETATION_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
 			map.put(GoodEndingWorldGen.DUCKWEED_PATCH_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
-			map.put(GoodEndingWorldGen.BIG_LILY_PADS_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
 		}).build().forEach((placedFeatureRegistryEntry, feature) -> placedFeatureRegistryEntry.getKey().ifPresent(placedFeatureRegistryKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(BiomeKeys.SWAMP), feature, placedFeatureRegistryKey)));
 
 		Util.make(ImmutableMap.<TagKey<Biome>, RegistryEntry<PlacedFeature>>builder(), map -> {

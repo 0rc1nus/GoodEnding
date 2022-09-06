@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 import net.orcinus.goodending.init.GoodEndingBlocks;
 import net.orcinus.goodending.init.GoodEndingEntityTypes;
 import net.orcinus.goodending.init.GoodEndingItems;
-import net.orcinus.goodending.mixin.BoatEntityAccessor;
+import net.orcinus.goodending.mixin.accessor.BoatEntityAccessor;
 
 public class GoodEndingBoatEntity extends BoatEntity {
     private static final TrackedData<Integer> BOAT_TYPE = DataTracker.registerData(GoodEndingBoatEntity.class, TrackedDataHandlerRegistry.INTEGER);

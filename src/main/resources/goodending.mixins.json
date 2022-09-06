@@ -5,15 +5,18 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "BlockEntityTypeMixin",
-    "BoatEntityAccessor",
-    "BrewingRecipeRegistryAccessor",
     "ItemMixin",
     "LilyPadBlockMixin",
     "LivingEntityMixin",
     "SaplingBlockMixin",
-    "SignTypeInvoker",
     "TreeConfiguredFeaturesMixin",
-    "WardenEntityMixin"
+    "VanillaBiomeParametersMixin",
+    "VanillaSurfaceRulesMixin",
+    "WardenEntityMixin",
+    "accessor.BoatEntityAccessor",
+    "invokers.BrewingRecipeRegistryInvoker",
+    "invokers.SignTypeInvoker",
+    "invokers.VanillaBiomeParametersInvoker"
   ],
   "client": [
     "EntityModelLayersMixin",
