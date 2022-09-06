@@ -3,7 +3,6 @@ package net.orcinus.goodending.mixin;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.biome.source.util.MultiNoiseUtil;
 import net.minecraft.world.biome.source.util.VanillaBiomeParameters;
 import net.orcinus.goodending.init.GoodEndingBiomes;
