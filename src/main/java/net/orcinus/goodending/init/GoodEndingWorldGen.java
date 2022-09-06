@@ -20,6 +20,7 @@ import net.minecraft.world.gen.feature.DefaultFeatureConfig;
 import net.minecraft.world.gen.feature.DiskFeatureConfig;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureConfig;
+import net.minecraft.world.gen.feature.MiscConfiguredFeatures;
 import net.minecraft.world.gen.feature.PlacedFeature;
 import net.minecraft.world.gen.feature.PlacedFeatures;
 import net.minecraft.world.gen.feature.RandomBooleanFeatureConfig;
@@ -127,6 +128,9 @@ public class GoodEndingWorldGen {
 
     public static final RegistryEntry<ConfiguredFeature<RandomPatchFeatureConfig, ?>> PATCH_FLOWERING_WATERLILY = register("patch_flowering_waterlily", Feature.RANDOM_PATCH, new RandomPatchFeatureConfig(10, 7, 3, PlacedFeatures.createEntry(Feature.SIMPLE_RANDOM_SELECTOR, new SimpleRandomFeatureConfig(RegistryEntryList.of(PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(new WeightedBlockStateProvider(DataPool.<BlockState>builder().add(GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD.getDefaultState(), 1).add(GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD.getDefaultState(), 1).add(GoodEndingBlocks.PINK_FLOWERING_LILY_PAD.getDefaultState(), 1))), new PlacementModifier[0]))))));
     public static final RegistryEntry<PlacedFeature> PATCH_FLOWERING_WATERLILY_PLACED = register("patch_flowering_waterlily", PATCH_FLOWERING_WATERLILY, VegetationPlacedFeatures.modifiers(4));
+
+    public static final RegistryEntry<ConfiguredFeature<DiskFeatureConfig, ?>> DISK_PODZOL = register("disk_podzol", Feature.DISK, new DiskFeatureConfig(new PredicatedStateProvider(BlockStateProvider.of(Blocks.PODZOL), List.of(new PredicatedStateProvider.Rule(BlockPredicate.not(BlockPredicate.eitherOf(BlockPredicate.solid(Direction.UP.getVector()), BlockPredicate.matchingFluids(Direction.UP.getVector(), Fluids.WATER))), BlockStateProvider.of(Blocks.PODZOL)))), BlockPredicate.matchingBlocks(List.of(Blocks.GRASS_BLOCK, Blocks.DIRT, Blocks.COARSE_DIRT)), UniformIntProvider.create(2, 6), 2));
+    public static final RegistryEntry<PlacedFeature> DISK_PODZOL_PLACED = register("disk_podzol", DISK_PODZOL, CountPlacementModifier.of(3), SquarePlacementModifier.of(), PlacedFeatures.OCEAN_FLOOR_WG_HEIGHTMAP, RandomOffsetPlacementModifier.vertically(ConstantIntProvider.create(-1)), BlockFilterPlacementModifier.of(BlockPredicate.matchingBlocks(Blocks.COARSE_DIRT)), BiomePlacementModifier.of());
 
     public static <FC extends FeatureConfig, F extends Feature<FC>> RegistryEntry<ConfiguredFeature<FC, ?>> register(String id, F feature, FC config) {
         return BuiltinRegistries.addCasted(BuiltinRegistries.CONFIGURED_FEATURE, new Identifier(GoodEnding.MODID, id).toString(), new ConfiguredFeature<>(feature, config));
