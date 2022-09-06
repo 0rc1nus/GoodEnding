@@ -11,10 +11,12 @@
     "SaplingBlockMixin",
     "TreeConfiguredFeaturesMixin",
     "VanillaBiomeParametersMixin",
+    "VanillaSurfaceRulesMixin",
     "WardenEntityMixin",
     "accessor.BoatEntityAccessor",
-    "accessor.BrewingRecipeRegistryAccessor",
-    "invokers.SignTypeInvoker"
+    "invokers.BrewingRecipeRegistryInvoker",
+    "invokers.SignTypeInvoker",
+    "invokers.VanillaBiomeParametersInvoker"
   ],
   "client": [
     "EntityModelLayersMixin",

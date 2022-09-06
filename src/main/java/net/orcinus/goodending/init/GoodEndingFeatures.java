@@ -36,7 +36,7 @@ public class GoodEndingFeatures {
     public static final Feature<TreeFeatureConfig> MARSH_MUDDY_OAK_TREE_FEATURE = registerFeature("marsh_swamp_tree", new MarshMuddyOakTreeFeature(TreeFeatureConfig.CODEC));
     public static final Feature<TreeFeatureConfig> TALL_BIRCH_TREE = registerFeature("tall_birch_tree", new TallBirchTreeFeature(TreeFeatureConfig.CODEC));
     public static final Feature<DefaultFeatureConfig> LARGE_LILY_PADS = registerFeature("large_lily_pad", new LargeLilyPadFeature(DefaultFeatureConfig.CODEC));
-
+    
     public static <FC extends FeatureConfig, F extends Feature<FC>> F registerFeature(String name, F feature) {
         FEATURES.put(feature, name);
         return feature;
