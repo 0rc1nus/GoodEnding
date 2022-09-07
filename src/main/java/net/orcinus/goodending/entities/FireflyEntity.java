@@ -195,7 +195,10 @@ public class FireflyEntity extends PathAwareEntity implements Flutterer {
 
     @Override
     public boolean damage(DamageSource source, float amount) {
-        return false;
+        if (source.getAttacker() instanceof PlayerEntity) {
+            return false;
+        }
+        return super.damage(source, amount);
     }
 
     @Override

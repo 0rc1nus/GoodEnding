@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -29,6 +30,7 @@ import net.minecraft.world.WorldEvents;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
 import net.minecraft.world.gen.GenerationStep;
+import net.minecraft.world.gen.feature.MiscPlacedFeatures;
 import net.minecraft.world.gen.feature.PlacedFeature;
 import net.minecraft.world.gen.feature.VegetationPlacedFeatures;
 import net.orcinus.goodending.init.GoodEndingBiomes;
@@ -40,6 +42,7 @@ import net.orcinus.goodending.init.GoodEndingPotions;
 import net.orcinus.goodending.init.GoodEndingSoundEvents;
 import net.orcinus.goodending.init.GoodEndingStatusEffects;
 import net.orcinus.goodending.init.GoodEndingTags;
+import net.orcinus.goodending.init.GoodEndingTreeDecorators;
 import net.orcinus.goodending.init.GoodEndingWorldGen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,6 +80,7 @@ public class GoodEnding implements ModInitializer {
 		GoodEndingBiomes.init();
 		GoodEndingFeatures.init();
 		GoodEndingStatusEffects.init();
+		GoodEndingTreeDecorators.init();
 		GoodEndingPotions.init();
 
 		Util.make(ImmutableMap.<RegistryEntry<PlacedFeature>, GenerationStep.Feature>builder(), map -> {
@@ -137,6 +141,8 @@ public class GoodEnding implements ModInitializer {
 		});
 
 		BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.SWAMP), SpawnGroup.AMBIENT, GoodEndingEntityTypes.FIREFLY_SWARM, 20, 8, 8);
+		BiomeModifications.addSpawn(BiomeSelectors.includeByKey(GoodEndingBiomes.MARSHY_SWAMP_KEY), SpawnGroup.AMBIENT, GoodEndingEntityTypes.FIREFLY_SWARM, 20, 8, 8);
+		BiomeModifications.addSpawn(BiomeSelectors.includeByKey(GoodEndingBiomes.MARSHY_SWAMP_KEY), SpawnGroup.CREATURE, EntityType.FROG, 10, 2, 5);
 
 		BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.OLD_GROWTH_BIRCH_FOREST), SpawnGroup.CREATURE, GoodEndingEntityTypes.WOODPECKER, 20, 1, 4);
 

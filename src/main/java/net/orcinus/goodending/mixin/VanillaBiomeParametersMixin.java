@@ -37,15 +37,19 @@ public class VanillaBiomeParametersMixin {
 
     @Inject(at = @At("RETURN"), method = "writeLowBiomes")
     private void GE$writeLowBiomes(Consumer<Pair<MultiNoiseUtil.NoiseHypercube, RegistryKey<Biome>>> parameters, MultiNoiseUtil.ParameterRange weirdness, CallbackInfo ci) {
-        for (MultiNoiseUtil.ParameterRange parameterRange : this.humidityParameters) {
-            ((VanillaBiomeParametersInvoker) this).callWriteBiomeParameters(parameters, MultiNoiseUtil.ParameterRange.combine(this.temperatureParameters[2], this.temperatureParameters[4]), parameterRange, MultiNoiseUtil.ParameterRange.combine(this.nearInlandContinentalness, this.farInlandContinentalness), this.erosionParameters[6], weirdness, 0.0f, GoodEndingBiomes.MARSHY_SWAMP_KEY);
+        for (MultiNoiseUtil.ParameterRange temperatureRange : this.temperatureParameters) {
+            for (MultiNoiseUtil.ParameterRange parameterRange : this.humidityParameters) {
+                ((VanillaBiomeParametersInvoker) this).callWriteBiomeParameters(parameters, temperatureRange, parameterRange, MultiNoiseUtil.ParameterRange.of(-0.11f, 0.3f), this.erosionParameters[6], weirdness, 0.0f, GoodEndingBiomes.MARSHY_SWAMP_KEY);
+            }
         }
     }
 
     @Inject(at = @At("RETURN"), method = "writeValleyBiomes")
     private void GE$writeValleyBiomes(Consumer<Pair<MultiNoiseUtil.NoiseHypercube, RegistryKey<Biome>>> parameters, MultiNoiseUtil.ParameterRange weirdness, CallbackInfo ci) {
-        for (MultiNoiseUtil.ParameterRange parameterRange : this.humidityParameters) {
-            ((VanillaBiomeParametersInvoker) this).callWriteBiomeParameters(parameters, MultiNoiseUtil.ParameterRange.combine(this.temperatureParameters[2], this.temperatureParameters[4]), parameterRange, MultiNoiseUtil.ParameterRange.combine(this.riverContinentalness, this.farInlandContinentalness), this.erosionParameters[6], weirdness, 0.0F, GoodEndingBiomes.MARSHY_SWAMP_KEY);
+        for (MultiNoiseUtil.ParameterRange temperatureRange : this.temperatureParameters) {
+            for (MultiNoiseUtil.ParameterRange parameterRange : this.humidityParameters) {
+                ((VanillaBiomeParametersInvoker) this).callWriteBiomeParameters(parameters, temperatureRange, parameterRange, MultiNoiseUtil.ParameterRange.of(-0.11f, 0.3f), this.erosionParameters[6], weirdness, 0.0F, GoodEndingBiomes.MARSHY_SWAMP_KEY);
+            }
         }
     }
 
