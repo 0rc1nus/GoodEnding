@@ -1,19 +1,16 @@
 package net.orcinus.goodending.mixin;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.ConfiguredFeatures;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.TreeFeatureConfig;
-import net.minecraft.world.gen.stateprovider.BlockStateProvider;
 import net.minecraft.world.gen.treedecorator.TreeDecorator;
 import net.minecraft.world.gen.trunk.DarkOakTrunkPlacer;
 import net.minecraft.world.gen.trunk.LargeOakTrunkPlacer;
 import net.minecraft.world.gen.trunk.TrunkPlacer;
-import net.orcinus.goodending.init.GoodEndingBlocks;
-import net.orcinus.goodending.world.gen.features.decorators.HangingVineDecorator;
+import net.orcinus.goodending.world.gen.features.decorators.HangingLeavesDecorator;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -30,10 +27,10 @@ public class ConfiguredFeaturesMixin {
             TrunkPlacer trunkPlacer = treeFeatureConfig.trunkPlacer;
             List<TreeDecorator> decorators = treeFeatureConfig.decorators;
             if (trunkPlacer instanceof LargeOakTrunkPlacer) {
-                decorators.add(new HangingVineDecorator(false));
+                decorators.add(new HangingLeavesDecorator(false));
             }
             if (trunkPlacer instanceof DarkOakTrunkPlacer) {
-                decorators.add(new HangingVineDecorator(true));
+                decorators.add(new HangingLeavesDecorator(true));
             }
         }
     }
