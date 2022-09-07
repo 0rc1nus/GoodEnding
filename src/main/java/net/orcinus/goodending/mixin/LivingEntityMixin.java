@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.PotionItem;
 import net.minecraft.item.SwordItem;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
@@ -40,7 +41,21 @@ public class LivingEntityMixin {
         if (entity instanceof PlayerEntity player) {
             ItemStack stack = player.getStackInHand($this.getActiveHand());
             if (stack.getNbt() != null && stack.getNbt().contains("Potion") && !(stack.getItem() instanceof PotionItem)) {
-                PotionUtil.getPotion(stack.getNbt()).getEffects().stream().filter(statusEffectInstance -> statusEffectInstance.getEffectType().getCategory() == StatusEffectCategory.HARMFUL).toList().forEach($this::addStatusEffect);
+                PotionUtil.getPotion(stack.getNbt()).getEffects().stream().filter(statusEffectInstance -> statusEffectInstance.getEffectType().getCategory() == StatusEffectCategory.HARMFUL).toList().forEach(statusEffectInstance -> {
+                    $this.addStatusEffect(new StatusEffectInstance(statusEffectInstance.getEffectType(), 240, statusEffectInstance.getAmplifier(), statusEffectInstance.isAmbient(), false, false));
+                });
+            }
+        }
+    }
+
+    @Inject(at = @At("HEAD"), method = "tick")
+    private void GE$tick(CallbackInfo ci) {
+        LivingEntity $this = (LivingEntity) (Object) this;
+        for (ItemStack stack : $this.getArmorItems()) {
+            if (stack.getNbt() != null) {
+                if (!stack.getNbt().contains("Potion")) continue;
+                Potion potion = PotionUtil.getPotion(stack.getNbt());
+                potion.getEffects().stream().filter(statusEffectInstance -> statusEffectInstance.getEffectType().getCategory() == StatusEffectCategory.BENEFICIAL).toList().forEach($this::addStatusEffect);
             }
         }
     }

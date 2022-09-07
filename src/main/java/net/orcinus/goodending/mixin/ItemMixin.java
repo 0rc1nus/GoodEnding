@@ -6,6 +6,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectUtil;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
@@ -50,7 +51,7 @@ public class ItemMixin  {
     @Inject(at = @At("HEAD"), method = "appendTooltip")
     private void GE$appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context, CallbackInfo ci) {
         Item $this = (Item) (Object) this;
-        if ($this instanceof SwordItem) {
+        if ($this instanceof ToolItem || $this instanceof ArmorItem) {
             NbtCompound nbt = stack.getNbt();
             if (nbt != null) {
                 String toolEffect = nbt.getString("Potion");

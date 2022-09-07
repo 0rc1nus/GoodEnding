@@ -12,6 +12,7 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.PotionItem;
@@ -93,7 +94,7 @@ public class MarshEntity extends PathAwareEntity {
     @Override
     protected ActionResult interactMob(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getStackInHand(hand);
-        if (stack.getItem() instanceof PotionItem) {
+        if (stack.getItem() instanceof PotionItem && this.getStoredPotion() == Potions.EMPTY) {
             if (!PotionUtil.getPotion(stack).hasInstantEffect()) {
                 if (!this.world.isClient()) {
                     this.setStoredPotion(PotionUtil.getPotion(stack));
@@ -110,7 +111,7 @@ public class MarshEntity extends PathAwareEntity {
                 return ActionResult.SUCCESS;
             }
         }
-        if (stack.getItem() instanceof ToolItem && this.getStoredPotion() != null) {
+        if ((stack.getItem() instanceof ArmorItem || stack.getItem() instanceof ToolItem) && this.getStoredPotion() != Potions.EMPTY) {
             if (!this.world.isClient()) {
                 ItemStack copy = stack.copy();
                 PotionUtil.setPotion(copy, this.getStoredPotion());
