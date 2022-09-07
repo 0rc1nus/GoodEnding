@@ -11,7 +11,7 @@
     "LivingEntityMixin",
     "SaplingBlockMixin",
     "TreeConfiguredFeaturesMixin",
-    "TreeDecoratorTypeAccessor",
+    "invokers.TreeDecoratorTypeInvoker",
     "TreeFeatureConfigMixin",
     "VanillaBiomeParametersMixin",
     "VanillaSurfaceRulesMixin",
