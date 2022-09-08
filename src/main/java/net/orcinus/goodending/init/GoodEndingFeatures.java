@@ -8,6 +8,7 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.TreeFeatureConfig;
 import net.orcinus.goodending.GoodEnding;
+import net.orcinus.goodending.world.gen.features.FancyDarkOakFeature;
 import net.orcinus.goodending.world.gen.features.LargeLilyPadFeature;
 import net.orcinus.goodending.world.gen.features.CypressTreeFeature;
 import net.orcinus.goodending.world.gen.features.DuckweedFeature;
@@ -36,7 +37,8 @@ public class GoodEndingFeatures {
     public static final Feature<TreeFeatureConfig> MARSH_MUDDY_OAK_TREE_FEATURE = registerFeature("marsh_swamp_tree", new MarshMuddyOakTreeFeature(TreeFeatureConfig.CODEC));
     public static final Feature<TreeFeatureConfig> TALL_BIRCH_TREE = registerFeature("tall_birch_tree", new TallBirchTreeFeature(TreeFeatureConfig.CODEC));
     public static final Feature<DefaultFeatureConfig> LARGE_LILY_PADS = registerFeature("large_lily_pad", new LargeLilyPadFeature(DefaultFeatureConfig.CODEC));
-    
+    public static final Feature<DefaultFeatureConfig> FANCY_DARK_OAK = registerFeature("fancy_dark_oak", new FancyDarkOakFeature(DefaultFeatureConfig.CODEC));
+
     public static <FC extends FeatureConfig, F extends Feature<FC>> F registerFeature(String name, F feature) {
         FEATURES.put(feature, name);
         return feature;

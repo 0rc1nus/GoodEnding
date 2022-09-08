@@ -10,7 +10,7 @@ import java.util.EnumSet;
 public class FollowMobWithEffectGoal extends Goal {
     protected final MarshEntity marsh;
     @Nullable
-    protected LivingEntity mate;
+    protected LivingEntity entity;
 
     public FollowMobWithEffectGoal(MarshEntity marsh) {
         this.marsh = marsh;
@@ -19,24 +19,24 @@ public class FollowMobWithEffectGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        this.mate = this.findMate();
-        return this.mate != null;
+        this.entity = this.findMate();
+        return this.entity != null;
     }
 
     @Override
     public boolean shouldContinue() {
-        return this.mate.isAlive() && !this.mate.getActiveStatusEffects().isEmpty();
+        return this.entity.isAlive() && !this.entity.getActiveStatusEffects().isEmpty();
     }
 
     @Override
     public void stop() {
-        this.mate = null;
+        this.entity = null;
     }
 
     @Override
     public void tick() {
-        this.marsh.getLookControl().lookAt(this.mate, 10.0f, this.marsh.getMaxLookPitchChange());
-        this.marsh.getNavigation().startMovingTo(this.mate, 1.0D);
+        this.marsh.getLookControl().lookAt(this.entity, 10.0f, this.marsh.getMaxLookPitchChange());
+        this.marsh.getNavigation().startMovingTo(this.entity, 1.0D);
     }
 
     @Nullable
