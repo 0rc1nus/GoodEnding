@@ -10,8 +10,8 @@
     "LilyPadBlockMixin",
     "LivingEntityMixin",
     "SaplingBlockMixin",
+    "ShieldItemMixin",
     "TreeConfiguredFeaturesMixin",
-    "invokers.TreeDecoratorTypeInvoker",
     "TreeFeatureConfigMixin",
     "VanillaBiomeParametersMixin",
     "VanillaSurfaceRulesMixin",
@@ -19,6 +19,7 @@
     "accessor.BoatEntityAccessor",
     "invokers.BrewingRecipeRegistryInvoker",
     "invokers.SignTypeInvoker",
+    "invokers.TreeDecoratorTypeInvoker",
     "invokers.VanillaBiomeParametersInvoker"
   ],
   "client": [

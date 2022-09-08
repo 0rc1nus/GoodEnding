@@ -19,6 +19,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Util;
 import net.orcinus.goodending.init.GoodEndingStatusEffects;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -28,6 +29,8 @@ import java.util.LinkedList;
 
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin {
+    @Shadow protected ItemStack activeItemStack;
+
     private static final LinkedList<StatusEffect> IMMUNITY_HIERARCHY = Util.make(Lists.newLinkedList(), list -> {
         list.add(GoodEndingStatusEffects.STRONG_IMMUNITY);
         list.add(GoodEndingStatusEffects.CONTEMPORARY_IMMUNITY);
@@ -35,28 +38,30 @@ public class LivingEntityMixin {
     });
 
     @Inject(at = @At("HEAD"), method = "applyDamage")
-    private void GE$damage(DamageSource source, float amount, CallbackInfo ci) {
+    private void GE$applyDamage(DamageSource source, float amount, CallbackInfo ci) {
         LivingEntity $this = (LivingEntity) (Object) this;
         Entity entity = source.getSource();
         if (entity instanceof PlayerEntity player) {
             ItemStack stack = player.getStackInHand($this.getActiveHand());
-            if (stack.getNbt() != null && stack.getNbt().contains("Potion") && !(stack.getItem() instanceof PotionItem)) {
+            if (stack.getNbt() != null && stack.getNbt().getInt("Amount") > 0 && stack.getNbt().contains("Potion") && !(stack.getItem() instanceof PotionItem)) {
                 PotionUtil.getPotion(stack.getNbt()).getEffects().stream().filter(statusEffectInstance -> statusEffectInstance.getEffectType().getCategory() == StatusEffectCategory.HARMFUL).toList().forEach(statusEffectInstance -> {
-                    $this.addStatusEffect(new StatusEffectInstance(statusEffectInstance.getEffectType(), 240, statusEffectInstance.getAmplifier(), statusEffectInstance.isAmbient(), false, false));
+                    stack.getNbt().putInt("Amount", stack.getNbt().getInt("Amount") - 1);
+                    $this.addStatusEffect(new StatusEffectInstance(statusEffectInstance.getEffectType(), 1200, statusEffectInstance.getAmplifier(), statusEffectInstance.isAmbient(), statusEffectInstance.shouldShowParticles(), statusEffectInstance.shouldShowIcon()));
                 });
             }
         }
     }
 
-    @Inject(at = @At("HEAD"), method = "tick")
-    private void GE$tick(CallbackInfo ci) {
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;damageShield(F)V"), method = "damage")
+    private void GE$damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity $this = (LivingEntity) (Object) this;
-        for (ItemStack stack : $this.getArmorItems()) {
-            if (stack.getNbt() != null) {
-                if (!stack.getNbt().contains("Potion")) continue;
-                Potion potion = PotionUtil.getPotion(stack.getNbt());
-                potion.getEffects().stream().filter(statusEffectInstance -> statusEffectInstance.getEffectType().getCategory() == StatusEffectCategory.BENEFICIAL).toList().forEach($this::addStatusEffect);
-            }
+        NbtCompound nbt = this.activeItemStack.getNbt();
+        if (nbt != null && nbt.getInt("Amount") > 0 && nbt.contains("Potion") && $this.isBlocking()) {
+            Potion potion = PotionUtil.getPotion(this.activeItemStack);
+            potion.getEffects().stream().filter(statusEffectInstance -> statusEffectInstance.getEffectType().getCategory() == StatusEffectCategory.BENEFICIAL).toList().forEach(statusEffectInstance -> {
+                nbt.putInt("Amount", nbt.getInt("Amount") - 1);
+                $this.addStatusEffect(new StatusEffectInstance(statusEffectInstance.getEffectType(), 1200, statusEffectInstance.getAmplifier(), statusEffectInstance.isAmbient(), statusEffectInstance.shouldShowParticles(), statusEffectInstance.shouldShowIcon()));
+            });
         }
     }
 

@@ -17,6 +17,7 @@ public interface GoodEndingTags {
     TagKey<Item> CYPRESS_LOGS_ITEM = TagKey.of(Registry.ITEM_KEY, new Identifier(MODID, "cypress_logs"));
     TagKey<Item> WILDFLOWERS_ITEM = TagKey.of(Registry.ITEM_KEY, new Identifier(MODID, "wildflowers"));
     TagKey<Item> FLOWERING_LILY_PADS_ITEM = TagKey.of(Registry.ITEM_KEY, new Identifier(MODID, "flowering_lily_pads"));
+    TagKey<Item> MARSH_TRUSTED_ITEMS = TagKey.of(Registry.ITEM_KEY, new Identifier(MODID, "marsh_trusted_items"));
 
     //Block tags
     TagKey<Block> CYPRESS_LOGS_BLOCK = TagKey.of(Registry.BLOCK_KEY, new Identifier(MODID, "cypress_logs"));

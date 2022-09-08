@@ -38,8 +38,7 @@ public class DrinkPotionGoal extends Goal {
             if (withinDistance) {
                 this.marshEntity.setStoredPotion(PotionUtil.getPotion(this.item.getStack()));
                 this.marshEntity.playSound(SoundEvents.ENTITY_GENERIC_DRINK, 1.0F, 1.0F);
-                ItemEntity itemEntity = new ItemEntity(this.marshEntity.world, Math.floor(lookControl.getLookX()), this.marshEntity.getEyeY(), Math.floor(lookControl.getLookZ()), new ItemStack(Items.GLASS_BOTTLE));
-                this.marshEntity.world.spawnEntity(itemEntity);
+                this.marshEntity.dropItem(Items.GLASS_BOTTLE, 1);
                 this.item.discard();
             }
         }

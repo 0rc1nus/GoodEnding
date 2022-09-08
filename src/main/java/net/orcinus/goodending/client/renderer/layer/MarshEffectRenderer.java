@@ -23,6 +23,9 @@ public class MarshEffectRenderer extends FeatureRenderer<MarshEntity, MarshEntit
     @Override
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, MarshEntity entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
         int color = PotionUtil.getColor(entity.getStoredPotion());
-        renderModel(this.getContextModel(), EFFECT_OVERLAY, matrices, vertexConsumers, light, entity, color, color, color);
+        int d = (int) ((color >> 16 & 0xFF) / 255.0);
+        int e = (int) ((color >> 8 & 0xFF) / 255.0);
+        int f = (int) ((color & 0xFF) / 255.0);
+        renderModel(this.getContextModel(), EFFECT_OVERLAY, matrices, vertexConsumers, light, entity, d, e, f);
     }
 }
