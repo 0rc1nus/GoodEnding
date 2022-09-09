@@ -15,6 +15,7 @@ import net.orcinus.goodending.world.gen.features.DuckweedFeature;
 import net.orcinus.goodending.world.gen.features.FallenLogFeature;
 import net.orcinus.goodending.world.gen.features.HalfWaterloggedDecorationFeature;
 import net.orcinus.goodending.world.gen.features.MarshMuddyOakTreeFeature;
+import net.orcinus.goodending.world.gen.features.MossyBoulderFeature;
 import net.orcinus.goodending.world.gen.features.ShallowWaterFeature;
 import net.orcinus.goodending.world.gen.features.MuddyOakTreeFeature;
 import net.orcinus.goodending.world.gen.features.TallBirchTreeFeature;
@@ -38,6 +39,7 @@ public class GoodEndingFeatures {
     public static final Feature<TreeFeatureConfig> TALL_BIRCH_TREE = registerFeature("tall_birch_tree", new TallBirchTreeFeature(TreeFeatureConfig.CODEC));
     public static final Feature<DefaultFeatureConfig> LARGE_LILY_PADS = registerFeature("large_lily_pad", new LargeLilyPadFeature(DefaultFeatureConfig.CODEC));
     public static final Feature<DefaultFeatureConfig> FANCY_DARK_OAK = registerFeature("fancy_dark_oak", new FancyDarkOakFeature(DefaultFeatureConfig.CODEC));
+    public static final Feature<DefaultFeatureConfig> MOSSY_BOULDER = registerFeature("mossy_boulder", new MossyBoulderFeature(DefaultFeatureConfig.CODEC));
 
     public static <FC extends FeatureConfig, F extends Feature<FC>> F registerFeature(String name, F feature) {
         FEATURES.put(feature, name);

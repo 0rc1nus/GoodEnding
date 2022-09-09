@@ -101,8 +101,8 @@ public class GoodEndingWorldGen {
     public static final RegistryEntry<PlacedFeature> DUCKWEED_PATCH_PLACED = register("duckweed_patch", DUCKWEED_PATCH, CountPlacementModifier.of(20), SquarePlacementModifier.of(), PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP, BiomePlacementModifier.of());
 
     public static final RegistryEntry<ConfiguredFeature<RandomPatchFeatureConfig, ?>> PATCH_PASTEL_WILDFLOWERS = register("patch_pastel_wildflowers", Feature.RANDOM_PATCH, ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(BlockStateProvider.of(GoodEndingBlocks.PASTEL_WILDFLOWERS)), List.of(Blocks.GRASS_BLOCK)));
-    public static final RegistryEntry<ConfiguredFeature<RandomPatchFeatureConfig, ?>> PATCH_TWILIGHT_WILDFLOWERS = register("patch_twilight_wildflowers", Feature.RANDOM_PATCH, ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(BlockStateProvider.of(GoodEndingBlocks.TWILIGHT_WILDFLOWERS)), List.of(Blocks.GRASS_BLOCK, Blocks.MUD)));
-    public static final RegistryEntry<ConfiguredFeature<RandomPatchFeatureConfig, ?>> PATCH_SPICY_WILDFLOWERS = register("patch_spicy_wildflowers", Feature.RANDOM_PATCH, ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(BlockStateProvider.of(GoodEndingBlocks.SPICY_WILDFLOWERS)), List.of(Blocks.GRASS_BLOCK)));
+    public static final RegistryEntry<ConfiguredFeature<RandomPatchFeatureConfig, ?>> PATCH_TWILIGHT_WILDFLOWERS = register("patch_twilight_wildflowers", Feature.RANDOM_PATCH, ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(BlockStateProvider.of(GoodEndingBlocks.TWILIGHT_WILDFLOWERS)), List.of(Blocks.GRASS_BLOCK, Blocks.MUD, Blocks.COARSE_DIRT, Blocks.PODZOL)));
+    public static final RegistryEntry<ConfiguredFeature<RandomPatchFeatureConfig, ?>> PATCH_SPICY_WILDFLOWERS = register("patch_spicy_wildflowers", Feature.RANDOM_PATCH, ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(BlockStateProvider.of(GoodEndingBlocks.SPICY_WILDFLOWERS)), List.of(Blocks.GRASS_BLOCK, Blocks.COARSE_DIRT, Blocks.PODZOL)));
     public static final RegistryEntry<ConfiguredFeature<RandomPatchFeatureConfig, ?>> PATCH_BALMY_WILDFLOWERS = register("patch_balmy_wildflowers", Feature.RANDOM_PATCH, ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(BlockStateProvider.of(GoodEndingBlocks.BALMY_WILDFLOWERS)), List.of(Blocks.GRASS_BLOCK)));
 
     public static final RegistryEntry<PlacedFeature> PATCH_PASTEL_WILDFLOWERS_PLACED = register("patch_pastel_wildflowers", PATCH_PASTEL_WILDFLOWERS, RarityFilterPlacementModifier.of(30), CountPlacementModifier.of(3), SquarePlacementModifier.of(), PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP, BiomePlacementModifier.of());
@@ -123,7 +123,13 @@ public class GoodEndingWorldGen {
     public static final RegistryEntry<ConfiguredFeature<RandomPatchFeatureConfig, ?>> PATCH_PINK_FLOWERED_LILY = register("patch_pink_flowered_lily", Feature.RANDOM_PATCH, new RandomPatchFeatureConfig(6, 2, 3, PlacedFeatures.createEntry(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(BlockStateProvider.of(GoodEndingBlocks.PINK_FLOWERING_LILY_PAD)))));
     public static final RegistryEntry<PlacedFeature> PATCH_PINK_FLOWERED_LILY_PLACED = register("patch_pink_flowered_lily_placed", PATCH_PINK_FLOWERED_LILY, VegetationPlacedFeatures.modifiers(2));
 
+    public static final RegistryEntry<ConfiguredFeature<RandomPatchFeatureConfig, ?>> PATCH_FERN = register("patch_fern", Feature.RANDOM_PATCH, ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(BlockStateProvider.of(Blocks.FERN))));
+    public static final RegistryEntry<ConfiguredFeature<RandomPatchFeatureConfig, ?>> PATCH_LARGE_FERN = register("patch_large_fern", Feature.RANDOM_PATCH, ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(BlockStateProvider.of(Blocks.LARGE_FERN)), List.of(), 32));
+    public static final RegistryEntry<ConfiguredFeature<RandomPatchFeatureConfig, ?>> OAK_HAMMOCK_PATCH_TALL_GRASS = register("oak_hammock_patch_tall_grass", Feature.RANDOM_PATCH, ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(BlockStateProvider.of(Blocks.TALL_GRASS)), List.of(), 30));
     public static final RegistryEntry<PlacedFeature> PATCH_TALL_GRASS_PLACED = register("patch_tall_grass_placed", VegetationConfiguredFeatures.PATCH_TALL_GRASS, VegetationPlacedFeatures.modifiers(3));
+    public static final RegistryEntry<PlacedFeature> PATCH_FERN_PLACED = register("patch_fern_placed", PATCH_FERN, VegetationPlacedFeatures.modifiers(3));
+    public static final RegistryEntry<PlacedFeature> PATCH_LARGE_FERN_PLACED = register("patch_large_fern_placed", PATCH_LARGE_FERN, VegetationPlacedFeatures.modifiers(3));
+    public static final RegistryEntry<PlacedFeature> OAK_HAMMOCK_PATCH_TALL_GRASS_PLACED = register("oak_hammock_patch_tall_grass_placed", OAK_HAMMOCK_PATCH_TALL_GRASS, VegetationPlacedFeatures.modifiers(3));
 
     public static final RegistryEntry<ConfiguredFeature<DefaultFeatureConfig, ?>> LARGE_LILY_PADS = register("large_lily_pads", GoodEndingFeatures.LARGE_LILY_PADS, new DefaultFeatureConfig());
 
@@ -137,6 +143,9 @@ public class GoodEndingWorldGen {
 
     public static final RegistryEntry<ConfiguredFeature<DefaultFeatureConfig, ?>> FANCY_DARK_OAK = register("fancy_dark_oak", GoodEndingFeatures.FANCY_DARK_OAK, new DefaultFeatureConfig());
     public static final RegistryEntry<PlacedFeature> FANCY_DARK_OAK_PLACED = register("fancy_dark_oak_placed", FANCY_DARK_OAK, CountPlacementModifier.of(3), SquarePlacementModifier.of(), PlacedFeatures.OCEAN_FLOOR_WG_HEIGHTMAP, BiomePlacementModifier.of());
+
+    public static final RegistryEntry<ConfiguredFeature<DefaultFeatureConfig, ?>> MOSSY_BOULDER = register("mossy_boulder", GoodEndingFeatures.MOSSY_BOULDER, new DefaultFeatureConfig());
+    public static final RegistryEntry<PlacedFeature> MOSSY_BOULDER_PLACED = register("mossy_boulder_placed", MOSSY_BOULDER, CountPlacementModifier.of(3), SquarePlacementModifier.of(), PlacedFeatures.OCEAN_FLOOR_WG_HEIGHTMAP, BiomePlacementModifier.of());
 
     public static <FC extends FeatureConfig, F extends Feature<FC>> RegistryEntry<ConfiguredFeature<FC, ?>> register(String id, F feature, FC config) {
         return BuiltinRegistries.addCasted(BuiltinRegistries.CONFIGURED_FEATURE, new Identifier(GoodEnding.MODID, id).toString(), new ConfiguredFeature<>(feature, config));
