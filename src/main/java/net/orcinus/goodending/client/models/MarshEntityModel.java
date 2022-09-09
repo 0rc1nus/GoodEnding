@@ -10,6 +10,7 @@ import net.minecraft.client.model.ModelPartData;
 import net.minecraft.client.model.ModelTransform;
 import net.minecraft.client.model.TexturedModelData;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
+import net.minecraft.util.math.MathHelper;
 import net.orcinus.goodending.entities.MarshEntity;
 
 import static net.minecraft.util.math.MathHelper.clamp;
@@ -37,8 +38,6 @@ public class MarshEntityModel<T extends MarshEntity> extends SinglePartEntityMod
     }
 
     public static TexturedModelData getTexturedModelData() {
-        // TODO replace 'undefined' with 'root'
-
         ModelData data = new ModelData();
         ModelPartData root = data.getRoot();
 
@@ -46,14 +45,12 @@ public class MarshEntityModel<T extends MarshEntity> extends SinglePartEntityMod
                 "body",
                 ModelPartBuilder.create()
                         .uv(0, 0)
-                        .mirrored(false)
-                        .cuboid(-5.0F, -10.0F, -5.0F, 10.0F, 10.0F, 10.0F, new Dilation(0.0F))
+                        .cuboid(-5.0F, -10.0F, -5.0F, 10.0F, 10.0F, 10.0F)
                         .uv(30, 0)
-                        .mirrored(false)
-                        .cuboid(5.0F, -8.0F, -1.0F, 1.0F, 3.0F, 3.0F, new Dilation(0.0F))
+                        .cuboid(5.0F, -8.0F, -1.0F, 1.0F, 3.0F, 3.0F)
                         .uv(30, 0)
                         .mirrored(true)
-                        .cuboid(-6.0F, -8.0F, -1.0F, 1.0F, 3.0F, 3.0F, new Dilation(0.0F)),
+                        .cuboid(-6.0F, -8.0F, -1.0F, 1.0F, 3.0F, 3.0F),
                 ModelTransform.of(0.0F, 19.0F, 0.0F, 0.0F, 0.0F, 0.0F)
         );
 
@@ -61,8 +58,7 @@ public class MarshEntityModel<T extends MarshEntity> extends SinglePartEntityMod
                 "tail",
                 ModelPartBuilder.create()
                         .uv(0, 0)
-                        .mirrored(false)
-                        .cuboid(0.0F, -3.0F, 0.0F, 0.0F, 6.0F, 4.0F, new Dilation(0.0F)),
+                        .cuboid(0.0F, -3.0F, 0.0F, 0.0F, 6.0F, 4.0F),
                 ModelTransform.of(0.0F, -4.0F, 5.0F, 0.0F, 0.0F, 0.0F)
         );
 
@@ -71,7 +67,7 @@ public class MarshEntityModel<T extends MarshEntity> extends SinglePartEntityMod
                 ModelPartBuilder.create()
                         .uv(0, 14)
                         .mirrored(true)
-                        .cuboid(0.0F, 0.0F, 0.0F, 0.0F, 6.0F, 6.0F, new Dilation(0.0F)),
+                        .cuboid(0.0F, 0.0F, 0.0F, 0.0F, 6.0F, 6.0F),
                 ModelTransform.of(5.0F, -3.0F, 2.0F, -0.7854F, 0.0F, -0.7854F)
         );
 
@@ -79,8 +75,7 @@ public class MarshEntityModel<T extends MarshEntity> extends SinglePartEntityMod
                 "rightFin",
                 ModelPartBuilder.create()
                         .uv(0, 14)
-                        .mirrored(false)
-                        .cuboid(0.0F, 0.0F, 0.0F, 0.0F, 6.0F, 6.0F, new Dilation(0.0F)),
+                        .cuboid(0.0F, 0.0F, 0.0F, 0.0F, 6.0F, 6.0F),
                 ModelTransform.of(-5.0F, -3.0F, 2.0F, -0.7854F, 0.0F, 0.7854F)
         );
 
@@ -88,8 +83,7 @@ public class MarshEntityModel<T extends MarshEntity> extends SinglePartEntityMod
                 "leftLeg",
                 ModelPartBuilder.create()
                         .uv(34, 23)
-                        .mirrored(false)
-                        .cuboid(-1.5F, 0.0F, -2.0F, 3.0F, 5.0F, 4.0F, new Dilation(0.0F)),
+                        .cuboid(-1.5F, 0.0F, -2.0F, 3.0F, 5.0F, 4.0F),
                 ModelTransform.of(2.5F, 19.0F, 0.0F, 0.0F, 0.0F, 0.0F)
         );
 
@@ -98,7 +92,7 @@ public class MarshEntityModel<T extends MarshEntity> extends SinglePartEntityMod
                 ModelPartBuilder.create()
                         .uv(34, 23)
                         .mirrored(true)
-                        .cuboid(-1.5F, 0.0F, -2.0F, 3.0F, 5.0F, 4.0F, new Dilation(0.0F)),
+                        .cuboid(-1.5F, 0.0F, -2.0F, 3.0F, 5.0F, 4.0F),
                 ModelTransform.of(-2.5F, 19.0F, 0.0F, 0.0F, 0.0F, 0.0F)
         );
 
@@ -107,19 +101,24 @@ public class MarshEntityModel<T extends MarshEntity> extends SinglePartEntityMod
 
     @Override
     public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
-        limbDistance = clamp(limbDistance, -0.45F, 0.45F);
+        float limb = clamp(limbDistance, -0.45F, 0.45F);
+        float tilt = Math.min(limbDistance / 0.3f, 1.0f);
         float speed = 1f;
         float degree = 1.0f;
 
-        if (entity.isTouchingWater()) {
-            this.rightLeg.pitch = cos(limbAngle * speed * 1.5F) * 1.4F * limbDistance;
-            this.leftLeg.pitch = cos(limbAngle * speed * 1.5F + (float)Math.PI) * 1.4F * limbDistance;
-        } else {
-            this.rightLeg.pitch = cos(limbAngle * speed * 0.6F) * 1.4F * limbDistance;
-            this.leftLeg.pitch = cos(limbAngle * speed * 0.6F + (float)Math.PI) * 1.4F * limbDistance;
-            this.body.roll = cos(limbAngle * speed * 0.3F) * 0.35F * limbDistance;
-            this.body.pivotY = cos(limbAngle * speed * 1.2F + (float)Math.PI / 2) * 2F * limbDistance + 16.5F;
-        }
+        leftFin.pitch = -0.7854F + tilt;
+        rightFin.pitch = -0.7854F + tilt;
+        body.pitch = tilt * 0.2f;
+
+        rightFin.roll = MathHelper.cos(animationProgress * speed * 0.3F + (float)Math.PI) * degree * 0.2F * 0.5F + 0.7854F;
+        leftFin.roll = MathHelper.cos(animationProgress * speed * 0.3F) * degree * 0.2F * 0.5F - 0.7854F;
+
+        rightLeg.pitch = cos(limbAngle * speed * 0.6F) * 1.4F * limb;
+        leftLeg.pitch = cos(limbAngle * speed * 0.6F + (float)Math.PI) * 1.4F * limb;
+        tail.yaw = cos(limbAngle * speed * 0.6F + (float)Math.PI / 2) * 1.4F * limb;
+        body.roll = cos(limbAngle * speed * 0.3F) * 0.35F * limb;
+        body.pivotY = cos(limbAngle * speed * 1.2F + (float)Math.PI / 2) * limb + 19F;
+
     }
 
     @Override
