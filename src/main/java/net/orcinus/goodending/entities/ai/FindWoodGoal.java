@@ -1,21 +1,14 @@
 package net.orcinus.goodending.entities.ai;
 
-import com.google.common.collect.Lists;
 import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tag.BlockTags;
-import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.orcinus.goodending.entities.WoodpeckerEntity;
-
-import java.util.List;
 
 public class FindWoodGoal extends Goal {
     private final WoodpeckerEntity woodpecker;
