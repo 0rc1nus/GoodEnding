@@ -2,6 +2,7 @@ package net.orcinus.goodending.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.Fertilizable;
 import net.minecraft.block.PlantBlock;
 import net.minecraft.block.ShapeContext;
@@ -82,7 +83,13 @@ public class LargeLilyPadBlock extends PlantBlock implements Waterloggable, Fert
                     int q = 2 + pos.getY();
                     for (int r = q - 2; r < q; ++r) {
                         BlockPos blockPos = new BlockPos(m + o, r, pos.getZ() - n + p);
-                        if (blockPos == pos || random.nextInt(4) != 0 || world.getBlockState(blockPos).getBlock().getDefaultState().isOf(GoodEndingBlocks.LARGE_LILY_PAD)  || !world.getBlockState(pos).getFluidState().isOf(Fluids.WATER) || !world.getBlockState(blockPos).getFluidState().isOf(Fluids.WATER)) continue;
+                        if (blockPos == pos
+                            || random.nextInt(4) != 0
+                            || world.getBlockState(blockPos).getBlock().getDefaultState().isOf(GoodEndingBlocks.LARGE_LILY_PAD)
+                            || !world.getBlockState(pos).getFluidState().isOf(Fluids.WATER)
+                            || !world.getBlockState(blockPos).getBlock().getDefaultState().isOf(Blocks.WATER))
+                            continue;
+
                         world.setBlockState(blockPos, state, Block.NOTIFY_ALL);
                     }
                 }
