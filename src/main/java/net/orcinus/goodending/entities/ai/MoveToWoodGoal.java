@@ -15,18 +15,24 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockStateRaycastContext;
 import net.orcinus.goodending.entities.WoodpeckerEntity;
+import net.orcinus.goodending.init.GoodEndingSoundEvents;
 
 import java.util.List;
 
 public class MoveToWoodGoal extends Goal {
     private final WoodpeckerEntity woodpecker;
+    private final Random random;
     private boolean cancel = false;
-    private int peckingTicks = 100;
+    private int peckingTicks;
+    private int peckingCooldownTicks;
+    private int drummingTicks;
 
-    public MoveToWoodGoal(WoodpeckerEntity woodpecker) {
+    public MoveToWoodGoal(WoodpeckerEntity woodpecker, Random random) {
         this.woodpecker = woodpecker;
+        this.random = random;
     }
 
     @Override
@@ -42,6 +48,15 @@ public class MoveToWoodGoal extends Goal {
             return false;
         }
         return this.woodpecker.getWoodPos() != null && this.woodpecker.world.getBlockState(this.woodpecker.getWoodPos()).isIn(BlockTags.LOGS) && this.woodpecker.getPeckingWoodCooldown() == 0;
+    }
+
+    @Override
+    public void start() {
+        super.start();
+        if (woodpecker.hasWood()) {
+            this.peckingTicks = 20 * 30 + random.nextInt(20 * 45);
+            this.peckingCooldownTicks = 20 * 2 + random.nextInt(20 * 5);
+        }
     }
 
     @Override
@@ -73,11 +88,12 @@ public class MoveToWoodGoal extends Goal {
         this.woodpecker.setWoodPos(null);
         this.woodpecker.setPeckingWoodCooldown(this.cancel ? 200 : 400);
         this.woodpecker.setPose(EntityPose.FALL_FLYING);
-        this.peckingTicks = 100;
+        this.peckingTicks = 20 * 30 + random.nextInt(20 * 45);
     }
 
     @Override
     public void tick() {
+
         BlockPos woodPos = this.woodpecker.getWoodPos();
         if (woodPos != null) {
             Direction attachedFace = this.woodpecker.getAttachedFace();
@@ -96,9 +112,7 @@ public class MoveToWoodGoal extends Goal {
                     this.woodpecker.getLookControl().lookAt(Vec3d.ofCenter(woodPos));
                     if (blockHitResult.getType() == HitResult.Type.BLOCK) {
                         List<WoodpeckerEntity> woodpeckerEntities = this.woodpecker.world.getNonSpectatingEntities(WoodpeckerEntity.class, new Box(woodPos.offset(this.woodpecker.getAttachedFace())));
-                        if (woodpeckerEntities.size() > 1 && this.peckingTicks > 90) {
-                            this.cancel = true;
-                        }
+                        if (woodpeckerEntities.size() > 1 && this.peckingTicks > 90) this.cancel = true;
                         BlockPos pos = new BlockPos(Vec3d.ofBottomCenter(woodPos));
                         this.woodpecker.getLookControl().lookAt(Vec3d.ofCenter(pos));
                         double xPosition = pos.getX() + (attachedFace.getAxis() == Direction.Axis.Z ? 0.5D : (attachedFace == Direction.WEST ? -0.2D : 1.2D));
@@ -108,27 +122,24 @@ public class MoveToWoodGoal extends Goal {
                         this.woodpecker.getNavigation().stop();
                         if (this.peckingTicks > 0) {
                             this.peckingTicks--;
+                            this.peckingCooldownTicks--;
+                            this.drummingTicks--;
+                            this.woodpecker.setPose(EntityPose.STANDING);
                         }
-                        EntityPose pose = EntityPose.STANDING;
-                        if (this.peckingTicks > 70 && this.peckingTicks < 95) {
-                            pose = EntityPose.DIGGING;
-                            if (this.peckingTicks > 75 && this.peckingTicks < 85) {
-                                peckWood(woodPos);
-                            }
+
+                        if (this.drummingTicks < 0 && this.drummingTicks > 50) this.woodpecker.setPose(EntityPose.STANDING);
+                        if (this.drummingTicks > 0 && this.drummingTicks < 50) this.woodpecker.setPose(EntityPose.DIGGING);
+
+                        if (peckingCooldownTicks == 0) {
+                            this.drummingTicks = 50;
+
+                            this.woodpecker.playSound(GoodEndingSoundEvents.ENTITY_WOODPECKER_DRUM, 1.0F, 1.0F);
+                            this.peckingCooldownTicks = 20 * 10 + random.nextInt(20 * 15);
                         }
-                        if (this.peckingTicks > 40 && this.peckingTicks < 65) {
-                            pose = EntityPose.DIGGING;
-                            if (this.peckingTicks > 45 && this.peckingTicks < 50) {
-                                peckWood(woodPos);
-                            }
+
+                        if (this.drummingTicks > 25 && this.drummingTicks < 40) {
+                            this.peckWood(woodPos);
                         }
-                        if (this.peckingTicks > 10 && this.peckingTicks < 35) {
-                            pose = EntityPose.DIGGING;
-                            if (this.peckingTicks > 15 && this.peckingTicks < 20) {
-                                peckWood(woodPos);
-                            }
-                        }
-                        this.woodpecker.setPose(pose);
                     }
                 } else {
                     if (this.woodpecker.getNavigation().isIdle()) {
