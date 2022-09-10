@@ -1,12 +1,8 @@
 package net.orcinus.goodending.mixin;
 
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.item.AxeItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShieldItem;
-import net.minecraft.item.SwordItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtil;
@@ -22,7 +18,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 
-//Imagine not referencing to the parent method, what a fucking shame
 @Mixin(ShieldItem.class)
 public class ShieldItemMixin {
 
@@ -35,7 +30,7 @@ public class ShieldItemMixin {
             if (toolEffect != null) {
                 potion.getEffects().forEach(statusEffectInstance -> {
                     MutableText mutableText = Text.translatable("item.goodending.retained_tool.status_effect").append(" ");
-                    tooltip.add(mutableText.append(Text.translatable(statusEffectInstance.getEffectType().getTranslationKey())).formatted(Formatting.GRAY));
+                    tooltip.add(mutableText.append(Text.translatable(statusEffectInstance.getEffectType().getTranslationKey())).formatted(nbt.getBoolean("Infinite") ? Formatting.LIGHT_PURPLE : Formatting.BLUE));
                 });
             }
             if (nbt.getInt("Amount") > 0) {

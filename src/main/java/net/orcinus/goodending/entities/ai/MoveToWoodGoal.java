@@ -25,6 +25,8 @@ import java.util.List;
 public class MoveToWoodGoal extends Goal {
     private final WoodpeckerEntity woodpecker;
     private final Random random;
+    private final int initialPeckingTicks;
+    private final int initialPeckingCooldownTicks;
     private boolean cancel = false;
     private int peckingTicks;
     private int peckingCooldownTicks;
@@ -33,6 +35,8 @@ public class MoveToWoodGoal extends Goal {
     public MoveToWoodGoal(WoodpeckerEntity woodpecker, Random random) {
         this.woodpecker = woodpecker;
         this.random = random;
+        this.initialPeckingTicks = 20 * 30 + random.nextInt(20 * 45);
+        this.initialPeckingCooldownTicks = 20 * 2 + random.nextInt(20 * 5);
     }
 
     @Override
@@ -54,8 +58,8 @@ public class MoveToWoodGoal extends Goal {
     public void start() {
         super.start();
         if (woodpecker.hasWood()) {
-            this.peckingTicks = 20 * 30 + random.nextInt(20 * 45);
-            this.peckingCooldownTicks = 20 * 2 + random.nextInt(20 * 5);
+            this.peckingTicks = this.initialPeckingTicks;
+            this.peckingCooldownTicks = this.initialPeckingCooldownTicks;
         }
     }
 
@@ -112,7 +116,7 @@ public class MoveToWoodGoal extends Goal {
                     this.woodpecker.getLookControl().lookAt(Vec3d.ofCenter(woodPos));
                     if (blockHitResult.getType() == HitResult.Type.BLOCK) {
                         List<WoodpeckerEntity> woodpeckerEntities = this.woodpecker.world.getNonSpectatingEntities(WoodpeckerEntity.class, new Box(woodPos.offset(this.woodpecker.getAttachedFace())));
-                        if (woodpeckerEntities.size() > 1 && this.peckingTicks > 90) this.cancel = true;
+                        if (woodpeckerEntities.size() > 1 && this.peckingTicks > this.initialPeckingTicks - 10) this.cancel = true;
                         BlockPos pos = new BlockPos(Vec3d.ofBottomCenter(woodPos));
                         this.woodpecker.getLookControl().lookAt(Vec3d.ofCenter(pos));
                         double xPosition = pos.getX() + (attachedFace.getAxis() == Direction.Axis.Z ? 0.5D : (attachedFace == Direction.WEST ? -0.2D : 1.2D));
@@ -127,7 +131,7 @@ public class MoveToWoodGoal extends Goal {
                             this.woodpecker.setPose(EntityPose.STANDING);
                         }
 
-                        if (this.drummingTicks < 0 && this.drummingTicks > 50) this.woodpecker.setPose(EntityPose.STANDING);
+                        if (this.drummingTicks < 0 || this.drummingTicks > 50) this.woodpecker.setPose(EntityPose.STANDING);
                         if (this.drummingTicks > 0 && this.drummingTicks < 50) this.woodpecker.setPose(EntityPose.DIGGING);
 
                         if (peckingCooldownTicks == 0) {

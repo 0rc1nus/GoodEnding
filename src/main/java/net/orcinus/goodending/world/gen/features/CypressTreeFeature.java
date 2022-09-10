@@ -115,15 +115,6 @@ public class CypressTreeFeature extends Feature<WaterTreeFeatureConfig> {
         return true;
     }
 
-    private static void placeVines(BlockPos pos, BooleanProperty faceProperty, StructureWorldAccess worldAccess) {
-        worldAccess.setBlockState(pos, Blocks.VINE.getDefaultState().with(faceProperty, true), Block.NOTIFY_ALL | Block.FORCE_STATE);
-        int i = 4;
-        for(pos = pos.down(); worldAccess.isAir(pos) && i > 0; --i) {
-            worldAccess.setBlockState(pos, Blocks.VINE.getDefaultState().with(faceProperty, true), Block.NOTIFY_ALL | Block.FORCE_STATE);
-            pos = pos.down();
-        }
-    }
-
     public boolean branchingRoot(StructureWorldAccess world, BlockPos blockPos, Block block, Random random, Direction direction, int tries) {
         BlockPos belowPos = blockPos.down();
         if (tries == 2) return repeatInnit(world, blockPos, block);

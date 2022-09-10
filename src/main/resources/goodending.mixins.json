@@ -15,7 +15,6 @@
     "TreeFeatureConfigMixin",
     "VanillaBiomeParametersMixin",
     "VanillaSurfaceRulesMixin",
-    "WardenEntityMixin",
     "accessor.BoatEntityAccessor",
     "invokers.BrewingRecipeRegistryInvoker",
     "invokers.SignTypeInvoker",

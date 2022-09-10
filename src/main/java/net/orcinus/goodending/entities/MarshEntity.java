@@ -13,6 +13,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.LingeringPotionItem;
 import net.minecraft.item.PotionItem;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.item.SwordItem;
@@ -32,6 +33,8 @@ import java.util.Collection;
 
 public class MarshEntity extends PathAwareEntity {
     private Potion potion = Potions.EMPTY;
+    private int dimensionalOpenTicks;
+    private boolean infinite;
 
     public MarshEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
         super(entityType, world);
@@ -46,6 +49,21 @@ public class MarshEntity extends PathAwareEntity {
         this.goalSelector.add(1, new EscapeDangerGoal(this, 1.25f));
         this.goalSelector.add(2, new FollowMobWithEffectGoal(this));
         this.goalSelector.add(3, new WanderAroundFarGoal(this, 1.0f));
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (this.dimensionalOpenTicks < 7 && this.getStoredPotion() != Potions.EMPTY) {
+            this.dimensionalOpenTicks++;
+        }
+        if (this.dimensionalOpenTicks == 7 && this.getStoredPotion() != Potions.EMPTY) {
+            this.dimensionalOpenTicks = 1;
+        }
+    }
+
+    public int getDimensionalOpenTicks() {
+        return this.dimensionalOpenTicks;
     }
 
     @Override
@@ -72,6 +90,9 @@ public class MarshEntity extends PathAwareEntity {
         Item item = itemStack.getItem();
 
         if (item instanceof PotionItem && this.getStoredPotion() == Potions.EMPTY) {
+            if (item instanceof LingeringPotionItem) {
+                this.infinite = true;
+            }
             this.setStoredPotion(PotionUtil.getPotion(itemStack));
             if (!player.getAbilities().creativeMode) {
                 itemStack.decrement(1);
@@ -80,10 +101,16 @@ public class MarshEntity extends PathAwareEntity {
             return ActionResult.SUCCESS;
         }
 
-        if (this.getStoredPotion() != Potions.EMPTY && this.getValidItems(item)) {
+        if (this.getStoredPotion() != Potions.EMPTY && this.getValidItems(item) && itemStack.getNbt() != null && !itemStack.getNbt().contains("Potion")) {
             if (itemStack.getNbt() != null) {
+                if (this.infinite) {
+                    itemStack.getNbt().putBoolean("Infinite", true);
+                    this.infinite = false;
+                } else {
+                    itemStack.getNbt().putInt("Amount", 10);
+                }
                 PotionUtil.setPotion(itemStack, this.getStoredPotion());
-                itemStack.getNbt().putInt("Amount", 10);
+                System.out.println("AMOGUS");
                 this.setStoredPotion(Potions.EMPTY);
                 return ActionResult.SUCCESS;
             }
@@ -109,11 +136,13 @@ public class MarshEntity extends PathAwareEntity {
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
         nbt.putString("Potion", Registry.POTION.getId(this.getStoredPotion()).toString());
+        nbt.putBoolean("Infinite", this.infinite);
     }
 
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
+        this.infinite = nbt.getBoolean("Infinite");
         this.setStoredPotion(PotionUtil.getPotion(nbt));
     }
 

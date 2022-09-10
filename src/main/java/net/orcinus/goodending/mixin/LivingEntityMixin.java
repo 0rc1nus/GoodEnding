@@ -10,12 +10,10 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PotionItem;
-import net.minecraft.item.SwordItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Hand;
 import net.minecraft.util.Util;
 import net.orcinus.goodending.init.GoodEndingStatusEffects;
 import org.spongepowered.asm.mixin.Mixin;
@@ -45,7 +43,9 @@ public class LivingEntityMixin {
             ItemStack stack = player.getStackInHand($this.getActiveHand());
             if (stack.getNbt() != null && stack.getNbt().getInt("Amount") > 0 && stack.getNbt().contains("Potion") && !(stack.getItem() instanceof PotionItem)) {
                 PotionUtil.getPotion(stack.getNbt()).getEffects().stream().filter(statusEffectInstance -> statusEffectInstance.getEffectType().getCategory() == StatusEffectCategory.HARMFUL).toList().forEach(statusEffectInstance -> {
-                    stack.getNbt().putInt("Amount", stack.getNbt().getInt("Amount") - 1);
+                    if (stack.getNbt().getInt("Amount") > 0) {
+                        stack.getNbt().putInt("Amount", stack.getNbt().getInt("Amount") - 1);
+                    }
                     $this.addStatusEffect(new StatusEffectInstance(statusEffectInstance.getEffectType(), 1200, statusEffectInstance.getAmplifier(), statusEffectInstance.isAmbient(), statusEffectInstance.shouldShowParticles(), statusEffectInstance.shouldShowIcon()));
                 });
             }
@@ -59,7 +59,9 @@ public class LivingEntityMixin {
         if (nbt != null && nbt.getInt("Amount") > 0 && nbt.contains("Potion") && $this.isBlocking()) {
             Potion potion = PotionUtil.getPotion(this.activeItemStack);
             potion.getEffects().stream().filter(statusEffectInstance -> statusEffectInstance.getEffectType().getCategory() == StatusEffectCategory.BENEFICIAL).toList().forEach(statusEffectInstance -> {
-                nbt.putInt("Amount", nbt.getInt("Amount") - 1);
+                if (this.activeItemStack.getNbt().getInt("Amount") > 0) {
+                    nbt.putInt("Amount", nbt.getInt("Amount") - 1);
+                }
                 $this.addStatusEffect(new StatusEffectInstance(statusEffectInstance.getEffectType(), 1200, statusEffectInstance.getAmplifier(), statusEffectInstance.isAmbient(), statusEffectInstance.shouldShowParticles(), statusEffectInstance.shouldShowIcon()));
             });
         }
