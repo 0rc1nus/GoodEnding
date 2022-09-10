@@ -17,26 +17,27 @@ import net.minecraft.world.gen.feature.TreeFeatureConfig;
 import net.minecraft.world.gen.feature.util.DripstoneHelper;
 import net.minecraft.world.gen.feature.util.FeatureContext;
 import net.orcinus.goodending.util.WorldGenUtil;
+import net.orcinus.goodending.world.gen.features.config.MuddyOakFeatureConfig;
 
 import java.util.List;
 
-public class MuddyOakTreeFeature extends Feature<TreeFeatureConfig> {
+public class MuddyOakTreeFeature extends Feature<MuddyOakFeatureConfig> {
 
-    public MuddyOakTreeFeature(Codec<TreeFeatureConfig> configCodec) {
+    public MuddyOakTreeFeature(Codec<MuddyOakFeatureConfig> configCodec) {
         super(configCodec);
     }
 
     @Override
-    public boolean generate(FeatureContext<TreeFeatureConfig> context) {
+    public boolean generate(FeatureContext<MuddyOakFeatureConfig> context) {
         StructureWorldAccess world = context.getWorld();
         BlockPos blockPos = context.getOrigin();
         Random random = context.getRandom();
-        TreeFeatureConfig config = context.getConfig();
+        MuddyOakFeatureConfig config = context.getConfig();
         int treeHeight = ConstantIntProvider.create(8).get(random);
         List<BlockPos> leavePoses = Lists.newArrayList();
         for (int i = 0; i < treeHeight; i++) {
             Direction direction = Direction.Type.HORIZONTAL.random(random);
-            if (random.nextInt(2) == 0 && i >= treeHeight / 2) {
+            if (config.generateBranch && random.nextInt(2) == 0 && i >= treeHeight / 2) {
                 for (int branchLength = 0; branchLength <= MathHelper.nextInt(random, 1, 2); branchLength++) {
                     BlockPos branchPos = blockPos.up(i).offset(direction, branchLength);
                     if (world.testBlockState(branchPos.down(), DripstoneHelper::canGenerate) && world.testBlockState(branchPos, blockState -> blockState.isAir() || blockState.isIn(BlockTags.LEAVES) || blockState.isOf(Blocks.WATER))){
