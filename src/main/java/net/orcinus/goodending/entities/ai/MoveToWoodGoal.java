@@ -35,7 +35,7 @@ public class MoveToWoodGoal extends Goal {
     public MoveToWoodGoal(WoodpeckerEntity woodpecker, Random random) {
         this.woodpecker = woodpecker;
         this.random = random;
-        this.initialPeckingTicks = 20 * 30 + random.nextInt(20 * 45);
+        this.initialPeckingTicks = 20 * 30 + random.nextInt(20 * 120);
         this.initialPeckingCooldownTicks = 20 * 2 + random.nextInt(20 * 5);
     }
 
@@ -92,7 +92,7 @@ public class MoveToWoodGoal extends Goal {
         this.woodpecker.setWoodPos(null);
         this.woodpecker.setPeckingWoodCooldown(this.cancel ? 200 : 400);
         this.woodpecker.setPose(EntityPose.FALL_FLYING);
-        this.peckingTicks = 20 * 30 + random.nextInt(20 * 45);
+        this.peckingTicks = 20 * 30 + random.nextInt(20 * 120);
     }
 
     @Override
