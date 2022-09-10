@@ -105,8 +105,8 @@ public class CypressTreeFeature extends Feature<WaterTreeFeatureConfig> {
                         BlockPos leavePose = pos.offset(direction).down(t);
                         if (world.getBlockState(leavePose).isIn(GoodEndingTags.CYPRESS_REPLACEABLES) || world.getBlockState(leavePose).getMaterial().isReplaceable() || world.getBlockState(leavePose).isIn(BlockTags.LEAVES)){
                             world.setBlockState(leavePose, leaveState.with(LeavesBlock.WATERLOGGED, world.getBlockState(leavePose).isOf(Blocks.WATER)), 19);
+                            leavePoses.add(leavePose);
                         }
-                        leavePoses.add(leavePose);
                     }
                 }
             }
