@@ -15,6 +15,13 @@ public class GoodEndingSoundEvents {
     public static final SoundEvent ENTITY_WOODPECKER_FLY = woodpecker("fly");
     private static SoundEvent woodpecker(String type) { return entity("woodpecker", type); }
 
+    public static final SoundEvent ENTITY_MARSH_IDLE = marsh("idle");
+    public static final SoundEvent ENTITY_MARSH_BREWING_IDLE = marsh("idle_brewing");
+    public static final SoundEvent ENTITY_MARSH_DEATH = marsh("death");
+    public static final SoundEvent ENTITY_MARSH_HURT = marsh("hurt");
+    public static final SoundEvent ENTITY_MARSH_BURP = marsh("burp");
+    private static SoundEvent marsh(String type) { return entity("marsh", type); }
+
     private static SoundEvent entity(String entity, String type) { return register("entity." + entity + "." + type); }
 
     private static SoundEvent register(String name) {

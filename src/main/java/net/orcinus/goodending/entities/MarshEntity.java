@@ -5,6 +5,7 @@ import net.minecraft.entity.ai.goal.EscapeDangerGoal;
 import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.MobEntity;
@@ -14,6 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.LingeringPotionItem;
+import net.minecraft.item.MilkBucketItem;
 import net.minecraft.item.PotionItem;
 import net.minecraft.item.ShieldItem;
 import net.minecraft.item.SwordItem;
@@ -23,17 +25,22 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.potion.Potions;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.orcinus.goodending.entities.ai.FollowMobWithEffectGoal;
+import net.orcinus.goodending.init.GoodEndingSoundEvents;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
 public class MarshEntity extends PathAwareEntity {
     private Potion potion = Potions.EMPTY;
-    private int dimensionalOpenTicks;
+    public int brewingTicks = 1;
+    public int burpingTicks;
     private boolean infinite;
 
     public MarshEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
@@ -52,25 +59,10 @@ public class MarshEntity extends PathAwareEntity {
     }
 
     @Override
-    public void tick() {
-        super.tick();
-        if (this.dimensionalOpenTicks < 7 && this.getStoredPotion() != Potions.EMPTY) {
-            this.dimensionalOpenTicks++;
-        }
-        if (this.dimensionalOpenTicks == 7 && this.getStoredPotion() != Potions.EMPTY) {
-            this.dimensionalOpenTicks = 1;
-        }
-    }
-
-    public int getDimensionalOpenTicks() {
-        return this.dimensionalOpenTicks;
-    }
-
-    @Override
     public void tickMovement() {
         super.tickMovement();
 
-        if (this.getStoredPotion() != Potions.EMPTY) {
+        if (this.getStoredPotion() != Potions.EMPTY && this.brewingTicks > 0) {
             Collection<StatusEffectInstance> collection = this.getStoredPotion().getEffects();
             int i = PotionUtil.getColor(collection);
 
@@ -85,33 +77,57 @@ public class MarshEntity extends PathAwareEntity {
     }
 
     @Override
+    public void tick() {
+        super.tick();
+        if (this.getStoredPotion() != Potions.EMPTY) this.brewingTicks--;
+        if (burpingTicks > 0) this.burpingTicks--;
+    }
+
+    @Override
     protected ActionResult interactMob(PlayerEntity player, Hand hand) {
         ItemStack itemStack = player.getStackInHand(hand);
         Item item = itemStack.getItem();
 
         if (item instanceof PotionItem && this.getStoredPotion() == Potions.EMPTY) {
-            if (item instanceof LingeringPotionItem) {
-                this.infinite = true;
+
+            if (!PotionUtil.getPotion(itemStack).hasInstantEffect()) {
+
+                if (item instanceof LingeringPotionItem) this.infinite = true;
+                if (!player.getAbilities().creativeMode) {
+                    itemStack.decrement(1);
+                    if (!(item instanceof ThrowablePotionItem)) this.dropItem(Items.GLASS_BOTTLE, 1);
+                }
+
+                this.setStoredPotion(PotionUtil.getPotion(itemStack));
+                this.brewingTicks = 20 * 10;
+
+                return ActionResult.SUCCESS;
             }
-            this.setStoredPotion(PotionUtil.getPotion(itemStack));
-            if (!player.getAbilities().creativeMode) {
-                itemStack.decrement(1);
-                if (!(item instanceof ThrowablePotionItem)) this.dropItem(Items.GLASS_BOTTLE, 1);
-            }
+        }
+
+        if (item instanceof MilkBucketItem && this.getStoredPotion() != Potions.EMPTY) {
+            player.setStackInHand(hand, Items.BUCKET.getDefaultStack());
+            this.setStoredPotion(Potions.EMPTY);
+            this.playSound(SoundEvents.ENTITY_GENERIC_DRINK, 1, 1);
+            this.brewingTicks = 1;
+
             return ActionResult.SUCCESS;
         }
 
-        if (this.getStoredPotion() != Potions.EMPTY && this.getValidItems(item) && itemStack.getNbt() != null && !itemStack.getNbt().contains("Potion")) {
+        if (this.getStoredPotion() != Potions.EMPTY && itemStack.getNbt() != null && !itemStack.getNbt().contains("Potion") && this.getValidItems(item) && this.brewingTicks < 0) {
+
             if (itemStack.getNbt() != null) {
                 if (this.infinite) {
                     itemStack.getNbt().putBoolean("Infinite", true);
                     this.infinite = false;
-                } else {
-                    itemStack.getNbt().putInt("Amount", 10);
-                }
+                } else itemStack.getNbt().putInt("Amount", 10);
+
                 PotionUtil.setPotion(itemStack, this.getStoredPotion());
-                this.dimensionalOpenTicks = 0;
+                this.burpingTicks = 15;
+                this.playSound(GoodEndingSoundEvents.ENTITY_MARSH_BURP, 1, 1);
                 this.setStoredPotion(Potions.EMPTY);
+                this.brewingTicks = 1;
+
                 return ActionResult.SUCCESS;
             }
         }
@@ -146,7 +162,6 @@ public class MarshEntity extends PathAwareEntity {
         this.setStoredPotion(PotionUtil.getPotion(nbt));
     }
 
-
     @Override
     public boolean canBreatheInWater() {
         return true;
@@ -160,4 +175,22 @@ public class MarshEntity extends PathAwareEntity {
         this.potion = potion;
     }
 
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        if (this.getStoredPotion() != Potions.EMPTY) return GoodEndingSoundEvents.ENTITY_MARSH_BREWING_IDLE;
+        else return GoodEndingSoundEvents.ENTITY_MARSH_IDLE;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return GoodEndingSoundEvents.ENTITY_MARSH_HURT;
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getDeathSound() {
+        return GoodEndingSoundEvents.ENTITY_MARSH_DEATH;
+    }
 }
