@@ -147,6 +147,7 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakFeatureConfig> {
                         }
                     }
                 }
+                world.setBlockState(leavePoses.get(world.getRandom().nextInt(leavePoses.size())), GoodEndingBlocks.DENSE_DARK_OAK_LEAVES.getDefaultState().with(LeavesBlock.DISTANCE, 1), 19);
                 return true;
             }
         }

@@ -72,10 +72,11 @@ public class GoodEndingItems {
     public static final Item POLLENFLAKE = register("pollenflake", new BlockItem(GoodEndingBlocks.POLLENFLAKE, new FabricItemSettings().group(TAB)));
 
     //Birch forest related
-    public static final Item DENSE_BIRCH_LEAVES = register("dense_birch_leaves", new BlockItem(GoodEndingBlocks.DENSE_BIRCH_LEAVES, new FabricItemSettings().group(TAB)));
     public static final Item BIRCH_MUSHROOM = register("birch_mushroom", new BlockItem(GoodEndingBlocks.BIRCH_MUSHROOM, new FabricItemSettings().group(TAB)));
 
     //General world enhancing blocks
+    public static final Item DENSE_BIRCH_LEAVES = register("dense_birch_leaves", new BlockItem(GoodEndingBlocks.DENSE_BIRCH_LEAVES, new FabricItemSettings().group(TAB)));
+    public static final Item DENSE_DARK_OAK_LEAVES = register("dense_dark_oak_leaves", new BlockItem(GoodEndingBlocks.DENSE_DARK_OAK_LEAVES, new FabricItemSettings().group(TAB)));
     public static final Item HANGING_OAK_LEAVES = register("hanging_oak_leaves", new BlockItem(GoodEndingBlocks.HANGING_OAK_LEAVES, new FabricItemSettings().group(TAB)));
     public static final Item HANGING_DARK_OAK_LEAVES = register("hanging_dark_oak_leaves", new BlockItem(GoodEndingBlocks.HANGING_DARK_OAK_LEAVES, new FabricItemSettings().group(TAB)));
 

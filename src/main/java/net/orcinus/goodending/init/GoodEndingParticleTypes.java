@@ -10,5 +10,6 @@ public class GoodEndingParticleTypes {
 
     public static final DefaultParticleType FIREFLY = Registry.register(Registry.PARTICLE_TYPE, new Identifier(GoodEnding.MODID, "firefly"), FabricParticleTypes.simple());
     public static final DefaultParticleType BIRCH_LEAF = Registry.register(Registry.PARTICLE_TYPE, new Identifier(GoodEnding.MODID, "birch_leaf"), FabricParticleTypes.simple());
+    public static final DefaultParticleType DARK_OAK_LEAF = Registry.register(Registry.PARTICLE_TYPE, new Identifier(GoodEnding.MODID, "dark_oak_leaf"), FabricParticleTypes.simple());
 
 }

@@ -17,7 +17,7 @@ import net.minecraft.client.render.entity.model.BoatEntityModel;
 import net.minecraft.item.BlockItem;
 import net.orcinus.goodending.client.models.MarshEntityModel;
 import net.orcinus.goodending.client.models.WoodPeckerEntityModel;
-import net.orcinus.goodending.client.particles.BirchLeafParticle;
+import net.orcinus.goodending.client.particles.LeafParticle;
 import net.orcinus.goodending.client.particles.FireflyParticle;
 import net.orcinus.goodending.client.renderer.FireflyRenderer;
 import net.orcinus.goodending.client.renderer.GoodEndingBoatEntityRenderer;
@@ -60,7 +60,8 @@ public class GoodEndingClient implements ClientModInitializer {
         );
 
         ParticleFactoryRegistry.getInstance().register(GoodEndingParticleTypes.FIREFLY, FireflyParticle.Factory::new);
-        ParticleFactoryRegistry.getInstance().register(GoodEndingParticleTypes.BIRCH_LEAF, BirchLeafParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(GoodEndingParticleTypes.BIRCH_LEAF, LeafParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(GoodEndingParticleTypes.DARK_OAK_LEAF, LeafParticle.Factory::new);
 
         EntityRendererRegistry.register(GoodEndingEntityTypes.BOAT, ctx -> new GoodEndingBoatEntityRenderer(ctx, false));
         EntityRendererRegistry.register(GoodEndingEntityTypes.CHEST_BOAT, ctx -> new GoodEndingBoatEntityRenderer(ctx, true));
@@ -87,12 +88,14 @@ public class GoodEndingClient implements ClientModInitializer {
                 GoodEndingBlocks.HANGING_OAK_LEAVES_PLANT,
                 GoodEndingBlocks.HANGING_DARK_OAK_LEAVES,
                 GoodEndingBlocks.HANGING_DARK_OAK_LEAVES_PLANT,
+                GoodEndingBlocks.DENSE_DARK_OAK_LEAVES,
                 Blocks.LILY_PAD,
                 GoodEndingBlocks.LARGE_LILY_PAD,
                 GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD,
                 GoodEndingBlocks.PINK_FLOWERING_LILY_PAD,
                 GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD
         );
+
         blockColor.register((state, world, pos, tintIndex) -> FoliageColors.getBirchColor(), GoodEndingBlocks.DENSE_BIRCH_LEAVES);
 
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
@@ -100,6 +103,7 @@ public class GoodEndingClient implements ClientModInitializer {
                     return blockColor.get(((BlockItem)stack.getItem()).getBlock()).getColor(blockState, null, null, tintIndex);
                 },
                 GoodEndingBlocks.DENSE_BIRCH_LEAVES,
+                GoodEndingBlocks.DENSE_DARK_OAK_LEAVES,
                 GoodEndingBlocks.LARGE_LILY_PAD,
                 Blocks.LILY_PAD,
                 GoodEndingBlocks.CYPRESS_LEAVES,

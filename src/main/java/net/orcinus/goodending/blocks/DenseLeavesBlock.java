@@ -2,15 +2,18 @@ package net.orcinus.goodending.blocks;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.LeavesBlock;
+import net.minecraft.particle.ParticleEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
-import net.orcinus.goodending.init.GoodEndingParticleTypes;
 
-public class DenseBirchLeavesBlock extends LeavesBlock {
-    public DenseBirchLeavesBlock(Settings settings) {
+public class DenseLeavesBlock extends LeavesBlock {
+    public ParticleEffect type;
+
+    public DenseLeavesBlock(Settings settings, ParticleEffect type) {
         super(settings);
+        this.type = type;
     }
 
     @Override
@@ -23,7 +26,7 @@ public class DenseBirchLeavesBlock extends LeavesBlock {
             mutable.set(i + MathHelper.nextInt(random, -6, 6), j - random.nextInt(6), k + MathHelper.nextInt(random, -6, 6));
             BlockState blockState = world.getBlockState(mutable);
             if (blockState.isFullCube(world, mutable)) continue;
-            world.addParticle(GoodEndingParticleTypes.BIRCH_LEAF, (double)mutable.getX() + random.nextDouble(), (double)mutable.getY() + random.nextDouble(), (double)mutable.getZ() + random.nextDouble(), 0.0, 0.0, 0.0);
+            world.addParticle(type, (double)mutable.getX() + random.nextDouble(), (double)mutable.getY() + random.nextDouble(), (double)mutable.getZ() + random.nextDouble(), 0.0, 0.0, 0.0);
         }
     }
 }

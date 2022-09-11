@@ -13,10 +13,10 @@ import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.util.math.BlockPos;
 
 @Environment(EnvType.CLIENT)
-public class BirchLeafParticle extends AnimatedParticle {
+public class LeafParticle extends AnimatedParticle {
     private final SpriteProvider spriteProvider;
 
-    BirchLeafParticle(ClientWorld world, double x, double y, double z, SpriteProvider spriteProvider) {
+    LeafParticle(ClientWorld world, double x, double y, double z, SpriteProvider spriteProvider) {
         super(world, x, y, z, spriteProvider, 0.25F);
         this.spriteProvider = spriteProvider;
         this.collidesWithWorld = true;
@@ -50,7 +50,7 @@ public class BirchLeafParticle extends AnimatedParticle {
 
         @Override
         public Particle createParticle(DefaultParticleType defaultParticleType, ClientWorld clientWorld, double d, double e, double f, double g, double h, double i) {
-            return new BirchLeafParticle(clientWorld, d, e, f, this.spriteProvider);
+            return new LeafParticle(clientWorld, d, e, f, this.spriteProvider);
         }
     }
 }
