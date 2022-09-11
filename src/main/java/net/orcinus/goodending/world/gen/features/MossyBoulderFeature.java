@@ -52,7 +52,7 @@ public class MossyBoulderFeature extends Feature<DefaultFeatureConfig> {
                     for (int j = -1; j < 1; j++) {
                         BlockState blockState = Blocks.MOSSY_COBBLESTONE.getDefaultState();
                         BlockPos placePos = pos.add(i, 0, j);
-                        if (world.testBlockState(placePos, state -> state.isAir() || state.isOf(Blocks.WATER) || state.getMaterial().isReplaceable()) && world.testBlockState(placePos.up(), state -> state.isAir() || state.isOf(Blocks.WATER) || state.getMaterial().isReplaceable())) {
+                        if ((world.getBlockState(placePos.up()).getMaterial().isReplaceable() || world.getBlockState(placePos.up()).isIn(BlockTags.SMALL_FLOWERS) || world.getBlockState(placePos.up()) == blockState) && (world.getBlockState(placePos).getMaterial().isReplaceable() || world.getBlockState(placePos) == blockState || world.getBlockState(placePos).isIn(BlockTags.SMALL_FLOWERS))) {
                             world.setBlockState(placePos, blockState, 2);
                             world.setBlockState(placePos.up(), blockState, 2);
                         }

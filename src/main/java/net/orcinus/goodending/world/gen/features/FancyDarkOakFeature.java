@@ -40,6 +40,7 @@ public class FancyDarkOakFeature extends Feature<DefaultFeatureConfig> {
         if (!world.getBlockState(blockPos.down()).isIn(BlockTags.DIRT)) {
             return false;
         } else {
+            blockPos = this.getInitialPos(world, blockPos, baseRadius);
             for (int x = -baseRadius; x <= baseRadius; x++) {
                 for (int z = -baseRadius; z <= baseRadius; z++) {
                     int height = 7;
@@ -60,32 +61,37 @@ public class FancyDarkOakFeature extends Feature<DefaultFeatureConfig> {
                                     BlockPos branchPos = blockPos.up(height - 1).offset(direction);
                                     final int length = UniformIntProvider.create(1, 3).get(random);
                                     for (int i = 0; i < length; i++) {
-                                        if (world.isAir(branchPos.offset(direction, i))) {
+                                        if (world.isAir(branchPos.offset(direction, i)) || world.getBlockState(branchPos.offset(direction, i)).getMaterial().isReplaceable()) {
                                             world.setBlockState(branchPos.offset(direction, i), Blocks.DARK_OAK_LOG.getDefaultState().with(PillarBlock.AXIS, direction.getAxis()), 2);
                                             for (int t = 0; t < length; t++) {
-                                                world.setBlockState(branchPos.offset(direction, length).up(t), Blocks.DARK_OAK_LOG.getDefaultState(), 2);
-                                                list.add(branchPos.offset(direction, length).up(length));
+                                                if (world.isAir(branchPos.offset(direction, length).up(t)) || world.getBlockState(branchPos.offset(direction, length).up(t)).getMaterial().isReplaceable()) {
+                                                    world.setBlockState(branchPos.offset(direction, length).up(t), Blocks.DARK_OAK_LOG.getDefaultState(), 2);
+                                                    list.add(branchPos.offset(direction, length).up(length));
+                                                }
                                             }
                                         }
                                     }
                                 }
                             }
-                            world.setBlockState(pos, Blocks.DARK_OAK_LOG.getDefaultState(), 19);
+                            if (world.isAir(pos) || world.getBlockState(pos).getMaterial().isReplaceable()) {
+                                world.setBlockState(pos, Blocks.DARK_OAK_LOG.getDefaultState(), 19);
+                            }
                         }
                     }
                 }
             }
             for (BlockPos pos : list) {
-                for (int x = -2; x <= 2; x++) {
-                    for (int z = -2; z <= 2; z++) {
+                int leaveRadius = 2;
+                for (int x = -leaveRadius; x <= leaveRadius; x++) {
+                    for (int z = -leaveRadius; z <= leaveRadius; z++) {
                         for (int y = -1; y <= 1; y++) {
                             BlockPos leavePos = new BlockPos(pos.getX() + x, pos.getY() + y, pos.getZ() + z);
-                            boolean flag = (x == -2 || x == 2) && (z == -2 || z == 2);
-                            boolean flag1 = y == 1 && !(x > -2 && x < 2 && z > -2 && z < 2);
+                            boolean flag = (x == -leaveRadius || x == leaveRadius) && (z == -leaveRadius || z == leaveRadius);
+                            boolean flag1 = y == 1 && !(x > -leaveRadius + random.nextInt(2) && x < leaveRadius - random.nextInt(2) && z > -leaveRadius + random.nextInt(2) && z < leaveRadius - random.nextInt(2));
                             boolean flag2 = y == -1 && !(x * x + z * z <= 4);
                             if (flag || flag1 || flag2) continue;
                             if (world.testBlockState(leavePos, DripstoneHelper::canGenerate)) {
-                                world.setBlockState(leavePos, Blocks.DARK_OAK_LEAVES.getDefaultState().with(LeavesBlock.DISTANCE, 1), 2);
+                                world.setBlockState(leavePos, Blocks.DARK_OAK_LEAVES.getDefaultState().with(LeavesBlock.DISTANCE, 1), leaveRadius);
                             }
                             if (random.nextFloat() < 0.15F) {
                                 leavePoses.add(leavePos);
@@ -118,4 +124,17 @@ public class FancyDarkOakFeature extends Feature<DefaultFeatureConfig> {
             return true;
         }
     }
+
+    public BlockPos getInitialPos(StructureWorldAccess world, BlockPos originPos, int baseRadius) {
+        for (int x = -baseRadius; x <= baseRadius; x++) {
+            for (int z = -baseRadius; z <= baseRadius; z++) {
+                BlockPos pos = new BlockPos(originPos.getX() + x, originPos.getY(), originPos.getZ() + z);
+                if (world.isAir(pos.down())) {
+                    return this.getInitialPos(world, originPos.down(), baseRadius);
+                }
+            }
+        }
+        return originPos;
+    }
+
 }
