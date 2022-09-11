@@ -2,7 +2,6 @@ package net.orcinus.goodending.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.Fertilizable;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.TallFlowerBlock;
@@ -28,8 +27,6 @@ import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Objects;
-
 @SuppressWarnings("deprecation")
 public class CattailBlock extends TallPlantBlock implements Waterloggable, Fertilizable {
     private static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
@@ -47,20 +44,21 @@ public class CattailBlock extends TallPlantBlock implements Waterloggable, Ferti
 
     @Override
     protected boolean canPlantOnTop(BlockState floor, BlockView world, BlockPos pos) {
-        return world.getBlockState(pos.up(3)).isAir() && super.canPlantOnTop(floor, world, pos) || floor.isOf(Blocks.MUD) && super.canPlantOnTop(floor, world, pos);
+        return world.getFluidState(pos.up()).isEqualAndStill(Fluids.WATER) && super.canPlantOnTop(floor, world, pos);
     }
 
     @Nullable
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        return super.getPlacementState(ctx) != null ? CattailBlock.withWaterloggedState(ctx.getWorld(), ctx.getBlockPos(), Objects.requireNonNull(super.getPlacementState(ctx))) : null;
+        BlockState blockState = super.getPlacementState(ctx);
+        return blockState != null ? CattailBlock.withWaterloggedState(ctx.getWorld(), ctx.getBlockPos(), blockState) : null;
     }
 
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
         if (!world.isClient()) {
             BlockPos blockPos = pos.up();
-            BlockState blockState = CattailBlock.withWaterloggedState(world, blockPos, this.getDefaultState().with(HALF, DoubleBlockHalf.UPPER));
+            BlockState blockState = TallPlantBlock.withWaterloggedState(world, blockPos, this.getDefaultState().with(HALF, DoubleBlockHalf.UPPER));
             world.setBlockState(blockPos, blockState, Block.NOTIFY_ALL);
         }
     }

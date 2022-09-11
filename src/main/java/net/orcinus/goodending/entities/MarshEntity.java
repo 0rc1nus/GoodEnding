@@ -110,7 +110,7 @@ public class MarshEntity extends PathAwareEntity {
                     itemStack.getNbt().putInt("Amount", 10);
                 }
                 PotionUtil.setPotion(itemStack, this.getStoredPotion());
-                System.out.println("AMOGUS");
+                this.dimensionalOpenTicks = 0;
                 this.setStoredPotion(Potions.EMPTY);
                 return ActionResult.SUCCESS;
             }

@@ -2,6 +2,7 @@
   "values": [
     "minecraft:flower_forest",
     "#minecraft:is_savanna",
-    "#minecraft:is_jungle"
+    "#minecraft:is_jungle",
+    "goodending:marshy_swamp"
   ]
 }

@@ -6,6 +6,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.PlaceableOnWaterItem;
 import net.minecraft.item.SignItem;
+import net.minecraft.item.TallBlockItem;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.orcinus.goodending.GoodEnding;
@@ -80,10 +81,8 @@ public class GoodEndingItems {
 
     //Swamp related
     public static final Item DUCKWEED = register("duckweed", new PlaceableOnWaterItem(GoodEndingBlocks.DUCKWEED, new Item.Settings().group(GoodEnding.TAB)));
-    public static final Item CATTAIL = register("cattail", new PlaceableOnWaterItem(GoodEndingBlocks.CATTAIL, new Item.Settings().group(GoodEnding.TAB)));
+    public static final Item CATTAIL = register("cattail", new TallBlockItem(GoodEndingBlocks.CATTAIL, new Item.Settings().group(GoodEnding.TAB)));
     public static final Item FIREFLY_BOTTLE = register("firefly_bottle", new FireflyBottleItem(new FabricItemSettings().maxCount(16).group(GoodEnding.TAB)));
-
-
 
     private static Item register(String id, Item item) {
         return Registry.register(Registry.ITEM, new Identifier(MODID, id), item);
