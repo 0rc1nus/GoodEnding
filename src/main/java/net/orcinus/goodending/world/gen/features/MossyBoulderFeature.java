@@ -54,6 +54,7 @@ public class MossyBoulderFeature extends Feature<DefaultFeatureConfig> {
                         BlockPos placePos = pos.add(i, 0, j);
                         if ((world.getBlockState(placePos.up()).getMaterial().isReplaceable() || world.getBlockState(placePos.up()).isIn(BlockTags.SMALL_FLOWERS) || world.getBlockState(placePos.up()) == blockState) && (world.getBlockState(placePos).getMaterial().isReplaceable() || world.getBlockState(placePos) == blockState || world.getBlockState(placePos).isIn(BlockTags.SMALL_FLOWERS))) {
                             world.setBlockState(placePos, blockState, 2);
+                            if (random.nextInt(3) != 0 && i == 0 || j == 0) continue;
                             world.setBlockState(placePos.up(), blockState, 2);
                         }
                     }

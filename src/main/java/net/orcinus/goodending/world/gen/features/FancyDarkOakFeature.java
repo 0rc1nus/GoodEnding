@@ -34,9 +34,16 @@ public class FancyDarkOakFeature extends Feature<DefaultFeatureConfig> {
         BlockPos blockPos = context.getOrigin();
         Random random = context.getRandom();
         StructureWorldAccess world = context.getWorld();
+        boolean huge = false;
+        int height = 7;
+        if (random.nextInt(6) == 0) {
+            height *= 2;
+            huge = true;
+        }
         int baseRadius = 2;
         List<BlockPos> list = Lists.newArrayList();
         List<BlockPos> leavePoses = Lists.newArrayList();
+        List<BlockPos> stemPoses = Lists.newArrayList();
         if (!world.getBlockState(blockPos.down()).isIn(BlockTags.DIRT)) {
             return false;
         } else {
@@ -47,17 +54,17 @@ public class FancyDarkOakFeature extends Feature<DefaultFeatureConfig> {
                 blockPos = initialPos;
                 for (int x = -baseRadius; x <= baseRadius; x++) {
                     for (int z = -baseRadius; z <= baseRadius; z++) {
-                        int height = 7;
                         for (int y = 0; y < height; y++) {
                             BlockPos pos = new BlockPos(blockPos.getX() + x, blockPos.getY() + y, blockPos.getZ() + z);
                             boolean flag = x == -baseRadius || x == baseRadius;
                             boolean flag1 = z == -baseRadius || z == baseRadius;
                             if (!(flag && flag1)) {
-                                boolean logFlag = ((x == 1 && flag1) || (x == -1 && flag1) || (z == 1 && flag) || (z == -1 && flag)) && y > 1;
+                                int corner = baseRadius - 1;
+                                boolean logFlag = ((x == corner && flag1) || (x == -corner && flag1) || (z == corner && flag) || (z == -corner && flag)) && y > 1;
                                 boolean logFlag1 = ((x == 0 && flag1) || (z == 0 && flag)) && y > 2;
-                                boolean logFlag2 = (x == 1 || x == -1) && (z == 1 || z == -1) && y > 3;
+                                boolean logFlag2 = (x == corner || x == -corner) && (z == corner || z == -corner) && y > 3;
                                 if (logFlag || logFlag1 || logFlag2) continue;
-                                if (y > 5 && ((x == -1 && z == 0) || (x == 1 && z == 0) || (x == 0 && z == -1) || (x == 0 && z == 1))) {
+                                if (y > 5 && ((x == -corner && z == 0) || (x == corner && z == 0) || (x == 0 && z == -corner) || (x == 0 && z == corner))) {
                                     for (Direction direction : Direction.Type.HORIZONTAL) {
                                         BlockPos branchPos = blockPos.up(height - 1).offset(direction);
                                         final int length = UniformIntProvider.create(1, 3).get(random);
@@ -66,7 +73,7 @@ public class FancyDarkOakFeature extends Feature<DefaultFeatureConfig> {
                                                 world.setBlockState(branchPos.offset(direction, i), Blocks.DARK_OAK_LOG.getDefaultState().with(PillarBlock.AXIS, direction.getAxis()), 2);
                                                 for (int t = 0; t < length; t++) {
                                                     if (world.isAir(branchPos.offset(direction, length).up(t)) || world.getBlockState(branchPos.offset(direction, length).up(t)).getMaterial().isReplaceable()) {
-                                                        world.setBlockState(branchPos.offset(direction, length).up(t), Blocks.DARK_OAK_LOG.getDefaultState(), 2);
+                                                        world.setBlockState(branchPos.offset(direction, length).up(t), Blocks.DARK_OAK_LOG.getDefaultState(), 19);
                                                         list.add(branchPos.offset(direction, length).up(length));
                                                     }
                                                 }
@@ -75,6 +82,23 @@ public class FancyDarkOakFeature extends Feature<DefaultFeatureConfig> {
                                     }
                                 }
                                 if (world.isAir(pos) || world.getBlockState(pos).getMaterial().isReplaceable()) {
+                                    world.setBlockState(pos, Blocks.DARK_OAK_LOG.getDefaultState(), 19);
+                                    if (huge && y > height - 2) {
+                                        stemPoses.add(pos);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                for (BlockPos stemPos : stemPoses) {
+                    for (int x = -2; x <= 2; x++) {
+                        for (int z = -2; z <= 2; z++) {
+                            int stemLength = MathHelper.nextInt(random, 1, 4);
+                            for (int y = 0; y <= stemLength; y++) {
+                                BlockPos pos = new BlockPos(stemPos.getX() + x, stemPos.getY() - y, stemPos.getZ() + z);
+                                if (!(x * x + z * z <= 4)) continue;
+                                if (world.isAir(pos)) {
                                     world.setBlockState(pos, Blocks.DARK_OAK_LOG.getDefaultState(), 19);
                                 }
                             }
@@ -92,7 +116,7 @@ public class FancyDarkOakFeature extends Feature<DefaultFeatureConfig> {
                                 boolean flag2 = y == -1 && !(x * x + z * z <= 4);
                                 if (flag || flag1 || flag2) continue;
                                 if (world.testBlockState(leavePos, DripstoneHelper::canGenerate)) {
-                                    world.setBlockState(leavePos, Blocks.DARK_OAK_LEAVES.getDefaultState().with(LeavesBlock.DISTANCE, 1), leaveRadius);
+                                    world.setBlockState(leavePos, Blocks.DARK_OAK_LEAVES.getDefaultState().with(LeavesBlock.DISTANCE, 1), 19);
                                 }
                                 if (random.nextFloat() < 0.15F) {
                                     leavePoses.add(leavePos);
@@ -103,21 +127,21 @@ public class FancyDarkOakFeature extends Feature<DefaultFeatureConfig> {
                 }
                 for (BlockPos pos : leavePoses) {
                     if (random.nextFloat() < 0.5F && world.testBlockState(pos.down(), AbstractBlock.AbstractBlockState::isAir) && world.testBlockState(pos, blockState -> blockState.isOf(Blocks.DARK_OAK_LEAVES))) {
-                        int height = MathHelper.nextInt(random, 1, 6);
-                        for (int i = 0; i <= height; i++) {
+                        int branchHeight = MathHelper.nextInt(random, 1, 6);
+                        for (int i = 0; i <= branchHeight; i++) {
                             BlockPos placePos = pos.down(i);
-                            if (i == height) {
+                            if (i == branchHeight) {
                                 if (world.testBlockState(placePos, AbstractBlock.AbstractBlockState::isAir)) {
-                                    world.setBlockState(placePos, GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.getDefaultState(), 2);
+                                    world.setBlockState(placePos, GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.getDefaultState(), 19);
                                     break;
                                 }
                             }
                             if (world.getBlockState(placePos.down()).isIn(BlockTags.LOGS)) {
-                                world.setBlockState(placePos, GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.getDefaultState(), 2);
+                                world.setBlockState(placePos, GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.getDefaultState(), 19);
                                 break;
                             }
                             if (world.testBlockState(placePos, AbstractBlock.AbstractBlockState::isAir)) {
-                                world.setBlockState(placePos, GoodEndingBlocks.HANGING_DARK_OAK_LEAVES_PLANT.getDefaultState(), 2);
+                                world.setBlockState(placePos, GoodEndingBlocks.HANGING_DARK_OAK_LEAVES_PLANT.getDefaultState(), 19);
                             }
                         }
                     }

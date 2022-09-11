@@ -92,7 +92,7 @@ public class GoodEnding implements ModInitializer {
 		}).build().forEach((placedFeatureRegistryEntry, feature) -> placedFeatureRegistryEntry.getKey().ifPresent(placedFeatureRegistryKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(GoodEndingBiomes.MARSHY_SWAMP_KEY), feature, placedFeatureRegistryKey)));
 
 		Util.make(ImmutableMap.<RegistryEntry<PlacedFeature>, GenerationStep.Feature>builder(), map -> {
-			map.put(GoodEndingWorldGen.FANCY_DARK_OAK_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
+			map.put(GoodEndingWorldGen.OAK_HAMMOCK_TREES_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
 			map.put(GoodEndingWorldGen.OAK_HAMMOCK_PATCH_TALL_GRASS_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
 			map.put(GoodEndingWorldGen.PATCH_FERN_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
 			map.put(GoodEndingWorldGen.PATCH_LARGE_FERN_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
