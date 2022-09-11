@@ -103,8 +103,8 @@ public class MarshEntityModel<T extends MarshEntity> extends SinglePartEntityMod
     public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
         float limb = clamp(limbDistance, -0.45F, 0.45F);
         float tilt = Math.min(limbDistance / 0.3f, 1.0f);
-        float speed = 1f;
-        float degree = 1.0f;
+        float speed = 0.75f;
+        float degree = 0.5f;
 
         leftFin.yaw = -tilt * 0.65F;
         rightFin.yaw = tilt * 0.65F;

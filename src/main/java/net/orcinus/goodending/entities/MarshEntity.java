@@ -2,6 +2,7 @@ package net.orcinus.goodending.entities;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.EscapeDangerGoal;
+import net.minecraft.entity.ai.goal.LookAroundGoal;
 import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -48,7 +49,7 @@ public class MarshEntity extends PathAwareEntity {
     }
 
     public static DefaultAttributeContainer.Builder createMarshAttributes() {
-        return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 16.0).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25);
+        return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 16.0).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.2);
     }
 
     @Override
@@ -56,6 +57,7 @@ public class MarshEntity extends PathAwareEntity {
         this.goalSelector.add(1, new EscapeDangerGoal(this, 1.25f));
         this.goalSelector.add(2, new FollowMobWithEffectGoal(this));
         this.goalSelector.add(3, new WanderAroundFarGoal(this, 1.0f));
+        this.goalSelector.add(3, new LookAroundGoal(this));
     }
 
     @Override
@@ -99,14 +101,14 @@ public class MarshEntity extends PathAwareEntity {
                 }
 
                 this.setStoredPotion(PotionUtil.getPotion(itemStack));
-                this.brewingTicks = 20 * 10;
+                this.brewingTicks = 20 * 90 + random.nextInt(20 * 60);
 
                 return ActionResult.SUCCESS;
             }
         }
 
         if (item instanceof MilkBucketItem && this.getStoredPotion() != Potions.EMPTY) {
-            player.setStackInHand(hand, Items.BUCKET.getDefaultStack());
+            if (!player.getAbilities().creativeMode) player.setStackInHand(hand, Items.BUCKET.getDefaultStack());
             this.setStoredPotion(Potions.EMPTY);
             this.playSound(SoundEvents.ENTITY_GENERIC_DRINK, 1, 1);
             this.brewingTicks = 1;
@@ -120,7 +122,7 @@ public class MarshEntity extends PathAwareEntity {
                 if (this.infinite) {
                     itemStack.getNbt().putBoolean("Infinite", true);
                     this.infinite = false;
-                } else itemStack.getNbt().putInt("Amount", 10);
+                } else itemStack.getNbt().putInt("Amount", 20);
 
                 PotionUtil.setPotion(itemStack, this.getStoredPotion());
                 this.burpingTicks = 15;

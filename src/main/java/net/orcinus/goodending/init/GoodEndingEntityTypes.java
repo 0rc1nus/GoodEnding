@@ -40,7 +40,7 @@ public class GoodEndingEntityTypes {
                     .entityFactory(MarshEntity::new)
                     .defaultAttributes(MarshEntity::createMarshAttributes)
                     .spawnGroup(SpawnGroup.CREATURE)
-                    .dimensions(EntityDimensions.fixed(0.5F, 1.4F)),
+                    .dimensions(EntityDimensions.fixed(0.8F, 1F)),
             new int[]{ 3423006, 6979129 }
     );
 
