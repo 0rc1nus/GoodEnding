@@ -8,13 +8,11 @@ import net.minecraft.block.sapling.SaplingGenerator;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,11 +22,6 @@ public class CypressSaplingBlock extends SaplingBlock implements Waterloggable {
     public CypressSaplingBlock(SaplingGenerator generator, Settings settings) {
         super(generator, settings);
         this.setDefaultState(this.stateManager.getDefaultState().with(WATERLOGGED, false));
-    }
-
-    @Override
-    public void generate(ServerWorld world, BlockPos pos, BlockState state, Random random) {
-        super.generate(world, pos, state, random);
     }
 
     @Nullable

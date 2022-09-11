@@ -20,8 +20,6 @@ public class VanillaSurfaceRulesMixin {
 
     @Shadow @Final private static MaterialRules.MaterialRule COARSE_DIRT;
 
-    @Shadow @Final private static MaterialRules.MaterialRule DIRT;
-
     @Shadow @Final private static MaterialRules.MaterialRule PODZOL;
 
     @ModifyVariable(method = "createDefaultRule", at = @At("STORE"), ordinal = 8)
