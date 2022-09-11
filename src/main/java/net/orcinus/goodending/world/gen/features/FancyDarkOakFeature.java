@@ -20,17 +20,18 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.util.DripstoneHelper;
 import net.minecraft.world.gen.feature.util.FeatureContext;
 import net.orcinus.goodending.init.GoodEndingBlocks;
+import net.orcinus.goodending.world.gen.features.config.FancyDarkOakFeatureConfig;
 
 import java.util.List;
 
-public class FancyDarkOakFeature extends Feature<DefaultFeatureConfig> {
+public class FancyDarkOakFeature extends Feature<FancyDarkOakFeatureConfig> {
 
-    public FancyDarkOakFeature(Codec<DefaultFeatureConfig> configCodec) {
+    public FancyDarkOakFeature(Codec<FancyDarkOakFeatureConfig> configCodec) {
         super(configCodec);
     }
 
     @Override
-    public boolean generate(FeatureContext<DefaultFeatureConfig> context) {
+    public boolean generate(FeatureContext<FancyDarkOakFeatureConfig> context) {
         BlockPos blockPos = context.getOrigin();
         Random random = context.getRandom();
         StructureWorldAccess world = context.getWorld();
@@ -47,7 +48,7 @@ public class FancyDarkOakFeature extends Feature<DefaultFeatureConfig> {
         if (!world.getBlockState(blockPos.down()).isIn(BlockTags.DIRT)) {
             return false;
         } else {
-            BlockPos initialPos = this.getInitialPos(world, blockPos, baseRadius, 1);
+            BlockPos initialPos = this.getInitialPos(context.getConfig(), world, blockPos, baseRadius, 1);
             if (initialPos == null) {
                 return false;
             } else {
@@ -151,7 +152,10 @@ public class FancyDarkOakFeature extends Feature<DefaultFeatureConfig> {
         }
     }
 
-    public BlockPos getInitialPos(StructureWorldAccess world, BlockPos originPos, int baseRadius, int count) {
+    public BlockPos getInitialPos(FancyDarkOakFeatureConfig config, StructureWorldAccess world, BlockPos originPos, int baseRadius, int count) {
+        if (config.isPlanted()) {
+            return originPos;
+        }
         for (int x = -baseRadius; x <= baseRadius; x++) {
             for (int z = -baseRadius; z <= baseRadius; z++) {
                 BlockPos pos = new BlockPos(originPos.getX() + x, originPos.getY(), originPos.getZ() + z);
@@ -160,7 +164,7 @@ public class FancyDarkOakFeature extends Feature<DefaultFeatureConfig> {
                         return null;
                     }
                     count++;
-                    return this.getInitialPos(world, originPos.down(), baseRadius, count);
+                    return this.getInitialPos(config, world, originPos.down(), baseRadius, count);
                 }
             }
         }
