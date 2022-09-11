@@ -1,10 +1,7 @@
 package net.orcinus.goodending.world.gen.features;
 
-import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
-import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
-import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.minecraft.util.math.random.Random;
@@ -13,8 +10,6 @@ import net.minecraft.world.gen.feature.DefaultFeatureConfig;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.util.FeatureContext;
 import net.orcinus.goodending.init.GoodEndingBlocks;
-
-import java.util.List;
 
 public class DuckweedFeature extends Feature<DefaultFeatureConfig> {
 
