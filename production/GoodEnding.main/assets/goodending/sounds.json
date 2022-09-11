@@ -48,5 +48,48 @@
       "goodending:entity/woodpecker/death"
     ],
     "subtitle": "subtitles.goodending.entity.woodpecker.death"
+  },
+  "entity.marsh.idle": {
+    "sounds": [
+      "goodending:entity/marsh/idle1",
+      "goodending:entity/marsh/idle2",
+      "goodending:entity/marsh/idle3",
+      "goodending:entity/marsh/idle4",
+      "goodending:entity/marsh/idle5",
+      "goodending:entity/marsh/idle6"
+    ],
+    "subtitle": "subtitles.goodending.entity.marsh.idle"
+  },
+  "entity.marsh.death": {
+    "sounds": [
+      "goodending:entity/marsh/death1",
+      "goodending:entity/marsh/death2",
+      "goodending:entity/marsh/death3"
+    ],
+    "subtitle": "subtitles.goodending.entity.marsh.death"
+  },
+  "entity.marsh.hurt": {
+    "sounds": [
+      "goodending:entity/marsh/hurt1",
+      "goodending:entity/marsh/hurt2",
+      "goodending:entity/marsh/hurt3",
+      "goodending:entity/marsh/hurt4"
+    ],
+    "subtitle": "subtitles.goodending.entity.marsh.hurt"
+  },
+  "entity.marsh.idle_brewing": {
+    "sounds": [
+      "goodending:entity/marsh/idle_brewing1",
+      "goodending:entity/marsh/idle_brewing2",
+      "goodending:entity/marsh/idle_brewing3",
+      "goodending:entity/marsh/idle_brewing4"
+    ],
+    "subtitle": "subtitles.goodending.entity.marsh.idle_brewing"
+  },
+  "entity.marsh.burp": {
+    "sounds": [
+      "goodending:entity/marsh/burp"
+    ],
+    "subtitle": "subtitles.goodending.entity.marsh.burp"
   }
 }

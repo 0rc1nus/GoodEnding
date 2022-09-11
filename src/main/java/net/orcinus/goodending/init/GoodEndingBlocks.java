@@ -94,8 +94,8 @@ public class GoodEndingBlocks {
     public static final Block BIRCH_MUSHROOM = register("birch_mushroom", new BirchMushroomPlantBlock(AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM).noCollision().breakInstantly()));
 
     //General world enhancing blocks
-    public static final Block DENSE_BIRCH_LEAVES = register("dense_birch_leaves", new DenseLeavesBlock(AbstractBlock.Settings.copy(Blocks.BIRCH_LEAVES), GoodEndingParticleTypes.BIRCH_LEAF));
-    public static final Block DENSE_DARK_OAK_LEAVES = register("dense_dark_oak_leaves", new DenseLeavesBlock(AbstractBlock.Settings.copy(Blocks.DARK_OAK_LEAVES), GoodEndingParticleTypes.DARK_OAK_LEAF));
+    public static final Block DENSE_BIRCH_LEAVES = register("dense_birch_leaves", new DenseLeavesBlock(() -> GoodEndingParticleTypes.BIRCH_LEAF, AbstractBlock.Settings.copy(Blocks.BIRCH_LEAVES)));
+    public static final Block DENSE_DARK_OAK_LEAVES = register("dense_dark_oak_leaves", new DenseLeavesBlock(() -> GoodEndingParticleTypes.DARK_OAK_LEAF, AbstractBlock.Settings.copy(Blocks.DARK_OAK_LEAVES)));
     public static final Block HANGING_OAK_LEAVES_PLANT = register("hanging_oak_leaves_plant", new HangingOakLeavesPlantBlock(AbstractBlock.Settings.copy(Blocks.OAK_LEAVES).noCollision().breakInstantly().sounds(BlockSoundGroup.MOSS_CARPET)));
     public static final Block HANGING_OAK_LEAVES = register("hanging_oak_leaves", new HangingLeavesBlock(AbstractBlock.Settings.copy(Blocks.OAK_LEAVES).ticksRandomly().noCollision().breakInstantly().sounds(BlockSoundGroup.MOSS_CARPET), HANGING_OAK_LEAVES_PLANT));
     public static final Block HANGING_DARK_OAK_LEAVES_PLANT = register("hanging_dark_oak_leaves_plant", new HangingDarkOakLeavesPlantBlock(AbstractBlock.Settings.copy(Blocks.OAK_LEAVES).noCollision().breakInstantly().sounds(BlockSoundGroup.MOSS_CARPET)));

@@ -123,6 +123,9 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakFeatureConfig> {
                         }
                     }
                 }
+                if (!leavePoses.isEmpty()) {
+                    world.setBlockState(leavePoses.get(world.getRandom().nextInt(leavePoses.size())), GoodEndingBlocks.DENSE_DARK_OAK_LEAVES.getDefaultState().with(LeavesBlock.DISTANCE, 1), 19);
+                }
                 for (BlockPos pos : leavePoses) {
                     if (random.nextFloat() < 0.5F && world.testBlockState(pos.down(), AbstractBlock.AbstractBlockState::isAir) && world.testBlockState(pos, blockState -> blockState.isOf(Blocks.DARK_OAK_LEAVES))) {
                         int branchHeight = MathHelper.nextInt(random, 1, 6);
@@ -144,7 +147,6 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakFeatureConfig> {
                         }
                     }
                 }
-                world.setBlockState(leavePoses.get(world.getRandom().nextInt(leavePoses.size())), GoodEndingBlocks.DENSE_DARK_OAK_LEAVES.getDefaultState().with(LeavesBlock.DISTANCE, 1), 19);
                 return true;
             }
         }

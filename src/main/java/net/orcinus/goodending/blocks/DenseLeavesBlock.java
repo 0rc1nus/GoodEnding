@@ -8,10 +8,12 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
-public class DenseLeavesBlock extends LeavesBlock {
-    public ParticleEffect type;
+import java.util.function.Supplier;
 
-    public DenseLeavesBlock(Settings settings, ParticleEffect type) {
+public class DenseLeavesBlock extends LeavesBlock {
+    public Supplier<ParticleEffect> type;
+
+    public DenseLeavesBlock(Supplier<ParticleEffect> type, Settings settings) {
         super(settings);
         this.type = type;
     }
@@ -26,7 +28,7 @@ public class DenseLeavesBlock extends LeavesBlock {
             mutable.set(i + MathHelper.nextInt(random, -6, 6), j - random.nextInt(6), k + MathHelper.nextInt(random, -6, 6));
             BlockState blockState = world.getBlockState(mutable);
             if (blockState.isFullCube(world, mutable)) continue;
-            world.addParticle(type, (double)mutable.getX() + random.nextDouble(), (double)mutable.getY() + random.nextDouble(), (double)mutable.getZ() + random.nextDouble(), 0.0, 0.0, 0.0);
+            world.addParticle(this.type.get(), (double)mutable.getX() + random.nextDouble(), (double)mutable.getY() + random.nextDouble(), (double)mutable.getZ() + random.nextDouble(), 0.0, 0.0, 0.0);
         }
     }
 }

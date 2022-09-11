@@ -44,7 +44,7 @@ public class TallBirchTreeFeature extends Feature<TreeFeatureConfig> {
         List<BlockPos> decorationPoses = Lists.newArrayList();
         List<BlockPos> branchPoses = Lists.newArrayList();
         List<BlockPos> leavePoses = Lists.newArrayList();
-        if (!world.isAir(blockPos)) {
+        if (!(world.isAir(blockPos) || world.getBlockState(blockPos).isOf(Blocks.BIRCH_SAPLING))) {
             return false;
         }
         for (int i = 0; i <= height; i++) {
