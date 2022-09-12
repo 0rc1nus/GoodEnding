@@ -105,8 +105,7 @@ public class GoodEndingBlocks {
     //Swamp related
     public static final Block DUCKWEED = register("duckweed", new LilyPadBlock(AbstractBlock.Settings.of(Material.REPLACEABLE_PLANT).breakInstantly().sounds(BlockSoundGroup.MOSS_CARPET).noCollision().nonOpaque()));
     public static final Block CATTAIL = register("cattail", new CattailBlock(AbstractBlock.Settings.of(Material.PLANT).noCollision().breakInstantly().sounds(BlockSoundGroup.SMALL_DRIPLEAF).offsetType(AbstractBlock.OffsetType.XYZ)));
-
-    public static final Block FIREFLY_LANTERN = register("firefly_lantern", new FireflyLanternBlock(AbstractBlock.Settings.of(Material.METAL).requiresTool().strength(3.5F).sounds(BlockSoundGroup.LANTERN).luminance(state -> state.get(FireflyLanternBlock.OPEN) ? 15 : 8).nonOpaque()));
+    public static final Block FIREFLY_LANTERN = register("firefly_lantern", new FireflyLanternBlock(AbstractBlock.Settings.of(Material.METAL).requiresTool().strength(3.5F).sounds(BlockSoundGroup.LANTERN).luminance(state -> 4).nonOpaque()));
 
     private static Block register(String id, Block block) { return Registry.register(Registry.BLOCK, new Identifier(MODID, id), block); }
 }

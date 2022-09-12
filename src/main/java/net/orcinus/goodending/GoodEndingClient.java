@@ -47,6 +47,7 @@ public class GoodEndingClient implements ClientModInitializer {
                 GoodEndingBlocks.SPICY_WILDFLOWERS,
                 GoodEndingBlocks.BALMY_WILDFLOWERS,
                 GoodEndingBlocks.DUCKWEED,
+                GoodEndingBlocks.FIREFLY_LANTERN,
                 GoodEndingBlocks.HANGING_OAK_LEAVES,
                 GoodEndingBlocks.HANGING_OAK_LEAVES_PLANT,
                 GoodEndingBlocks.HANGING_DARK_OAK_LEAVES,

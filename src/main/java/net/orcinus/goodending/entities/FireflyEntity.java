@@ -168,6 +168,10 @@ public class FireflyEntity extends PathAwareEntity implements Flutterer {
             double l = random.nextGaussian() * 0.025;
             for (int i = 0; i < count; i++) if (this.random.nextFloat() < 0.1F) world.addParticle(GoodEndingParticleTypes.FIREFLY, mutable.getX() + random.nextDouble(), this.getY() + random.nextDouble(), mutable.getZ() + random.nextDouble(), j, k, l);
         }
+
+        if (world.getTimeOfDay() < 12000 && world.getTimeOfDay() > 24000) {
+            this.discard();
+        }
     }
 
     public static DefaultAttributeContainer.Builder createFireflyAttributes() {
