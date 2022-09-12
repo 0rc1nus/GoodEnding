@@ -36,6 +36,9 @@ public class FallenLogFeature extends Feature<FallenLogConfig> {
         BlockPos.Mutable mut = blockPos.mutableCopy();
         List<BlockPos> decorationPoses = Lists.newArrayList();
         FallenLogConfig config = context.getConfig();
+        if (!world.getBlockState(blockPos.down()).isIn(BlockTags.DIRT)) {
+            return false;
+        }
         for (int i = 0; i <= logLength; i++) {
             boolean flag = world.getBlockState(mut).getMaterial().isReplaceable() || world.testBlockState(mut, state -> state.isAir() || state.isOf(Blocks.WATER) || state.isIn(BlockTags.FLOWERS));
             if (world.getBlockState(mut.down()).getMaterial().isReplaceable() || world.testBlockState(mut.down(), DripstoneHelper::canGenerate)) {
