@@ -42,12 +42,12 @@ public class FireflyLanternBlock extends LanternBlock {
 
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-        if (state.get(OPEN) && state.get(HANGING)) {
+        if (state.get(OPEN)) {
             double x = pos.getX() + 0.5D;
             double y = pos.getY();
             double z = pos.getZ() + 0.5D;
             double xVelocity = random.nextFloat() / 17.0F * (random.nextBoolean() ? -1 : 1);
-            double yVelocity = random.nextFloat() / 16.0F * -1;
+            double yVelocity = random.nextFloat() / 16.0F * (state.get(HANGING) ? -1 : 1);
             double zVelocity = random.nextFloat() / 17.0F * (random.nextBoolean() ? -1 : 1);
             world.addParticle(GoodEndingParticleTypes.FIREFLY, x, y, z, xVelocity, yVelocity, zVelocity);
         }
