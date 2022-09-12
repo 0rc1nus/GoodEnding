@@ -225,6 +225,11 @@ public class FireflyEntity extends PathAwareEntity implements Flutterer {
     }
 
     @Override
+    public boolean cannotDespawn() {
+        return true;
+    }
+
+    @Override
     public boolean canImmediatelyDespawn(double distanceSquared) {
         return !this.isFromBottle();
     }
