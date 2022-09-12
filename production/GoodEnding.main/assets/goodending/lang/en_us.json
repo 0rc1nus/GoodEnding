@@ -86,5 +86,10 @@
   "subtitles.goodending.entity.woodpecker.woody_idle": "Woodpecker laughs",
   "subtitles.goodending.entity.woodpecker.hurt": "Woodpecker hurt",
   "subtitles.goodending.entity.woodpecker.death": "Woodpecker dies",
-  "subtitles.goodending.entity.woodpecker.fly": "Woodpecker flops"
+  "subtitles.goodending.entity.woodpecker.fly": "Woodpecker flops",
+  "subtitles.goodending.entity.marsh.idle": "Marsh glops",
+  "subtitles.goodending.entity.marsh.idle_brewing": "Marsh glops",
+  "subtitles.goodending.entity.marsh.hurt": "Marsh hurt",
+  "subtitles.goodending.entity.marsh.burp": "Marsh dies",
+  "subtitles.goodending.entity.marsh.death": "Marsh burps"
 }

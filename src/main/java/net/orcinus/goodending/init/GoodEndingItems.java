@@ -106,6 +106,7 @@ public class GoodEndingItems {
         CompostingChanceRegistry.INSTANCE.add(GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD, 0.65F);
         CompostingChanceRegistry.INSTANCE.add(GoodEndingBlocks.LARGE_LILY_PAD, 0.65F);
         CompostingChanceRegistry.INSTANCE.add(GoodEndingBlocks.DENSE_BIRCH_LEAVES, 0.3F);
+        CompostingChanceRegistry.INSTANCE.add(GoodEndingBlocks.DENSE_DARK_OAK_LEAVES, 0.3F);
         CompostingChanceRegistry.INSTANCE.add(GoodEndingBlocks.HANGING_OAK_LEAVES, 0.3F);
         CompostingChanceRegistry.INSTANCE.add(GoodEndingBlocks.HANGING_DARK_OAK_LEAVES, 0.65F);
         CompostingChanceRegistry.INSTANCE.add(GoodEndingBlocks.POLLENFLAKE, 0.65F);
