@@ -81,8 +81,12 @@ public class MarshEntity extends PathAwareEntity {
     @Override
     public void tick() {
         super.tick();
-        if (this.getStoredPotion() != Potions.EMPTY) this.brewingTicks--;
-        if (burpingTicks > 0) this.burpingTicks--;
+        if (this.getStoredPotion() != Potions.EMPTY) {
+            this.brewingTicks--;
+        }
+        if (burpingTicks > 0) {
+            this.burpingTicks--;
+        }
     }
 
     @Override
@@ -94,10 +98,14 @@ public class MarshEntity extends PathAwareEntity {
 
             if (!PotionUtil.getPotion(itemStack).hasInstantEffect()) {
 
-                if (item instanceof LingeringPotionItem) this.infinite = true;
+                if (item instanceof LingeringPotionItem) {
+                    this.infinite = true;
+                }
                 if (!player.getAbilities().creativeMode) {
                     itemStack.decrement(1);
-                    if (!(item instanceof ThrowablePotionItem)) this.dropItem(Items.GLASS_BOTTLE, 1);
+                    if (!(item instanceof ThrowablePotionItem)) {
+                        this.dropItem(Items.GLASS_BOTTLE, 1);
+                    }
                 }
 
                 this.setStoredPotion(PotionUtil.getPotion(itemStack));
@@ -108,7 +116,9 @@ public class MarshEntity extends PathAwareEntity {
         }
 
         if (item instanceof MilkBucketItem && this.getStoredPotion() != Potions.EMPTY) {
-            if (!player.getAbilities().creativeMode) player.setStackInHand(hand, Items.BUCKET.getDefaultStack());
+            if (!player.getAbilities().creativeMode) {
+                player.setStackInHand(hand, Items.BUCKET.getDefaultStack());
+            }
             this.setStoredPotion(Potions.EMPTY);
             this.playSound(SoundEvents.ENTITY_GENERIC_DRINK, 1, 1);
             this.brewingTicks = 1;
@@ -122,7 +132,9 @@ public class MarshEntity extends PathAwareEntity {
                 if (this.infinite) {
                     itemStack.getNbt().putBoolean("Infinite", true);
                     this.infinite = false;
-                } else itemStack.getNbt().putInt("Amount", 20);
+                } else {
+                    itemStack.getNbt().putInt("Amount", 20);
+                }
 
                 PotionUtil.setPotion(itemStack, this.getStoredPotion());
                 this.burpingTicks = 15;
