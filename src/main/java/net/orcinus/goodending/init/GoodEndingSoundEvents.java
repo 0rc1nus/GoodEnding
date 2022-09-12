@@ -22,10 +22,34 @@ public class GoodEndingSoundEvents {
     public static final SoundEvent ENTITY_MARSH_BURP = marsh("burp");
     private static SoundEvent marsh(String type) { return entity("marsh", type); }
 
-    private static SoundEvent entity(String entity, String type) { return register("entity." + entity + "." + type); }
+    public static final SoundEvent ENTITY_FIREFLY_SWARM_IDLE = fireflySwarm("idle");
+    private static SoundEvent fireflySwarm(String type) { return entity("firefly_swarm", type); }
 
-    private static SoundEvent register(String name) {
-        Identifier identifier = new Identifier(GoodEnding.MODID, name);
+    public static final SoundEvent ITEM_FIREFLY_BOTTLE_FILL = fireflyBottle("fill");
+    public static final SoundEvent ITEM_FIREFLY_BOTTLE_EMPTY = fireflyBottle("empty");
+    private static SoundEvent fireflyBottle(String type) { return item("firefly_bottle", type); }
+
+    public static final SoundEvent BLOCK_DENSE_LEAVES_BREAK = denseLeaves("break");
+    public static final SoundEvent BLOCK_DENSE_LEAVES_PLACE = denseLeaves("place");
+    public static final SoundEvent BLOCK_DENSE_LEAVES_FALL = denseLeaves("fall");
+    private static SoundEvent denseLeaves(String type) { return block("dense_leaves", type); }
+
+    public static final SoundEvent BLOCK_FIREFLY_LANTERN_BREAK = fireflyLantern("break");
+    private static SoundEvent fireflyLantern(String type) { return block("firefly_lantern", type); }
+
+    public static final SoundEvent BLOCK_HANGING_LEAVES_BREAK = hangingLeaves("break");
+    public static final SoundEvent BLOCK_HANGING_LEAVES_PLACE = hangingLeaves("place");
+    public static final SoundEvent BLOCK_HANGING_LEAVES_FALL = hangingLeaves("fall");
+    private static SoundEvent hangingLeaves(String type) { return block("hanging_leaves", type); }
+
+
+    private static SoundEvent entity(String entity, String type) { return register("entity." + entity + "." + type); }
+    private static SoundEvent item(String item, String type) { return register("item." + item + "." + type); }
+    private static SoundEvent block(String block, String type) { return register("block." + block + "." + type); }
+
+
+    private static SoundEvent register(String id) {
+        Identifier identifier = new Identifier(GoodEnding.MODID, id);
         return Registry.register(Registry.SOUND_EVENT, identifier, new SoundEvent(identifier));
     }
 }

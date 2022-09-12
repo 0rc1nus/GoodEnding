@@ -26,7 +26,6 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -41,6 +40,7 @@ import net.minecraft.world.event.GameEvent;
 import net.orcinus.goodending.entities.ai.FlyAroundGoal;
 import net.orcinus.goodending.init.GoodEndingItems;
 import net.orcinus.goodending.init.GoodEndingParticleTypes;
+import net.orcinus.goodending.init.GoodEndingSoundEvents;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
@@ -136,7 +136,7 @@ public class FireflyEntity extends PathAwareEntity implements Flutterer {
     protected ActionResult interactMob(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getStackInHand(hand);
         if (stack.isOf(Items.GLASS_BOTTLE) && this.getCount() > 0) {
-            this.world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0f, 1.0f);
+            this.world.playSound(player, player.getX(), player.getY(), player.getZ(), GoodEndingSoundEvents.ITEM_FIREFLY_BOTTLE_FILL, SoundCategory.NEUTRAL, 2.0f, 1.0f);
             if (!this.world.isClient()) {
                 this.setCount(this.getCount() - 1);
                 this.emitGameEvent(GameEvent.ENTITY_INTERACT);
@@ -152,7 +152,7 @@ public class FireflyEntity extends PathAwareEntity implements Flutterer {
                 this.setFromBottle(true);
                 player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, new ItemStack(Items.GLASS_BOTTLE)));
             }
-            this.world.playSound(null, this.getBlockPos(), SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            this.world.playSound(null, this.getBlockPos(), GoodEndingSoundEvents.ITEM_FIREFLY_BOTTLE_EMPTY, SoundCategory.NEUTRAL, 2.0F, 1.0F);
             return ActionResult.SUCCESS;
         }
 
@@ -237,7 +237,13 @@ public class FireflyEntity extends PathAwareEntity implements Flutterer {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return null;
+        if (world.getTimeOfDay() < 12000 && world.getTimeOfDay() > 0) return null;
+        return GoodEndingSoundEvents.ENTITY_FIREFLY_SWARM_IDLE;
+    }
+
+    @Override
+    public int getMinAmbientSoundDelay() {
+        return 200;
     }
 
     @Override

@@ -95,17 +95,17 @@ public class GoodEndingBlocks {
     public static final Block BIRCH_MUSHROOM = register("birch_mushroom", new BirchMushroomPlantBlock(AbstractBlock.Settings.copy(Blocks.BROWN_MUSHROOM).noCollision().breakInstantly()));
 
     //General world enhancing blocks
-    public static final Block DENSE_BIRCH_LEAVES = register("dense_birch_leaves", new DenseLeavesBlock(() -> GoodEndingParticleTypes.BIRCH_LEAF, AbstractBlock.Settings.copy(Blocks.BIRCH_LEAVES)));
-    public static final Block DENSE_DARK_OAK_LEAVES = register("dense_dark_oak_leaves", new DenseLeavesBlock(() -> GoodEndingParticleTypes.DARK_OAK_LEAF, AbstractBlock.Settings.copy(Blocks.DARK_OAK_LEAVES)));
-    public static final Block HANGING_OAK_LEAVES_PLANT = register("hanging_oak_leaves_plant", new HangingOakLeavesPlantBlock(AbstractBlock.Settings.copy(Blocks.OAK_LEAVES).noCollision().breakInstantly().sounds(BlockSoundGroup.MOSS_CARPET)));
-    public static final Block HANGING_OAK_LEAVES = register("hanging_oak_leaves", new HangingLeavesBlock(AbstractBlock.Settings.copy(Blocks.OAK_LEAVES).ticksRandomly().noCollision().breakInstantly().sounds(BlockSoundGroup.MOSS_CARPET), HANGING_OAK_LEAVES_PLANT));
-    public static final Block HANGING_DARK_OAK_LEAVES_PLANT = register("hanging_dark_oak_leaves_plant", new HangingDarkOakLeavesPlantBlock(AbstractBlock.Settings.copy(Blocks.OAK_LEAVES).noCollision().breakInstantly().sounds(BlockSoundGroup.MOSS_CARPET)));
-    public static final Block HANGING_DARK_OAK_LEAVES = register("hanging_dark_oak_leaves", new HangingLeavesBlock(AbstractBlock.Settings.copy(Blocks.OAK_LEAVES).ticksRandomly().noCollision().breakInstantly().sounds(BlockSoundGroup.MOSS_CARPET), HANGING_DARK_OAK_LEAVES_PLANT));
+    public static final Block DENSE_BIRCH_LEAVES = register("dense_birch_leaves", new DenseLeavesBlock(() -> GoodEndingParticleTypes.BIRCH_LEAF, AbstractBlock.Settings.copy(Blocks.BIRCH_LEAVES).sounds(GoodEndingBlockSoundGroups.DENSE_LEAVES)));
+    public static final Block DENSE_DARK_OAK_LEAVES = register("dense_dark_oak_leaves", new DenseLeavesBlock(() -> GoodEndingParticleTypes.DARK_OAK_LEAF, AbstractBlock.Settings.copy(Blocks.DARK_OAK_LEAVES).sounds(GoodEndingBlockSoundGroups.DENSE_LEAVES)));
+    public static final Block HANGING_OAK_LEAVES_PLANT = register("hanging_oak_leaves_plant", new HangingOakLeavesPlantBlock(AbstractBlock.Settings.copy(Blocks.OAK_LEAVES).noCollision().breakInstantly().sounds(GoodEndingBlockSoundGroups.HANGING_LEAVES)));
+    public static final Block HANGING_OAK_LEAVES = register("hanging_oak_leaves", new HangingLeavesBlock(AbstractBlock.Settings.copy(Blocks.OAK_LEAVES).ticksRandomly().noCollision().breakInstantly().sounds(GoodEndingBlockSoundGroups.HANGING_LEAVES), HANGING_OAK_LEAVES_PLANT));
+    public static final Block HANGING_DARK_OAK_LEAVES_PLANT = register("hanging_dark_oak_leaves_plant", new HangingDarkOakLeavesPlantBlock(AbstractBlock.Settings.copy(Blocks.OAK_LEAVES).noCollision().breakInstantly().sounds(GoodEndingBlockSoundGroups.HANGING_LEAVES)));
+    public static final Block HANGING_DARK_OAK_LEAVES = register("hanging_dark_oak_leaves", new HangingLeavesBlock(AbstractBlock.Settings.copy(Blocks.OAK_LEAVES).ticksRandomly().noCollision().breakInstantly().sounds(GoodEndingBlockSoundGroups.HANGING_LEAVES), HANGING_DARK_OAK_LEAVES_PLANT));
 
     //Swamp related
     public static final Block DUCKWEED = register("duckweed", new LilyPadBlock(AbstractBlock.Settings.of(Material.REPLACEABLE_PLANT).breakInstantly().sounds(BlockSoundGroup.MOSS_CARPET).noCollision().nonOpaque()));
     public static final Block CATTAIL = register("cattail", new CattailBlock(AbstractBlock.Settings.of(Material.PLANT).noCollision().breakInstantly().sounds(BlockSoundGroup.SMALL_DRIPLEAF).offsetType(AbstractBlock.OffsetType.XYZ)));
-    public static final Block FIREFLY_LANTERN = register("firefly_lantern", new FireflyLanternBlock(AbstractBlock.Settings.of(Material.METAL).requiresTool().strength(3.5F).sounds(BlockSoundGroup.LANTERN).luminance(state -> 4).nonOpaque()));
+    public static final Block FIREFLY_LANTERN = register("firefly_lantern", new FireflyLanternBlock(AbstractBlock.Settings.of(Material.METAL).requiresTool().strength(3.5F).sounds(GoodEndingBlockSoundGroups.FIREFLY_LANTERN).luminance(state -> 4).nonOpaque()));
 
     private static Block register(String id, Block block) { return Registry.register(Registry.BLOCK, new Identifier(MODID, id), block); }
 }
