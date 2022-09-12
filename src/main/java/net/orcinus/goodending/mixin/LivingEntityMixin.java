@@ -62,7 +62,7 @@ public class LivingEntityMixin {
                 if (this.activeItemStack.getNbt().getInt("Amount") > 0) {
                     nbt.putInt("Amount", nbt.getInt("Amount") - 1);
                 }
-                $this.addStatusEffect(new StatusEffectInstance(statusEffectInstance.getEffectType(), 1200, statusEffectInstance.getAmplifier(), statusEffectInstance.isAmbient(), statusEffectInstance.shouldShowParticles(), statusEffectInstance.shouldShowIcon()));
+                $this.addStatusEffect(new StatusEffectInstance(statusEffectInstance.getEffectType(), 200, statusEffectInstance.getAmplifier(), statusEffectInstance.isAmbient(), statusEffectInstance.shouldShowParticles(), statusEffectInstance.shouldShowIcon()));
             });
         }
     }
