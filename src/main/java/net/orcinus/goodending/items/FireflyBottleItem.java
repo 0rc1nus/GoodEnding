@@ -40,6 +40,7 @@ public class FireflyBottleItem extends Item {
             FireflyEntity fireflyEntity = GoodEndingEntityTypes.FIREFLY_SWARM.create(world);
             fireflyEntity.setPos(blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5);
             fireflyEntity.setCount(1);
+            fireflyEntity.setFromBottle(true);
             world.playSound(null, blockPos, SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.NEUTRAL, 1.0F, 1.0F);
             serverWorld.spawnEntityAndPassengers(fireflyEntity);
             world.emitGameEvent(context.getPlayer(), GameEvent.ENTITY_PLACE, blockPos);
