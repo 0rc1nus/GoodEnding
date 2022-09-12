@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "hanging=false,open=false": {
+      "model": "goodending:block/firefly_lantern"
+    },
+    "hanging=true,open=false": {
+      "model": "goodending:block/firefly_lantern_hanging"
+    },
+    "hanging=false,open=true": {
+      "model": "goodending:block/firefly_lantern_open"
+    },
+    "hanging=true,open=true": {
+      "model": "goodending:block/firefly_lantern_hanging_open"
+    }
+  }
+}

@@ -17,8 +17,8 @@ import net.minecraft.client.render.entity.model.BoatEntityModel;
 import net.minecraft.item.BlockItem;
 import net.orcinus.goodending.client.models.MarshEntityModel;
 import net.orcinus.goodending.client.models.WoodPeckerEntityModel;
-import net.orcinus.goodending.client.particles.LeafParticle;
 import net.orcinus.goodending.client.particles.FireflyParticle;
+import net.orcinus.goodending.client.particles.LeafParticle;
 import net.orcinus.goodending.client.renderer.FireflyRenderer;
 import net.orcinus.goodending.client.renderer.GoodEndingBoatEntityRenderer;
 import net.orcinus.goodending.client.renderer.MarshRenderer;
@@ -47,6 +47,7 @@ public class GoodEndingClient implements ClientModInitializer {
                 GoodEndingBlocks.SPICY_WILDFLOWERS,
                 GoodEndingBlocks.BALMY_WILDFLOWERS,
                 GoodEndingBlocks.DUCKWEED,
+                GoodEndingBlocks.FIREFLY_LANTERN,
                 GoodEndingBlocks.HANGING_OAK_LEAVES,
                 GoodEndingBlocks.HANGING_OAK_LEAVES_PLANT,
                 GoodEndingBlocks.HANGING_DARK_OAK_LEAVES,

@@ -26,7 +26,6 @@ import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -41,12 +40,14 @@ import net.minecraft.world.event.GameEvent;
 import net.orcinus.goodending.entities.ai.FlyAroundGoal;
 import net.orcinus.goodending.init.GoodEndingItems;
 import net.orcinus.goodending.init.GoodEndingParticleTypes;
+import net.orcinus.goodending.init.GoodEndingSoundEvents;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
 public class FireflyEntity extends PathAwareEntity implements Flutterer {
     private static final TrackedData<Integer> COUNT = DataTracker.registerData(FireflyEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<Boolean> FROM_BOTTLE = DataTracker.registerData(FireflyEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
     public FireflyEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
         super(entityType, world);
@@ -64,18 +65,29 @@ public class FireflyEntity extends PathAwareEntity implements Flutterer {
     protected void initDataTracker() {
         super.initDataTracker();
         this.dataTracker.startTracking(COUNT, 1);
+        this.dataTracker.startTracking(FROM_BOTTLE, false);
     }
 
     @Override
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
         nbt.putInt("Count", this.getCount());
+        nbt.putBoolean("FromBottle", this.isFromBottle());
     }
 
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
         this.setCount(nbt.getInt("Count"));
+        this.setFromBottle(nbt.getBoolean("FromBottle"));
+    }
+
+    public boolean isFromBottle() {
+        return this.dataTracker.get(FROM_BOTTLE);
+    }
+
+    public void setFromBottle(boolean fromBottle) {
+        this.dataTracker.set(FROM_BOTTLE, fromBottle);
     }
 
     public void setCount(int count) {
@@ -124,7 +136,7 @@ public class FireflyEntity extends PathAwareEntity implements Flutterer {
     protected ActionResult interactMob(PlayerEntity player, Hand hand) {
         ItemStack stack = player.getStackInHand(hand);
         if (stack.isOf(Items.GLASS_BOTTLE) && this.getCount() > 0) {
-            this.world.playSound(player, player.getX(), player.getY(), player.getZ(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.NEUTRAL, 1.0f, 1.0f);
+            this.world.playSound(player, player.getX(), player.getY(), player.getZ(), GoodEndingSoundEvents.ITEM_FIREFLY_BOTTLE_FILL, SoundCategory.NEUTRAL, 2.0f, 1.0f);
             if (!this.world.isClient()) {
                 this.setCount(this.getCount() - 1);
                 this.emitGameEvent(GameEvent.ENTITY_INTERACT);
@@ -137,9 +149,10 @@ public class FireflyEntity extends PathAwareEntity implements Flutterer {
             if (!this.world.isClient()) {
                 this.setCount(this.getCount() + 1);
                 this.emitGameEvent(GameEvent.ENTITY_INTERACT);
+                this.setFromBottle(true);
                 player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, new ItemStack(Items.GLASS_BOTTLE)));
             }
-            this.world.playSound(null, this.getBlockPos(), SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+            this.world.playSound(null, this.getBlockPos(), GoodEndingSoundEvents.ITEM_FIREFLY_BOTTLE_EMPTY, SoundCategory.NEUTRAL, 2.0F, 1.0F);
             return ActionResult.SUCCESS;
         }
 
@@ -157,16 +170,25 @@ public class FireflyEntity extends PathAwareEntity implements Flutterer {
     @Override
     public void tick() {
         super.tick();
+
+        int count = this.getCount();
+        BlockPos.Mutable mutable = new BlockPos.Mutable();
+        float width = 1 + (count - 1) * 0.5F;
+        Random random = this.getWorld().random;
+        double j = random.nextGaussian() * 0.025;
+        double k = random.nextGaussian() * 0.025;
+        double l = random.nextGaussian() * 0.025;
+
         if (this.isAlive()) {
-            int count = this.getCount();
-            BlockPos.Mutable mutable = new BlockPos.Mutable();
-            float width = 1 + (count - 1) * 0.5F;
-            mutable.set(this.getX() + MathHelper.nextBetween(random, -width, width), this.getBlockPos().getY(), this.getZ() + MathHelper.nextBetween(random, -width, width));
-            Random random = this.getWorld().random;
-            double j = random.nextGaussian() * 0.025;
-            double k = random.nextGaussian() * 0.025;
-            double l = random.nextGaussian() * 0.025;
-            for (int i = 0; i < count; i++) if (this.random.nextFloat() < 0.1F) world.addParticle(GoodEndingParticleTypes.FIREFLY, mutable.getX() + random.nextDouble(), this.getY() + random.nextDouble(), mutable.getZ() + random.nextDouble(), j, k, l);
+            if (world.getTimeOfDay() < 12000 && world.getTimeOfDay() > 0) {
+                mutable.set(this.getX() + MathHelper.nextBetween(random, -0.25f, 0.25f), this.getBlockPos().getY(), this.getZ() + MathHelper.nextBetween(random, -0.25f, 0.25f));
+                for (int i = 0; i < 0.5; i++) if (this.random.nextFloat() < 0.01F) world.addParticle(GoodEndingParticleTypes.FIREFLY, mutable.getX() + random.nextDouble(), this.getY() + random.nextDouble(), mutable.getZ() + random.nextDouble(), j, k, l);
+            }
+            else {
+                mutable.set(this.getX() + MathHelper.nextBetween(random, -width, width), this.getBlockPos().getY(), this.getZ() + MathHelper.nextBetween(random, -width, width));
+                for (int i = 0; i < count; i++) if (this.random.nextFloat() < 0.1F) world.addParticle(GoodEndingParticleTypes.FIREFLY, mutable.getX() + random.nextDouble(), this.getY() + random.nextDouble(), mutable.getZ() + random.nextDouble(), j, k, l);
+            }
+
         }
     }
 
@@ -187,18 +209,41 @@ public class FireflyEntity extends PathAwareEntity implements Flutterer {
     protected void tickCramming() {
     }
 
-    @Nullable
     @Override
-    protected SoundEvent getAmbientSound() {
-        return null;
+    public boolean canBeLeashedBy(PlayerEntity player) {
+        return false;
     }
 
     @Override
-    public boolean damage(DamageSource source, float amount) {
-        if (source.getAttacker() instanceof PlayerEntity) {
-            return false;
-        }
-        return super.damage(source, amount);
+    protected boolean canStartRiding(Entity entity) {
+        return false;
+    }
+
+    @Override
+    public boolean isAttackable() {
+        return false;
+    }
+
+    @Override
+    public boolean cannotDespawn() {
+        return true;
+    }
+
+    @Override
+    public boolean canImmediatelyDespawn(double distanceSquared) {
+        return !this.isFromBottle();
+    }
+
+    @Nullable
+    @Override
+    protected SoundEvent getAmbientSound() {
+        if (world.getTimeOfDay() < 12000 && world.getTimeOfDay() > 0) return null;
+        return GoodEndingSoundEvents.ENTITY_FIREFLY_SWARM_IDLE;
+    }
+
+    @Override
+    public int getMinAmbientSoundDelay() {
+        return 200;
     }
 
     @Override
