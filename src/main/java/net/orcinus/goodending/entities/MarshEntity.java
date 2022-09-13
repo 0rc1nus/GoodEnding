@@ -23,6 +23,7 @@ import net.minecraft.item.ShieldItem;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ThrowablePotionItem;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtil;
@@ -33,8 +34,8 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import net.orcinus.goodending.entities.ai.StrangerDangerGoal;
 import net.orcinus.goodending.entities.ai.FollowMobWithEffectGoal;
+import net.orcinus.goodending.entities.ai.StrangerDangerGoal;
 import net.orcinus.goodending.init.GoodEndingSoundEvents;
 import org.jetbrains.annotations.Nullable;
 
@@ -65,7 +66,7 @@ public class MarshEntity extends PathAwareEntity {
     }
 
     public boolean isTrusted() {
-        return trusted;
+        return this.trusted;
     }
 
     @Override
@@ -169,21 +170,20 @@ public class MarshEntity extends PathAwareEntity {
     @Override
     public void handleStatus(byte status) {
         if (status == EntityStatuses.ADD_SPLASH_PARTICLES) {
-            for (int i = 0; i < 5; ++i) {
-                double d = this.random.nextGaussian() * 0.02;
-                double e = this.random.nextGaussian() * 0.02;
-                double f = this.random.nextGaussian() * 0.02;
-                this.world.addParticle(ParticleTypes.SPLASH, this.getParticleX(1.0), this.getRandomBodyY() + 1.0, this.getParticleZ(1.0), d, e, f);
-            }
+            this.spawnParticles(5, ParticleTypes.SPLASH, 1.0);
         } else if (status == EntityStatuses.ADD_BREEDING_PARTICLES) {
-            for (int i = 0; i < 7; ++i) {
-                double d = this.random.nextGaussian() * 0.02;
-                double e = this.random.nextGaussian() * 0.02;
-                double f = this.random.nextGaussian() * 0.02;
-                this.world.addParticle(ParticleTypes.HEART, this.getParticleX(1.0), this.getRandomBodyY() + 0.5, this.getParticleZ(1.0), d, e, f);
-            }
+            this.spawnParticles(7, ParticleTypes.HEART, 0.5);
         } else {
             super.handleStatus(status);
+        }
+    }
+
+    private void spawnParticles(int x, DefaultParticleType splash, double x1) {
+        for (int i = 0; i < x; ++i) {
+            double d = this.random.nextGaussian() * 0.02;
+            double e = this.random.nextGaussian() * 0.02;
+            double f = this.random.nextGaussian() * 0.02;
+            this.world.addParticle(splash, this.getParticleX(1.0), this.getRandomBodyY() + x1, this.getParticleZ(1.0), d, e, f);
         }
     }
 

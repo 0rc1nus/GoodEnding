@@ -82,6 +82,7 @@ public class GoodEndingItems {
 
     //Swamp related
     public static final Item DUCKWEED = register("duckweed", new PlaceableOnWaterItem(GoodEndingBlocks.DUCKWEED, new Item.Settings().group(GoodEnding.TAB)));
+    public static final Item ALGAE = register("algae", new PlaceableOnWaterItem(GoodEndingBlocks.ALGAE, new Item.Settings().group(GoodEnding.TAB)));
     public static final Item CATTAIL = register("cattail", new TallBlockItem(GoodEndingBlocks.CATTAIL, new Item.Settings().group(GoodEnding.TAB)));
     public static final Item FIREFLY_BOTTLE = register("firefly_bottle", new FireflyBottleItem(new FabricItemSettings().maxCount(16).group(GoodEnding.TAB)));
     public static final Item FIREFLY_LANTERN = register("firefly_lantern", new BlockItem(GoodEndingBlocks.FIREFLY_LANTERN, new Item.Settings().group(TAB)));
