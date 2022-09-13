@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -15,6 +16,8 @@ import net.minecraft.client.color.world.FoliageColors;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.BoatEntityModel;
 import net.minecraft.item.BlockItem;
+import net.orcinus.goodending.client.gui.tooltip.PotionApplicationTooltipComponent;
+import net.orcinus.goodending.client.gui.tooltip.PotionApplicationTooltipData;
 import net.orcinus.goodending.client.models.MarshEntityModel;
 import net.orcinus.goodending.client.models.WoodPeckerEntityModel;
 import net.orcinus.goodending.client.particles.FireflyParticle;
@@ -35,6 +38,13 @@ public class GoodEndingClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        TooltipComponentCallback.EVENT.register(data -> {
+            if (data instanceof PotionApplicationTooltipData potionApplicationTooltipData) {
+                return new PotionApplicationTooltipComponent(potionApplicationTooltipData);
+            }
+            return null;
+        });
+
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(),
                 GoodEndingBlocks.ALGAE,
                 GoodEndingBlocks.BIRCH_MUSHROOM,
@@ -123,4 +133,5 @@ public class GoodEndingClient implements ClientModInitializer {
         );
 
     }
+
 }
