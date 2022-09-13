@@ -7,10 +7,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.PlaceableOnWaterItem;
 import net.minecraft.item.SignItem;
 import net.minecraft.item.TallBlockItem;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.orcinus.goodending.GoodEnding;
 import net.orcinus.goodending.entities.GoodEndingBoatEntity;
+import net.orcinus.goodending.items.AlgaeBucketItem;
 import net.orcinus.goodending.items.FireflyBottleItem;
 import net.orcinus.goodending.items.GoodEndingBoatItem;
 import net.orcinus.goodending.items.PlaceableUnderWaterItem;
@@ -82,7 +84,7 @@ public class GoodEndingItems {
 
     //Swamp related
     public static final Item DUCKWEED = register("duckweed", new PlaceableOnWaterItem(GoodEndingBlocks.DUCKWEED, new Item.Settings().group(GoodEnding.TAB)));
-    public static final Item ALGAE = register("algae", new PlaceableOnWaterItem(GoodEndingBlocks.ALGAE, new Item.Settings().group(GoodEnding.TAB)));
+    public static final Item ALGAE_BUCKET = register("algae_bucket", new AlgaeBucketItem(GoodEndingBlocks.ALGAE, new Item.Settings().group(GoodEnding.TAB).maxCount(1), SoundEvents.BLOCK_LILY_PAD_PLACE));
     public static final Item CATTAIL = register("cattail", new TallBlockItem(GoodEndingBlocks.CATTAIL, new Item.Settings().group(GoodEnding.TAB)));
     public static final Item FIREFLY_BOTTLE = register("firefly_bottle", new FireflyBottleItem(new FabricItemSettings().maxCount(16).group(GoodEnding.TAB)));
     public static final Item FIREFLY_LANTERN = register("firefly_lantern", new BlockItem(GoodEndingBlocks.FIREFLY_LANTERN, new Item.Settings().group(TAB)));

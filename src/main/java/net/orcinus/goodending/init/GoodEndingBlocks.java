@@ -25,6 +25,7 @@ import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
+import net.orcinus.goodending.blocks.AlgaeBlock;
 import net.orcinus.goodending.blocks.BirchMushroomPlantBlock;
 import net.orcinus.goodending.blocks.CattailBlock;
 import net.orcinus.goodending.blocks.CypressSaplingBlock;
@@ -104,7 +105,7 @@ public class GoodEndingBlocks {
 
     //Swamp related
     public static final Block DUCKWEED = register("duckweed", new LilyPadBlock(AbstractBlock.Settings.of(Material.REPLACEABLE_PLANT).breakInstantly().sounds(BlockSoundGroup.MOSS_CARPET).noCollision().nonOpaque()));
-    public static final Block ALGAE = register("algae", new LilyPadBlock(AbstractBlock.Settings.of(Material.REPLACEABLE_PLANT).breakInstantly().sounds(BlockSoundGroup.SLIME).noCollision().nonOpaque()));
+    public static final Block ALGAE = register("algae", new AlgaeBlock(AbstractBlock.Settings.of(Material.REPLACEABLE_PLANT).breakInstantly().sounds(BlockSoundGroup.SLIME).nonOpaque()));
     public static final Block CATTAIL = register("cattail", new CattailBlock(AbstractBlock.Settings.of(Material.PLANT).noCollision().breakInstantly().sounds(BlockSoundGroup.SMALL_DRIPLEAF).offsetType(AbstractBlock.OffsetType.XYZ)));
     public static final Block FIREFLY_LANTERN = register("firefly_lantern", new FireflyLanternBlock(AbstractBlock.Settings.of(Material.METAL).requiresTool().strength(3.5F).sounds(GoodEndingBlockSoundGroups.FIREFLY_LANTERN).luminance(state -> 4).nonOpaque()));
 
