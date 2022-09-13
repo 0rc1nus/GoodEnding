@@ -40,13 +40,15 @@ public class SaplingBlockMixin {
         if (state.isOf(Blocks.BIRCH_SAPLING)) {
             for (int x = -1; x <= 1; x++) {
                 for (int z = -1; z <= 1; z++) {
+                    if (x == 0 && z == 0) continue;
                     BlockPos blockPos = new BlockPos(pos.getX() + x, pos.getY(), pos.getZ() + z);
                     if (!world.getBlockState(blockPos).isOf(Blocks.TALL_GRASS)) {
                         break;
+                    } else {
+                        ci.cancel();
+                        TallBirchSaplingGenerator tallBirchSaplingGenerator = new TallBirchSaplingGenerator();
+                        tallBirchSaplingGenerator.generate(world, world.getChunkManager().getChunkGenerator(), pos, state, random);
                     }
-                    ci.cancel();
-                    TallBirchSaplingGenerator tallBirchSaplingGenerator = new TallBirchSaplingGenerator();
-                    tallBirchSaplingGenerator.generate(world, world.getChunkManager().getChunkGenerator(), pos, state, random);
                 }
             }
         }
