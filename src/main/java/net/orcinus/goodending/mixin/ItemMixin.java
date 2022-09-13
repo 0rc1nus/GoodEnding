@@ -56,7 +56,7 @@ public class ItemMixin  {
                     });
                 }
                 if (nbt.getInt("Amount") > 0) {
-                    tooltip.add(Text.translatable("item.goodending.inflict_count.status_effect").append(" ").append(Text.translatable("" + nbt.getInt("Amount"))).formatted(Formatting.GRAY));
+                    tooltip.add(Text.translatable("item.goodending.inflict_count.status_effect").append(" ").append(Text.translatable("potion.level." + nbt.getInt("Amount"))).formatted(Formatting.GRAY));
                 }
             }
         }
