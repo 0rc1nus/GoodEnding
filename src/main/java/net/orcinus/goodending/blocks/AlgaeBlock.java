@@ -9,10 +9,13 @@ import net.minecraft.block.FluidDrainable;
 import net.minecraft.block.PlantBlock;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.Waterloggable;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
@@ -51,7 +54,14 @@ public class AlgaeBlock extends PlantBlock implements Waterloggable, Fertilizabl
 
     @Override
     public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        if (context instanceof EntityShapeContext && !context.isDescending()) return VoxelShapes.empty();
+        if (context instanceof EntityShapeContext entityShapeContext) {
+            if (entityShapeContext.getEntity() != null && entityShapeContext.getEntity() instanceof LivingEntity livingEntity && livingEntity.getEquippedStack(EquipmentSlot.FEET).isOf(Items.LEATHER_BOOTS)) {
+                return super.getCollisionShape(state, world, pos, context);
+            }
+            if (!context.isDescending()) {
+                return VoxelShapes.empty();
+            }
+        }
         return super.getCollisionShape(state, world, pos, context);
     }
 

@@ -8,6 +8,9 @@ import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.MobEntity;
@@ -42,14 +45,20 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 public class MarshEntity extends PathAwareEntity {
+    private static final TrackedData<Boolean> TRUSTED = DataTracker.registerData(MarshEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
     private Potion potion = Potions.EMPTY;
     public int brewingTicks = 1;
     public int burpingTicks;
     private boolean infinite;
-    private boolean trusted;
 
     public MarshEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
         super(entityType, world);
+    }
+
+    @Override
+    protected void initDataTracker() {
+        super.initDataTracker();
+        this.dataTracker.startTracking(TRUSTED, false);
     }
 
     public static DefaultAttributeContainer.Builder createMarshAttributes() {
@@ -66,7 +75,11 @@ public class MarshEntity extends PathAwareEntity {
     }
 
     public boolean isTrusted() {
-        return this.trusted;
+        return this.dataTracker.get(TRUSTED);
+    }
+
+    public void setTrusted(boolean trusted) {
+        this.dataTracker.set(TRUSTED, trusted);
     }
 
     @Override
@@ -103,16 +116,16 @@ public class MarshEntity extends PathAwareEntity {
         ItemStack itemStack = player.getStackInHand(hand);
         Item item = itemStack.getItem();
 
-        if (item == Items.FERMENTED_SPIDER_EYE && !this.trusted) {
+        if (item == Items.FERMENTED_SPIDER_EYE && !this.isTrusted()) {
             if (!player.getAbilities().creativeMode) {
                 itemStack.decrement(1);
             }
-            this.trusted = true;
+            this.setTrusted(true);
             this.world.sendEntityStatus(this, EntityStatuses.ADD_BREEDING_PARTICLES);
             return ActionResult.success(world.isClient);
         }
 
-        if (item instanceof PotionItem && this.getStoredPotion() == Potions.EMPTY && this.trusted) {
+        if (item instanceof PotionItem && this.getStoredPotion() == Potions.EMPTY && this.isTrusted()) {
 
             if (!PotionUtil.getPotion(itemStack).hasInstantEffect()) {
 
@@ -133,7 +146,7 @@ public class MarshEntity extends PathAwareEntity {
             }
         }
 
-        if (item instanceof MilkBucketItem && this.getStoredPotion() != Potions.EMPTY && this.trusted) {
+        if (item instanceof MilkBucketItem && this.getStoredPotion() != Potions.EMPTY && this.isTrusted()) {
             if (!player.getAbilities().creativeMode) {
                 player.setStackInHand(hand, Items.BUCKET.getDefaultStack());
             }
@@ -204,14 +217,14 @@ public class MarshEntity extends PathAwareEntity {
         super.writeCustomDataToNbt(nbt);
         nbt.putString("Potion", Registry.POTION.getId(this.getStoredPotion()).toString());
         nbt.putBoolean("Infinite", this.infinite);
-        nbt.putBoolean("Trusted", this.trusted);
+        nbt.putBoolean("Trusted", this.isTrusted());
     }
 
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
         this.infinite = nbt.getBoolean("Infinite");
-        this.trusted = nbt.getBoolean("Trusted");
+        this.setTrusted(nbt.getBoolean("Trusted"));
         this.setStoredPotion(PotionUtil.getPotion(nbt));
     }
 
