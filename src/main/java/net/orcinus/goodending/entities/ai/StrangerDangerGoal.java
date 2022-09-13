@@ -5,10 +5,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.FleeEntityGoal;
 import net.orcinus.goodending.entities.MarshEntity;
 
-public class AvoidStrangerDangerGoal<T extends LivingEntity> extends FleeEntityGoal<T> {
+public class StrangerDangerGoal<T extends LivingEntity> extends FleeEntityGoal<T> {
     private final MarshEntity marshEntity;
 
-    public AvoidStrangerDangerGoal(MarshEntity mob, Class<T> fleeFromType) {
+    public StrangerDangerGoal(MarshEntity mob, Class<T> fleeFromType) {
         super(mob, fleeFromType, 6.0f, 1.2, 1.5);
         this.marshEntity = mob;
     }

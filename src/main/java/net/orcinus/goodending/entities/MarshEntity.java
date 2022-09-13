@@ -3,7 +3,6 @@ package net.orcinus.goodending.entities;
 import net.minecraft.entity.EntityStatuses;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.EscapeDangerGoal;
-import net.minecraft.entity.ai.goal.FleeEntityGoal;
 import net.minecraft.entity.ai.goal.LookAroundGoal;
 import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -13,7 +12,6 @@ import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -35,7 +33,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import net.orcinus.goodending.entities.ai.AvoidStrangerDangerGoal;
+import net.orcinus.goodending.entities.ai.StrangerDangerGoal;
 import net.orcinus.goodending.entities.ai.FollowMobWithEffectGoal;
 import net.orcinus.goodending.init.GoodEndingSoundEvents;
 import org.jetbrains.annotations.Nullable;
@@ -59,7 +57,7 @@ public class MarshEntity extends PathAwareEntity {
 
     @Override
     protected void initGoals() {
-        this.goalSelector.add(1, new AvoidStrangerDangerGoal<>(this, PlayerEntity.class));
+        this.goalSelector.add(1, new StrangerDangerGoal<>(this, PlayerEntity.class));
         this.goalSelector.add(1, new EscapeDangerGoal(this, 1.25f));
         this.goalSelector.add(2, new FollowMobWithEffectGoal(this));
         this.goalSelector.add(3, new WanderAroundFarGoal(this, 1.0f));
