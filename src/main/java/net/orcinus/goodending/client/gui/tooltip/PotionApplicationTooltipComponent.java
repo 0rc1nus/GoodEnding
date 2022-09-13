@@ -25,12 +25,12 @@ public class PotionApplicationTooltipComponent implements TooltipComponent {
 
     @Override
     public int getHeight() {
-        return 20;
+        return 15;
     }
 
     @Override
     public int getWidth(TextRenderer textRenderer) {
-        return 20;
+        return 15;
     }
 
     /**
@@ -46,8 +46,11 @@ public class PotionApplicationTooltipComponent implements TooltipComponent {
         for (StatusEffectInstance statusEffectInstance : this.data.getPotion().getEffects()) {
             StatusEffect statusEffect = statusEffectInstance.getEffectType();
             Sprite sprite = statusEffectSpriteManager.getSprite(statusEffect);
+
             RenderSystem.setShaderTexture(0, sprite.getAtlas().getId());
-            AbstractInventoryScreen.drawSprite(matrices, x, y - 1, z, 18, 18, sprite);
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            AbstractInventoryScreen.drawSprite(matrices, x, y - 1, z, 12, 12, sprite);
+
         }
     }
 }

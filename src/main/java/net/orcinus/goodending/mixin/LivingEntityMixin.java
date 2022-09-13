@@ -41,7 +41,7 @@ public class LivingEntityMixin {
         Entity entity = source.getSource();
         if (entity instanceof PlayerEntity player) {
             ItemStack stack = player.getStackInHand($this.getActiveHand());
-            if (stack.getNbt() != null && stack.getNbt().getInt("Amount") > 0 && stack.getNbt().contains("Potion") && !(stack.getItem() instanceof PotionItem)) {
+            if (stack.getNbt() != null && (stack.getNbt().contains("Infinite") || stack.getNbt().contains("Potion")) && !(stack.getItem() instanceof PotionItem)) {
                 PotionUtil.getPotion(stack.getNbt()).getEffects().stream().filter(statusEffectInstance -> statusEffectInstance.getEffectType().getCategory() == StatusEffectCategory.HARMFUL).toList().forEach(statusEffectInstance -> {
                     if (stack.getNbt().getInt("Amount") > 0) {
                         stack.getNbt().putInt("Amount", stack.getNbt().getInt("Amount") - 1);
@@ -56,7 +56,7 @@ public class LivingEntityMixin {
     private void GE$damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity $this = (LivingEntity) (Object) this;
         NbtCompound nbt = this.activeItemStack.getNbt();
-        if (nbt != null && nbt.getInt("Amount") > 0 && nbt.contains("Potion") && $this.isBlocking()) {
+        if (nbt != null && (nbt.getBoolean("Infinite") || nbt.getInt("Amount") > 0) && nbt.contains("Potion") && $this.isBlocking()) {
             Potion potion = PotionUtil.getPotion(this.activeItemStack);
             potion.getEffects().stream().filter(statusEffectInstance -> statusEffectInstance.getEffectType().getCategory() == StatusEffectCategory.BENEFICIAL).toList().forEach(statusEffectInstance -> {
                 if (this.activeItemStack.getNbt().getInt("Amount") > 0) {
