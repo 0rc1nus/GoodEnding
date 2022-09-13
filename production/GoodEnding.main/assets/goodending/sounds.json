@@ -91,5 +91,94 @@
       "goodending:entity/marsh/burp"
     ],
     "subtitle": "subtitles.goodending.entity.marsh.burp"
+  },
+  "entity.firefly_swarm.idle": {
+    "sounds": [
+      "goodending:entity/firefly_swarm/fly1",
+      "goodending:entity/firefly_swarm/fly2",
+      "goodending:entity/firefly_swarm/fly3",
+      "goodending:entity/firefly_swarm/fly4",
+      "goodending:entity/firefly_swarm/fly5",
+      "goodending:entity/firefly_swarm/fly6"
+    ],
+    "subtitle": "subtitles.goodending.entity.firefly_swarm.idle"
+  },
+  "item.firefly_bottle.fill": {
+    "sounds": [
+      "goodending:item/firefly_bottle/fill2",
+      "goodending:item/firefly_bottle/fill3"
+    ],
+    "subtitle": "subtitles.goodending.item.firefly_bottle.fill"
+  },
+  "item.firefly_bottle.empty": {
+    "sounds": [
+      {
+        "name": "goodending:item.firefly_bottle.fill",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.goodending.item.firefly_bottle.empty"
+  },
+  "block.dense_leaves.break": {
+    "sounds": [
+      "goodending:block/dense_leaves/heavy1",
+      "goodending:block/dense_leaves/heavy2",
+      "goodending:block/dense_leaves/heavy3",
+      "goodending:block/dense_leaves/heavy4"
+    ],
+    "subtitle": "subtitles.block.generic.break"
+  },
+  "block.dense_leaves.place": {
+    "sounds": [
+      {
+        "name": "goodending:block.dense_leaves.break",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.block.generic.place"
+  },
+  "block.dense_leaves.fall": {
+    "sounds": [
+      {
+        "name": "goodending:block.dense_leaves.break",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.block.generic.fall"
+  },
+  "block.hanging_leaves.break": {
+    "sounds": [
+      "goodending:block/hanging_leaves/heavy1",
+      "goodending:block/hanging_leaves/heavy2",
+      "goodending:block/hanging_leaves/heavy3",
+      "goodending:block/hanging_leaves/heavy4"
+    ],
+    "subtitle": "subtitles.block.generic.break"
+  },
+  "block.hanging_leaves.place": {
+    "sounds": [
+      {
+        "name": "goodending:block.hanging_leaves.break",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.block.generic.place"
+  },
+  "block.hanging_leaves.fall": {
+    "sounds": [
+      {
+        "name": "goodending:block.hanging_leaves.break",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.block.generic.fall"
+  },
+  "block.firefly_lantern.break": {
+    "sounds": [
+      "goodending:block/firefly_lantern/break1",
+      "goodending:block/firefly_lantern/break2",
+      "goodending:block/firefly_lantern/break3"
+    ],
+    "subtitle": "subtitles.block.generic.break"
   }
 }

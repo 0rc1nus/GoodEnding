@@ -1,7 +1,9 @@
 package net.orcinus.goodending.entities;
 
+import net.minecraft.entity.EntityStatuses;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.EscapeDangerGoal;
+import net.minecraft.entity.ai.goal.FleeEntityGoal;
 import net.minecraft.entity.ai.goal.LookAroundGoal;
 import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -11,6 +13,7 @@ import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -32,6 +35,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+import net.orcinus.goodending.entities.ai.AvoidStrangerDangerGoal;
 import net.orcinus.goodending.entities.ai.FollowMobWithEffectGoal;
 import net.orcinus.goodending.init.GoodEndingSoundEvents;
 import org.jetbrains.annotations.Nullable;
@@ -43,6 +47,7 @@ public class MarshEntity extends PathAwareEntity {
     public int brewingTicks = 1;
     public int burpingTicks;
     private boolean infinite;
+    private boolean trusted;
 
     public MarshEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
         super(entityType, world);
@@ -54,10 +59,15 @@ public class MarshEntity extends PathAwareEntity {
 
     @Override
     protected void initGoals() {
+        this.goalSelector.add(1, new AvoidStrangerDangerGoal<>(this, PlayerEntity.class));
         this.goalSelector.add(1, new EscapeDangerGoal(this, 1.25f));
         this.goalSelector.add(2, new FollowMobWithEffectGoal(this));
         this.goalSelector.add(3, new WanderAroundFarGoal(this, 1.0f));
         this.goalSelector.add(3, new LookAroundGoal(this));
+    }
+
+    public boolean isTrusted() {
+        return trusted;
     }
 
     @Override
@@ -94,7 +104,16 @@ public class MarshEntity extends PathAwareEntity {
         ItemStack itemStack = player.getStackInHand(hand);
         Item item = itemStack.getItem();
 
-        if (item instanceof PotionItem && this.getStoredPotion() == Potions.EMPTY) {
+        if (item == Items.FERMENTED_SPIDER_EYE && !this.trusted) {
+            if (!player.getAbilities().creativeMode) {
+                itemStack.decrement(1);
+            }
+            this.trusted = true;
+            this.world.sendEntityStatus(this, EntityStatuses.ADD_BREEDING_PARTICLES);
+            return ActionResult.success(world.isClient);
+        }
+
+        if (item instanceof PotionItem && this.getStoredPotion() == Potions.EMPTY && this.trusted) {
 
             if (!PotionUtil.getPotion(itemStack).hasInstantEffect()) {
 
@@ -115,7 +134,7 @@ public class MarshEntity extends PathAwareEntity {
             }
         }
 
-        if (item instanceof MilkBucketItem && this.getStoredPotion() != Potions.EMPTY) {
+        if (item instanceof MilkBucketItem && this.getStoredPotion() != Potions.EMPTY && this.trusted) {
             if (!player.getAbilities().creativeMode) {
                 player.setStackInHand(hand, Items.BUCKET.getDefaultStack());
             }
@@ -149,6 +168,26 @@ public class MarshEntity extends PathAwareEntity {
         return super.interactMob(player, hand);
     }
 
+    @Override
+    public void handleStatus(byte status) {
+        if (status == EntityStatuses.ADD_SPLASH_PARTICLES) {
+            for (int i = 0; i < 5; ++i) {
+                double d = this.random.nextGaussian() * 0.02;
+                double e = this.random.nextGaussian() * 0.02;
+                double f = this.random.nextGaussian() * 0.02;
+                this.world.addParticle(ParticleTypes.SPLASH, this.getParticleX(1.0), this.getRandomBodyY() + 1.0, this.getParticleZ(1.0), d, e, f);
+            }
+        } else if (status == EntityStatuses.ADD_BREEDING_PARTICLES) {
+            for (int i = 0; i < 7; ++i) {
+                double d = this.random.nextGaussian() * 0.02;
+                double e = this.random.nextGaussian() * 0.02;
+                double f = this.random.nextGaussian() * 0.02;
+                this.world.addParticle(ParticleTypes.HEART, this.getParticleX(1.0), this.getRandomBodyY() + 0.5, this.getParticleZ(1.0), d, e, f);
+            }
+        } else {
+            super.handleStatus(status);
+        }
+    }
 
     public boolean getValidItems(Item item) {
         for (StatusEffectInstance effectInstance : this.getStoredPotion().getEffects()) {
@@ -167,12 +206,14 @@ public class MarshEntity extends PathAwareEntity {
         super.writeCustomDataToNbt(nbt);
         nbt.putString("Potion", Registry.POTION.getId(this.getStoredPotion()).toString());
         nbt.putBoolean("Infinite", this.infinite);
+        nbt.putBoolean("Trusted", this.trusted);
     }
 
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
         this.infinite = nbt.getBoolean("Infinite");
+        this.trusted = nbt.getBoolean("Trusted");
         this.setStoredPotion(PotionUtil.getPotion(nbt));
     }
 
