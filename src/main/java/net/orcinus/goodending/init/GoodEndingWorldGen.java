@@ -54,6 +54,7 @@ import net.orcinus.goodending.world.gen.features.config.FallenLogConfig;
 import net.orcinus.goodending.world.gen.features.config.FancyDarkOakFeatureConfig;
 import net.orcinus.goodending.world.gen.features.config.HalfWaterloggedDecorationConfig;
 import net.orcinus.goodending.world.gen.features.config.MuddyOakFeatureConfig;
+import net.orcinus.goodending.world.gen.features.config.ShallowWaterConfig;
 import net.orcinus.goodending.world.gen.features.config.WaterTreeFeatureConfig;
 
 import java.util.List;
@@ -64,8 +65,11 @@ public class GoodEndingWorldGen {
     public static final RegistryEntry<ConfiguredFeature<DiskFeatureConfig, ?>> DISK_MUD = register("disk_mud", Feature.DISK, new DiskFeatureConfig(new PredicatedStateProvider(BlockStateProvider.of(Blocks.MUD), List.of(new PredicatedStateProvider.Rule(BlockPredicate.not(BlockPredicate.eitherOf(BlockPredicate.solid(Direction.UP.getVector()), BlockPredicate.matchingFluids(Direction.UP.getVector(), Fluids.WATER))), BlockStateProvider.of(Blocks.MUD)))), BlockPredicate.matchingBlocks(List.of(Blocks.GRASS_BLOCK, Blocks.DIRT)), UniformIntProvider.create(3, 5), 2));
     public static final RegistryEntry<PlacedFeature> DISK_MUD_PLACED = register("disk_mud", DISK_MUD, CountPlacementModifier.of(2), SquarePlacementModifier.of(), PlacedFeatures.OCEAN_FLOOR_WG_HEIGHTMAP, RandomOffsetPlacementModifier.vertically(ConstantIntProvider.create(-1)), BlockFilterPlacementModifier.of(BlockPredicate.matchingBlocks(Blocks.GRASS_BLOCK, Blocks.DIRT)), BiomePlacementModifier.of());
 
-    public static final RegistryEntry<ConfiguredFeature<DefaultFeatureConfig, ?>> SHALLOW_WATER_MUD = register("shallow_water_mud", GoodEndingFeatures.SHALLOW_WATER, new DefaultFeatureConfig());
+    public static final RegistryEntry<ConfiguredFeature<ShallowWaterConfig, ?>> SHALLOW_WATER_MUD = register("shallow_water_mud", GoodEndingFeatures.SHALLOW_WATER, new ShallowWaterConfig(BlockStateProvider.of(Blocks.MUD), true, false, 6, 0.25F));
     public static final RegistryEntry<PlacedFeature> SHALLOW_WATER_MUD_PLACED = register("shallow_water_mud", SHALLOW_WATER_MUD, CountPlacementModifier.of(120), SquarePlacementModifier.of(), PlacedFeatures.OCEAN_FLOOR_WG_HEIGHTMAP, BiomePlacementModifier.of());
+
+    public static final RegistryEntry<ConfiguredFeature<ShallowWaterConfig, ?>> PATCH_ALGAE = register("patch_algae", GoodEndingFeatures.SHALLOW_WATER, new ShallowWaterConfig(BlockStateProvider.of(GoodEndingBlocks.ALGAE), false, true, 3, 0.85F));
+    public static final RegistryEntry<PlacedFeature> PATCH_ALGAE_PLACED = register("patch_algae", PATCH_ALGAE, CountPlacementModifier.of(25), SquarePlacementModifier.of(), PlacedFeatures.OCEAN_FLOOR_WG_HEIGHTMAP, BiomePlacementModifier.of());
 
     public static final RegistryEntry<ConfiguredFeature<WaterTreeFeatureConfig, ?>> CYPRESS_TREE = register("cypress_tree", GoodEndingFeatures.CYPRESS_TREE, new WaterTreeFeatureConfig.WaterTreeFeatureBuilder(BlockStateProvider.of(Blocks.OAK_LOG), new DarkOakTrunkPlacer(6, 2, 1), BlockStateProvider.of(Blocks.OAK_LEAVES), new DarkOakFoliagePlacer(ConstantIntProvider.create(0), ConstantIntProvider.create(0)), new ThreeLayersFeatureSize(1, 1, 0, 1, 2, OptionalInt.empty()), false).build());
     public static final RegistryEntry<ConfiguredFeature<WaterTreeFeatureConfig, ?>> CYPRESS_TREE_PLANTED = register("cypress_tree_planted", GoodEndingFeatures.CYPRESS_TREE, new WaterTreeFeatureConfig.WaterTreeFeatureBuilder(BlockStateProvider.of(Blocks.OAK_LOG), new DarkOakTrunkPlacer(6, 2, 1), BlockStateProvider.of(Blocks.OAK_LEAVES), new DarkOakFoliagePlacer(ConstantIntProvider.create(0), ConstantIntProvider.create(0)), new ThreeLayersFeatureSize(1, 1, 0, 1, 2, OptionalInt.empty()), true).build());

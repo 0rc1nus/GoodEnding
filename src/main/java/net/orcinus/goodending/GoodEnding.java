@@ -56,6 +56,7 @@ public class GoodEnding implements ModInitializer {
 
 	//-7697642187085846839
 	//-5973 63 417692
+	//-5933 64 41867
 
 	//2634269655997717243
 	//-2121 72 -116
@@ -83,6 +84,7 @@ public class GoodEnding implements ModInitializer {
 		GoodEndingPotions.init();
 
 		Util.make(ImmutableMap.<RegistryEntry<PlacedFeature>, GenerationStep.Feature>builder(), map -> {
+			map.put(GoodEndingWorldGen.PATCH_ALGAE_PLACED, GenerationStep.Feature.UNDERGROUND_ORES);
 			map.put(GoodEndingWorldGen.BIG_LILY_PADS_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
 			map.put(GoodEndingWorldGen.PATCH_FLOWERING_WATERLILY_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
 			map.put(GoodEndingWorldGen.DISK_PODZOL_PLACED, GenerationStep.Feature.UNDERGROUND_ORES);
@@ -99,7 +101,6 @@ public class GoodEnding implements ModInitializer {
 		}).build().forEach((placedFeatureRegistryEntry, feature) -> placedFeatureRegistryEntry.getKey().ifPresent(placedFeatureRegistryKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY), feature, placedFeatureRegistryKey)));
 
 		Util.make(ImmutableMap.<RegistryEntry<PlacedFeature>, GenerationStep.Feature>builder(), map -> {
-//			map.put(GoodEndingWorldGen.DISK_MUD_PLACED, GenerationStep.Feature.UNDERGROUND_ORES);
 			map.put(GoodEndingWorldGen.SHALLOW_WATER_MUD_PLACED, GenerationStep.Feature.UNDERGROUND_ORES);
 			map.put(GoodEndingWorldGen.CATTAIL_PATCH_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
 			map.put(GoodEndingWorldGen.SWAMP_FALLEN_LOG_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
