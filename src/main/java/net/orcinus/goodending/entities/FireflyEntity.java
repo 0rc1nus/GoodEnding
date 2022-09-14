@@ -198,7 +198,7 @@ public class FireflyEntity extends PathAwareEntity implements Flutterer {
 
     @SuppressWarnings("unused")
     public static boolean canSpawn(EntityType<FireflyEntity> entity, ServerWorldAccess world, SpawnReason reason, BlockPos pos, Random random) {
-        return world.getLightLevel(pos) < UniformIntProvider.create(0, 7).get(random);
+        return world.getLightLevel(pos) < UniformIntProvider.create(0, 7).get(random) && pos.getY() > world.getSeaLevel();
     }
 
     @Override
