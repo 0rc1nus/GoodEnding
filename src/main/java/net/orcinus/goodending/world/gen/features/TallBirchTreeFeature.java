@@ -48,7 +48,7 @@ public class TallBirchTreeFeature extends Feature<TreeFeatureConfig> {
             return false;
         }
         for (int i = 0; i <= height; i++) {
-            if (world.testBlockState(blockPos.up(i), blockState -> blockState.isAir() || blockState.isOf(Blocks.WATER) || blockState.isIn(BlockTags.LEAVES))) {
+            if (world.testBlockState(blockPos.up(i), blockState -> blockState.isOf(Blocks.BIRCH_SAPLING) || blockState.isAir() || blockState.isOf(Blocks.WATER) || blockState.isIn(BlockTags.LEAVES))) {
                 world.setBlockState(blockPos.up(i), config.trunkProvider.getBlockState(random, blockPos.up(i)), 19);
                 decorationPoses.add(blockPos.up(i));
                 if (i >= height / 2) {

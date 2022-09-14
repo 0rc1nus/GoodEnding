@@ -30,15 +30,6 @@ public class CypressTreeFeature extends Feature<WaterTreeFeatureConfig> {
         super(configCodec);
     }
 
-    public BlockPos moveUpIfNecessary(StructureWorldAccess world, BlockPos blockPos) {
-        for (Direction direction : Direction.Type.HORIZONTAL) {
-            if (!world.getBlockState(blockPos.offset(direction)).isAir() && world.testBlockState(blockPos.up(), DripstoneHelper::canGenerate)) {
-                return this.moveUpIfNecessary(world, blockPos.up());
-            }
-        }
-        return blockPos;
-    }
-
     @Override
     public boolean generate(FeatureContext<WaterTreeFeatureConfig> context) {
         StructureWorldAccess world = context.getWorld();
@@ -116,7 +107,7 @@ public class CypressTreeFeature extends Feature<WaterTreeFeatureConfig> {
 
     public boolean branchingRoot(StructureWorldAccess world, BlockPos blockPos, Block block, Random random, Direction direction, int tries) {
         BlockPos belowPos = blockPos.down();
-        if (tries == 2) return repeatInnit(world, blockPos, block);
+        if (tries == 2) return this.repeatPlace(world, blockPos, block);
         BlockPos finalPos = random.nextInt(3) != 0 ? belowPos : blockPos.offset(direction);
         if ((world.getBlockState(finalPos).isIn(GoodEndingTags.CYPRESS_REPLACEABLES) || world.getBlockState(finalPos).getMaterial().isReplaceable() || world.getBlockState(finalPos).isOf(Blocks.WATER)) && tries < 2) {
             world.setBlockState(finalPos, block.getDefaultState(), 19);
@@ -127,11 +118,11 @@ public class CypressTreeFeature extends Feature<WaterTreeFeatureConfig> {
         }
     }
 
-    public boolean repeatInnit(StructureWorldAccess world, BlockPos blockPos, Block block) {
+    public boolean repeatPlace(StructureWorldAccess world, BlockPos blockPos, Block block) {
         BlockPos belowPos = blockPos.down();
         if (world.getBlockState(belowPos).isIn(GoodEndingTags.CYPRESS_REPLACEABLES) || world.getBlockState(belowPos).isOf(Blocks.WATER) || world.getBlockState(belowPos).getMaterial().isReplaceable()) {
             world.setBlockState(belowPos, block.getDefaultState(), 19);
-            return repeatInnit(world, belowPos, block);
+            return this.repeatPlace(world, belowPos, block);
         } else {
             return true;
         }

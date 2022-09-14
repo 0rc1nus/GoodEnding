@@ -8,6 +8,7 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.TreeFeatureConfig;
 import net.orcinus.goodending.GoodEnding;
+import net.orcinus.goodending.world.gen.features.AlgaePatchFeature;
 import net.orcinus.goodending.world.gen.features.CypressTreeFeature;
 import net.orcinus.goodending.world.gen.features.DuckweedFeature;
 import net.orcinus.goodending.world.gen.features.FallenLogFeature;
@@ -41,6 +42,7 @@ public class GoodEndingFeatures {
     public static final Feature<DefaultFeatureConfig> LARGE_LILY_PADS = registerFeature("large_lily_pad", new LargeLilyPadFeature(DefaultFeatureConfig.CODEC));
     public static final Feature<FancyDarkOakFeatureConfig> FANCY_DARK_OAK = registerFeature("fancy_dark_oak", new FancyDarkOakFeature(FancyDarkOakFeatureConfig.CODEC));
     public static final Feature<DefaultFeatureConfig> MOSSY_BOULDER = registerFeature("mossy_boulder", new MossyBoulderFeature(DefaultFeatureConfig.CODEC));
+    public static final Feature<DefaultFeatureConfig> ALGAE_PATCH = registerFeature("algae_patch", new AlgaePatchFeature(DefaultFeatureConfig.CODEC));
 
     public static <FC extends FeatureConfig, F extends Feature<FC>> F registerFeature(String name, F feature) {
         FEATURES.put(feature, name);

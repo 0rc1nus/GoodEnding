@@ -23,12 +23,10 @@ public class VanillaSurfaceRulesMixin {
 
     @Shadow @Final private static MaterialRules.MaterialRule PODZOL;
 
-    @Shadow @Final private static MaterialRules.MaterialRule GRASS_BLOCK;
-
     @Shadow @Final private static MaterialRules.MaterialRule MUD;
 
-    @ModifyVariable(method = "createDefaultRule", at = @At("STORE"), ordinal = 8)
-    private static MaterialRules.MaterialRule injected(MaterialRules.MaterialRule materialRule) {
+    @ModifyVariable(at = @At("STORE"), method = "createDefaultRule", ordinal = 8)
+    private static MaterialRules.MaterialRule GE$createDefaultRule(MaterialRules.MaterialRule materialRule) {
         MaterialRules.MaterialRule condition = MaterialRules.condition(MaterialRules.biome(GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY), MaterialRules.sequence(MaterialRules.condition(surfaceNoiseThreshold(1.75), COARSE_DIRT), MaterialRules.condition(surfaceNoiseThreshold(-0.75), PODZOL), COARSE_DIRT));
         MaterialRules.MaterialRule swamp = MaterialRules.sequence(MaterialRules.condition(MaterialRules.biome(GoodEndingBiomes.MARSHY_SWAMP_KEY), MaterialRules.condition(MaterialRules.aboveY(YOffset.fixed(62), 0), MaterialRules.condition(MaterialRules.not(MaterialRules.aboveY(YOffset.fixed(63), 0)), MaterialRules.condition(MaterialRules.noiseThreshold(NoiseParametersKeys.SURFACE_SWAMP, 0.0), WATER)))));
         return MaterialRules.sequence(MaterialRules.condition(MaterialRules.STONE_DEPTH_FLOOR, MaterialRules.condition(MaterialRules.biome(BiomeKeys.SWAMP), MaterialRules.sequence(MaterialRules.condition(MaterialRules.noiseThreshold(NoiseParametersKeys.SURFACE, -0.0575, 0.0575), MUD), MaterialRules.condition(MaterialRules.aboveY(YOffset.fixed(62), 0), MaterialRules.condition(MaterialRules.not(MaterialRules.aboveY(YOffset.fixed(63), 0)), MaterialRules.condition(MaterialRules.noiseThreshold(NoiseParametersKeys.SURFACE_SWAMP, 0.0), WATER)))))), MaterialRules.condition(MaterialRules.STONE_DEPTH_FLOOR, swamp), MaterialRules.condition(MaterialRules.STONE_DEPTH_FLOOR, condition), materialRule);

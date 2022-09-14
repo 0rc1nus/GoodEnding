@@ -43,7 +43,7 @@ public class ShallowWaterFeature extends Feature<ShallowWaterConfig> {
                 BlockPos pos = new BlockPos(blockPos.getX() + x, blockPos.getY(), blockPos.getZ() + z);
                 if (random.nextFloat() < config.chance && world.getFluidState(pos).isIn(FluidTags.WATER) && world.getBlockState(pos.up()).isAir()) {
                     if (config.water_surface) {
-                        pos = pos.up();
+                        pos = pos;
                     }
                     world.setBlockState(pos, config.state.getBlockState(random, pos), 2);
                     if (config.decorate && world.getBlockState(pos.up()).isAir() && random.nextInt(3) == 0) {
