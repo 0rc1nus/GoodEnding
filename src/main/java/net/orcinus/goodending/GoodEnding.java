@@ -54,19 +54,6 @@ public class GoodEnding implements ModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
 	public static final ItemGroup TAB = FabricItemGroupBuilder.create(new Identifier(MODID, MODID)).icon(() -> new ItemStack(GoodEndingItems.YELLOW_FLOWERING_LILY_PAD)).build();
 
-	//-7697642187085846839
-	//-5973 63 417692
-	//-5933 64 41867
-
-	//2634269655997717243
-	//-2121 72 -116
-
-	//1519091418833411884
-	//387 82 272
-
-	//-866439392768082315
-	//-2752 63 -3572
-
 	@SuppressWarnings("UnstableApiUsage")
 	@Override
 	public void onInitialize() {
@@ -149,7 +136,7 @@ public class GoodEnding implements ModInitializer {
 		BiomeModifications.addSpawn(BiomeSelectors.includeByKey(GoodEndingBiomes.MARSHY_SWAMP_KEY), SpawnGroup.AMBIENT, GoodEndingEntityTypes.FIREFLY_SWARM, 20, 8, 8);
 		BiomeModifications.addSpawn(BiomeSelectors.includeByKey(GoodEndingBiomes.MARSHY_SWAMP_KEY), SpawnGroup.CREATURE, EntityType.FROG, 10, 2, 5);
 
-		BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.OLD_GROWTH_BIRCH_FOREST), SpawnGroup.CREATURE, GoodEndingEntityTypes.WOODPECKER, 20, 1, 4);
+		BiomeModifications.addSpawn(BiomeSelectors.includeByKey(BiomeKeys.OLD_GROWTH_BIRCH_FOREST), SpawnGroup.CREATURE, GoodEndingEntityTypes.WOODPECKER, 40, 1, 4);
 
 		StrippableBlockRegistry.register(GoodEndingBlocks.MUDDY_OAK_LOG, GoodEndingBlocks.STRIPPED_MUDDY_OAK_LOG);
 		StrippableBlockRegistry.register(GoodEndingBlocks.MUDDY_OAK_WOOD, GoodEndingBlocks.STRIPPED_MUDDY_OAK_WOOD);

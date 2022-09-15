@@ -22,8 +22,8 @@
     "invokers.VanillaBiomeParametersInvoker"
   ],
   "client": [
-    "EntityModelLayersMixin",
-    "TexturedRenderLayersMixin"
+    "client.EntityModelLayersMixin",
+    "client.TexturedRenderLayersMixin"
   ],
   "injectors": {
     "defaultRequire": 1
