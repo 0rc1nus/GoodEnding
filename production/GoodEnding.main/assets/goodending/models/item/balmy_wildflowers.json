@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "goodending:block/balmy_wildflowers"
-  }
-}

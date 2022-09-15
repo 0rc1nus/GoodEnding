@@ -1,6 +1,0 @@
-{
-	"parent": "goodending:block/wildflower_template",
-	"textures": {
-		"wildflower": "goodending:block/pastel_wildflowers"
-	}
-}

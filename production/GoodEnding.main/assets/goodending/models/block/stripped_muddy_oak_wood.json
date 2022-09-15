@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_column",
-  "textures": {
-    "end": "goodending:block/stripped_muddy_oak_log",
-    "side": "goodending:block/stripped_muddy_oak_log"
-  }
-}
