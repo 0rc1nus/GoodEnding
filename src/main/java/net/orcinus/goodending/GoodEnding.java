@@ -176,6 +176,8 @@ public class GoodEnding implements ModInitializer {
 			return ActionResult.PASS;
 		});
 
+
+
 	}
 
 	private void addFeatureToBiome(RegistryEntry<PlacedFeature> placedFeatureRegistryEntry, RegistryKey<Biome> biomeRegistryKey) {
