@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "bark",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "goodending:stripped_cypress_log"
+    }
+  },
+  "result": {
+    "item": "goodending:stripped_cypress_wood",
+    "count": 3
+  }
+}

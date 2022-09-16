@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "goodending:block/muddy_oak_slab"
+    },
+    "type=double": {
+      "model": "goodending:block/muddy_oak_planks"
+    },
+    "type=top": {
+      "model": "goodending:block/muddy_oak_slab_top"
+    }
+  }
+}

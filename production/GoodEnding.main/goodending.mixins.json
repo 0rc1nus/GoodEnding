@@ -1,0 +1,31 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.orcinus.goodending.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "BlockEntityTypeMixin",
+    "ConfiguredFeaturesMixin",
+    "ItemMixin",
+    "LilyPadBlockMixin",
+    "LivingEntityMixin",
+    "SaplingBlockMixin",
+    "ShieldItemMixin",
+    "TreeConfiguredFeaturesMixin",
+    "TreeFeatureConfigMixin",
+    "VanillaBiomeParametersMixin",
+    "VanillaSurfaceRulesMixin",
+    "accessor.BoatEntityAccessor",
+    "invokers.BrewingRecipeRegistryInvoker",
+    "invokers.SignTypeInvoker",
+    "invokers.TreeDecoratorTypeInvoker",
+    "invokers.VanillaBiomeParametersInvoker"
+  ],
+  "client": [
+    "client.EntityModelLayersMixin",
+    "client.TexturedRenderLayersMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

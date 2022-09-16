@@ -1,0 +1,15 @@
+{
+  "structures": [
+    {
+      "structure": "goodending:revamped_swamp_hut",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 32,
+    "separation": 8,
+    "salt": 14357618,
+    "spread_type": "linear"
+  }
+}

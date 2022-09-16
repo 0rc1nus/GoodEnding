@@ -40,6 +40,9 @@ import net.orcinus.goodending.init.GoodEndingItems;
 import net.orcinus.goodending.init.GoodEndingPotions;
 import net.orcinus.goodending.init.GoodEndingSoundEvents;
 import net.orcinus.goodending.init.GoodEndingStatusEffects;
+import net.orcinus.goodending.init.GoodEndingStructurePieceTypes;
+import net.orcinus.goodending.init.GoodEndingStructureProcessors;
+import net.orcinus.goodending.init.GoodEndingStructureType;
 import net.orcinus.goodending.init.GoodEndingTags;
 import net.orcinus.goodending.init.GoodEndingTreeDecorators;
 import net.orcinus.goodending.init.GoodEndingWorldGen;
@@ -61,7 +64,10 @@ public class GoodEnding implements ModInitializer {
 		Reflection.initialize(
 			GoodEndingSoundEvents.class,
 			GoodEndingItems.class,
-			GoodEndingBlocks.class
+			GoodEndingBlocks.class,
+			GoodEndingStructureType.class,
+			GoodEndingStructurePieceTypes.class,
+			GoodEndingStructureProcessors.class
 		);
 
 		GoodEndingBiomes.init();

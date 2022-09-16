@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "goodending:block/pink_flowering_lily_pad"
+      },
+      {
+        "model": "goodending:block/pink_flowering_lily_pad",
+        "y": 90
+      },
+      {
+        "model": "goodending:block/pink_flowering_lily_pad",
+        "y": 180
+      },
+      {
+        "model": "goodending:block/pink_flowering_lily_pad",
+        "y": 270
+      }
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/button_pressed",
+  "textures": {
+    "texture": "goodending:block/muddy_oak_planks"
+  }
+}

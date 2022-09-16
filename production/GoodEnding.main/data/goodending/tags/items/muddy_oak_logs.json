@@ -1,0 +1,9 @@
+{
+    "replace": false,
+    "values": [
+        "goodending:muddy_oak_log",
+        "goodending:muddy_oak_wood",
+        "goodending:stripped_muddy_oak_log",
+        "goodending:stripped_muddy_oak_wood"
+    ]
+}

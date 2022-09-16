@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "id": "goodending",
+  "version": "${version}",
+
+  "name": "Good Ending",
+  "description": "This mod aims to improve the wild update",
+  "authors": [
+    "Orcinus",
+    "Ninni"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/goodending/icon.png",
+  "accessWidener" : "goodending.accesswidener",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "net.orcinus.goodending.GoodEnding"
+    ],
+    "client": [
+      "net.orcinus.goodending.GoodEndingClient"
+    ]
+  },
+  "mixins": [
+    "goodending.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.14.6",
+    "fabric": "*",
+    "minecraft": "~1.19",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
