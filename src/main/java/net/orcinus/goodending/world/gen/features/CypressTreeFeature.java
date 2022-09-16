@@ -7,6 +7,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.block.PillarBlock;
+import net.minecraft.block.VineBlock;
+import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -18,7 +20,6 @@ import net.minecraft.world.gen.feature.util.DripstoneHelper;
 import net.minecraft.world.gen.feature.util.FeatureContext;
 import net.orcinus.goodending.init.GoodEndingBlocks;
 import net.orcinus.goodending.init.GoodEndingTags;
-import net.orcinus.goodending.util.WorldGenUtil;
 import net.orcinus.goodending.world.gen.features.config.WaterTreeFeatureConfig;
 
 import java.util.Arrays;
@@ -101,7 +102,7 @@ public class CypressTreeFeature extends Feature<WaterTreeFeatureConfig> {
                 }
             }
         });
-        WorldGenUtil.generateVines(world, 0.25F, random, leavePoses);
+        this.generateVines(world, 0.25F, random, leavePoses);
         return true;
     }
 
@@ -126,5 +127,50 @@ public class CypressTreeFeature extends Feature<WaterTreeFeatureConfig> {
         } else {
             return true;
         }
+    }
+
+    public void generateVines(StructureWorldAccess world, float probability, Random random, List<BlockPos> leavePositions) {
+        leavePositions.forEach((pos) -> {
+            BlockPos blockPos;
+            if (random.nextFloat() < probability) {
+                blockPos = pos.west();
+                if (world.isAir(blockPos)) {
+                    placeVines(blockPos, VineBlock.EAST, world);
+                }
+            }
+
+            if (random.nextFloat() < probability) {
+                blockPos = pos.east();
+                if (world.isAir(blockPos)) {
+                    placeVines(blockPos, VineBlock.WEST, world);
+                }
+            }
+
+            if (random.nextFloat() < probability) {
+                blockPos = pos.north();
+                if (world.isAir(blockPos)) {
+                    placeVines(blockPos, VineBlock.SOUTH, world);
+                }
+            }
+
+            if (random.nextFloat() < probability) {
+                blockPos = pos.south();
+                if (world.isAir(blockPos)) {
+                    placeVines(blockPos, VineBlock.NORTH, world);
+                }
+            }
+
+        });
+    }
+
+    private static void placeVines(BlockPos pos, BooleanProperty faceProperty, StructureWorldAccess world) {
+        world.setBlockState(pos, Blocks.VINE.getDefaultState().with(faceProperty, true), 19);
+        int i = 4;
+
+        for (pos = pos.down(); world.isAir(pos) && i > 0; --i) {
+            world.setBlockState(pos, Blocks.VINE.getDefaultState().with(faceProperty, true), 19);
+            pos = pos.down();
+        }
+
     }
 }

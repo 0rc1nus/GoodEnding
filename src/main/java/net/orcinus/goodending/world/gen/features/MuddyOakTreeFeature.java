@@ -2,6 +2,8 @@ package net.orcinus.goodending.world.gen.features;
 
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
+import net.minecraft.block.AbstractPlantStemBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.PillarBlock;
 import net.minecraft.state.property.Properties;
@@ -15,7 +17,7 @@ import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.util.DripstoneHelper;
 import net.minecraft.world.gen.feature.util.FeatureContext;
-import net.orcinus.goodending.util.WorldGenUtil;
+import net.orcinus.goodending.init.GoodEndingBlocks;
 import net.orcinus.goodending.world.gen.features.config.MuddyOakFeatureConfig;
 
 import java.util.List;
@@ -84,8 +86,27 @@ public class MuddyOakTreeFeature extends Feature<MuddyOakFeatureConfig> {
                 }
             }
         }
-        WorldGenUtil.generateHangingVines(world, 0.25F, random, leavePoses);
+        this.generateHangingVines(world, 0.25F, random, leavePoses);
         return true;
+    }
+
+    public void generateHangingVines(StructureWorldAccess world, float probability, Random random, List<BlockPos> leavePositions) {
+        leavePositions.forEach((pos) -> {
+            BlockPos.Mutable mutable = pos.mutableCopy();
+            if (random.nextFloat() < probability) {
+                int length = MathHelper.nextInt(random, 1, 2);
+                for (int i = 0; i <= length; i++) {
+                    if (world.isAir(mutable)) {
+                        if (i == length || !world.isAir(mutable.down())) {
+                            world.setBlockState(mutable, GoodEndingBlocks.HANGING_OAK_LEAVES.getDefaultState().with(AbstractPlantStemBlock.AGE, MathHelper.nextInt(random, 17, 25)), Block.NOTIFY_LISTENERS);
+                            break;
+                        }
+                        world.setBlockState(mutable, GoodEndingBlocks.HANGING_OAK_LEAVES_PLANT.getDefaultState(), Block.NOTIFY_LISTENERS);
+                    }
+                    mutable.move(Direction.DOWN);
+                }
+            }
+        });
     }
 
 }
