@@ -90,7 +90,7 @@ public class TallBirchTreeFeature extends Feature<TreeFeatureConfig> {
                 }
             }
         });
-        return false;
+        return true;
     }
 
     private void setBeehive(StructureWorldAccess world, Random random, BlockPos offsetPos, Direction direction) {
