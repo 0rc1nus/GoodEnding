@@ -42,8 +42,4 @@ public class LargeLilyPadFeature extends Feature<DefaultFeatureConfig> {
         return false;
     }
 
-    private boolean atPosition(StructureWorldAccess world, BlockPos blockPos) {
-        return world.getFluidState(blockPos).isIn(FluidTags.WATER);
-    }
-
 }
