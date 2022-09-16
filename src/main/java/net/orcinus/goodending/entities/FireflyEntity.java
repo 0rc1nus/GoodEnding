@@ -234,18 +234,6 @@ public class FireflyEntity extends PathAwareEntity implements Flutterer {
         return !this.isFromBottle();
     }
 
-    @Nullable
-    @Override
-    protected SoundEvent getAmbientSound() {
-        if (world.getTimeOfDay() < 12000 && world.getTimeOfDay() > 0) return null;
-        return GoodEndingSoundEvents.ENTITY_FIREFLY_SWARM_IDLE;
-    }
-
-    @Override
-    public int getMinAmbientSoundDelay() {
-        return 200;
-    }
-
     @Override
     public boolean isInAir() {
         return !this.onGround;
