@@ -5,6 +5,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.StructureWorldAccess;
@@ -34,8 +35,10 @@ public class AlgaePatchFeature extends Feature<DefaultFeatureConfig> {
                     if (flag && flag1) {
                         continue;
                     }
-                    if (world.isAir(blockPos.add(x, 0, z)) && world.getBlockState(blockPos.add(x, 0, z)).isOf(Blocks.WATER)) {
-                        world.setBlockState(blockPos.add(x, 0, z), GoodEndingBlocks.ALGAE.getDefaultState().with(AlgaeBlock.WATERLOGGED, true), 2);
+                    BlockPos placePos = blockPos.add(x, 0, z);
+                    int distance = Math.max(1, Math.round(MathHelper.sqrt((float) blockPos.getSquaredDistance(placePos))));
+                    if (random.nextInt(distance) == 0 && world.isAir(blockPos.add(x, 1, z)) && world.getBlockState(placePos).isOf(Blocks.WATER)) {
+                        world.setBlockState(placePos, GoodEndingBlocks.ALGAE.getDefaultState().with(AlgaeBlock.WATERLOGGED, true), 2);
                     }
                 }
             }
