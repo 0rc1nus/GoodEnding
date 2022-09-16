@@ -1,5 +1,8 @@
 package net.orcinus.goodending.world.gen.features.structures;
 
+import com.google.common.collect.ImmutableList;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.structure.IglooGenerator;
 import net.minecraft.structure.SimpleStructurePiece;
@@ -9,6 +12,11 @@ import net.minecraft.structure.StructurePlacementData;
 import net.minecraft.structure.StructureTemplate;
 import net.minecraft.structure.StructureTemplateManager;
 import net.minecraft.structure.processor.BlockIgnoreStructureProcessor;
+import net.minecraft.structure.processor.RuleStructureProcessor;
+import net.minecraft.structure.processor.StructureProcessor;
+import net.minecraft.structure.processor.StructureProcessorRule;
+import net.minecraft.structure.rule.AlwaysTrueRuleTest;
+import net.minecraft.structure.rule.RandomBlockMatchRuleTest;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
 import net.minecraft.util.Identifier;
@@ -24,6 +32,7 @@ import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.orcinus.goodending.GoodEnding;
 import net.orcinus.goodending.init.GoodEndingStructurePieceTypes;
 import net.orcinus.goodending.init.GoodEndingStructureProcessors;
+import net.orcinus.goodending.world.gen.features.processors.LeverProcessor;
 import net.orcinus.goodending.world.gen.features.processors.PillarLogProcessor;
 
 public class RevampedSwampHutGenerator {
@@ -50,7 +59,7 @@ public class RevampedSwampHutGenerator {
         }
 
         private static StructurePlacementData createPlacementData(BlockRotation rotation) {
-            return new StructurePlacementData().setRotation(rotation).setMirror(BlockMirror.NONE).addProcessor(BlockIgnoreStructureProcessor.IGNORE_STRUCTURE_BLOCKS).addProcessor(PillarLogProcessor.INSTANCE);
+            return new StructurePlacementData().setRotation(rotation).setMirror(BlockMirror.NONE).addProcessor(BlockIgnoreStructureProcessor.IGNORE_STRUCTURE_BLOCKS).addProcessor(PillarLogProcessor.INSTANCE).addProcessor(LeverProcessor.INSTANCE).addProcessor(new RuleStructureProcessor(ImmutableList.of(new StructureProcessorRule(new RandomBlockMatchRuleTest(Blocks.CLAY, 0.3f), AlwaysTrueRuleTest.INSTANCE, Blocks.BONE_BLOCK.getDefaultState()), new StructureProcessorRule(new RandomBlockMatchRuleTest(Blocks.SAND, 0.3f), AlwaysTrueRuleTest.INSTANCE, Blocks.SOUL_SAND.getDefaultState()), new StructureProcessorRule(new RandomBlockMatchRuleTest(Blocks.GLASS, 0.3f), AlwaysTrueRuleTest.INSTANCE, Blocks.PUMPKIN.getDefaultState()), new StructureProcessorRule(new RandomBlockMatchRuleTest(Blocks.CLAY, 0.3f), AlwaysTrueRuleTest.INSTANCE, Blocks.HAY_BLOCK.getDefaultState()), new StructureProcessorRule(new RandomBlockMatchRuleTest(Blocks.SAND, 0.3f), AlwaysTrueRuleTest.INSTANCE, Blocks.GLOWSTONE.getDefaultState()), new StructureProcessorRule(new RandomBlockMatchRuleTest(Blocks.GLASS, 0.3f), AlwaysTrueRuleTest.INSTANCE, Blocks.PURPLE_WOOL.getDefaultState()))));
         }
 
         @Override
