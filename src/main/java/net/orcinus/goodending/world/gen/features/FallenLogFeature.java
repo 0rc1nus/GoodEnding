@@ -37,7 +37,8 @@ public class FallenLogFeature extends Feature<FallenLogConfig> {
         BlockPos.Mutable mut = blockPos.mutableCopy();
         List<BlockPos> decorationPoses = Lists.newArrayList();
         FallenLogConfig config = context.getConfig();
-        if (!world.getBlockState(blockPos.down()).isIn(BlockTags.DIRT)) {
+        boolean initFlag = world.getBlockState(blockPos.down()).isIn(BlockTags.DIRT) && world.getBlockState(blockPos).isAir();
+        if (!initFlag) {
             return false;
         } else {
             BlockState checkState = world.getBlockState(blockPos.offset(direction));
