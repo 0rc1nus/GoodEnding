@@ -68,13 +68,12 @@ public class RevampedSwampHutGenerator {
 
         @Override
         public void generate(StructureWorldAccess world, StructureAccessor structureAccessor, ChunkGenerator chunkGenerator, Random random, BlockBox chunkBox, ChunkPos chunkPos, BlockPos pivot) {
-            StructurePlacementData structurePlacementData = createPlacementData(this.placementData.getRotation());
-            BlockPos blockPos = BlockPos.ORIGIN;
-            BlockPos blockPos2 = this.pos.add(StructureTemplate.transform(structurePlacementData, new BlockPos(3 - blockPos.getX(), 0, -blockPos.getZ())));
-            int i = world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, blockPos2.getX(), blockPos2.getZ());
-            this.pos = new BlockPos(this.pos.getX(), i, this.pos.getZ());
+            BlockPos blockPos = new BlockPos(chunkPos.getStartPos());
+            int i = world.getTopY(Heightmap.Type.WORLD_SURFACE_WG, blockPos.getX(), blockPos.getZ());
+            this.pos = new BlockPos(this.pos.getX(), i + 1, this.pos.getZ());
             super.generate(world, structureAccessor, chunkGenerator, random, chunkBox, chunkPos, pivot);
         }
+        //-1984 ~ 104288
     }
 
 
