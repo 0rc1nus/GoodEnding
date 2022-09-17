@@ -42,7 +42,7 @@ import net.orcinus.goodending.init.GoodEndingSoundEvents;
 import net.orcinus.goodending.init.GoodEndingStatusEffects;
 import net.orcinus.goodending.init.GoodEndingStructurePieceTypes;
 import net.orcinus.goodending.init.GoodEndingStructureProcessors;
-import net.orcinus.goodending.init.GoodEndingStructureType;
+import net.orcinus.goodending.init.GoodEndingStructureTypes;
 import net.orcinus.goodending.init.GoodEndingTags;
 import net.orcinus.goodending.init.GoodEndingTreeDecorators;
 import net.orcinus.goodending.init.GoodEndingWorldGen;
@@ -65,7 +65,7 @@ public class GoodEnding implements ModInitializer {
 			GoodEndingSoundEvents.class,
 			GoodEndingItems.class,
 			GoodEndingBlocks.class,
-			GoodEndingStructureType.class,
+			GoodEndingStructureTypes.class,
 			GoodEndingStructurePieceTypes.class,
 			GoodEndingStructureProcessors.class
 		);
@@ -96,7 +96,7 @@ public class GoodEnding implements ModInitializer {
 		Util.make(ImmutableMap.<RegistryEntry<PlacedFeature>, GenerationStep.Feature>builder(), map -> {
 			map.put(GoodEndingWorldGen.SHALLOW_WATER_MUD_PLACED, GenerationStep.Feature.UNDERGROUND_ORES);
 			map.put(GoodEndingWorldGen.CATTAIL_PATCH_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
-			map.put(GoodEndingWorldGen.SWAMP_FALLEN_LOG_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
+			map.put(GoodEndingWorldGen.SWAMP_FALLEN_LOG_PLACED, GenerationStep.Feature.LOCAL_MODIFICATIONS);
 			map.put(GoodEndingWorldGen.CYPRESS_TREE_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
 			map.put(GoodEndingWorldGen.SWAMP_VEGETATION_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
 			map.put(GoodEndingWorldGen.DUCKWEED_PATCH_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
@@ -111,16 +111,30 @@ public class GoodEnding implements ModInitializer {
 
 		this.addFeatureToBiome(GoodEndingWorldGen.PATCH_PINK_FLOWERED_LILY_PLACED, BiomeKeys.MANGROVE_SWAMP);
 
-		this.addFeatureToBiome(GoodEndingWorldGen.OAK_FALLEN_LOG_PLACED, BiomeKeys.FOREST);
-		this.addFeatureToBiome(GoodEndingWorldGen.OAK_FALLEN_LOG_PLACED, BiomeKeys.WOODED_BADLANDS);
-		this.addFeatureToBiome(GoodEndingWorldGen.SPRUCE_FALLEN_LOG_PLACED, BiomeKeys.TAIGA);
-		this.addFeatureToBiome(GoodEndingWorldGen.SPRUCE_FALLEN_LOG_PLACED, BiomeKeys.SNOWY_TAIGA);
-		this.addFeatureToBiome(GoodEndingWorldGen.SPRUCE_FALLEN_LOG_PLACED, BiomeKeys.WINDSWEPT_FOREST);
-		this.addFeatureToBiome(GoodEndingWorldGen.SPRUCE_FALLEN_LOG_PLACED, BiomeKeys.GROVE);
-		this.addFeatureToBiome(GoodEndingWorldGen.ACACIA_FALLEN_LOG_PLACED, BiomeKeys.SAVANNA);
-		this.addFeatureToBiome(GoodEndingWorldGen.BIRCH_FALLEN_LOG_PLACED, BiomeKeys.FOREST);
-		this.addFeatureToBiome(GoodEndingWorldGen.BIRCH_FALLEN_LOG_PLACED, BiomeKeys.BIRCH_FOREST);
-		this.addFeatureToBiome(GoodEndingWorldGen.BIRCH_FALLEN_LOG_PLACED, BiomeKeys.OLD_GROWTH_BIRCH_FOREST);
+//		this.addFeatureToBiome(GoodEndingWorldGen.OAK_FALLEN_LOG_PLACED, BiomeKeys.FOREST);
+//		this.addFeatureToBiome(GoodEndingWorldGen.OAK_FALLEN_LOG_PLACED, BiomeKeys.WOODED_BADLANDS);
+//		this.addFeatureToBiome(GoodEndingWorldGen.SPRUCE_FALLEN_LOG_PLACED, BiomeKeys.TAIGA);
+//		this.addFeatureToBiome(GoodEndingWorldGen.SPRUCE_FALLEN_LOG_PLACED, BiomeKeys.SNOWY_TAIGA);
+//		this.addFeatureToBiome(GoodEndingWorldGen.SPRUCE_FALLEN_LOG_PLACED, BiomeKeys.WINDSWEPT_FOREST);
+//		this.addFeatureToBiome(GoodEndingWorldGen.SPRUCE_FALLEN_LOG_PLACED, BiomeKeys.GROVE);
+//		this.addFeatureToBiome(GoodEndingWorldGen.ACACIA_FALLEN_LOG_PLACED, BiomeKeys.SAVANNA);
+//		this.addFeatureToBiome(GoodEndingWorldGen.BIRCH_FALLEN_LOG_PLACED, BiomeKeys.FOREST);
+//		this.addFeatureToBiome(GoodEndingWorldGen.BIRCH_FALLEN_LOG_PLACED, BiomeKeys.BIRCH_FOREST);
+//		this.addFeatureToBiome(GoodEndingWorldGen.BIRCH_FALLEN_LOG_PLACED, BiomeKeys.OLD_GROWTH_BIRCH_FOREST);
+
+		Util.make(ImmutableMap.<RegistryKey<Biome>, RegistryEntry<PlacedFeature>>builder(), map -> {
+			map.put(BiomeKeys.FOREST, GoodEndingWorldGen.OAK_FALLEN_LOG_PLACED);
+			map.put(BiomeKeys.WOODED_BADLANDS, GoodEndingWorldGen.OAK_FALLEN_LOG_PLACED);
+			map.put(BiomeKeys.TAIGA, GoodEndingWorldGen.SPRUCE_FALLEN_LOG_PLACED);
+			map.put(BiomeKeys.SNOWY_TAIGA, GoodEndingWorldGen.SPRUCE_FALLEN_LOG_PLACED);
+			map.put(BiomeKeys.WINDSWEPT_FOREST, GoodEndingWorldGen.SPRUCE_FALLEN_LOG_PLACED);
+			map.put(BiomeKeys.GROVE, GoodEndingWorldGen.SPRUCE_FALLEN_LOG_PLACED);
+			map.put(BiomeKeys.SAVANNA, GoodEndingWorldGen.ACACIA_FALLEN_LOG_PLACED);
+			map.put(BiomeKeys.BIRCH_FOREST, GoodEndingWorldGen.BIRCH_FALLEN_LOG_PLACED);
+			map.put(BiomeKeys.OLD_GROWTH_BIRCH_FOREST, GoodEndingWorldGen.BIRCH_FALLEN_LOG_PLACED);
+		}).build().forEach((biome, worldgen) -> worldgen.getKey().ifPresent(placedFeatureRegistryKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(biome), GenerationStep.Feature.LOCAL_MODIFICATIONS, placedFeatureRegistryKey)));
+
+		GoodEndingWorldGen.BIRCH_FALLEN_LOG_PLACED.getKey().ifPresent(placedFeatureRegistryKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(BiomeKeys.FOREST), GenerationStep.Feature.LOCAL_MODIFICATIONS, placedFeatureRegistryKey));
 
 		this.addFeatureToBiome(GoodEndingWorldGen.PATCH_TALL_GRASS_PLACED, BiomeKeys.OLD_GROWTH_BIRCH_FOREST);
 

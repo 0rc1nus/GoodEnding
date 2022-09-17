@@ -8,7 +8,7 @@ import net.minecraft.world.gen.structure.StructureType;
 import net.orcinus.goodending.GoodEnding;
 import net.orcinus.goodending.world.gen.features.structures.RevampedSwampHutStructure;
 
-public class GoodEndingStructureType {
+public class GoodEndingStructureTypes {
 
     public static final StructureType<RevampedSwampHutStructure> REVAMPED_SWAMP_HUT = register("revamped_swamp_hut", RevampedSwampHutStructure.CODEC);
 
