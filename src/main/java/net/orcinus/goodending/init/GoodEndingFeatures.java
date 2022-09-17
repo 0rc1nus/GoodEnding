@@ -9,6 +9,7 @@ import net.minecraft.world.gen.feature.FeatureConfig;
 import net.minecraft.world.gen.feature.TreeFeatureConfig;
 import net.orcinus.goodending.GoodEnding;
 import net.orcinus.goodending.world.gen.features.AlgaePatchFeature;
+import net.orcinus.goodending.world.gen.features.BoulderFeature;
 import net.orcinus.goodending.world.gen.features.CypressTreeFeature;
 import net.orcinus.goodending.world.gen.features.DuckweedFeature;
 import net.orcinus.goodending.world.gen.features.FallenLogFeature;
@@ -19,6 +20,7 @@ import net.orcinus.goodending.world.gen.features.MossyBoulderFeature;
 import net.orcinus.goodending.world.gen.features.MuddyOakTreeFeature;
 import net.orcinus.goodending.world.gen.features.ShallowWaterFeature;
 import net.orcinus.goodending.world.gen.features.TallBirchTreeFeature;
+import net.orcinus.goodending.world.gen.features.config.BoulderConfig;
 import net.orcinus.goodending.world.gen.features.config.FallenLogConfig;
 import net.orcinus.goodending.world.gen.features.config.FancyDarkOakFeatureConfig;
 import net.orcinus.goodending.world.gen.features.config.HalfWaterloggedDecorationConfig;
@@ -43,6 +45,7 @@ public class GoodEndingFeatures {
     public static final Feature<FancyDarkOakFeatureConfig> FANCY_DARK_OAK = registerFeature("fancy_dark_oak", new FancyDarkOakFeature(FancyDarkOakFeatureConfig.CODEC));
     public static final Feature<DefaultFeatureConfig> MOSSY_BOULDER = registerFeature("mossy_boulder", new MossyBoulderFeature(DefaultFeatureConfig.CODEC));
     public static final Feature<DefaultFeatureConfig> ALGAE_PATCH = registerFeature("algae_patch", new AlgaePatchFeature(DefaultFeatureConfig.CODEC));
+    public static final Feature<BoulderConfig> BOULDER = registerFeature("boulder", new BoulderFeature(BoulderConfig.CODEC));
 
     public static <FC extends FeatureConfig, F extends Feature<FC>> F registerFeature(String name, F feature) {
         FEATURES.put(feature, name);

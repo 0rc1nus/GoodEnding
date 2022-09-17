@@ -76,6 +76,13 @@ public class GoodEnding implements ModInitializer {
 		GoodEndingTreeDecorators.init();
 		GoodEndingPotions.init();
 
+		Util.make(ImmutableMap.<RegistryEntry<PlacedFeature>, RegistryKey<Biome>>builder(), map -> {
+			map.put(GoodEndingWorldGen.GRANITE_BOULDER_PLACED, BiomeKeys.SAVANNA);
+			map.put(GoodEndingWorldGen.PLAINS_BOULDER_PLACED, BiomeKeys.PLAINS);
+			map.put(GoodEndingWorldGen.DESERT_BOULDER_PLACED, BiomeKeys.DESERT);
+			map.put(GoodEndingWorldGen.BADLANDS_BOULDER_PLACED, BiomeKeys.BADLANDS);
+		}).build().forEach((placedFeatureRegistryEntry, biomeRegistryKey) -> placedFeatureRegistryEntry.getKey().ifPresent(placedFeatureRegistryKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(biomeRegistryKey), GenerationStep.Feature.LOCAL_MODIFICATIONS, placedFeatureRegistryKey)));
+
 		Util.make(ImmutableMap.<RegistryEntry<PlacedFeature>, GenerationStep.Feature>builder(), map -> {
 			map.put(GoodEndingWorldGen.PATCH_ALGAE_PLACED, GenerationStep.Feature.UNDERGROUND_ORES);
 			map.put(GoodEndingWorldGen.BIG_LILY_PADS_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
@@ -110,17 +117,6 @@ public class GoodEnding implements ModInitializer {
 		}).build().forEach((biomeTagKey, placedFeatureRegistryEntry) -> placedFeatureRegistryEntry.getKey().ifPresent(placedFeatureRegistryKey -> BiomeModifications.addFeature(BiomeSelectors.tag(biomeTagKey), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureRegistryKey)));
 
 		this.addFeatureToBiome(GoodEndingWorldGen.PATCH_PINK_FLOWERED_LILY_PLACED, BiomeKeys.MANGROVE_SWAMP);
-
-//		this.addFeatureToBiome(GoodEndingWorldGen.OAK_FALLEN_LOG_PLACED, BiomeKeys.FOREST);
-//		this.addFeatureToBiome(GoodEndingWorldGen.OAK_FALLEN_LOG_PLACED, BiomeKeys.WOODED_BADLANDS);
-//		this.addFeatureToBiome(GoodEndingWorldGen.SPRUCE_FALLEN_LOG_PLACED, BiomeKeys.TAIGA);
-//		this.addFeatureToBiome(GoodEndingWorldGen.SPRUCE_FALLEN_LOG_PLACED, BiomeKeys.SNOWY_TAIGA);
-//		this.addFeatureToBiome(GoodEndingWorldGen.SPRUCE_FALLEN_LOG_PLACED, BiomeKeys.WINDSWEPT_FOREST);
-//		this.addFeatureToBiome(GoodEndingWorldGen.SPRUCE_FALLEN_LOG_PLACED, BiomeKeys.GROVE);
-//		this.addFeatureToBiome(GoodEndingWorldGen.ACACIA_FALLEN_LOG_PLACED, BiomeKeys.SAVANNA);
-//		this.addFeatureToBiome(GoodEndingWorldGen.BIRCH_FALLEN_LOG_PLACED, BiomeKeys.FOREST);
-//		this.addFeatureToBiome(GoodEndingWorldGen.BIRCH_FALLEN_LOG_PLACED, BiomeKeys.BIRCH_FOREST);
-//		this.addFeatureToBiome(GoodEndingWorldGen.BIRCH_FALLEN_LOG_PLACED, BiomeKeys.OLD_GROWTH_BIRCH_FOREST);
 
 		Util.make(ImmutableMap.<RegistryKey<Biome>, RegistryEntry<PlacedFeature>>builder(), map -> {
 			map.put(BiomeKeys.FOREST, GoodEndingWorldGen.OAK_FALLEN_LOG_PLACED);
