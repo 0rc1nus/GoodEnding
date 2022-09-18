@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -37,6 +38,7 @@ import net.orcinus.goodending.init.GoodEndingStructurePieceTypes;
 import net.orcinus.goodending.init.GoodEndingStructureProcessors;
 import net.orcinus.goodending.init.GoodEndingStructureTypes;
 import net.orcinus.goodending.init.GoodEndingTreeDecorators;
+import net.orcinus.goodending.init.GoodEndingVanillaIntegration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,11 +68,7 @@ public class GoodEnding implements ModInitializer {
 		GoodEndingTreeDecorators.init();
 		GoodEndingPotions.init();
 		GoodEndingBiomeModifiers.init();
-
-		StrippableBlockRegistry.register(GoodEndingBlocks.MUDDY_OAK_LOG, GoodEndingBlocks.STRIPPED_MUDDY_OAK_LOG);
-		StrippableBlockRegistry.register(GoodEndingBlocks.MUDDY_OAK_WOOD, GoodEndingBlocks.STRIPPED_MUDDY_OAK_WOOD);
-		StrippableBlockRegistry.register(GoodEndingBlocks.CYPRESS_LOG, GoodEndingBlocks.STRIPPED_CYPRESS_LOG);
-		StrippableBlockRegistry.register(GoodEndingBlocks.CYPRESS_WOOD, GoodEndingBlocks.STRIPPED_CYPRESS_WOOD);
+		GoodEndingVanillaIntegration.init();
 
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
 			BlockPos blockPos = hitResult.getBlockPos();
@@ -92,11 +90,6 @@ public class GoodEnding implements ModInitializer {
 			return ActionResult.PASS;
 		});
 
-
-
 	}
 
-	private void addFeatureToBiome(RegistryEntry<PlacedFeature> featureEntry, RegistryKey<Biome> biomeKey) {
-		featureEntry.getKey().ifPresent(featureKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(biomeKey), GenerationStep.Feature.VEGETAL_DECORATION, featureKey));
-	}
 }
