@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.registry.CompostingChanceRegistry;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.item.PlaceableOnWaterItem;
 import net.minecraft.item.SignItem;
 import net.minecraft.item.TallBlockItem;
@@ -84,7 +85,7 @@ public class GoodEndingItems {
 
     //Swamp related
     public static final Item DUCKWEED = register("duckweed", new PlaceableOnWaterItem(GoodEndingBlocks.DUCKWEED, new Item.Settings().group(GoodEnding.TAB)));
-    public static final Item ALGAE_BUCKET = register("algae_bucket", new AlgaeBucketItem(GoodEndingBlocks.ALGAE, new Item.Settings().group(GoodEnding.TAB).maxCount(1), SoundEvents.BLOCK_LILY_PAD_PLACE));
+    public static final Item ALGAE_BUCKET = register("algae_bucket", new AlgaeBucketItem(GoodEndingBlocks.ALGAE, new Item.Settings().group(GoodEnding.TAB).recipeRemainder(Items.BUCKET).maxCount(1), SoundEvents.BLOCK_LILY_PAD_PLACE));
     public static final Item CATTAIL = register("cattail", new TallBlockItem(GoodEndingBlocks.CATTAIL, new Item.Settings().group(GoodEnding.TAB)));
     public static final Item FIREFLY_BOTTLE = register("firefly_bottle", new FireflyBottleItem(new FabricItemSettings().maxCount(16).group(GoodEnding.TAB)));
     public static final Item FIREFLY_LANTERN = register("firefly_lantern", new BlockItem(GoodEndingBlocks.FIREFLY_LANTERN, new Item.Settings().group(TAB)));
