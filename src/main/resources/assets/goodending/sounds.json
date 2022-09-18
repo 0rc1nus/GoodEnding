@@ -44,9 +44,7 @@
     "subtitle": "subtitles.goodending.entity.woodpecker.hurt"
   },
   "entity.woodpecker.death": {
-    "sounds": [
-      "goodending:entity/woodpecker/death"
-    ],
+    "sounds": ["goodending:entity/woodpecker/death"],
     "subtitle": "subtitles.goodending.entity.woodpecker.death"
   },
   "entity.marsh.idle": {
@@ -87,9 +85,7 @@
     "subtitle": "subtitles.goodending.entity.marsh.idle_brewing"
   },
   "entity.marsh.burp": {
-    "sounds": [
-      "goodending:entity/marsh/burp"
-    ],
+    "sounds": ["goodending:entity/marsh/burp"],
     "subtitle": "subtitles.goodending.entity.marsh.burp"
   },
   "entity.firefly_swarm.idle": {
@@ -180,5 +176,13 @@
       "goodending:block/firefly_lantern/break3"
     ],
     "subtitle": "subtitles.block.generic.break"
+  },
+  "block.firefly_lantern.open": {
+    "sounds": ["goodending:block/firefly_lantern/open"],
+    "subtitle": "subtitles.block.generic.open"
+  },
+  "block.firefly_lantern.close": {
+    "sounds": ["goodending:block/firefly_lantern/close"],
+    "subtitle": "subtitles.block.generic.close"
   }
 }

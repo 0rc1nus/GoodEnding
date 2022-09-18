@@ -5,6 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.LanternBlock;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
@@ -19,9 +20,9 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldEvents;
 import net.minecraft.world.event.GameEvent;
 import net.orcinus.goodending.init.GoodEndingParticleTypes;
+import net.orcinus.goodending.init.GoodEndingSoundEvents;
 
 import java.util.stream.Stream;
 
@@ -53,10 +54,12 @@ public class FireflyLanternBlock extends LanternBlock {
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         world.setBlockState(pos, state.cycle(OPEN), 2);
-        world.syncWorldEvent(player, state.get(OPEN) ? WorldEvents.IRON_DOOR_OPENS : WorldEvents.IRON_DOOR_CLOSES, pos, 0);
+
+        world.playSound(null, pos, state.get(OPEN) ? GoodEndingSoundEvents.BLOCK_FIREFLY_LANTERN_CLOSE : GoodEndingSoundEvents.BLOCK_FIREFLY_LANTERN_OPEN, SoundCategory.BLOCKS, 1, 1);
         world.emitGameEvent(player, state.get(OPEN) ? GameEvent.BLOCK_OPEN : GameEvent.BLOCK_CLOSE, pos);
         return ActionResult.success(world.isClient);
     }
+
 
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {

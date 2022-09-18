@@ -35,6 +35,8 @@ public class GoodEndingSoundEvents {
     private static SoundEvent denseLeaves(String type) { return block("dense_leaves", type); }
 
     public static final SoundEvent BLOCK_FIREFLY_LANTERN_BREAK = fireflyLantern("break");
+    public static final SoundEvent BLOCK_FIREFLY_LANTERN_OPEN = fireflyLantern("open");
+    public static final SoundEvent BLOCK_FIREFLY_LANTERN_CLOSE = fireflyLantern("close");
     private static SoundEvent fireflyLantern(String type) { return block("firefly_lantern", type); }
 
     public static final SoundEvent BLOCK_HANGING_LEAVES_BREAK = hangingLeaves("break");

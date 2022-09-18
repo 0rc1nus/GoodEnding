@@ -183,7 +183,7 @@ public class GoodEndingWorldGen {
     public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> MOSSY_COBBLESTONE_BOULDER = register("mossy_cobblestone_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(true, BlockStateProvider.of(Blocks.MOSSY_COBBLESTONE), BlockStateProvider.of(Blocks.COBBLESTONE), UniformFloatProvider.create(2F, 3F)));
     public static final RegistryEntry<PlacedFeature> MOSSY_COBBLESTONE_BOULDER_PLACED = register("mossy_cobblestone_boulder_placed", MOSSY_COBBLESTONE_BOULDER, GoodEndingWorldGen.boulderModifier(19, PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP));
 
-    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> MOSSIER_COBBLESTONE_BOULDER = register("mossier_cobblestone_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(false, BlockStateProvider.of(Blocks.MOSS_BLOCK), BlockStateProvider.of(Blocks.MOSSY_COBBLESTONE), UniformFloatProvider.create(2F, 3F)));
+    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> MOSSIER_COBBLESTONE_BOULDER = register("mossier_cobblestone_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(false, BlockStateProvider.of(Blocks.MOSS_BLOCK), BlockStateProvider.of(Blocks.MOSSY_COBBLESTONE), UniformFloatProvider.create(2, 4.2F)));
     public static final RegistryEntry<PlacedFeature> MOSSIER_COBBLESTONE_BOULDER_PLACED = register("mossier_cobblestone_boulder_placed", MOSSIER_COBBLESTONE_BOULDER, GoodEndingWorldGen.boulderModifier(19, PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP));
 
     public static List<PlacementModifier> boulderModifier(int chance, PlacementModifier heightmap) {

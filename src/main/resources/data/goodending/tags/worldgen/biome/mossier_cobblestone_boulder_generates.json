@@ -1,6 +1,7 @@
 {
   "values": [
     "minecraft:sparse_jungle",
+    "goodending:marshy_swamp",
     "minecraft:old_growth_birch_forest"
   ]
 }
