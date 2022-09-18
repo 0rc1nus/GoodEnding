@@ -108,7 +108,7 @@
       "goodending:item/firefly_bottle/fill2",
       "goodending:item/firefly_bottle/fill3"
     ],
-    "subtitle": "subtitles.goodending.item.firefly_bottle.fill"
+    "subtitle": "subtitles.item.bottle.fill"
   },
   "item.firefly_bottle.empty": {
     "sounds": [
@@ -117,7 +117,7 @@
         "type": "event"
       }
     ],
-    "subtitle": "subtitles.goodending.item.firefly_bottle.empty"
+    "subtitle": "subtitles.item.bottle.empty"
   },
   "block.dense_leaves.break": {
     "sounds": [
