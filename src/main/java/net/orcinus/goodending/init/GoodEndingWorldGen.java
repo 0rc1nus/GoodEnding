@@ -1,5 +1,8 @@
 package net.orcinus.goodending.init;
 
+import java.util.List;
+import java.util.OptionalInt;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.fluid.Fluids;
@@ -7,6 +10,7 @@ import net.minecraft.tag.BlockTags;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DataPool;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.floatprovider.UniformFloatProvider;
 import net.minecraft.util.math.intprovider.ConstantIntProvider;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.minecraft.util.registry.BuiltinRegistries;
@@ -57,9 +61,6 @@ import net.orcinus.goodending.world.gen.features.config.HalfWaterloggedDecoratio
 import net.orcinus.goodending.world.gen.features.config.MuddyOakFeatureConfig;
 import net.orcinus.goodending.world.gen.features.config.ShallowWaterConfig;
 import net.orcinus.goodending.world.gen.features.config.WaterTreeFeatureConfig;
-
-import java.util.List;
-import java.util.OptionalInt;
 
 public class GoodEndingWorldGen {
 
@@ -158,17 +159,28 @@ public class GoodEndingWorldGen {
     public static final RegistryEntry<ConfiguredFeature<DefaultFeatureConfig, ?>> MOSSY_BOULDER = register("mossy_boulder", GoodEndingFeatures.MOSSY_BOULDER, new DefaultFeatureConfig());
     public static final RegistryEntry<PlacedFeature> MOSSY_BOULDER_PLACED = register("mossy_boulder_placed", MOSSY_BOULDER, CountPlacementModifier.of(2), SquarePlacementModifier.of(), PlacedFeatures.OCEAN_FLOOR_WG_HEIGHTMAP, BiomePlacementModifier.of());
 
-    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> GRANITE_BOULDER = register("granite_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(BlockStateProvider.of(Blocks.GRANITE), BlockStateProvider.of(Blocks.LIGHT_GRAY_TERRACOTTA)));
-    public static final RegistryEntry<PlacedFeature> GRANITE_BOULDER_PLACED = register("granite_boulder_placed", GRANITE_BOULDER, RarityFilterPlacementModifier.of(25), CountPlacementModifier.of(2), SquarePlacementModifier.of(), PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> GRANITE_BOULDER = register("granite_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(BlockStateProvider.of(Blocks.LIGHT_GRAY_TERRACOTTA), BlockStateProvider.of(Blocks.GRANITE), UniformFloatProvider.create(2, 4.2F)));
+    public static final RegistryEntry<PlacedFeature> GRANITE_BOULDER_PLACED = register("granite_boulder_placed", GRANITE_BOULDER, RarityFilterPlacementModifier.of(19), CountPlacementModifier.of(2), SquarePlacementModifier.of(), PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
 
-    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> PLAINS_BOULDER = register("plains_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(BlockStateProvider.of(Blocks.STONE), BlockStateProvider.of(Blocks.TUFF)));
+    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> PLAINS_BOULDER = register("plains_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(BlockStateProvider.of(Blocks.STONE), BlockStateProvider.of(Blocks.TUFF), UniformFloatProvider.create(2, 3.5F)));
     public static final RegistryEntry<PlacedFeature> PLAINS_BOULDER_PLACED = register("plains_boulder_placed", PLAINS_BOULDER, RarityFilterPlacementModifier.of(25), CountPlacementModifier.of(2), SquarePlacementModifier.of(), PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
 
-    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> DESERT_BOULDER = register("desert_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(BlockStateProvider.of(Blocks.SANDSTONE), BlockStateProvider.of(Blocks.SANDSTONE)));
-    public static final RegistryEntry<PlacedFeature> DESERT_BOULDER_PLACED = register("desert_boulder_placed", DESERT_BOULDER, RarityFilterPlacementModifier.of(25), CountPlacementModifier.of(2), SquarePlacementModifier.of(), PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> DESERT_BOULDER = register("desert_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(BlockStateProvider.of(Blocks.SANDSTONE), BlockStateProvider.of(Blocks.SANDSTONE), UniformFloatProvider.create(2, 3.5F)));
+    public static final RegistryEntry<PlacedFeature> DESERT_BOULDER_PLACED = register("desert_boulder_placed", DESERT_BOULDER, RarityFilterPlacementModifier.of(20), CountPlacementModifier.of(2), SquarePlacementModifier.of(), PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
 
-    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> BADLANDS_BOULDER = register("badlands_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(BlockStateProvider.of(Blocks.RED_SANDSTONE), BlockStateProvider.of(Blocks.RED_SANDSTONE)));
+    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> BADLANDS_BOULDER = register("badlands_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(BlockStateProvider.of(Blocks.RED_SANDSTONE), BlockStateProvider.of(Blocks.RED_SANDSTONE), UniformFloatProvider.create(2, 3.5F)));
     public static final RegistryEntry<PlacedFeature> BADLANDS_BOULDER_PLACED = register("badlands_boulder_placed", BADLANDS_BOULDER, RarityFilterPlacementModifier.of(25), CountPlacementModifier.of(2), SquarePlacementModifier.of(), PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP, BiomePlacementModifier.of());
+
+    //
+
+    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> BASALT_BOULDER = register("basalt_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(BlockStateProvider.of(Blocks.SMOOTH_BASALT), BlockStateProvider.of(Blocks.SMOOTH_BASALT), UniformFloatProvider.create(2.3F, 5.4F)));
+    public static final RegistryEntry<PlacedFeature> BASALT_BOULDER_PLACED = register("basalt_boulder_placed", BASALT_BOULDER, RarityFilterPlacementModifier.of(19), CountPlacementModifier.of(50), SquarePlacementModifier.of(), PlacedFeatures.OCEAN_FLOOR_WG_HEIGHTMAP, BiomePlacementModifier.of());
+
+    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> STONE_BOULDER = register("stone_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(BlockStateProvider.of(Blocks.STONE), BlockStateProvider.of(Blocks.STONE), UniformFloatProvider.create(2.1F, 4.8F)));
+    public static final RegistryEntry<PlacedFeature> STONE_BOULDER_PLACED = register("stone_boulder_placed", STONE_BOULDER, RarityFilterPlacementModifier.of(19), CountPlacementModifier.of(2), SquarePlacementModifier.of(), PlacedFeatures.OCEAN_FLOOR_WG_HEIGHTMAP, BiomePlacementModifier.of());
+
+    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> TUFF_BOULDER = register("tuff_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(BlockStateProvider.of(Blocks.TUFF), BlockStateProvider.of(Blocks.TUFF), UniformFloatProvider.create(2.2F, 5.2F)));
+    public static final RegistryEntry<PlacedFeature> TUFF_BOULDER_PLACED = register("tuff_boulder_placed", STONE_BOULDER, RarityFilterPlacementModifier.of(19), CountPlacementModifier.of(50), SquarePlacementModifier.of(), PlacedFeatures.OCEAN_FLOOR_WG_HEIGHTMAP, BiomePlacementModifier.of());
 
     public static <FC extends FeatureConfig, F extends Feature<FC>> RegistryEntry<ConfiguredFeature<FC, ?>> register(String id, F feature, FC config) {
         return BuiltinRegistries.addCasted(BuiltinRegistries.CONFIGURED_FEATURE, new Identifier(GoodEnding.MODID, id).toString(), new ConfiguredFeature<>(feature, config));

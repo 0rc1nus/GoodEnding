@@ -81,7 +81,11 @@ public class GoodEnding implements ModInitializer {
 			map.put(GoodEndingWorldGen.PLAINS_BOULDER_PLACED, BiomeKeys.PLAINS);
 			map.put(GoodEndingWorldGen.DESERT_BOULDER_PLACED, BiomeKeys.DESERT);
 			map.put(GoodEndingWorldGen.BADLANDS_BOULDER_PLACED, BiomeKeys.BADLANDS);
-		}).build().forEach((placedFeatureRegistryEntry, biomeRegistryKey) -> placedFeatureRegistryEntry.getKey().ifPresent(placedFeatureRegistryKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(biomeRegistryKey), GenerationStep.Feature.LOCAL_MODIFICATIONS, placedFeatureRegistryKey)));
+			
+			map.put(GoodEndingWorldGen.BASALT_BOULDER_PLACED, BiomeKeys.WARM_OCEAN);
+			map.put(GoodEndingWorldGen.TUFF_BOULDER_PLACED, BiomeKeys.COLD_OCEAN);
+
+		}).build().forEach((featureEntry, biomeKey) -> featureEntry.getKey().ifPresent(featureKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(biomeKey), GenerationStep.Feature.LOCAL_MODIFICATIONS, featureKey)));
 
 		Util.make(ImmutableMap.<RegistryEntry<PlacedFeature>, GenerationStep.Feature>builder(), map -> {
 			map.put(GoodEndingWorldGen.PATCH_ALGAE_PLACED, GenerationStep.Feature.UNDERGROUND_ORES);
@@ -90,7 +94,7 @@ public class GoodEnding implements ModInitializer {
 			map.put(GoodEndingWorldGen.DISK_PODZOL_PLACED, GenerationStep.Feature.UNDERGROUND_ORES);
 			map.put(GoodEndingWorldGen.MARSH_SWAMP_TREE_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
 			map.put(GoodEndingWorldGen.MARSHY_SWAMP_VEGETATION, GenerationStep.Feature.VEGETAL_DECORATION);
-		}).build().forEach((placedFeatureRegistryEntry, feature) -> placedFeatureRegistryEntry.getKey().ifPresent(placedFeatureRegistryKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(GoodEndingBiomes.MARSHY_SWAMP_KEY), feature, placedFeatureRegistryKey)));
+		}).build().forEach((featureEntry, feature) -> featureEntry.getKey().ifPresent(featureKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(GoodEndingBiomes.MARSHY_SWAMP_KEY), feature, featureKey)));
 
 		Util.make(ImmutableMap.<RegistryEntry<PlacedFeature>, GenerationStep.Feature>builder(), map -> {
 			map.put(GoodEndingWorldGen.OAK_HAMMOCK_TREES_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
@@ -98,7 +102,7 @@ public class GoodEnding implements ModInitializer {
 			map.put(GoodEndingWorldGen.PATCH_FERN_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
 			map.put(GoodEndingWorldGen.PATCH_LARGE_FERN_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
 			map.put(GoodEndingWorldGen.MOSSY_BOULDER_PLACED, GenerationStep.Feature.LOCAL_MODIFICATIONS);
-		}).build().forEach((placedFeatureRegistryEntry, feature) -> placedFeatureRegistryEntry.getKey().ifPresent(placedFeatureRegistryKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY), feature, placedFeatureRegistryKey)));
+		}).build().forEach((featureEntry, feature) -> featureEntry.getKey().ifPresent(featureKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY), feature, featureKey)));
 
 		Util.make(ImmutableMap.<RegistryEntry<PlacedFeature>, GenerationStep.Feature>builder(), map -> {
 			map.put(GoodEndingWorldGen.SHALLOW_WATER_MUD_PLACED, GenerationStep.Feature.UNDERGROUND_ORES);
@@ -107,14 +111,14 @@ public class GoodEnding implements ModInitializer {
 			map.put(GoodEndingWorldGen.CYPRESS_TREE_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
 			map.put(GoodEndingWorldGen.SWAMP_VEGETATION_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
 			map.put(GoodEndingWorldGen.DUCKWEED_PATCH_PLACED, GenerationStep.Feature.VEGETAL_DECORATION);
-		}).build().forEach((placedFeatureRegistryEntry, feature) -> placedFeatureRegistryEntry.getKey().ifPresent(placedFeatureRegistryKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(BiomeKeys.SWAMP), feature, placedFeatureRegistryKey)));
+		}).build().forEach((featureEntry, feature) -> featureEntry.getKey().ifPresent(featureKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(BiomeKeys.SWAMP), feature, featureKey)));
 
 		Util.make(ImmutableMap.<TagKey<Biome>, RegistryEntry<PlacedFeature>>builder(), map -> {
 			map.put(GoodEndingTags.PASTEL_WILDFLOWER_GENERATES, GoodEndingWorldGen.PATCH_PASTEL_WILDFLOWERS_PLACED);
 			map.put(GoodEndingTags.TWILIGHT_WILDFLOWER_GENERATES, GoodEndingWorldGen.PATCH_TWILIGHT_WILDFLOWERS_PLACED);
 			map.put(GoodEndingTags.SPICY_WILDFLOWER_GENERATES, GoodEndingWorldGen.PATCH_SPICY_WILDFLOWERS_PLACED);
 			map.put(GoodEndingTags.BALMY_WILDFLOWER_GENERATES, GoodEndingWorldGen.PATCH_BALMY_WILDFLOWERS_PLACED);
-		}).build().forEach((biomeTagKey, placedFeatureRegistryEntry) -> placedFeatureRegistryEntry.getKey().ifPresent(placedFeatureRegistryKey -> BiomeModifications.addFeature(BiomeSelectors.tag(biomeTagKey), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureRegistryKey)));
+		}).build().forEach((biomeTagKey, featureEntry) -> featureEntry.getKey().ifPresent(featureKey -> BiomeModifications.addFeature(BiomeSelectors.tag(biomeTagKey), GenerationStep.Feature.VEGETAL_DECORATION, featureKey)));
 
 		this.addFeatureToBiome(GoodEndingWorldGen.PATCH_PINK_FLOWERED_LILY_PLACED, BiomeKeys.MANGROVE_SWAMP);
 
@@ -128,9 +132,9 @@ public class GoodEnding implements ModInitializer {
 			map.put(BiomeKeys.SAVANNA, GoodEndingWorldGen.ACACIA_FALLEN_LOG_PLACED);
 			map.put(BiomeKeys.BIRCH_FOREST, GoodEndingWorldGen.BIRCH_FALLEN_LOG_PLACED);
 			map.put(BiomeKeys.OLD_GROWTH_BIRCH_FOREST, GoodEndingWorldGen.BIRCH_FALLEN_LOG_PLACED);
-		}).build().forEach((biome, worldgen) -> worldgen.getKey().ifPresent(placedFeatureRegistryKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(biome), GenerationStep.Feature.LOCAL_MODIFICATIONS, placedFeatureRegistryKey)));
+		}).build().forEach((biome, worldgen) -> worldgen.getKey().ifPresent(featureKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(biome), GenerationStep.Feature.LOCAL_MODIFICATIONS, featureKey)));
 
-		GoodEndingWorldGen.BIRCH_FALLEN_LOG_PLACED.getKey().ifPresent(placedFeatureRegistryKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(BiomeKeys.FOREST), GenerationStep.Feature.LOCAL_MODIFICATIONS, placedFeatureRegistryKey));
+		GoodEndingWorldGen.BIRCH_FALLEN_LOG_PLACED.getKey().ifPresent(featureKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(BiomeKeys.FOREST), GenerationStep.Feature.LOCAL_MODIFICATIONS, featureKey));
 
 		this.addFeatureToBiome(GoodEndingWorldGen.PATCH_TALL_GRASS_PLACED, BiomeKeys.OLD_GROWTH_BIRCH_FOREST);
 
@@ -183,7 +187,7 @@ public class GoodEnding implements ModInitializer {
 
 	}
 
-	private void addFeatureToBiome(RegistryEntry<PlacedFeature> placedFeatureRegistryEntry, RegistryKey<Biome> biomeRegistryKey) {
-		placedFeatureRegistryEntry.getKey().ifPresent(placedFeatureRegistryKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(biomeRegistryKey), GenerationStep.Feature.VEGETAL_DECORATION, placedFeatureRegistryKey));
+	private void addFeatureToBiome(RegistryEntry<PlacedFeature> featureEntry, RegistryKey<Biome> biomeKey) {
+		featureEntry.getKey().ifPresent(featureKey -> BiomeModifications.addFeature(BiomeSelectors.includeByKey(biomeKey), GenerationStep.Feature.VEGETAL_DECORATION, featureKey));
 	}
 }
