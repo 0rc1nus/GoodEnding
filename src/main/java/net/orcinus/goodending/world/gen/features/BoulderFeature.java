@@ -9,24 +9,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.util.DripstoneHelper;
 import net.minecraft.world.gen.feature.util.FeatureContext;
+import net.orcinus.goodending.init.GoodEndingTags;
 import net.orcinus.goodending.world.gen.features.config.BoulderConfig;
 
 public class BoulderFeature extends Feature<BoulderConfig> {
+
     public BoulderFeature(Codec<BoulderConfig> configCodec) {
         super(configCodec);
-    }
-
-    private boolean isValidGround(BlockState state) {
-        if (state.isIn(BlockTags.TERRACOTTA)) return true;
-        if (state.isIn(BlockTags.SAND)) return true;
-        if (state.isIn(BlockTags.DIRT)) return true;
-        if (state.isOf(Blocks.GRAVEL)) return true;
-        return false;
-    }
-
-    private boolean isValidSpace(StructureWorldAccess world, BlockPos pos) {
-        return world.getBlockState(pos).isAir() || world.getBlockState(pos).isOf(Blocks.WATER);
     }
 
     @Override
@@ -35,11 +26,10 @@ public class BoulderFeature extends Feature<BoulderConfig> {
         BlockPos origin = context.getOrigin();
         Random random = context.getRandom();
         BoulderConfig config = context.getConfig();
-
-        if (isValidGround(world.getBlockState(origin.down())) && isValidSpace(world, origin)) {
+        if (world.getBlockState(origin.down()).isIn(GoodEndingTags.BASE_BOULDER) && world.testBlockState(origin, DripstoneHelper::canGenerate)) {
             float size = config.size().get(random);
-            generateBoulder(world, origin.up(), random, config, size);
-            modifyGrass(world, origin, random, size);
+            this.generateBoulder(world, origin.up(), random, config, size);
+            this.modifyGrass(world, origin, random, size);
             return true;
         } else {
             return false;
@@ -52,8 +42,8 @@ public class BoulderFeature extends Feature<BoulderConfig> {
                 for (float z = -size; z < size; z++) {
                     double distance = Math.sqrt(x * x + y * y + z * z);
                     if (distance <= size * ((size - y) / 4)) {
-                        var pos = origin.add(x, y, z);
-                        var state = y + 1 > 0 && random.nextFloat() > 0.25F ? config.stone().getBlockState(random, pos) : config.secondaryStone().getBlockState(random, pos);
+                        BlockPos pos = origin.add(x, y, z);
+                        BlockState state = y + 1 > 0 && random.nextFloat() > 0.25F ? config.stone().getBlockState(random, pos) : config.secondaryStone().getBlockState(random, pos);
                         world.setBlockState(pos, state, 3);
                     }
                 }

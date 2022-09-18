@@ -37,12 +37,8 @@ public class FallenLogFeature extends Feature<FallenLogConfig> {
         BlockPos.Mutable mut = blockPos.mutableCopy();
         List<BlockPos> decorationPoses = Lists.newArrayList();
         FallenLogConfig config = context.getConfig();
-        boolean initFlag = world.getBlockState(blockPos.down()).isIn(BlockTags.DIRT) && world.getBlockState(blockPos).isAir();
-        if (!initFlag) {
-            return false;
-        } else {
-            BlockState checkState = world.getBlockState(blockPos.offset(direction));
-            if (!(checkState.isOf(Blocks.WATER) || checkState.isAir())) {
+        if (world.getBlockState(blockPos.down()).isIn(BlockTags.DIRT) && world.testBlockState(blockPos, DripstoneHelper::canGenerate)) {
+            if (!world.testBlockState(blockPos.offset(direction), DripstoneHelper::canGenerate)) {
                 direction = direction.rotateYClockwise();
             }
             for (int i = 0; i <= logLength; i++) {
@@ -72,10 +68,10 @@ public class FallenLogFeature extends Feature<FallenLogConfig> {
                     world.setBlockState(pos.offset(dir), GoodEndingBlocks.BIRCH_MUSHROOM.getDefaultState().with(BirchMushroomPlantBlock.FACING, dir), 2);
                 }
             }
+            return true;
+        } else {
+            return false;
         }
-        return true;
     }
 
-    private void extracted(StructureWorldAccess world, Random random, Direction direction, int logLength, BlockPos.Mutable mut, List<BlockPos> decorationPoses, FallenLogConfig config) {
-    }
 }
