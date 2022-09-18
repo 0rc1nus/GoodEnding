@@ -3,12 +3,8 @@ package net.orcinus.goodending;
 import com.google.common.collect.Lists;
 import com.google.common.reflect.Reflection;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
-import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
-import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemGroup;
@@ -20,12 +16,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.RegistryEntry;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.WorldEvents;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.GenerationStep;
-import net.minecraft.world.gen.feature.PlacedFeature;
 import net.orcinus.goodending.init.GoodEndingBiomeModifiers;
 import net.orcinus.goodending.init.GoodEndingBiomes;
 import net.orcinus.goodending.init.GoodEndingBlocks;
@@ -39,14 +30,11 @@ import net.orcinus.goodending.init.GoodEndingStructureProcessors;
 import net.orcinus.goodending.init.GoodEndingStructureTypes;
 import net.orcinus.goodending.init.GoodEndingTreeDecorators;
 import net.orcinus.goodending.init.GoodEndingVanillaIntegration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class GoodEnding implements ModInitializer {
 	public static final String MODID = "goodending";
-	public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
 	public static final ItemGroup TAB = FabricItemGroupBuilder.create(new Identifier(MODID, MODID)).icon(() -> new ItemStack(GoodEndingItems.YELLOW_FLOWERING_LILY_PAD)).build();
 
 	@SuppressWarnings("UnstableApiUsage")

@@ -3,6 +3,8 @@
     "#minecraft:terracotta",
     "#minecraft:sand",
     "#minecraft:dirt",
+    "#minecraft:base_stone_overworld",
+    "#c:ores",
     "minecraft:gravel"
   ]
 }

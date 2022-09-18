@@ -47,7 +47,6 @@ public class GoodEndingBiomeModifiers {
         addFeature(GoodEndingWorldGen.OAK_HAMMOCK_PATCH_TALL_GRASS_PLACED, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY, GenerationStep.Feature.VEGETAL_DECORATION);
         addFeature(GoodEndingWorldGen.PATCH_FERN_PLACED, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY, GenerationStep.Feature.VEGETAL_DECORATION);
         addFeature(GoodEndingWorldGen.PATCH_LARGE_FERN_PLACED, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY, GenerationStep.Feature.VEGETAL_DECORATION);
-        addFeature(GoodEndingWorldGen.MOSSY_BOULDER_PLACED, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY, GenerationStep.Feature.LOCAL_MODIFICATIONS);
     }
 
     public static void addSwampVegetation() {
@@ -102,6 +101,10 @@ public class GoodEndingBiomeModifiers {
         addFeature(GoodEndingWorldGen.RED_SANDSTONE_BOULDER_PLACED, GoodEndingTags.RED_SANDSTONE_BOULDER_GENERATES, GenerationStep.Feature.LOCAL_MODIFICATIONS);
         addFeature(GoodEndingWorldGen.SMOOTH_BASALT_BOULDER_PLACED, GoodEndingTags.SMOOTH_BASALT_BOULDER_GENERATES, GenerationStep.Feature.LOCAL_MODIFICATIONS);
         addFeature(GoodEndingWorldGen.TUFF_BOULDER_PLACED, GoodEndingTags.TUFF_BOULDER_GENERATES, GenerationStep.Feature.LOCAL_MODIFICATIONS);
+        addFeature(GoodEndingWorldGen.STONE_BOULDER_PLACED, GoodEndingTags.STONE_BOULDER_GENERATES, GenerationStep.Feature.LOCAL_MODIFICATIONS);
+        addFeature(GoodEndingWorldGen.COBBLESTONE_BOULDER_PLACED, GoodEndingTags.COBBLESTONE_BOULDER_GENERATES, GenerationStep.Feature.LOCAL_MODIFICATIONS);
+        addFeature(GoodEndingWorldGen.MOSSY_COBBLESTONE_BOULDER_PLACED, GoodEndingTags.MOSSY_COBBLESTONE_BOULDER_GENERATES, GenerationStep.Feature.LOCAL_MODIFICATIONS);
+        addFeature(GoodEndingWorldGen.MOSSIER_COBBLESTONE_BOULDER_PLACED, GoodEndingTags.MOSSIER_COBBLESTONE_BOULDER_GENERATES, GenerationStep.Feature.LOCAL_MODIFICATIONS);
     }
 
     public static void addFeature(RegistryEntry<PlacedFeature> featureRegistryEntry, RegistryKey<Biome> biomeRegistryKey, GenerationStep.Feature step) {

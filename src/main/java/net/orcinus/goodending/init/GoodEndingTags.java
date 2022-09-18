@@ -33,6 +33,10 @@ public interface GoodEndingTags {
     TagKey<Biome> BALMY_WILDFLOWER_GENERATES = registerBiomeTag("balmy_wildflower_generates");
     TagKey<Biome> LIGHT_GRAY_TERRACOTTA_GRANITE_BOULDER_GENERATES = registerBiomeTag("light_gray_terracotta_granite_boulder_generates");
     TagKey<Biome> STONE_TUFF_BOULDER_GENERATES = registerBiomeTag("stone_tuff_boulder_generates");
+    TagKey<Biome> STONE_BOULDER_GENERATES = registerBiomeTag("stone_boulder_generates");
+    TagKey<Biome> COBBLESTONE_BOULDER_GENERATES = registerBiomeTag("cobblestone_boulder_generates");
+    TagKey<Biome> MOSSY_COBBLESTONE_BOULDER_GENERATES = registerBiomeTag("mossy_cobblestone_boulder_generates");
+    TagKey<Biome> MOSSIER_COBBLESTONE_BOULDER_GENERATES = registerBiomeTag("mossier_cobblestone_boulder_generates");
     TagKey<Biome> TUFF_BOULDER_GENERATES = registerBiomeTag("tuff_boulder_generates");
     TagKey<Biome> SANDSTONE_BOULDER_GENERATES = registerBiomeTag("sandstone_boulder_generates");
     TagKey<Biome> SMOOTH_BASALT_BOULDER_GENERATES = registerBiomeTag("smooth_basalt_boulder_generates");

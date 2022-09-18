@@ -156,29 +156,35 @@ public class GoodEndingWorldGen {
     public static final RegistryEntry<ConfiguredFeature<RandomFeatureConfig, ?>> OAK_HAMMOCK_TREES = register("oak_hammock_trees", Feature.RANDOM_SELECTOR, new RandomFeatureConfig(List.of(new RandomFeatureEntry(TreePlacedFeatures.FANCY_OAK_CHECKED, 0.2F), new RandomFeatureEntry(PlacedFeatures.createEntry(FANCY_DARK_OAK), 0.8F)), PlacedFeatures.createEntry(FANCY_DARK_OAK)));
     public static final RegistryEntry<PlacedFeature> OAK_HAMMOCK_TREES_PLACED = register("oak_hammock_trees_placed", OAK_HAMMOCK_TREES, CountPlacementModifier.of(5), SquarePlacementModifier.of(), VegetationPlacedFeatures.NOT_IN_SURFACE_WATER_MODIFIER, PlacedFeatures.OCEAN_FLOOR_HEIGHTMAP, BiomePlacementModifier.of());
 
-    public static final RegistryEntry<ConfiguredFeature<DefaultFeatureConfig, ?>> MOSSY_BOULDER = register("mossy_boulder", GoodEndingFeatures.MOSSY_BOULDER, new DefaultFeatureConfig());
-    public static final RegistryEntry<PlacedFeature> MOSSY_BOULDER_PLACED = register("mossy_boulder_placed", MOSSY_BOULDER, CountPlacementModifier.of(2), SquarePlacementModifier.of(), PlacedFeatures.OCEAN_FLOOR_WG_HEIGHTMAP, BiomePlacementModifier.of());
-
-    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> GRANITE_BOULDER = register("granite_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(BlockStateProvider.of(Blocks.LIGHT_GRAY_TERRACOTTA), BlockStateProvider.of(Blocks.GRANITE), UniformFloatProvider.create(2, 4.2F)));
+    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> GRANITE_BOULDER = register("granite_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(true, BlockStateProvider.of(Blocks.LIGHT_GRAY_TERRACOTTA), BlockStateProvider.of(Blocks.GRANITE), UniformFloatProvider.create(2, 4.2F)));
     public static final RegistryEntry<PlacedFeature> GRANITE_BOULDER_PLACED = register("granite_boulder_placed", GRANITE_BOULDER, GoodEndingWorldGen.boulderModifier(19, PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP));
 
-    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> PLAINS_BOULDER = register("plains_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(BlockStateProvider.of(Blocks.STONE), BlockStateProvider.of(Blocks.TUFF), UniformFloatProvider.create(2, 3.5F)));
+    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> PLAINS_BOULDER = register("plains_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(true, BlockStateProvider.of(Blocks.STONE), BlockStateProvider.of(Blocks.TUFF), UniformFloatProvider.create(2, 3.5F)));
     public static final RegistryEntry<PlacedFeature> PLAINS_BOULDER_PLACED = register("plains_boulder_placed", PLAINS_BOULDER, GoodEndingWorldGen.boulderModifier(25, PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP));
 
-    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> DESERT_BOULDER = register("desert_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(BlockStateProvider.of(Blocks.SANDSTONE), BlockStateProvider.of(Blocks.SANDSTONE), UniformFloatProvider.create(2, 3.5F)));
+    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> DESERT_BOULDER = register("desert_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(true, BlockStateProvider.of(Blocks.SANDSTONE), BlockStateProvider.of(Blocks.SANDSTONE), UniformFloatProvider.create(2, 3.5F)));
     public static final RegistryEntry<PlacedFeature> DESERT_BOULDER_PLACED = register("desert_boulder_placed", DESERT_BOULDER, GoodEndingWorldGen.boulderModifier(20, PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP));
 
-    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> RED_SANDSTONE_BOULDER = register("red_sandstone_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(BlockStateProvider.of(Blocks.RED_SANDSTONE), BlockStateProvider.of(Blocks.RED_SANDSTONE), UniformFloatProvider.create(2, 3.5F)));
+    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> RED_SANDSTONE_BOULDER = register("red_sandstone_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(true, BlockStateProvider.of(Blocks.RED_SANDSTONE), BlockStateProvider.of(Blocks.RED_SANDSTONE), UniformFloatProvider.create(2, 3.5F)));
     public static final RegistryEntry<PlacedFeature> RED_SANDSTONE_BOULDER_PLACED = register("red_sandstone_boulder_placed", RED_SANDSTONE_BOULDER, GoodEndingWorldGen.boulderModifier(25, PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP));
 
-    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> SMOOTH_BASALT_BOULDER = register("smooth_basalt_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(BlockStateProvider.of(Blocks.SMOOTH_BASALT), BlockStateProvider.of(Blocks.SMOOTH_BASALT), UniformFloatProvider.create(2.3F, 5.4F)));
+    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> SMOOTH_BASALT_BOULDER = register("smooth_basalt_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(true, BlockStateProvider.of(Blocks.SMOOTH_BASALT), BlockStateProvider.of(Blocks.SMOOTH_BASALT), UniformFloatProvider.create(2.3F, 5.4F)));
     public static final RegistryEntry<PlacedFeature> SMOOTH_BASALT_BOULDER_PLACED = register("smooth_basalt_boulder_placed", SMOOTH_BASALT_BOULDER, GoodEndingWorldGen.boulderModifier(19, PlacedFeatures.OCEAN_FLOOR_WG_HEIGHTMAP));
 
-    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> STONE_BOULDER = register("stone_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(BlockStateProvider.of(Blocks.STONE), BlockStateProvider.of(Blocks.STONE), UniformFloatProvider.create(2.1F, 4.8F)));
+    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> STONE_BOULDER = register("stone_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(true, BlockStateProvider.of(Blocks.STONE), BlockStateProvider.of(Blocks.STONE), UniformFloatProvider.create(2.1F, 4.8F)));
     public static final RegistryEntry<PlacedFeature> STONE_BOULDER_PLACED = register("stone_boulder_placed", STONE_BOULDER, GoodEndingWorldGen.boulderModifier(19, PlacedFeatures.OCEAN_FLOOR_WG_HEIGHTMAP));
 
-    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> TUFF_BOULDER = register("tuff_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(BlockStateProvider.of(Blocks.TUFF), BlockStateProvider.of(Blocks.TUFF), UniformFloatProvider.create(2.2F, 5.2F)));
+    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> TUFF_BOULDER = register("tuff_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(true, BlockStateProvider.of(Blocks.TUFF), BlockStateProvider.of(Blocks.TUFF), UniformFloatProvider.create(2.2F, 5.2F)));
     public static final RegistryEntry<PlacedFeature> TUFF_BOULDER_PLACED = register("tuff_boulder_placed", TUFF_BOULDER, GoodEndingWorldGen.boulderModifier(19, PlacedFeatures.OCEAN_FLOOR_WG_HEIGHTMAP));
+
+    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> COBBLESTONE_BOULDER = register("cobblestone_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(true, BlockStateProvider.of(Blocks.COBBLESTONE), BlockStateProvider.of(Blocks.COBBLESTONE), UniformFloatProvider.create(2F, 3F)));
+    public static final RegistryEntry<PlacedFeature> COBBLESTONE_BOULDER_PLACED = register("cobblestone_boulder_placed", COBBLESTONE_BOULDER, GoodEndingWorldGen.boulderModifier(19, PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP));
+
+    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> MOSSY_COBBLESTONE_BOULDER = register("mossy_cobblestone_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(true, BlockStateProvider.of(Blocks.MOSSY_COBBLESTONE), BlockStateProvider.of(Blocks.COBBLESTONE), UniformFloatProvider.create(2F, 3F)));
+    public static final RegistryEntry<PlacedFeature> MOSSY_COBBLESTONE_BOULDER_PLACED = register("mossy_cobblestone_boulder_placed", MOSSY_COBBLESTONE_BOULDER, GoodEndingWorldGen.boulderModifier(19, PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP));
+
+    public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> MOSSIER_COBBLESTONE_BOULDER = register("mossier_cobblestone_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(false, BlockStateProvider.of(Blocks.MOSS_BLOCK), BlockStateProvider.of(Blocks.MOSSY_COBBLESTONE), UniformFloatProvider.create(2F, 3F)));
+    public static final RegistryEntry<PlacedFeature> MOSSIER_COBBLESTONE_BOULDER_PLACED = register("mossier_cobblestone_boulder_placed", MOSSIER_COBBLESTONE_BOULDER, GoodEndingWorldGen.boulderModifier(19, PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP));
 
     public static List<PlacementModifier> boulderModifier(int chance, PlacementModifier heightmap) {
         return List.of(RarityFilterPlacementModifier.of(chance), CountPlacementModifier.of(2), SquarePlacementModifier.of(), heightmap, BiomePlacementModifier.of());

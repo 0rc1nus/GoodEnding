@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.StructureWorldAccess;
@@ -29,7 +28,7 @@ public class BoulderFeature extends Feature<BoulderConfig> {
         if (world.getBlockState(origin.down()).isIn(GoodEndingTags.BASE_BOULDER) && world.testBlockState(origin, DripstoneHelper::canGenerate)) {
             float size = config.size().get(random);
             this.generateBoulder(world, origin.up(), random, config, size);
-            this.modifyGrass(world, origin, random, size);
+            this.modifyGrass(world, origin, random, size, config);
             return true;
         } else {
             return false;
@@ -51,10 +50,10 @@ public class BoulderFeature extends Feature<BoulderConfig> {
         }
     }
 
-    private void modifyGrass(StructureWorldAccess world, BlockPos origin, Random random, float size) {
+    private void modifyGrass(StructureWorldAccess world, BlockPos origin, Random random, float size, BoulderConfig config) {
         int radius = (int) (size * 1.5F);
         BlockPos.streamOutwards(origin, radius, 3, radius).forEach((pos) -> {
-            if (world.getBlockState(pos).isOf(Blocks.GRASS_BLOCK) && random.nextBoolean()) {
+            if ((world.getBlockState(pos).isOf(Blocks.GRASS_BLOCK) || (world.getBlockState(pos).isOf(Blocks.PODZOL))) && random.nextBoolean() && config.coarseDirt()) {
                 world.setBlockState(pos, Blocks.COARSE_DIRT.getDefaultState(), 3);
             }
         });
