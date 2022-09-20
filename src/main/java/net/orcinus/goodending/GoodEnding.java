@@ -22,6 +22,7 @@ import net.orcinus.goodending.init.GoodEndingBiomes;
 import net.orcinus.goodending.init.GoodEndingBlocks;
 import net.orcinus.goodending.init.GoodEndingFeatures;
 import net.orcinus.goodending.init.GoodEndingItems;
+import net.orcinus.goodending.init.GoodEndingParticleTypes;
 import net.orcinus.goodending.init.GoodEndingPotions;
 import net.orcinus.goodending.init.GoodEndingSoundEvents;
 import net.orcinus.goodending.init.GoodEndingStatusEffects;
@@ -57,6 +58,7 @@ public class GoodEnding implements ModInitializer {
 		GoodEndingPotions.init();
 		GoodEndingBiomeModifiers.init();
 		GoodEndingVanillaIntegration.init();
+		GoodEndingParticleTypes.init();
 
 		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
 			BlockPos blockPos = hitResult.getBlockPos();

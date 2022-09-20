@@ -179,10 +179,10 @@
   },
   "block.firefly_lantern.open": {
     "sounds": ["goodending:block/firefly_lantern/open"],
-    "subtitle": "subtitles.block.generic.open"
+    "subtitle": "subtitles.block.generic.toggle"
   },
   "block.firefly_lantern.close": {
     "sounds": ["goodending:block/firefly_lantern/close"],
-    "subtitle": "subtitles.block.generic.close"
+    "subtitle": "subtitles.block.generic.toggle"
   }
 }

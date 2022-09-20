@@ -182,14 +182,24 @@ public class FireflyEntity extends PathAwareEntity implements Flutterer {
         if (this.isAlive()) {
             if (world.getTimeOfDay() < 12000 && world.getTimeOfDay() > 0) {
                 mutable.set(this.getX() + MathHelper.nextBetween(random, -0.25f, 0.25f), this.getBlockPos().getY(), this.getZ() + MathHelper.nextBetween(random, -0.25f, 0.25f));
-                for (int i = 0; i < 0.5; i++) if (this.random.nextFloat() < 0.01F) world.addParticle(GoodEndingParticleTypes.FIREFLY, mutable.getX() + random.nextDouble(), this.getY() + random.nextDouble(), mutable.getZ() + random.nextDouble(), j, k, l);
+                for (int i = 0; i < 0.5; i++) {
+                    if (this.random.nextFloat() < 0.01F) this.addParticle(mutable, random, j, k, l);
+                }
             }
             else {
                 mutable.set(this.getX() + MathHelper.nextBetween(random, -width, width), this.getBlockPos().getY(), this.getZ() + MathHelper.nextBetween(random, -width, width));
-                for (int i = 0; i < count; i++) if (this.random.nextFloat() < 0.1F) world.addParticle(GoodEndingParticleTypes.FIREFLY, mutable.getX() + random.nextDouble(), this.getY() + random.nextDouble(), mutable.getZ() + random.nextDouble(), j, k, l);
+                for (int i = 0; i < count; i++) {
+                    if (this.random.nextFloat() < 0.1F) {
+                        this.addParticle(mutable, random, j, k, l);
+                    }
+                }
             }
 
         }
+    }
+
+    private void addParticle(BlockPos.Mutable mutable, Random random, double j, double k, double l) {
+        this.world.addParticle(GoodEndingParticleTypes.FIREFLY, mutable.getX() + random.nextDouble(), this.getY() + random.nextDouble(), mutable.getZ() + random.nextDouble(), j, k, l);
     }
 
     public static DefaultAttributeContainer.Builder createFireflyAttributes() {
@@ -254,5 +264,10 @@ public class FireflyEntity extends PathAwareEntity implements Flutterer {
     @Override
     public boolean occludeVibrationSignals() {
         return true;
+    }
+
+    @Override
+    protected MoveEffect getMoveEffect() {
+        return MoveEffect.NONE;
     }
 }
