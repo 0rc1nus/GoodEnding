@@ -56,7 +56,7 @@ import net.minecraft.world.gen.trunk.StraightTrunkPlacer;
 import net.orcinus.goodending.GoodEnding;
 import net.orcinus.goodending.world.gen.features.config.BoulderConfig;
 import net.orcinus.goodending.world.gen.features.config.FallenLogConfig;
-import net.orcinus.goodending.world.gen.features.config.FancyDarkOakFeatureConfig;
+import net.orcinus.goodending.world.gen.features.config.FancyDarkOakTreeConfig;
 import net.orcinus.goodending.world.gen.features.config.HalfWaterloggedDecorationConfig;
 import net.orcinus.goodending.world.gen.features.config.MuddyOakFeatureConfig;
 import net.orcinus.goodending.world.gen.features.config.ShallowWaterConfig;
@@ -150,11 +150,14 @@ public class GoodEndingWorldGen {
     public static final RegistryEntry<ConfiguredFeature<DiskFeatureConfig, ?>> DISK_PODZOL = register("disk_podzol", Feature.DISK, new DiskFeatureConfig(new PredicatedStateProvider(BlockStateProvider.of(Blocks.PODZOL), List.of(new PredicatedStateProvider.Rule(BlockPredicate.not(BlockPredicate.anyOf(BlockPredicate.matchingBlocks(Blocks.COARSE_DIRT), BlockPredicate.solid(Direction.UP.getVector()), BlockPredicate.matchingFluids(Direction.UP.getVector(), Fluids.WATER))), BlockStateProvider.of(Blocks.PODZOL)))), BlockPredicate.matchingBlocks(List.of(Blocks.GRASS_BLOCK, Blocks.DIRT, Blocks.COARSE_DIRT)), UniformIntProvider.create(2, 6), 0));
     public static final RegistryEntry<PlacedFeature> DISK_PODZOL_PLACED = register("disk_podzol", DISK_PODZOL, CountPlacementModifier.of(3), SquarePlacementModifier.of(), PlacedFeatures.OCEAN_FLOOR_WG_HEIGHTMAP, RandomOffsetPlacementModifier.vertically(ConstantIntProvider.create(-1)), BlockFilterPlacementModifier.of(BlockPredicate.matchingBlocks(Blocks.COARSE_DIRT)), BiomePlacementModifier.of());
 
-    public static final RegistryEntry<ConfiguredFeature<FancyDarkOakFeatureConfig, ?>> FANCY_DARK_OAK = register("fancy_dark_oak", GoodEndingFeatures.FANCY_DARK_OAK, new FancyDarkOakFeatureConfig(false));
-    public static final RegistryEntry<ConfiguredFeature<FancyDarkOakFeatureConfig, ?>> FANCY_DARK_OAK_PLANTED = register("fancy_dark_oak_planted", GoodEndingFeatures.FANCY_DARK_OAK, new FancyDarkOakFeatureConfig(true));
+    public static final RegistryEntry<ConfiguredFeature<FancyDarkOakTreeConfig, ?>> FANCY_DARK_OAK = register("fancy_dark_oak", GoodEndingFeatures.FANCY_DARK_OAK, new FancyDarkOakTreeConfig.FancyDarkOakTreeConfigBuilder(false, false).build());
+    public static final RegistryEntry<ConfiguredFeature<FancyDarkOakTreeConfig, ?>> FANCY_DARK_OAK_PLANTED = register("fancy_dark_oak_planted", GoodEndingFeatures.FANCY_DARK_OAK, new FancyDarkOakTreeConfig.FancyDarkOakTreeConfigBuilder(false, true).build());
 
-    public static final RegistryEntry<ConfiguredFeature<RandomFeatureConfig, ?>> OAK_HAMMOCK_TREES = register("oak_hammock_trees", Feature.RANDOM_SELECTOR, new RandomFeatureConfig(List.of(new RandomFeatureEntry(TreePlacedFeatures.FANCY_OAK_CHECKED, 0.2F), new RandomFeatureEntry(PlacedFeatures.createEntry(FANCY_DARK_OAK), 0.8F)), PlacedFeatures.createEntry(FANCY_DARK_OAK)));
-    public static final RegistryEntry<PlacedFeature> OAK_HAMMOCK_TREES_PLACED = register("oak_hammock_trees_placed", OAK_HAMMOCK_TREES, CountPlacementModifier.of(5), SquarePlacementModifier.of(), VegetationPlacedFeatures.NOT_IN_SURFACE_WATER_MODIFIER, PlacedFeatures.OCEAN_FLOOR_HEIGHTMAP, BiomePlacementModifier.of());
+    public static final RegistryEntry<ConfiguredFeature<FancyDarkOakTreeConfig, ?>> BIG_FANCY_DARK_OAK = register("big_fancy_dark_oak", GoodEndingFeatures.FANCY_DARK_OAK, new FancyDarkOakTreeConfig.FancyDarkOakTreeConfigBuilder(true, false).build());
+    public static final RegistryEntry<ConfiguredFeature<FancyDarkOakTreeConfig, ?>> BIG_FANCY_DARK_OAK_PLANTED = register("big_fancy_dark_oak_planted", GoodEndingFeatures.FANCY_DARK_OAK, new FancyDarkOakTreeConfig.FancyDarkOakTreeConfigBuilder(true, true).build());
+
+    public static final RegistryEntry<ConfiguredFeature<RandomFeatureConfig, ?>> OAK_HAMMOCK_TREES = register("oak_hammock_trees", Feature.RANDOM_SELECTOR, new RandomFeatureConfig(List.of(new RandomFeatureEntry(TreePlacedFeatures.FANCY_OAK_CHECKED, 0.2F), new RandomFeatureEntry(PlacedFeatures.createEntry(FANCY_DARK_OAK), 0.8F), new RandomFeatureEntry(PlacedFeatures.createEntry(BIG_FANCY_DARK_OAK), 0.78F)), PlacedFeatures.createEntry(FANCY_DARK_OAK)));
+    public static final RegistryEntry<PlacedFeature> OAK_HAMMOCK_TREES_PLACED = register("oak_hammock_trees_placed", OAK_HAMMOCK_TREES, CountPlacementModifier.of(8), SquarePlacementModifier.of(), VegetationPlacedFeatures.NOT_IN_SURFACE_WATER_MODIFIER, PlacedFeatures.OCEAN_FLOOR_HEIGHTMAP, BiomePlacementModifier.of());
 
     public static final RegistryEntry<ConfiguredFeature<BoulderConfig, ?>> GRANITE_BOULDER = register("granite_boulder", GoodEndingFeatures.BOULDER, new BoulderConfig(true, BlockStateProvider.of(Blocks.LIGHT_GRAY_TERRACOTTA), BlockStateProvider.of(Blocks.GRANITE), UniformFloatProvider.create(2, 4.2F)));
     public static final RegistryEntry<PlacedFeature> GRANITE_BOULDER_PLACED = register("granite_boulder_placed", GRANITE_BOULDER, GoodEndingWorldGen.boulderModifier(19, PlacedFeatures.WORLD_SURFACE_WG_HEIGHTMAP));

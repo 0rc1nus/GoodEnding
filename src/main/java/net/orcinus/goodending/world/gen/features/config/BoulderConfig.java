@@ -16,4 +16,5 @@ public record BoulderConfig(Boolean coarseDirt, BlockStateProvider stone, BlockS
         BlockStateProvider.TYPE_CODEC.fieldOf("secondary_stone").forGetter(config -> config.secondaryStone),
         FloatProvider.createValidatedCodec(1, 64).fieldOf("size").forGetter(config -> config.size)
     ).apply(instance, BoulderConfig::new));
+
 }

@@ -21,7 +21,7 @@ import net.orcinus.goodending.world.gen.features.ShallowWaterFeature;
 import net.orcinus.goodending.world.gen.features.TallBirchTreeFeature;
 import net.orcinus.goodending.world.gen.features.config.BoulderConfig;
 import net.orcinus.goodending.world.gen.features.config.FallenLogConfig;
-import net.orcinus.goodending.world.gen.features.config.FancyDarkOakFeatureConfig;
+import net.orcinus.goodending.world.gen.features.config.FancyDarkOakTreeConfig;
 import net.orcinus.goodending.world.gen.features.config.HalfWaterloggedDecorationConfig;
 import net.orcinus.goodending.world.gen.features.config.MuddyOakFeatureConfig;
 import net.orcinus.goodending.world.gen.features.config.ShallowWaterConfig;
@@ -41,7 +41,7 @@ public class GoodEndingFeatures {
     public static final Feature<MuddyOakFeatureConfig> MUDDY_OAK_TREE_FEATURE = registerFeature("swamp_tree", new MuddyOakTreeFeature(MuddyOakFeatureConfig.CODEC));
     public static final Feature<TreeFeatureConfig> TALL_BIRCH_TREE = registerFeature("tall_birch_tree", new TallBirchTreeFeature(TreeFeatureConfig.CODEC));
     public static final Feature<DefaultFeatureConfig> LARGE_LILY_PADS = registerFeature("large_lily_pad", new LargeLilyPadFeature(DefaultFeatureConfig.CODEC));
-    public static final Feature<FancyDarkOakFeatureConfig> FANCY_DARK_OAK = registerFeature("fancy_dark_oak", new FancyDarkOakFeature(FancyDarkOakFeatureConfig.CODEC));
+    public static final Feature<FancyDarkOakTreeConfig> FANCY_DARK_OAK = registerFeature("fancy_dark_oak", new FancyDarkOakFeature(FancyDarkOakTreeConfig.CODEC));
     public static final Feature<DefaultFeatureConfig> ALGAE_PATCH = registerFeature("algae_patch", new AlgaePatchFeature(DefaultFeatureConfig.CODEC));
     public static final Feature<BoulderConfig> BOULDER = registerFeature("boulder", new BoulderFeature(BoulderConfig.CODEC));
 

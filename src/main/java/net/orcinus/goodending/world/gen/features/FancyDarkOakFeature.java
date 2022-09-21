@@ -17,24 +17,25 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.util.DripstoneHelper;
 import net.minecraft.world.gen.feature.util.FeatureContext;
 import net.orcinus.goodending.init.GoodEndingBlocks;
-import net.orcinus.goodending.world.gen.features.config.FancyDarkOakFeatureConfig;
+import net.orcinus.goodending.world.gen.features.config.FancyDarkOakTreeConfig;
 
 import java.util.List;
+import java.util.Optional;
 
-public class FancyDarkOakFeature extends Feature<FancyDarkOakFeatureConfig> {
+public class FancyDarkOakFeature extends Feature<FancyDarkOakTreeConfig> {
 
-    public FancyDarkOakFeature(Codec<FancyDarkOakFeatureConfig> configCodec) {
+    public FancyDarkOakFeature(Codec<FancyDarkOakTreeConfig> configCodec) {
         super(configCodec);
     }
 
     @Override
-    public boolean generate(FeatureContext<FancyDarkOakFeatureConfig> context) {
+    public boolean generate(FeatureContext<FancyDarkOakTreeConfig> context) {
         BlockPos blockPos = context.getOrigin();
         Random random = context.getRandom();
         StructureWorldAccess world = context.getWorld();
         boolean huge = false;
         int height = 7;
-        if (random.nextInt(6) == 0) {
+        if (context.getConfig().isFancy) {
             height *= 2;
             huge = true;
         }
@@ -45,11 +46,11 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakFeatureConfig> {
         if (!world.getBlockState(blockPos.down()).isIn(BlockTags.DIRT)) {
             return false;
         } else {
-            BlockPos initialPos = this.getInitialPos(context.getConfig(), world, blockPos, baseRadius, 1);
-            if (initialPos == null) {
+            Optional<BlockPos> initialPos = this.getInitialPos(context.getConfig(), world, blockPos, baseRadius, 1);
+            if (initialPos.isEmpty()) {
                 return false;
             } else {
-                blockPos = initialPos;
+                blockPos = initialPos.get();
                 for (int x = -baseRadius; x <= baseRadius; x++) {
                     for (int z = -baseRadius; z <= baseRadius; z++) {
                         for (int y = 0; y < height; y++) {
@@ -151,23 +152,23 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakFeatureConfig> {
         }
     }
 
-    public BlockPos getInitialPos(FancyDarkOakFeatureConfig config, StructureWorldAccess world, BlockPos originPos, int baseRadius, int count) {
-        if (config.isPlanted()) {
-            return originPos;
+    public Optional<BlockPos> getInitialPos(FancyDarkOakTreeConfig config, StructureWorldAccess world, BlockPos originPos, int baseRadius, int count) {
+        if (config.planted) {
+            return Optional.of(originPos);
         }
         for (int x = -baseRadius; x <= baseRadius; x++) {
             for (int z = -baseRadius; z <= baseRadius; z++) {
                 BlockPos pos = new BlockPos(originPos.getX() + x, originPos.getY(), originPos.getZ() + z);
                 if (world.isAir(pos.down())) {
                     if (count > 4) {
-                        return null;
+                        return Optional.empty();
                     }
                     count++;
                     return this.getInitialPos(config, world, originPos.down(), baseRadius, count);
                 }
             }
         }
-        return originPos;
+        return Optional.of(originPos);
     }
 
 }

@@ -12,7 +12,7 @@ public class FancyDarkOakSaplingGenerator extends LargeTreeSaplingGenerator {
     @Nullable
     @Override
     protected RegistryEntry<? extends ConfiguredFeature<?, ?>> getLargeTreeFeature(Random random) {
-        return GoodEndingWorldGen.FANCY_DARK_OAK_PLANTED;
+        return random.nextFloat() < 0.25F ? GoodEndingWorldGen.BIG_FANCY_DARK_OAK_PLANTED : GoodEndingWorldGen.FANCY_DARK_OAK_PLANTED;
     }
 
     @Nullable
