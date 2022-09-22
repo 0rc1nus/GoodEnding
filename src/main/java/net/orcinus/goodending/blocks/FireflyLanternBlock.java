@@ -66,7 +66,6 @@ public class FireflyLanternBlock extends LanternBlock {
         if ((!state.get(OPEN)) || (state.get(OPEN) && world.getTimeOfDay() < 12000 && world.getTimeOfDay() > 0)) {
             for (int l = 0; l < 1; ++l) {
                 double x = pos.getX() + 0.5D;
-
                 double y = pos.getY();
                 double z = pos.getZ() + 0.5D;
                 double xVelocity = random.nextFloat() / 45.0F * (random.nextBoolean() ? -1 : 1);
