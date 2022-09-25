@@ -16,6 +16,7 @@ import net.minecraft.world.StructureWorldAccess;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.util.DripstoneHelper;
 import net.minecraft.world.gen.feature.util.FeatureContext;
+import net.orcinus.goodending.blocks.HangingLeavesBlock;
 import net.orcinus.goodending.init.GoodEndingBlocks;
 import net.orcinus.goodending.world.gen.features.config.FancyDarkOakTreeConfig;
 
@@ -133,12 +134,12 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakTreeConfig> {
                             BlockPos placePos = pos.down(i);
                             if (i == branchHeight) {
                                 if (world.testBlockState(placePos, AbstractBlock.AbstractBlockState::isAir)) {
-                                    world.setBlockState(placePos, GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.getDefaultState(), 19);
+                                    world.setBlockState(placePos, GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.getDefaultState().with(HangingLeavesBlock.AGE, 25), 19);
                                     break;
                                 }
                             }
                             if (world.getBlockState(placePos.down()).isIn(BlockTags.LOGS)) {
-                                world.setBlockState(placePos, GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.getDefaultState(), 19);
+                                world.setBlockState(placePos, GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.getDefaultState().with(HangingLeavesBlock.AGE, 25), 19);
                                 break;
                             }
                             if (world.testBlockState(placePos, AbstractBlock.AbstractBlockState::isAir)) {

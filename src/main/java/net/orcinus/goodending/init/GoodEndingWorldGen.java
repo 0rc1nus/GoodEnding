@@ -64,9 +64,6 @@ import net.orcinus.goodending.world.gen.features.config.WaterTreeFeatureConfig;
 
 public class GoodEndingWorldGen {
 
-    public static final RegistryEntry<ConfiguredFeature<DiskFeatureConfig, ?>> DISK_MUD = register("disk_mud", Feature.DISK, new DiskFeatureConfig(new PredicatedStateProvider(BlockStateProvider.of(Blocks.MUD), List.of(new PredicatedStateProvider.Rule(BlockPredicate.not(BlockPredicate.eitherOf(BlockPredicate.solid(Direction.UP.getVector()), BlockPredicate.matchingFluids(Direction.UP.getVector(), Fluids.WATER))), BlockStateProvider.of(Blocks.MUD)))), BlockPredicate.matchingBlocks(List.of(Blocks.GRASS_BLOCK, Blocks.DIRT)), UniformIntProvider.create(3, 5), 2));
-    public static final RegistryEntry<PlacedFeature> DISK_MUD_PLACED = register("disk_mud", DISK_MUD, CountPlacementModifier.of(2), SquarePlacementModifier.of(), PlacedFeatures.OCEAN_FLOOR_WG_HEIGHTMAP, RandomOffsetPlacementModifier.vertically(ConstantIntProvider.create(-1)), BlockFilterPlacementModifier.of(BlockPredicate.matchingBlocks(Blocks.GRASS_BLOCK, Blocks.DIRT)), BiomePlacementModifier.of());
-
     public static final RegistryEntry<ConfiguredFeature<ShallowWaterConfig, ?>> SHALLOW_WATER_MUD = register("shallow_water_mud", GoodEndingFeatures.SHALLOW_WATER, new ShallowWaterConfig(BlockStateProvider.of(Blocks.MUD), true, false, 6, 0.25F));
     public static final RegistryEntry<PlacedFeature> SHALLOW_WATER_MUD_PLACED = register("shallow_water_mud", SHALLOW_WATER_MUD, CountPlacementModifier.of(120), SquarePlacementModifier.of(), PlacedFeatures.OCEAN_FLOOR_WG_HEIGHTMAP, BiomePlacementModifier.of());
 
