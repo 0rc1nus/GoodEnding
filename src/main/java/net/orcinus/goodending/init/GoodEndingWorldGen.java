@@ -133,9 +133,9 @@ public class GoodEndingWorldGen {
     public static final RegistryEntry<ConfiguredFeature<RandomPatchFeatureConfig, ?>> PATCH_LARGE_FERN = register("patch_large_fern", Feature.RANDOM_PATCH, ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(BlockStateProvider.of(Blocks.LARGE_FERN)), List.of(), 24));
     public static final RegistryEntry<ConfiguredFeature<RandomPatchFeatureConfig, ?>> OAK_HAMMOCK_PATCH_TALL_GRASS = register("oak_hammock_patch_tall_grass", Feature.RANDOM_PATCH, ConfiguredFeatures.createRandomPatchFeatureConfig(Feature.SIMPLE_BLOCK, new SimpleBlockFeatureConfig(BlockStateProvider.of(Blocks.TALL_GRASS)), List.of(), 24));
     public static final RegistryEntry<PlacedFeature> PATCH_TALL_GRASS_PLACED = register("patch_tall_grass_placed", VegetationConfiguredFeatures.PATCH_TALL_GRASS, VegetationPlacedFeatures.modifiers(3));
-    public static final RegistryEntry<PlacedFeature> PATCH_FERN_PLACED = register("patch_fern_placed", PATCH_FERN, VegetationPlacedFeatures.modifiers(2));
-    public static final RegistryEntry<PlacedFeature> PATCH_LARGE_FERN_PLACED = register("patch_large_fern_placed", PATCH_LARGE_FERN, VegetationPlacedFeatures.modifiers(3));
-    public static final RegistryEntry<PlacedFeature> OAK_HAMMOCK_PATCH_TALL_GRASS_PLACED = register("oak_hammock_patch_tall_grass_placed", OAK_HAMMOCK_PATCH_TALL_GRASS, VegetationPlacedFeatures.modifiers(3));
+    public static final RegistryEntry<PlacedFeature> PATCH_FERN_PLACED = register("patch_fern_placed", PATCH_FERN, VegetationPlacedFeatures.modifiers(1));
+    public static final RegistryEntry<PlacedFeature> PATCH_LARGE_FERN_PLACED = register("patch_large_fern_placed", PATCH_LARGE_FERN, VegetationPlacedFeatures.modifiers(1));
+    public static final RegistryEntry<PlacedFeature> OAK_HAMMOCK_PATCH_TALL_GRASS_PLACED = register("oak_hammock_patch_tall_grass_placed", OAK_HAMMOCK_PATCH_TALL_GRASS, VegetationPlacedFeatures.modifiers(1));
 
     public static final RegistryEntry<ConfiguredFeature<DefaultFeatureConfig, ?>> LARGE_LILY_PADS = register("large_lily_pads", GoodEndingFeatures.LARGE_LILY_PADS, new DefaultFeatureConfig());
 

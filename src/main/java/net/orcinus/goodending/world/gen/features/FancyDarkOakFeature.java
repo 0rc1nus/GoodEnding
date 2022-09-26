@@ -128,8 +128,8 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakTreeConfig> {
                     break;
                 }
                 for (BlockPos pos : leavePoses) {
-                    if (random.nextFloat() < 0.5F && world.testBlockState(pos.down(), AbstractBlock.AbstractBlockState::isAir) && world.testBlockState(pos, blockState -> blockState.isOf(Blocks.DARK_OAK_LEAVES))) {
-                        int branchHeight = MathHelper.nextInt(random, 1, 6);
+                    if (random.nextFloat() < 0.15F && world.testBlockState(pos.down(), AbstractBlock.AbstractBlockState::isAir) && world.testBlockState(pos, blockState -> blockState.isOf(Blocks.DARK_OAK_LEAVES))) {
+                        int branchHeight = (int) MathHelper.nextFloat(random, height * 0.25F, height * 0.75F);
                         for (int i = 0; i <= branchHeight; i++) {
                             BlockPos placePos = pos.down(i);
                             if (i == branchHeight) {
