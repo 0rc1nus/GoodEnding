@@ -34,4 +34,14 @@ public class GoodEndingBlockSoundGroups {
         SoundEvents.BLOCK_CAVE_VINES_HIT,
         GoodEndingSoundEvents.BLOCK_HANGING_LEAVES_FALL
     );
+
+    public static final BlockSoundGroup ALGAE = new BlockSoundGroup(
+        1.0F, 1.0F,
+
+        GoodEndingSoundEvents.BLOCK_ALGAE_BREAK,
+        GoodEndingSoundEvents.BLOCK_ALGAE_STEP,
+        GoodEndingSoundEvents.BLOCK_ALGAE_PLACE,
+        GoodEndingSoundEvents.BLOCK_ALGAE_HIT,
+        GoodEndingSoundEvents.BLOCK_ALGAE_FALL
+    );
 }

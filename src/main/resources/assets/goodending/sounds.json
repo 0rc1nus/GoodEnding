@@ -184,5 +184,50 @@
   "block.firefly_lantern.close": {
     "sounds": ["goodending:block/firefly_lantern/close"],
     "subtitle": "subtitles.block.generic.toggle"
+  },
+  "block.algae.break": {
+    "sounds": [
+      "goodending:block/algae/break1",
+      "goodending:block/algae/break2",
+      "goodending:block/algae/break3",
+      "goodending:block/algae/break4"
+    ],
+    "subtitle": "subtitles.block.generic.break"
+  },
+  "block.algae.place": {
+    "sounds": [
+      {
+        "name": "goodending:block.algae.break",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.block.generic.place"
+  },
+  "block.algae.fall": {
+    "sounds": [
+      {
+        "name": "goodending:block.algae.break",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.block.generic.fall"
+  },
+  "block.algae.step": {
+    "sounds": [
+      "goodending:block/algae/step1",
+      "goodending:block/algae/step2",
+      "goodending:block/algae/step3",
+      "goodending:block/algae/step4"
+    ],
+    "subtitle": "subtitles.block.generic.step"
+  },
+  "block.algae.hit": {
+    "sounds": [
+      {
+        "name": "goodending:block.algae.step",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.block.generic.hit"
   }
 }

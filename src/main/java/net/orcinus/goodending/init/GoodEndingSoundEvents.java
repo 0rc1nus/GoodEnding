@@ -44,6 +44,12 @@ public class GoodEndingSoundEvents {
     public static final SoundEvent BLOCK_HANGING_LEAVES_FALL = hangingLeaves("fall");
     private static SoundEvent hangingLeaves(String type) { return block("hanging_leaves", type); }
 
+    public static final SoundEvent BLOCK_ALGAE_BREAK = algae("break");
+    public static final SoundEvent BLOCK_ALGAE_STEP = algae("step");
+    public static final SoundEvent BLOCK_ALGAE_HIT = algae("hit");
+    public static final SoundEvent BLOCK_ALGAE_PLACE = algae("place");
+    public static final SoundEvent BLOCK_ALGAE_FALL = algae("fall");
+    private static SoundEvent algae(String type) { return block("algae", type); }
 
     private static SoundEvent entity(String entity, String type) { return register("entity." + entity + "." + type); }
     private static SoundEvent item(String item, String type) { return register("item." + item + "." + type); }
