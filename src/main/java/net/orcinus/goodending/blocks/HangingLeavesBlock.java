@@ -33,6 +33,11 @@ public class HangingLeavesBlock extends AbstractPlantStemBlock {
     }
 
     @Override
+    public boolean hasRandomTicks(BlockState state) {
+        return false;
+    }
+
+    @Override
     protected int getGrowthLength(Random random) {
         return VineLogic.getGrowthLength(random);
     }
