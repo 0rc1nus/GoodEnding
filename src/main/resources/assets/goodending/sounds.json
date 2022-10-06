@@ -219,7 +219,7 @@
       "goodending:block/algae/step3",
       "goodending:block/algae/step4"
     ],
-    "subtitle": "subtitles.block.generic.step"
+    "subtitle": "subtitles.block.generic.footsteps"
   },
   "block.algae.hit": {
     "sounds": [
