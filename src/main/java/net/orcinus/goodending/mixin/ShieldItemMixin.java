@@ -25,14 +25,11 @@ public class ShieldItemMixin {
     private void GE$appendTooltip(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag context, CallbackInfo ci) {
         CompoundTag nbt = stack.getTag();
         if (nbt != null) {
-            String toolEffect = nbt.getString("Potion");
             Potion potion = PotionUtils.getPotion(nbt);
-            if (toolEffect != null) {
-                potion.getEffects().forEach(statusEffectInstance -> {
-                    MutableComponent mutableText = Component.translatable("item.goodending.retained_tool.status_effect").append(" ");
-                    tooltip.add(mutableText.append(Component.translatable(statusEffectInstance.getEffect().getDescriptionId())).withStyle(nbt.getBoolean("Infinite") ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.BLUE));
-                });
-            }
+            potion.getEffects().forEach(statusEffectInstance -> {
+                MutableComponent mutableText = Component.translatable("item.goodending.retained_tool.status_effect").append(" ");
+                tooltip.add(mutableText.append(Component.translatable(statusEffectInstance.getEffect().getDescriptionId())).withStyle(nbt.getBoolean("Infinite") ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.BLUE));
+            });
             if (nbt.getInt("Amount") > 0) {
                 tooltip.add(Component.translatable("item.goodending.retained_count.status_effect").append(" ").append(Component.translatable("" + nbt.getInt("Amount"))).withStyle(ChatFormatting.GRAY));
             }

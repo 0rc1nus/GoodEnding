@@ -18,12 +18,17 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
+import net.minecraftforge.client.event.RenderTooltipEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.orcinus.goodending.GoodEnding;
+import net.orcinus.goodending.client.gui.tooltip.PotionApplicationTooltipComponent;
+import net.orcinus.goodending.client.gui.tooltip.PotionApplicationTooltipData;
 import net.orcinus.goodending.client.models.MarshEntityModel;
 import net.orcinus.goodending.client.models.WoodPeckerEntityModel;
 import net.orcinus.goodending.client.particles.FireflyParticle;
@@ -73,6 +78,11 @@ public class ClientEvents {
         ItemBlockRenderTypes.setRenderLayer(GoodEndingBlocks.POLLENFLAKE.get(), RenderType.cutout());
 
         event.enqueueWork(GoodEndingSignTypes::init);
+    }
+
+    @SubscribeEvent
+    public static void renderTooltip(RegisterClientTooltipComponentFactoriesEvent event) {
+        event.register(PotionApplicationTooltipData.class, PotionApplicationTooltipComponent::new);
     }
 
     @SubscribeEvent

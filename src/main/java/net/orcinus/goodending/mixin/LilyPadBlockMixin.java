@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(WaterlilyBlock.class)
-public class LilyPadBlockMixin extends BushBlock {
+public abstract class LilyPadBlockMixin extends BushBlock {
 
     public LilyPadBlockMixin(Properties settings) {
         super(settings);

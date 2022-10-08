@@ -46,14 +46,11 @@ public class ItemMixin  {
         if ($this instanceof SwordItem) {
             CompoundTag nbt = stack.getTag();
             if (nbt != null) {
-                String toolEffect = nbt.getString("Potion");
                 Potion potion = PotionUtils.getPotion(nbt);
-                if (toolEffect != null) {
-                    potion.getEffects().forEach(statusEffectInstance -> {
-                        MutableComponent mutableText = Component.translatable("item.goodending.inflict_tool.status_effect").append(" ");
-                        tooltip.add(mutableText.append(Component.translatable(statusEffectInstance.getEffect().getDescriptionId())).withStyle(nbt.getBoolean("Infinite") ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.RED));
-                    });
-                }
+                potion.getEffects().forEach(statusEffectInstance -> {
+                    MutableComponent mutableText = Component.translatable("item.goodending.inflict_tool.status_effect").append(" ");
+                    tooltip.add(mutableText.append(Component.translatable(statusEffectInstance.getEffect().getDescriptionId())).withStyle(nbt.getBoolean("Infinite") ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.RED));
+                });
                 if (nbt.getInt("Amount") > 0) {
                     tooltip.add(Component.translatable("item.goodending.inflict_count.status_effect").append(" ").append(Component.translatable("potion.goodending.level." + nbt.getInt("Amount"))).withStyle(ChatFormatting.GRAY));
                 }
