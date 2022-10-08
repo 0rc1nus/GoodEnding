@@ -36,9 +36,6 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakTreeConfig> {
         WorldGenLevel world = context.level();
         boolean huge = false;
         int height = 7;
-        /*
-         * If the dark oak tree is extra fancy, it will multiply the height by 2
-         */
         if (context.config().isFancy) {
             height *= 2;
             huge = true;
@@ -58,44 +55,21 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakTreeConfig> {
                 for (int x = -baseRadius; x <= baseRadius; x++) {
                     for (int z = -baseRadius; z <= baseRadius; z++) {
                         for (int y = 0; y < height; y++) {
-                            /*
-                             * Trunk Shape is done here
-                             */
                             BlockPos pos = new BlockPos(blockPos.getX() + x, blockPos.getY() + y, blockPos.getZ() + z);
                             boolean flag = x == -baseRadius || x == baseRadius;
                             boolean flag1 = z == -baseRadius || z == baseRadius;
-                            /*
-                             * This condition is to make it so that the tree's trunk won't generate the corners
-                             */
                             if (!(flag && flag1)) {
                                 int corner = baseRadius - 1;
                                 boolean logFlag = ((x == corner && flag1) || (x == -corner && flag1) || (z == corner && flag) || (z == -corner && flag)) && y > 1;
                                 boolean logFlag1 = ((x == 0 && flag1) || (z == 0 && flag)) && y > 2;
                                 boolean logFlag2 = (x == corner || x == -corner) && (z == corner || z == -corner) && y > 3;
-                                /*
-                                 * Starts carving the trunk as the height goes up
-                                 * Same method as the first condition that is shown above
-                                 */
                                 if (logFlag || logFlag1 || logFlag2) continue;
-                                /*
-                                 * Another condition for checking the corners
-                                 */
                                 if (y > 5 && ((x == -corner && z == 0) || (x == corner && z == 0) || (x == 0 && z == -corner) || (x == 0 && z == corner))) {
-                                    /*
-                                     * Generates the 4 branches at the top of the tree
-                                     */
                                     for (Direction direction : Direction.Plane.HORIZONTAL) {
                                         BlockPos branchPos = blockPos.above(height - 1).relative(direction);
                                         final int length = UniformInt.of(1, 3).sample(random);
                                         for (int i = 0; i < length; i++) {
-                                            /*
-                                             * Checks if the position is empty or if the material is replaceable
-                                             * If true, then it'll place the block
-                                             */
                                             if (world.isEmptyBlock(branchPos.relative(direction, i)) || world.getBlockState(branchPos.relative(direction, i)).getMaterial().isReplaceable()) {
-                                                /*
-                                                 * Generates the 4 branches
-                                                 */
                                                 world.setBlock(branchPos.relative(direction, i), Blocks.DARK_OAK_LOG.defaultBlockState().setValue(RotatedPillarBlock.AXIS, direction.getAxis()), 2);
                                                 for (int t = 0; t < length; t++) {
                                                     if (world.isEmptyBlock(branchPos.relative(direction, length).above(t)) || world.getBlockState(branchPos.relative(direction, length).above(t)).getMaterial().isReplaceable()) {
@@ -110,22 +84,9 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakTreeConfig> {
                                         }
                                     }
                                 }
-                                /*
-                                 * Check if the trunk pos is air or if the material of the trunk pos is replaceable
-                                 */
                                 if (world.isEmptyBlock(pos) || world.getBlockState(pos).getMaterial().isReplaceable()) {
-                                    /*
-                                     * Generates the trunk
-                                     */
                                     world.setBlock(pos, Blocks.DARK_OAK_LOG.defaultBlockState(), 19);
-                                    /*
-                                     * If the tree is extra fancy, it'll generate this some sort of meristem thing
-                                     * Which isn't important if you were to make a normal tree
-                                     */
                                     if (huge && y > height - 2) {
-                                        /*
-                                         * the stemposes list stores the pos which will be used later
-                                         */
                                         stemPoses.add(pos);
                                     }
                                 }
@@ -133,9 +94,6 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakTreeConfig> {
                         }
                     }
                 }
-                /*
-                 * Generates the meristem
-                 */
                 for (BlockPos stemPos : stemPoses) {
                     for (int x = -2; x <= 2; x++) {
                         for (int z = -2; z <= 2; z++) {
@@ -150,9 +108,6 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakTreeConfig> {
                         }
                     }
                 }
-                /*
-                 * Taking the poses from the arraylist and it'll proceed to generate leaves
-                 */
                 for (BlockPos pos : list) {
                     int leaveRadius = 2;
                     for (int x = -leaveRadius; x <= leaveRadius; x++) {
@@ -171,17 +126,10 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakTreeConfig> {
                         }
                     }
                 }
-                /*
-                 * Collected from the list that was added in the leave pos,
-                 * Generates one dense dark oak leaves per tree (Leaves that emits leaves particle)
-                 */
                 for (BlockPos densePos : leavePoses) {
                     world.setBlock(densePos, GoodEndingBlocks.DENSE_DARK_OAK_LEAVES.get().defaultBlockState().setValue(LeavesBlock.DISTANCE, 1), 19);
                     break;
                 }
-                /*
-                 * Generates hanging leaves
-                 */
                 for (BlockPos pos : leavePoses) {
                     if (random.nextFloat() < 0.15F && world.isStateAtPosition(pos.below(), BlockBehaviour.BlockStateBase::isAir) && world.isStateAtPosition(pos, blockState -> blockState.is(Blocks.DARK_OAK_LEAVES))) {
                         int branchHeight = (int) Mth.nextFloat(random, height * 0.25F, height * 0.75F);
@@ -208,10 +156,6 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakTreeConfig> {
         }
     }
 
-    /**
-     * Checks if there's any air below the tree. If there is, it'll move down by 1 block and it rechecks again.
-     * It checks for 4 times. If it checks for 5 times, the tree will not generate.
-     */
     public Optional<BlockPos> getInitialPos(FancyDarkOakTreeConfig config, WorldGenLevel world, BlockPos originPos, int baseRadius, int count) {
         if (config.planted) {
             return Optional.of(originPos);
