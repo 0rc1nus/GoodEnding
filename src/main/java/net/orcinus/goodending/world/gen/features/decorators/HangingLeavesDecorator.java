@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
+import net.orcinus.goodending.blocks.HangingLeavesBlock;
 import net.orcinus.goodending.init.GoodEndingBlocks;
 import net.orcinus.goodending.init.GoodEndingTreeDecorators;
 
@@ -39,7 +40,7 @@ public class HangingLeavesDecorator extends TreeDecorator {
                         BlockPos placePos = pos.below(i);
                         if (i == height) {
                             if (world.isStateAtPosition(placePos, BlockBehaviour.BlockStateBase::isAir)) {
-                                generator.setBlock(placePos, this.darkOak ? GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.get().defaultBlockState() : GoodEndingBlocks.HANGING_OAK_LEAVES.get().defaultBlockState());
+                                generator.setBlock(placePos, this.darkOak ? GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.get().defaultBlockState().setValue(HangingLeavesBlock.AGE, Mth.nextInt(random, 22, 25)) : GoodEndingBlocks.HANGING_OAK_LEAVES.get().defaultBlockState().setValue(HangingLeavesBlock.AGE, Mth.nextInt(random, 22, 25)));
                                 break;
                             }
                         }

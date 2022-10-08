@@ -8,7 +8,6 @@
     "ItemMixin",
     "LilyPadBlockMixin",
     "LivingEntityMixin",
-    "SaplingBlockMixin",
     "ShieldItemMixin",
     "TreeConfiguredFeaturesMixin",
     "TreeFeatureConfigMixin",

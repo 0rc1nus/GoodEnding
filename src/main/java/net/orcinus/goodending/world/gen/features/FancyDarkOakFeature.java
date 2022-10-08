@@ -10,6 +10,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.GrowingPlantHeadBlock;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -182,8 +183,8 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakTreeConfig> {
                  * Generates hanging leaves
                  */
                 for (BlockPos pos : leavePoses) {
-                    if (random.nextFloat() < 0.5F && world.isStateAtPosition(pos.below(), BlockBehaviour.BlockStateBase::isAir) && world.isStateAtPosition(pos, blockState -> blockState.is(Blocks.DARK_OAK_LEAVES))) {
-                        int branchHeight = Mth.nextInt(random, 1, 6);
+                    if (random.nextFloat() < 0.15F && world.isStateAtPosition(pos.below(), BlockBehaviour.BlockStateBase::isAir) && world.isStateAtPosition(pos, blockState -> blockState.is(Blocks.DARK_OAK_LEAVES))) {
+                        int branchHeight = (int) Mth.nextFloat(random, height * 0.25F, height * 0.75F);
                         for (int i = 0; i <= branchHeight; i++) {
                             BlockPos placePos = pos.below(i);
                             if (i == branchHeight) {
@@ -193,7 +194,7 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakTreeConfig> {
                                 }
                             }
                             if (world.getBlockState(placePos.below()).is(BlockTags.LOGS)) {
-                                world.setBlock(placePos, GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.get().defaultBlockState(), 19);
+                                world.setBlock(placePos, GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.get().defaultBlockState().setValue(GrowingPlantHeadBlock.AGE, Mth.nextInt(random, 22, 25)), 19);
                                 break;
                             }
                             if (world.isStateAtPosition(placePos, BlockBehaviour.BlockStateBase::isAir)) {

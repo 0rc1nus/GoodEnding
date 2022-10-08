@@ -138,8 +138,8 @@ public class GoodEndingWorldGen {
     public static final Holder<ConfiguredFeature<RandomPatchConfiguration, ?>> PATCH_LARGE_FERN = register("patch_large_fern", Feature.RANDOM_PATCH, FeatureUtils.simplePatchConfiguration(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.LARGE_FERN)), List.of(), 24));
     public static final Holder<ConfiguredFeature<RandomPatchConfiguration, ?>> OAK_HAMMOCK_PATCH_TALL_GRASS = register("oak_hammock_patch_tall_grass", Feature.RANDOM_PATCH, FeatureUtils.simplePatchConfiguration(Feature.SIMPLE_BLOCK, new SimpleBlockConfiguration(BlockStateProvider.simple(Blocks.TALL_GRASS)), List.of(), 24));
     public static final Holder<PlacedFeature> PATCH_TALL_GRASS_PLACED = register("patch_tall_grass_placed", VegetationFeatures.PATCH_TALL_GRASS, VegetationPlacements.worldSurfaceSquaredWithCount(3));
-    public static final Holder<PlacedFeature> PATCH_FERN_PLACED = register("patch_fern_placed", PATCH_FERN, VegetationPlacements.worldSurfaceSquaredWithCount(2));
-    public static final Holder<PlacedFeature> PATCH_LARGE_FERN_PLACED = register("patch_large_fern_placed", PATCH_LARGE_FERN, VegetationPlacements.worldSurfaceSquaredWithCount(3));
+    public static final Holder<PlacedFeature> PATCH_FERN_PLACED = register("patch_fern_placed", PATCH_FERN, VegetationPlacements.worldSurfaceSquaredWithCount(1));
+    public static final Holder<PlacedFeature> PATCH_LARGE_FERN_PLACED = register("patch_large_fern_placed", PATCH_LARGE_FERN, VegetationPlacements.worldSurfaceSquaredWithCount(1));
     public static final Holder<PlacedFeature> OAK_HAMMOCK_PATCH_TALL_GRASS_PLACED = register("oak_hammock_patch_tall_grass_placed", OAK_HAMMOCK_PATCH_TALL_GRASS, VegetationPlacements.worldSurfaceSquaredWithCount(3));
 
     public static final Holder<ConfiguredFeature<NoneFeatureConfiguration, ?>> LARGE_LILY_PADS = register("large_lily_pads", GoodEndingFeatures.LARGE_LILY_PADS.get(), new NoneFeatureConfiguration());
