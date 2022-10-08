@@ -41,7 +41,7 @@ public class HangingLeavesDecorator extends TreeDecorator {
                         BlockPos placePos = pos.down(i);
                         if (i == height) {
                             if (world.testBlockState(placePos, AbstractBlock.AbstractBlockState::isAir)) {
-                                generator.replace(placePos, this.darkOak ? GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.getDefaultState().with(HangingLeavesBlock.AGE, 25) : GoodEndingBlocks.HANGING_OAK_LEAVES.getDefaultState().with(HangingLeavesBlock.AGE, 25));
+                                generator.replace(placePos, this.darkOak ? GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.getDefaultState().with(HangingLeavesBlock.AGE, MathHelper.nextInt(random, 22, 25)) : GoodEndingBlocks.HANGING_OAK_LEAVES.getDefaultState().with(HangingLeavesBlock.AGE, MathHelper.nextInt(random, 22, 25)));
                                 break;
                             }
                         }
