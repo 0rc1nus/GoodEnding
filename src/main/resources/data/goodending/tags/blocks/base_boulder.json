@@ -4,7 +4,7 @@
     "#minecraft:sand",
     "#minecraft:dirt",
     "#minecraft:base_stone_overworld",
-    "#c:ores",
+    "#forge:ores",
     "minecraft:gravel"
   ]
 }

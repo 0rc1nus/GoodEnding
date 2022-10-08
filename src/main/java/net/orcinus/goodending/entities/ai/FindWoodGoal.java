@@ -1,13 +1,13 @@
 package net.orcinus.goodending.entities.ai;
 
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RaycastContext;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.orcinus.goodending.entities.WoodpeckerEntity;
 
 public class FindWoodGoal extends Goal {
@@ -19,7 +19,7 @@ public class FindWoodGoal extends Goal {
     }
 
     @Override
-    public boolean canStart() {
+    public boolean canUse() {
         if (!(this.woodpecker.getAttachedFace() == Direction.UP || this.woodpecker.getAttachedFace() == Direction.DOWN)) {
             return false;
         }
@@ -34,17 +34,17 @@ public class FindWoodGoal extends Goal {
     }
 
     protected boolean findNearestBlock() {
-        BlockPos mobPos = this.woodpecker.getBlockPos();
+        BlockPos mobPos = this.woodpecker.blockPosition();
         for (int i = 0; i < 8; i++) {
-            BlockPos offset = mobPos.add(this.woodpecker.getRandom().nextInt(16) - 8, this.woodpecker.getRandom().nextInt(4) + 1, this.woodpecker.getRandom().nextInt(16) - 8);
+            BlockPos offset = mobPos.offset(this.woodpecker.getRandom().nextInt(16) - 8, this.woodpecker.getRandom().nextInt(4) + 1, this.woodpecker.getRandom().nextInt(16) - 8);
             double x = offset.getX() + 0.5F - this.woodpecker.getX();
             double z = offset.getZ() + 0.5F - this.woodpecker.getZ();
             double distance = x * x + z * z;
-            Vec3d blockVec = Vec3d.ofCenter(offset);
-            BlockHitResult result = this.woodpecker.world.raycast(new RaycastContext(this.woodpecker.getEyePos(), blockVec, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, this.woodpecker));
-            if (this.woodpecker.world.getBlockState(result.getBlockPos()).isIn(BlockTags.LOGS) && this.woodpecker.world.getBlockState(result.getBlockPos().offset(result.getSide())).isAir() && result.getType() != HitResult.Type.MISS && distance > 4 && result.getSide().getAxis() != Direction.Axis.Y) {
+            Vec3 blockVec = Vec3.atCenterOf(offset);
+            BlockHitResult result = this.woodpecker.level.clip(new ClipContext(this.woodpecker.getEyePosition(), blockVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.woodpecker));
+            if (this.woodpecker.level.getBlockState(result.getBlockPos()).is(BlockTags.LOGS) && this.woodpecker.level.getBlockState(result.getBlockPos().relative(result.getDirection())).isAir() && result.getType() != HitResult.Type.MISS && distance > 4 && result.getDirection().getAxis() != Direction.Axis.Y) {
                 this.pos = result.getBlockPos();
-                this.woodpecker.setAttachedFace(result.getSide());
+                this.woodpecker.setAttachedFace(result.getDirection());
                 return true;
             }
         }

@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_features",
+  "biomes": "minecraft:swamp",
+  "features": [
+    "goodending:swamp_tree",
+    "goodending:cattail_patch",
+    "goodending:cypress_tree_placed",
+    "goodending:swamp_vegetation",
+    "goodending:duckweed_patch"
+  ],
+  "step": "vegetal_decoration"
+}

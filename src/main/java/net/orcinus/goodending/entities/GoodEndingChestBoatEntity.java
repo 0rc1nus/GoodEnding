@@ -1,51 +1,50 @@
 package net.orcinus.goodending.entities;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.RideableInventory;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.mob.PiglinBrain;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.vehicle.VehicleInventory;
-import net.minecraft.inventory.StackReference;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.screen.GenericContainerScreenHandler;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.ItemScatterer;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Containers;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.HasCustomInventoryScreen;
+import net.minecraft.world.entity.SlotAccess;
+import net.minecraft.world.entity.monster.piglin.PiglinAi;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.ContainerEntity;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.orcinus.goodending.init.GoodEndingEntityTypes;
 import net.orcinus.goodending.init.GoodEndingItems;
 import org.jetbrains.annotations.Nullable;
 
-public class GoodEndingChestBoatEntity extends GoodEndingBoatEntity implements RideableInventory, VehicleInventory {
-    private DefaultedList<ItemStack> inventory = DefaultedList.ofSize(27, ItemStack.EMPTY);
+public class GoodEndingChestBoatEntity extends GoodEndingBoatEntity implements HasCustomInventoryScreen, ContainerEntity {
+    private NonNullList<ItemStack> inventory = NonNullList.withSize(27, ItemStack.EMPTY);
     @Nullable
-    private Identifier lootTableId;
+    private ResourceLocation lootTableId;
     private long lootTableSeed;
 
-    public GoodEndingChestBoatEntity(EntityType<? extends GoodEndingBoatEntity> entityType, World world) {
+    public GoodEndingChestBoatEntity(EntityType<? extends GoodEndingBoatEntity> entityType, Level world) {
         super(entityType, world);
     }
 
-    public GoodEndingChestBoatEntity(World world, double d, double e, double f) {
-        this(GoodEndingEntityTypes.CHEST_BOAT, world);
-        this.setPosition(d, e, f);
-        this.prevX = d;
-        this.prevY = e;
-        this.prevZ = f;
+    public GoodEndingChestBoatEntity(Level world, double d, double e, double f) {
+        this(GoodEndingEntityTypes.CHEST_BOAT.get(), world);
+        this.setPos(d, e, f);
+        this.xo = d;
+        this.yo = e;
+        this.zo = f;
     }
 
     @Override
-    protected float getPassengerHorizontalOffset() {
-        return 0.15f;
+    protected float getSinglePassengerXOffset() {
+        return 0.15F;
     }
 
     @Override
@@ -54,140 +53,131 @@ public class GoodEndingChestBoatEntity extends GoodEndingBoatEntity implements R
     }
 
     @Override
-    protected void writeCustomDataToNbt(NbtCompound nbt) {
-        super.writeCustomDataToNbt(nbt);
-        this.writeInventoryToNbt(nbt);
+    protected void addAdditionalSaveData(CompoundTag nbt) {
+        super.addAdditionalSaveData(nbt);
+        this.addChestVehicleSaveData(nbt);
     }
 
     @Override
-    protected void readCustomDataFromNbt(NbtCompound nbt) {
-        super.readCustomDataFromNbt(nbt);
-        this.readInventoryFromNbt(nbt);
+    protected void readAdditionalSaveData(CompoundTag nbt) {
+        super.readAdditionalSaveData(nbt);
+        this.readChestVehicleSaveData(nbt);
     }
 
     @Override
-    public void dropItems(DamageSource source) {
-        super.dropItems(source);
-        this.onBroken(source, this.world, this);
+    public void destroy(DamageSource source) {
+        super.destroy(source);
+        this.chestVehicleDestroyed(source, this.level, this);
     }
 
     @Override
-    public void remove(Entity.RemovalReason reason) {
-        if (!this.world.isClient && reason.shouldDestroy()) {
-            ItemScatterer.spawn(this.world, this, this);
+    public void remove(RemovalReason reason) {
+        if (!this.level.isClientSide && reason.shouldDestroy()) {
+            Containers.dropContents(this.level, this, this);
         }
         super.remove(reason);
     }
 
     @Override
-    public ActionResult interact(PlayerEntity player, Hand hand) {
-        if (!this.canAddPassenger(player) || player.shouldCancelInteraction()) {
-            return this.open(this::emitGameEvent, player);
-        }
-        return super.interact(player, hand);
+    public InteractionResult interact(Player player, InteractionHand hand) {
+        return this.canAddPassenger(player) && !player.isSecondaryUseActive() ? super.interact(player, hand) : this.interactWithChestVehicle(this::gameEvent, player);
     }
 
     @Override
-    public void openInventory(PlayerEntity player) {
-        player.openHandledScreen(this);
-        if (!player.world.isClient) {
-            this.emitGameEvent(GameEvent.CONTAINER_OPEN, player);
-            PiglinBrain.onGuardedBlockInteracted(player, true);
+    public void openCustomInventoryScreen(Player player) {
+        player.openMenu(this);
+        if (!player.level.isClientSide) {
+            this.gameEvent(GameEvent.CONTAINER_OPEN, player);
+            PiglinAi.angerNearbyPiglins(player, true);
         }
     }
 
     @Override
-    public Item asItem() {
-        return this.getGoodEndingBoatType() == BoatType.MUDDY_OAK ? GoodEndingItems.MUDDY_OAK_CHEST_BOAT : GoodEndingItems.CYPRESS_CHEST_BOAT;
+    public Item getDropItem() {
+        return this.getGoodEndingBoatType() == BoatType.MUDDY_OAK ? GoodEndingItems.MUDDY_OAK_CHEST_BOAT.get() : GoodEndingItems.CYPRESS_CHEST_BOAT.get();
     }
 
     @Override
-    public void clear() {
-        this.clearInventory();
+    public void clearContent() {
+        this.clearChestVehicleContent();
     }
 
     @Override
-    public int size() {
+    public int getContainerSize() {
         return 27;
     }
 
     @Override
-    public ItemStack getStack(int slot) {
-        return this.getInventoryStack(slot);
+    public ItemStack getItem(int slot) {
+        return this.getChestVehicleItem(slot);
     }
 
     @Override
-    public ItemStack removeStack(int slot, int amount) {
-        return this.removeInventoryStack(slot, amount);
+    public ItemStack removeItem(int slot, int amount) {
+        return this.removeChestVehicleItem(slot, amount);
     }
 
     @Override
-    public ItemStack removeStack(int slot) {
-        return this.removeInventoryStack(slot);
+    public ItemStack removeItemNoUpdate(int slot) {
+        return this.removeChestVehicleItemNoUpdate(slot);
     }
 
     @Override
-    public void setStack(int slot, ItemStack stack) {
-        this.setInventoryStack(slot, stack);
+    public void setItem(int slot, ItemStack stack) {
+        this.setChestVehicleItem(slot, stack);
     }
 
     @Override
-    public StackReference getStackReference(int mappedIndex) {
-        return this.getInventoryStackReference(mappedIndex);
+    public SlotAccess getSlot(int mappedIndex) {
+        return this.getChestVehicleSlot(mappedIndex);
     }
 
     @Override
-    public void markDirty() {
+    public void setChanged() {
     }
 
     @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return this.canPlayerAccess(player);
+    public boolean stillValid(Player player) {
+        return this.isChestVehicleStillValid(player);
     }
 
-    @Override
-    @Nullable
-    public ScreenHandler createMenu(int i, PlayerInventory playerInventory, PlayerEntity playerEntity) {
-        if (this.lootTableId == null || !playerEntity.isSpectator()) {
-            this.generateLoot(playerInventory.player);
-            return GenericContainerScreenHandler.createGeneric9x3(i, playerInventory, this);
+    @javax.annotation.Nullable
+    public AbstractContainerMenu createMenu(int p_219910_, Inventory p_219911_, Player p_219912_) {
+        if (this.lootTableId != null && p_219912_.isSpectator()) {
+            return null;
+        } else {
+            this.unpackLootTable(p_219911_.player);
+            return ChestMenu.threeRows(p_219910_, p_219911_, this);
         }
-        return null;
     }
 
-    public void generateLoot(@Nullable PlayerEntity player) {
-        this.generateInventoryLoot(player);
+    public void unpackLootTable(@javax.annotation.Nullable Player p_219914_) {
+        this.unpackChestVehicleLootTable(p_219914_);
     }
 
-    @Override
-    @Nullable
-    public Identifier getLootTableId() {
+    @javax.annotation.Nullable
+    public ResourceLocation getLootTable() {
         return this.lootTableId;
     }
 
-    @Override
-    public void setLootTableId(@Nullable Identifier lootTableId) {
-        this.lootTableId = lootTableId;
+    public void setLootTable(@javax.annotation.Nullable ResourceLocation p_219890_) {
+        this.lootTableId = p_219890_;
     }
 
-    @Override
     public long getLootTableSeed() {
         return this.lootTableSeed;
     }
 
-    @Override
-    public void setLootTableSeed(long lootTableSeed) {
-        this.lootTableSeed = lootTableSeed;
+    public void setLootTableSeed(long p_219888_) {
+        this.lootTableSeed = p_219888_;
     }
 
-    @Override
-    public DefaultedList<ItemStack> getInventory() {
+    public NonNullList<ItemStack> getItemStacks() {
         return this.inventory;
     }
 
-    @Override
-    public void resetInventory() {
-        this.inventory = DefaultedList.ofSize(this.size(), ItemStack.EMPTY);
+    public void clearItemStacks() {
+        this.inventory = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
     }
 
 }

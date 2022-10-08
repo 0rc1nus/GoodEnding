@@ -1,0 +1,8 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#goodending:light_gray_terracotta_granite_boulder_generates",
+  "features": [
+    "goodending:granite_boulder"
+  ],
+  "step": "local_modifications"
+}

@@ -1,22 +1,22 @@
 package net.orcinus.goodending.client.gui.tooltip;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
-import net.minecraft.client.gui.tooltip.TooltipComponent;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.texture.Sprite;
-import net.minecraft.client.texture.StatusEffectSpriteManager;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.MobEffectTextureManager;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@Environment(EnvType.CLIENT)
-public class PotionApplicationTooltipComponent implements TooltipComponent {
+@OnlyIn(Dist.CLIENT)
+public class PotionApplicationTooltipComponent implements ClientTooltipComponent {
     private final PotionApplicationTooltipData data;
 
     public PotionApplicationTooltipComponent(PotionApplicationTooltipData data) {
@@ -29,7 +29,7 @@ public class PotionApplicationTooltipComponent implements TooltipComponent {
     }
 
     @Override
-    public int getWidth(TextRenderer textRenderer) {
+    public int getWidth(Font textRenderer) {
         return 15;
     }
 
@@ -39,17 +39,17 @@ public class PotionApplicationTooltipComponent implements TooltipComponent {
      * @author 0rc1nus
      */
     @Override
-    public void drawItems(TextRenderer textRenderer, int x, int y, MatrixStack matrices, ItemRenderer itemRenderer, int z) {
-        StatusEffectSpriteManager statusEffectSpriteManager = MinecraftClient.getInstance().getStatusEffectSpriteManager();
-        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+    public void renderImage(Font textRenderer, int x, int y, PoseStack matrices, ItemRenderer itemRenderer, int z) {
+        MobEffectTextureManager statusEffectSpriteManager = Minecraft.getInstance().getMobEffectTextures();
+        LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
-        for (StatusEffectInstance statusEffectInstance : this.data.getPotion().getEffects()) {
-            StatusEffect statusEffect = statusEffectInstance.getEffectType();
-            Sprite sprite = statusEffectSpriteManager.getSprite(statusEffect);
+        for (MobEffectInstance statusEffectInstance : this.data.getPotion().getEffects()) {
+            MobEffect statusEffect = statusEffectInstance.getEffect();
+            TextureAtlasSprite sprite = statusEffectSpriteManager.get(statusEffect);
 
-            RenderSystem.setShaderTexture(0, sprite.getAtlas().getId());
+            RenderSystem.setShaderTexture(0, sprite.atlas().getId());
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            AbstractInventoryScreen.drawSprite(matrices, x, y - 1, z, 12, 12, sprite);
+            EffectRenderingInventoryScreen.blit(matrices, x, y - 1, z, 12, 12, sprite);
 
         }
     }

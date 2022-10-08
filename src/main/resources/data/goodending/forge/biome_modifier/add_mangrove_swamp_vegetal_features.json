@@ -1,0 +1,8 @@
+{
+  "type": "forge:add_features",
+  "biomes": "minecraft:mangrove_swamp",
+  "features": [
+    "goodending:patch_pink_flowered_lily_placed"
+  ],
+  "step": "vegetal_decoration"
+}

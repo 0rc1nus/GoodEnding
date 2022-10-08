@@ -1,0 +1,8 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#goodending:balmy_wildflower_generates",
+  "features": [
+    "goodending:patch_balmy_wildflowers"
+  ],
+  "step": "vegetal_decoration"
+}

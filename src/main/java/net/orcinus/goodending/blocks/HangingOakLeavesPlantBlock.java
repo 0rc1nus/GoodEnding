@@ -1,37 +1,37 @@
 package net.orcinus.goodending.blocks;
 
-import net.minecraft.block.AbstractPlantBlock;
-import net.minecraft.block.AbstractPlantStemBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.WorldView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.GrowingPlantBodyBlock;
+import net.minecraft.world.level.block.GrowingPlantHeadBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.orcinus.goodending.init.GoodEndingBlocks;
 
-public class HangingOakLeavesPlantBlock extends AbstractPlantBlock {
-    public static final VoxelShape SHAPE = Block.createCuboidShape(1.0, 0.0, 1.0, 15.0, 16.0, 15.0);
+public class HangingOakLeavesPlantBlock extends GrowingPlantBodyBlock {
+    public static final VoxelShape SHAPE = box(1.0, 0.0, 1.0, 15.0, 16.0, 15.0);
 
-    public HangingOakLeavesPlantBlock(Settings settings) {
+    public HangingOakLeavesPlantBlock(Properties settings) {
         super(settings, Direction.DOWN, SHAPE, false);
     }
 
     @Override
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
-        BlockPos blockPos = pos.offset(this.growthDirection.getOpposite());
+    public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+        BlockPos blockPos = pos.relative(this.growthDirection.getOpposite());
         BlockState blockState = world.getBlockState(blockPos);
 
         if (!this.canAttachTo(blockState)) {
             return false;
         } else {
-            return blockState.isOf(this.getStem()) || blockState.isOf(this.getPlant()) || blockState.isIn(BlockTags.LEAVES);
+            return blockState.is(this.getHeadBlock()) || blockState.is(this.getBodyBlock()) || blockState.is(BlockTags.LEAVES);
         }
     }
 
     @Override
-    protected AbstractPlantStemBlock getStem() {
-        return (AbstractPlantStemBlock) GoodEndingBlocks.HANGING_OAK_LEAVES;
+    protected GrowingPlantHeadBlock getHeadBlock() {
+        return (GrowingPlantHeadBlock) GoodEndingBlocks.HANGING_OAK_LEAVES.get();
     }
+
 }

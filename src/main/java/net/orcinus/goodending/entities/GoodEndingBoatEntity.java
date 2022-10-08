@@ -1,102 +1,100 @@
 package net.orcinus.goodending.entities;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.vehicle.BoatEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.tag.FluidTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.GameRules;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.orcinus.goodending.init.GoodEndingBlocks;
 import net.orcinus.goodending.init.GoodEndingEntityTypes;
 import net.orcinus.goodending.init.GoodEndingItems;
-import net.orcinus.goodending.mixin.accessor.BoatEntityAccessor;
 
-public class GoodEndingBoatEntity extends BoatEntity {
-    private static final TrackedData<Integer> BOAT_TYPE = DataTracker.registerData(GoodEndingBoatEntity.class, TrackedDataHandlerRegistry.INTEGER);
+public class GoodEndingBoatEntity extends Boat {
+    private static final EntityDataAccessor<Integer> BOAT_TYPE = SynchedEntityData.defineId(GoodEndingBoatEntity.class, EntityDataSerializers.INT);
 
-    public GoodEndingBoatEntity(EntityType<? extends GoodEndingBoatEntity> entityType, World world) {
+    public GoodEndingBoatEntity(EntityType<? extends GoodEndingBoatEntity> entityType, Level world) {
         super(entityType, world);
     }
 
-    public GoodEndingBoatEntity(World world, double x, double y, double z) {
-        this(GoodEndingEntityTypes.BOAT, world);
-        this.setPosition(x, y, z);
-        this.prevX = x;
-        this.prevY = y;
-        this.prevZ = z;
+    public GoodEndingBoatEntity(Level world, double x, double y, double z) {
+        this(GoodEndingEntityTypes.BOAT.get(), world);
+        this.setPos(x, y, z);
+        this.xo = x;
+        this.yo = y;
+        this.zo = z;
     }
 
     @Override
-    protected void initDataTracker() {
-        super.initDataTracker();
-        this.dataTracker.startTracking(BOAT_TYPE, BOAT_TYPE.getId());
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(BOAT_TYPE, BOAT_TYPE.getId());
     }
 
     @Override
-    public Item asItem() {
-        return this.getGoodEndingBoatType() == BoatType.MUDDY_OAK ? GoodEndingItems.MUDDY_OAK_BOAT : GoodEndingItems.CYPRESS_BOAT;
+    public Item getDropItem() {
+        return this.getGoodEndingBoatType() == BoatType.MUDDY_OAK ? GoodEndingItems.MUDDY_OAK_BOAT.get() : GoodEndingItems.CYPRESS_BOAT.get();
     }
 
     @Override
-    protected void readCustomDataFromNbt(NbtCompound nbt) {
-        super.readCustomDataFromNbt(nbt);
+    protected void readAdditionalSaveData(CompoundTag nbt) {
+        super.readAdditionalSaveData(nbt);
         if (nbt.contains("Type", 8)) {
             this.setGoodEndingBoatType(BoatType.byName(nbt.getString("Type")));
         }
     }
 
     @Override
-    protected void writeCustomDataToNbt(NbtCompound nbt) {
-        super.writeCustomDataToNbt(nbt);
+    protected void addAdditionalSaveData(CompoundTag nbt) {
+        super.addAdditionalSaveData(nbt);
         nbt.putString("Type", this.getGoodEndingBoatType().getName());
     }
 
     public BoatType getGoodEndingBoatType() {
-        return BoatType.byId(this.dataTracker.get(BOAT_TYPE));
+        return BoatType.byId(this.entityData.get(BOAT_TYPE));
     }
 
     public void setGoodEndingBoatType(BoatType type) {
-        this.dataTracker.set(BOAT_TYPE, type.ordinal());
+        this.entityData.set(BOAT_TYPE, type.ordinal());
     }
 
     @Override
-    protected void fall(double heightDifference, boolean onGround, BlockState state, BlockPos landedPosition) {
-        ((BoatEntityAccessor)this).setFallVelocity(this.getVelocity().y);
-        if (!this.hasVehicle()) {
+    protected void checkFallDamage(double heightDifference, boolean onGround, BlockState state, BlockPos landedPosition) {
+        this.lastYd = this.getDeltaMovement().y;
+        if (!this.isPassenger()) {
             if (onGround) {
                 if (this.fallDistance > 3.0F) {
-                    if (((BoatEntityAccessor)this).getLocation() != BoatEntity.Location.ON_LAND) {
-                        this.onLanding();
+                    if (this.status != Boat.Status.ON_LAND) {
+                        this.resetFallDistance();
                         return;
                     }
 
-                    this.handleFallDamage(this.fallDistance, 1.0F, DamageSource.FALL);
-                    if (!this.world.isClient && !this.isRemoved()) {
+                    this.causeFallDamage(this.fallDistance, 1.0F, DamageSource.FALL);
+                    if (!this.level.isClientSide && !this.isRemoved()) {
                         this.kill();
-                        if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
+                        if (this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
                             int i;
                             for(i = 0; i < 3; ++i) {
-                                this.dropItem(this.getGoodEndingBoatType().getPlanks());
+                                this.spawnAtLocation(this.getGoodEndingBoatType().getPlanks());
                             }
 
                             for(i = 0; i < 2; ++i) {
-                                this.dropItem(Items.STICK);
+                                this.spawnAtLocation(Items.STICK);
                             }
                         }
                     }
                 }
 
-                this.onLanding();
-            } else if (!this.world.getFluidState(this.getBlockPos().down()).isIn(FluidTags.WATER) && heightDifference < 0.0) {
+                this.resetFallDistance();
+            } else if (!this.canBoatInFluid(this.level.getFluidState(this.blockPosition().below())) && heightDifference < 0.0) {
                 this.fallDistance -= (float)heightDifference;
             }
 
@@ -104,8 +102,8 @@ public class GoodEndingBoatEntity extends BoatEntity {
     }
 
     public enum BoatType {
-        MUDDY_OAK(GoodEndingBlocks.MUDDY_OAK_PLANKS, "muddy_oak"),
-        CYPRESS(GoodEndingBlocks.CYPRESS_PLANKS, "cypress");
+        MUDDY_OAK(GoodEndingBlocks.MUDDY_OAK_PLANKS.get(), "muddy_oak"),
+        CYPRESS(GoodEndingBlocks.CYPRESS_PLANKS.get(), "cypress");
 
         private final String name;
         private final Block planks;

@@ -1,6 +1,7 @@
 {
   "values": [
-    "#c:plains",
+    "minecraft:sunflower_plains",
+    "minecraft:plains",
     "minecraft:meadow"
   ]
 }

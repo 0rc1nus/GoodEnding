@@ -1,17 +1,20 @@
 package net.orcinus.goodending.init;
 
-import net.orcinus.goodending.mixin.invokers.SignTypeInvoker;
-import net.orcinus.goodending.util.GoodEndingSignType;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.client.renderer.Sheets;
+import net.minecraft.world.level.block.state.properties.WoodType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.orcinus.goodending.GoodEnding;
 
 public class GoodEndingSignTypes {
 
-    public static final GoodEndingSignType CYPRESS = registerSign("cypress");
-    public static final GoodEndingSignType MUDDY_OAK = registerSign("muddy_oak");
+    public static final WoodType MUDDY_OAK = WoodType.register(new WoodType(GoodEnding.MODID + ":muddy_oak"));
+    public static final WoodType CYPRESS = WoodType.register(new WoodType(GoodEnding.MODID + ":cypress"));
 
-    @NotNull
-    private static GoodEndingSignType registerSign(String id) {
-        return (GoodEndingSignType) SignTypeInvoker.invokeRegister(new GoodEndingSignType(id));
+    @OnlyIn(Dist.CLIENT)
+    public static void init() {
+        Sheets.addWoodType(MUDDY_OAK);
+        Sheets.addWoodType(CYPRESS);
     }
 
 }

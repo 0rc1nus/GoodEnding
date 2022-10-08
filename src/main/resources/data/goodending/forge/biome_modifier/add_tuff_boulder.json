@@ -1,0 +1,8 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#goodending:tuff_boulder_generates",
+  "features": [
+    "goodending:tuff_boulder"
+  ],
+  "step": "local_modifications"
+}

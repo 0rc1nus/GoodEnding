@@ -1,0 +1,8 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#goodending:pastel_wildflower_generates",
+  "features": [
+    "goodending:patch_pastel_wildflowers"
+  ],
+  "step": "vegetal_decoration"
+}

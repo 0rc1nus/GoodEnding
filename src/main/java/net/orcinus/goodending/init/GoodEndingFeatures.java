@@ -1,12 +1,11 @@
 package net.orcinus.goodending.init;
 
-import com.google.common.collect.Maps;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.gen.feature.DefaultFeatureConfig;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.FeatureConfig;
-import net.minecraft.world.gen.feature.TreeFeatureConfig;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import net.orcinus.goodending.GoodEnding;
 import net.orcinus.goodending.world.gen.features.AlgaePatchFeature;
 import net.orcinus.goodending.world.gen.features.BoulderFeature;
@@ -27,31 +26,20 @@ import net.orcinus.goodending.world.gen.features.config.MuddyOakFeatureConfig;
 import net.orcinus.goodending.world.gen.features.config.ShallowWaterConfig;
 import net.orcinus.goodending.world.gen.features.config.WaterTreeFeatureConfig;
 
-import java.util.Map;
-
 public class GoodEndingFeatures {
 
-    public static final Map<Feature<?>, String> FEATURES = Maps.newLinkedHashMap();
+    public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, GoodEnding.MODID);
 
-    public static final Feature<FallenLogConfig> FALLEN_LOG = registerFeature("fallen_log", new FallenLogFeature(FallenLogConfig.CODEC));
-    public static final Feature<HalfWaterloggedDecorationConfig> HALF_WATERLOGGED_DECORATION = registerFeature("half_waterlogged_decoration", new HalfWaterloggedDecorationFeature(HalfWaterloggedDecorationConfig.CODEC));
-    public static final Feature<ShallowWaterConfig> SHALLOW_WATER = registerFeature("shallow_water", new ShallowWaterFeature(ShallowWaterConfig.CODEC));
-    public static final Feature<WaterTreeFeatureConfig> CYPRESS_TREE = registerFeature("cypress_tree", new CypressTreeFeature(WaterTreeFeatureConfig.CODEC));
-    public static final Feature<DefaultFeatureConfig> DUCKWEED_PATCH = registerFeature("duckweed_patch", new DuckweedFeature(DefaultFeatureConfig.CODEC));
-    public static final Feature<MuddyOakFeatureConfig> MUDDY_OAK_TREE_FEATURE = registerFeature("swamp_tree", new MuddyOakTreeFeature(MuddyOakFeatureConfig.CODEC));
-    public static final Feature<TreeFeatureConfig> TALL_BIRCH_TREE = registerFeature("tall_birch_tree", new TallBirchTreeFeature(TreeFeatureConfig.CODEC));
-    public static final Feature<DefaultFeatureConfig> LARGE_LILY_PADS = registerFeature("large_lily_pad", new LargeLilyPadFeature(DefaultFeatureConfig.CODEC));
-    public static final Feature<FancyDarkOakTreeConfig> FANCY_DARK_OAK = registerFeature("fancy_dark_oak", new FancyDarkOakFeature(FancyDarkOakTreeConfig.CODEC));
-    public static final Feature<DefaultFeatureConfig> ALGAE_PATCH = registerFeature("algae_patch", new AlgaePatchFeature(DefaultFeatureConfig.CODEC));
-    public static final Feature<BoulderConfig> BOULDER = registerFeature("boulder", new BoulderFeature(BoulderConfig.CODEC));
-
-    public static <FC extends FeatureConfig, F extends Feature<FC>> F registerFeature(String name, F feature) {
-        FEATURES.put(feature, name);
-        return feature;
-    }
-
-    public static void init() {
-        FEATURES.keySet().forEach(feature -> Registry.register(Registry.FEATURE, new Identifier(GoodEnding.MODID, FEATURES.get(feature)), feature));
-    }
+    public static final RegistryObject<Feature<FallenLogConfig>> FALLEN_LOG = FEATURES.register("fallen_log", () -> new FallenLogFeature(FallenLogConfig.CODEC));
+    public static final RegistryObject<Feature<HalfWaterloggedDecorationConfig>> HALF_WATERLOGGED_DECORATION = FEATURES.register("half_waterlogged_decoration", () -> new HalfWaterloggedDecorationFeature(HalfWaterloggedDecorationConfig.CODEC));
+    public static final RegistryObject<Feature<ShallowWaterConfig>> SHALLOW_WATER = FEATURES.register("shallow_water", () -> new ShallowWaterFeature(ShallowWaterConfig.CODEC));
+    public static final RegistryObject<Feature<WaterTreeFeatureConfig>> CYPRESS_TREE = FEATURES.register("cypress_tree", () -> new CypressTreeFeature(WaterTreeFeatureConfig.CODEC));
+    public static final RegistryObject<Feature<NoneFeatureConfiguration>> DUCKWEED_PATCH = FEATURES.register("duckweed_patch", () -> new DuckweedFeature(NoneFeatureConfiguration.CODEC));
+    public static final RegistryObject<Feature<MuddyOakFeatureConfig>> MUDDY_OAK_TREE_FEATURE = FEATURES.register("swamp_tree", () -> new MuddyOakTreeFeature(MuddyOakFeatureConfig.CODEC));
+    public static final RegistryObject<Feature<TreeConfiguration>> TALL_BIRCH_TREE = FEATURES.register("tall_birch_tree", () -> new TallBirchTreeFeature(TreeConfiguration.CODEC));
+    public static final RegistryObject<Feature<NoneFeatureConfiguration>> LARGE_LILY_PADS = FEATURES.register("large_lily_pad", () -> new LargeLilyPadFeature(NoneFeatureConfiguration.CODEC));
+    public static final RegistryObject<Feature<FancyDarkOakTreeConfig>> FANCY_DARK_OAK = FEATURES.register("fancy_dark_oak", () -> new FancyDarkOakFeature(FancyDarkOakTreeConfig.CODEC));
+    public static final RegistryObject<Feature<NoneFeatureConfiguration>> ALGAE_PATCH = FEATURES.register("algae_patch", () -> new AlgaePatchFeature(NoneFeatureConfiguration.CODEC));
+    public static final RegistryObject<Feature<BoulderConfig>> BOULDER = FEATURES.register("boulder", () -> new BoulderFeature(BoulderConfig.CODEC));
 
 }

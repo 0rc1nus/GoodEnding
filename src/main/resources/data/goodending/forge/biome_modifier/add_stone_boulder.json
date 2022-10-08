@@ -1,0 +1,8 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#goodending:stone_boulder_generates",
+  "features": [
+    "goodending:stone_boulder"
+  ],
+  "step": "local_modifications"
+}

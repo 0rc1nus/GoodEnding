@@ -1,0 +1,8 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#goodending:spicy_wildflower_generates",
+  "features": [
+    "goodending:patch_spicy_wildflowers"
+  ],
+  "step": "vegetal_decoration"
+}

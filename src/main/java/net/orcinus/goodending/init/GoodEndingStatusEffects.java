@@ -1,30 +1,19 @@
 package net.orcinus.goodending.init;
 
-import com.google.common.collect.Maps;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import net.orcinus.goodending.GoodEnding;
 import net.orcinus.goodending.effects.ImmunityEffect;
 
-import java.util.Map;
-
+@Mod.EventBusSubscriber(modid = GoodEnding.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class GoodEndingStatusEffects {
-    public static final Map<Identifier, StatusEffect> STATUS_EFFECTS = Maps.newLinkedHashMap();
+    public static final DeferredRegister<MobEffect> MOB_EFFECTS = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, GoodEnding.MODID);
 
-    public static final StatusEffect STRONG_IMMUNITY = registerStatusEffect("strong_immunity", new ImmunityEffect());
-    public static final StatusEffect CONTEMPORARY_IMMUNITY = registerStatusEffect("contemporary_immunity", new ImmunityEffect());
-    public static final StatusEffect SHATTERED_IMMUNITY = registerStatusEffect("shattered_immunity", new ImmunityEffect());
-
-    public static <S extends StatusEffect> S registerStatusEffect(String name, S effect) {
-        STATUS_EFFECTS.put(new Identifier(GoodEnding.MODID, name), effect);
-        return effect;
-    }
-
-    public static void init() {
-        for (Identifier id : STATUS_EFFECTS.keySet()) {
-            Registry.register(Registry.STATUS_EFFECT, id, STATUS_EFFECTS.get(id));
-        }
-    }
+    public static final RegistryObject<MobEffect> STRONG_IMMUNITY = MOB_EFFECTS.register("strong_immunity", ImmunityEffect::new);
+    public static final RegistryObject<MobEffect> CONTEMPORARY_IMMUNITY = MOB_EFFECTS.register("contemporary_immunity", ImmunityEffect::new);
+    public static final RegistryObject<MobEffect> SHATTERED_IMMUNITY = MOB_EFFECTS.register("shattered_immunity", ImmunityEffect::new);
 
 }

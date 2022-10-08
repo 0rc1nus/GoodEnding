@@ -2,14 +2,14 @@ package net.orcinus.goodending.world.gen.features.decorators;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.TestableWorld;
-import net.minecraft.world.gen.treedecorator.TreeDecorator;
-import net.minecraft.world.gen.treedecorator.TreeDecoratorType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.LevelSimulatedReader;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
+import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 import net.orcinus.goodending.init.GoodEndingBlocks;
 import net.orcinus.goodending.init.GoodEndingTreeDecorators;
 
@@ -23,28 +23,28 @@ public class HangingLeavesDecorator extends TreeDecorator {
     }
 
     @Override
-    protected TreeDecoratorType<?> getType() {
-        return GoodEndingTreeDecorators.HANGING_LEAVES_DECORATOR;
+    protected TreeDecoratorType<?> type() {
+        return GoodEndingTreeDecorators.HANGING_LEAVES_DECORATOR.get();
     }
 
     @Override
-    public void generate(Generator generator) {
-        TestableWorld world = generator.getWorld();
-        if (generator.getRandom().nextBoolean()) {
-            for (BlockPos pos : generator.getLeavesPositions()) {
-                Random random = generator.getRandom();
-                if (random.nextFloat() < 0.5F && world.testBlockState(pos.down(), AbstractBlock.AbstractBlockState::isAir) && world.testBlockState(pos, blockState -> blockState.isOf(this.darkOak ? Blocks.DARK_OAK_LEAVES : Blocks.OAK_LEAVES))) {
-                    int height = MathHelper.nextInt(random, 0, 2);
+    public void place(Context generator) {
+        LevelSimulatedReader world = generator.level();
+        if (generator.random().nextBoolean()) {
+            for (BlockPos pos : generator.leaves()) {
+                RandomSource random = generator.random();
+                if (random.nextFloat() < 0.5F && world.isStateAtPosition(pos.below(), BlockBehaviour.BlockStateBase::isAir) && world.isStateAtPosition(pos, blockState -> blockState.is(this.darkOak ? Blocks.DARK_OAK_LEAVES : Blocks.OAK_LEAVES))) {
+                    int height = Mth.nextInt(random, 0, 2);
                     for (int i = 0; i <= height; i++) {
-                        BlockPos placePos = pos.down(i);
+                        BlockPos placePos = pos.below(i);
                         if (i == height) {
-                            if (world.testBlockState(placePos, AbstractBlock.AbstractBlockState::isAir)) {
-                                generator.replace(placePos, this.darkOak ? GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.getDefaultState() : GoodEndingBlocks.HANGING_OAK_LEAVES.getDefaultState());
+                            if (world.isStateAtPosition(placePos, BlockBehaviour.BlockStateBase::isAir)) {
+                                generator.setBlock(placePos, this.darkOak ? GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.get().defaultBlockState() : GoodEndingBlocks.HANGING_OAK_LEAVES.get().defaultBlockState());
                                 break;
                             }
                         }
-                        if (world.testBlockState(placePos, AbstractBlock.AbstractBlockState::isAir)) {
-                            generator.replace(placePos, this.darkOak ? GoodEndingBlocks.HANGING_DARK_OAK_LEAVES_PLANT.getDefaultState() : GoodEndingBlocks.HANGING_OAK_LEAVES_PLANT.getDefaultState());
+                        if (world.isStateAtPosition(placePos, BlockBehaviour.BlockStateBase::isAir)) {
+                            generator.setBlock(placePos, this.darkOak ? GoodEndingBlocks.HANGING_DARK_OAK_LEAVES_PLANT.get().defaultBlockState() : GoodEndingBlocks.HANGING_OAK_LEAVES_PLANT.get().defaultBlockState());
                         }
                     }
                 }

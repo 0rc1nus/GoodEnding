@@ -1,0 +1,8 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#goodending:cobblestone_boulder_generates",
+  "features": [
+    "goodending:cobblestone_boulder"
+  ],
+  "step": "local_modifications"
+}

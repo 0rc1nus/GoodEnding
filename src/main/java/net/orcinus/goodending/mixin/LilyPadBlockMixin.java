@@ -1,17 +1,17 @@
 package net.orcinus.goodending.mixin;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.EntityShapeContext;
-import net.minecraft.block.LilyPadBlock;
-import net.minecraft.block.PlantBlock;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.vehicle.BoatEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.WaterlilyBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.EntityCollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.orcinus.goodending.init.GoodEndingBlocks;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,32 +19,32 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(LilyPadBlock.class)
-public class LilyPadBlockMixin extends PlantBlock {
+@Mixin(WaterlilyBlock.class)
+public class LilyPadBlockMixin extends BushBlock {
 
-    public LilyPadBlockMixin(Settings settings) {
+    public LilyPadBlockMixin(Properties settings) {
         super(settings);
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        if (context instanceof EntityShapeContext entityShapeContext && entityShapeContext.getEntity() != null) {
-            if (entityShapeContext.getEntity() instanceof BoatEntity) {
-                return VoxelShapes.empty();
+    public VoxelShape getCollisionShape(BlockState p_60572_, BlockGetter p_60573_, BlockPos p_60574_, CollisionContext context) {
+        if (context instanceof EntityCollisionContext entityShapeContext && entityShapeContext.getEntity() != null) {
+            if (entityShapeContext.getEntity() instanceof Boat) {
+                return Shapes.empty();
             }
         }
-        return super.getCollisionShape(state, world, pos, context);
+        return super.getCollisionShape(p_60572_, p_60573_, p_60574_, context);
     }
 
-    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;breakBlock(Lnet/minecraft/util/math/BlockPos;ZLnet/minecraft/entity/Entity;)Z"), method = "onEntityCollision", cancellable = true)
-    private void GE$onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity, CallbackInfo ci) {
+    @Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;destroyBlock(Lnet/minecraft/core/BlockPos;ZLnet/minecraft/world/entity/Entity;)Z"), method = "entityInside", cancellable = true)
+    private void GE$onEntityCollision(BlockState p_58164_, Level p_58165_, BlockPos p_58166_, Entity p_58167_, CallbackInfo ci) {
         ci.cancel();
     }
 
 
-    @Inject(at = @At(value = "HEAD"), method = "canPlantOnTop", cancellable = true)
-    private void GE$canPlantOnTop(BlockState floor, BlockView world, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
-        if (world.getBlockState(pos).isOf(GoodEndingBlocks.LARGE_LILY_PAD)) cir.setReturnValue(false);
+    @Inject(at = @At(value = "HEAD"), method = "mayPlaceOn", cancellable = true)
+    private void GE$canPlantOnTop(BlockState floor, BlockGetter world, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
+        if (world.getBlockState(pos).is(GoodEndingBlocks.LARGE_LILY_PAD.get())) cir.setReturnValue(false);
     }
 
 }

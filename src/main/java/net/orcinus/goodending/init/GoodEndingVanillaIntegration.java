@@ -1,55 +1,80 @@
 package net.orcinus.goodending.init;
 
-import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
-import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
+import com.google.common.collect.Maps;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ComposterBlock;
+import net.minecraft.world.level.block.FireBlock;
 
 public class GoodEndingVanillaIntegration {
 
     public static void init() {
-        registerCompostables();
+        registerStrippables();
         registerFlammables();
     }
 
     public static void registerFlammables() {
-        FlammableBlockRegistry defaultInstance = FlammableBlockRegistry.getDefaultInstance();
-        defaultInstance.add(GoodEndingBlocks.MUDDY_OAK_LOG, 5, 5);
-        defaultInstance.add(GoodEndingBlocks.CYPRESS_LOG, 5, 5);
-        defaultInstance.add(GoodEndingBlocks.MUDDY_OAK_WOOD, 5, 5);
-        defaultInstance.add(GoodEndingBlocks.CYPRESS_WOOD, 5, 5);
-        defaultInstance.add(GoodEndingBlocks.STRIPPED_MUDDY_OAK_LOG, 5, 5);
-        defaultInstance.add(GoodEndingBlocks.STRIPPED_CYPRESS_LOG, 5, 5);
-        defaultInstance.add(GoodEndingBlocks.STRIPPED_MUDDY_OAK_WOOD, 5, 5);
-        defaultInstance.add(GoodEndingBlocks.STRIPPED_CYPRESS_WOOD, 5, 5);
-        defaultInstance.add(GoodEndingBlocks.MUDDY_OAK_PLANKS, 5, 20);
-        defaultInstance.add(GoodEndingBlocks.CYPRESS_PLANKS, 5, 20);
-        defaultInstance.add(GoodEndingBlocks.MUDDY_OAK_SLAB, 5, 20);
-        defaultInstance.add(GoodEndingBlocks.CYPRESS_SLAB, 5, 20);
-        defaultInstance.add(GoodEndingBlocks.MUDDY_OAK_STAIRS, 5, 20);
-        defaultInstance.add(GoodEndingBlocks.CYPRESS_STAIRS, 5, 20);
-        defaultInstance.add(GoodEndingBlocks.MUDDY_OAK_FENCE, 5, 20);
-        defaultInstance.add(GoodEndingBlocks.CYPRESS_FENCE, 5, 20);
-        defaultInstance.add(GoodEndingBlocks.MUDDY_OAK_FENCE_GATE, 5, 20);
-        defaultInstance.add(GoodEndingBlocks.CYPRESS_FENCE_GATE, 5, 20);
-        defaultInstance.add(GoodEndingBlocks.CYPRESS_LEAVES, 30, 60);
-        defaultInstance.add(GoodEndingBlocks.DENSE_BIRCH_LEAVES, 30, 60);
-        defaultInstance.add(GoodEndingBlocks.DENSE_DARK_OAK_LEAVES, 30, 60);
-        defaultInstance.add(GoodEndingBlocks.CATTAIL, 60, 100);
-        defaultInstance.add(GoodEndingBlocks.POLLENFLAKE, 60, 100);
-        defaultInstance.add(GoodEndingBlocks.BALMY_WILDFLOWERS, 60, 100);
-        defaultInstance.add(GoodEndingBlocks.PASTEL_WILDFLOWERS, 60, 100);
-        defaultInstance.add(GoodEndingBlocks.SPICY_WILDFLOWERS, 60, 100);
-        defaultInstance.add(GoodEndingBlocks.TWILIGHT_WILDFLOWERS, 60, 100);
-        defaultInstance.add(GoodEndingBlocks.HANGING_OAK_LEAVES, 15, 60);
-        defaultInstance.add(GoodEndingBlocks.HANGING_OAK_LEAVES_PLANT, 15, 60);
-        defaultInstance.add(GoodEndingBlocks.HANGING_DARK_OAK_LEAVES, 15, 60);
-        defaultInstance.add(GoodEndingBlocks.HANGING_DARK_OAK_LEAVES_PLANT, 15, 60);
+        FireBlock fireBlock = (FireBlock) Blocks.FIRE;
+        fireBlock.setFlammable(GoodEndingBlocks.MUDDY_OAK_LOG.get(), 5, 5);
+        fireBlock.setFlammable(GoodEndingBlocks.CYPRESS_LOG.get(), 5, 5);
+        fireBlock.setFlammable(GoodEndingBlocks.MUDDY_OAK_WOOD.get(), 5, 5);
+        fireBlock.setFlammable(GoodEndingBlocks.CYPRESS_WOOD.get(), 5, 5);
+        fireBlock.setFlammable(GoodEndingBlocks.STRIPPED_MUDDY_OAK_LOG.get(), 5, 5);
+        fireBlock.setFlammable(GoodEndingBlocks.STRIPPED_CYPRESS_LOG.get(), 5, 5);
+        fireBlock.setFlammable(GoodEndingBlocks.STRIPPED_MUDDY_OAK_WOOD.get(), 5, 5);
+        fireBlock.setFlammable(GoodEndingBlocks.STRIPPED_CYPRESS_WOOD.get(), 5, 5);
+        fireBlock.setFlammable(GoodEndingBlocks.MUDDY_OAK_PLANKS.get(), 5, 20);
+        fireBlock.setFlammable(GoodEndingBlocks.CYPRESS_PLANKS.get(), 5, 20);
+        fireBlock.setFlammable(GoodEndingBlocks.MUDDY_OAK_SLAB.get(), 5, 20);
+        fireBlock.setFlammable(GoodEndingBlocks.CYPRESS_SLAB.get(), 5, 20);
+        fireBlock.setFlammable(GoodEndingBlocks.MUDDY_OAK_STAIRS.get(), 5, 20);
+        fireBlock.setFlammable(GoodEndingBlocks.CYPRESS_STAIRS.get(), 5, 20);
+        fireBlock.setFlammable(GoodEndingBlocks.MUDDY_OAK_FENCE.get(), 5, 20);
+        fireBlock.setFlammable(GoodEndingBlocks.CYPRESS_FENCE.get(), 5, 20);
+        fireBlock.setFlammable(GoodEndingBlocks.MUDDY_OAK_FENCE_GATE.get(), 5, 20);
+        fireBlock.setFlammable(GoodEndingBlocks.CYPRESS_FENCE_GATE.get(), 5, 20);
+        fireBlock.setFlammable(GoodEndingBlocks.CYPRESS_LEAVES.get(), 30, 60);
+        fireBlock.setFlammable(GoodEndingBlocks.DENSE_BIRCH_LEAVES.get(), 30, 60);
+        fireBlock.setFlammable(GoodEndingBlocks.DENSE_DARK_OAK_LEAVES.get(), 30, 60);
+        fireBlock.setFlammable(GoodEndingBlocks.CATTAIL.get(), 60, 100);
+        fireBlock.setFlammable(GoodEndingBlocks.POLLENFLAKE.get(), 60, 100);
+        fireBlock.setFlammable(GoodEndingBlocks.BALMY_WILDFLOWERS.get(), 60, 100);
+        fireBlock.setFlammable(GoodEndingBlocks.PASTEL_WILDFLOWERS.get(), 60, 100);
+        fireBlock.setFlammable(GoodEndingBlocks.SPICY_WILDFLOWERS.get(), 60, 100);
+        fireBlock.setFlammable(GoodEndingBlocks.TWILIGHT_WILDFLOWERS.get(), 60, 100);
+        fireBlock.setFlammable(GoodEndingBlocks.HANGING_OAK_LEAVES.get(), 15, 60);
+        fireBlock.setFlammable(GoodEndingBlocks.HANGING_OAK_LEAVES_PLANT.get(), 15, 60);
+        fireBlock.setFlammable(GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.get(), 15, 60);
+        fireBlock.setFlammable(GoodEndingBlocks.HANGING_DARK_OAK_LEAVES_PLANT.get(), 15, 60);
+    }
+
+    public static void registerStrippables() {
+        AxeItem.STRIPPABLES = Maps.newHashMap(AxeItem.STRIPPABLES);
+        AxeItem.STRIPPABLES.put(GoodEndingBlocks.MUDDY_OAK_LOG.get(), GoodEndingBlocks.STRIPPED_MUDDY_OAK_LOG.get());
+        AxeItem.STRIPPABLES.put(GoodEndingBlocks.MUDDY_OAK_WOOD.get(), GoodEndingBlocks.STRIPPED_MUDDY_OAK_WOOD.get());
+        AxeItem.STRIPPABLES.put(GoodEndingBlocks.CYPRESS_LOG.get(), GoodEndingBlocks.STRIPPED_CYPRESS_LOG.get());
+        AxeItem.STRIPPABLES.put(GoodEndingBlocks.CYPRESS_WOOD.get(), GoodEndingBlocks.STRIPPED_CYPRESS_WOOD.get());
     }
 
     public static void registerCompostables() {
-        StrippableBlockRegistry.register(GoodEndingBlocks.MUDDY_OAK_LOG, GoodEndingBlocks.STRIPPED_MUDDY_OAK_LOG);
-        StrippableBlockRegistry.register(GoodEndingBlocks.MUDDY_OAK_WOOD, GoodEndingBlocks.STRIPPED_MUDDY_OAK_WOOD);
-        StrippableBlockRegistry.register(GoodEndingBlocks.CYPRESS_LOG, GoodEndingBlocks.STRIPPED_CYPRESS_LOG);
-        StrippableBlockRegistry.register(GoodEndingBlocks.CYPRESS_WOOD, GoodEndingBlocks.STRIPPED_CYPRESS_WOOD);
+        ComposterBlock.COMPOSTABLES.put(GoodEndingBlocks.CYPRESS_LEAVES.get(), 0.3F);
+        ComposterBlock.COMPOSTABLES.put(GoodEndingBlocks.DUCKWEED.get(), 0.5F);
+        ComposterBlock.COMPOSTABLES.put(GoodEndingBlocks.CATTAIL.get(), 0.3F);
+        ComposterBlock.COMPOSTABLES.put(GoodEndingBlocks.CYPRESS_SAPLING.get(), 0.3F);
+        ComposterBlock.COMPOSTABLES.put(GoodEndingBlocks.PASTEL_WILDFLOWERS.get(), 0.65F);
+        ComposterBlock.COMPOSTABLES.put(GoodEndingBlocks.TWILIGHT_WILDFLOWERS.get(), 0.65F);
+        ComposterBlock.COMPOSTABLES.put(GoodEndingBlocks.SPICY_WILDFLOWERS.get(), 0.65F);
+        ComposterBlock.COMPOSTABLES.put(GoodEndingBlocks.BALMY_WILDFLOWERS.get(), 0.65F);
+        ComposterBlock.COMPOSTABLES.put(GoodEndingBlocks.BIRCH_MUSHROOM.get(), 0.65F);
+        ComposterBlock.COMPOSTABLES.put(GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD.get(), 0.65F);
+        ComposterBlock.COMPOSTABLES.put(GoodEndingBlocks.PINK_FLOWERING_LILY_PAD.get(), 0.65F);
+        ComposterBlock.COMPOSTABLES.put(GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD.get(), 0.65F);
+        ComposterBlock.COMPOSTABLES.put(GoodEndingBlocks.LARGE_LILY_PAD.get(), 0.65F);
+        ComposterBlock.COMPOSTABLES.put(GoodEndingBlocks.DENSE_BIRCH_LEAVES.get(), 0.3F);
+        ComposterBlock.COMPOSTABLES.put(GoodEndingBlocks.DENSE_DARK_OAK_LEAVES.get(), 0.3F);
+        ComposterBlock.COMPOSTABLES.put(GoodEndingBlocks.HANGING_OAK_LEAVES.get(), 0.3F);
+        ComposterBlock.COMPOSTABLES.put(GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.get(), 0.65F);
+        ComposterBlock.COMPOSTABLES.put(GoodEndingBlocks.POLLENFLAKE.get(), 0.65F);
     }
 
 }

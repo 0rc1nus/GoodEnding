@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "minecraft:swamp",
+  "spawners": [
+    {
+      "type": "goodending:firefly_swarm",
+      "weight": 20,
+      "minCount": 8,
+      "maxCount": 8
+    }
+  ]
+}

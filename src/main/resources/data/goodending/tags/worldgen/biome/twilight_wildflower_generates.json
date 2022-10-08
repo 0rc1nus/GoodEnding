@@ -1,7 +1,8 @@
 {
   "values": [
     "minecraft:flower_forest",
-    "#c:swamp",
+    "minecraft:mangrove_swamp",
+    "minecraft:swamp",
     "minecraft:birch_forest",
     "minecraft:old_growth_birch_forest",
     "minecraft:dark_forest",

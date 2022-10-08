@@ -1,25 +1,21 @@
 package net.orcinus.goodending;
 
-import com.google.common.collect.Lists;
-import com.google.common.reflect.Reflection;
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
-import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldEvents;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.orcinus.goodending.events.MiscEvents;
+import net.orcinus.goodending.events.MobEvents;
 import net.orcinus.goodending.init.GoodEndingBiomeModifiers;
 import net.orcinus.goodending.init.GoodEndingBiomes;
+import net.orcinus.goodending.init.GoodEndingBlockEntityTypes;
 import net.orcinus.goodending.init.GoodEndingBlocks;
+import net.orcinus.goodending.init.GoodEndingEntityTypes;
 import net.orcinus.goodending.init.GoodEndingFeatures;
 import net.orcinus.goodending.init.GoodEndingItems;
 import net.orcinus.goodending.init.GoodEndingParticleTypes;
@@ -31,55 +27,51 @@ import net.orcinus.goodending.init.GoodEndingStructureProcessors;
 import net.orcinus.goodending.init.GoodEndingStructureTypes;
 import net.orcinus.goodending.init.GoodEndingTreeDecorators;
 import net.orcinus.goodending.init.GoodEndingVanillaIntegration;
+import net.orcinus.goodending.init.GoodEndingWorldGen;
+import net.orcinus.goodending.mixin.invokers.BrewingRecipeRegistryInvoker;
 
-import java.util.List;
-
-public class GoodEnding implements ModInitializer {
+@Mod(GoodEnding.MODID)
+public class GoodEnding {
 	public static final String MODID = "goodending";
-	public static final ItemGroup TAB = FabricItemGroupBuilder.create(new Identifier(MODID, MODID)).icon(() -> new ItemStack(GoodEndingItems.YELLOW_FLOWERING_LILY_PAD)).build();
+	public static final CreativeModeTab TAB = new CreativeModeTab(MODID) {
+		@Override
+		public ItemStack makeIcon() {
+			return new ItemStack(GoodEndingItems.YELLOW_FLOWERING_LILY_PAD.get());
+		}
+	};
 
-	@SuppressWarnings("UnstableApiUsage")
-	@Override
-	public void onInitialize() {
+	public GoodEnding() {
+		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		IEventBus eventBus = MinecraftForge.EVENT_BUS;
 
-		Reflection.initialize(
-			GoodEndingSoundEvents.class,
-			GoodEndingItems.class,
-			GoodEndingBlocks.class,
-			GoodEndingStructureTypes.class,
-			GoodEndingStructurePieceTypes.class,
-			GoodEndingStructureProcessors.class
-		);
+		GoodEndingBlocks.BLOCKS.register(modEventBus);
+		GoodEndingBlockEntityTypes.BLOCK_ENTITY_TYPES.register(modEventBus);
+		GoodEndingBiomes.BIOMES.register(modEventBus);
+		GoodEndingItems.ITEMS.register(modEventBus);
+		GoodEndingEntityTypes.ENTITY_TYPES.register(modEventBus);
+		GoodEndingFeatures.FEATURES.register(modEventBus);
+		GoodEndingParticleTypes.PARTICLE_TYPES.register(modEventBus);
+		GoodEndingSoundEvents.SOUND_EVENTS.register(modEventBus);
+		GoodEndingStatusEffects.MOB_EFFECTS.register(modEventBus);
+		GoodEndingPotions.POTIONS.register(modEventBus);
+		GoodEndingTreeDecorators.TREE_DECORATOR_TYPES.register(modEventBus);
 
-		GoodEndingBiomes.init();
-		GoodEndingFeatures.init();
-		GoodEndingStatusEffects.init();
-		GoodEndingTreeDecorators.init();
-		GoodEndingPotions.init();
-		GoodEndingBiomeModifiers.init();
-		GoodEndingVanillaIntegration.init();
-		GoodEndingParticleTypes.init();
+		modEventBus.addListener(this::commonSetup);
+		eventBus.register(this);
+		eventBus.register(new MobEvents());
+		eventBus.register(new MiscEvents());
+	}
 
-		UseBlockCallback.EVENT.register((player, world, hand, hitResult) -> {
-			BlockPos blockPos = hitResult.getBlockPos();
-			ItemStack stack = player.getStackInHand(hand);
-			if (world.getBlockState(blockPos).isOf(Blocks.LILY_PAD) && stack.isOf(Items.BONE_MEAL) && !world.isClient()) {
-				if (!player.getAbilities().creativeMode) {
-					stack.decrement(1);
-				}
-				List<Block> list = Util.make(Lists.newArrayList(), block -> {
-					block.add(GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD);
-					block.add(GoodEndingBlocks.PINK_FLOWERING_LILY_PAD);
-					block.add(GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD);
-				});
-				world.setBlockState(blockPos, list.get(world.getRandom().nextInt(list.size())).getDefaultState(), 2);
-				world.playSound(null, blockPos, SoundEvents.ITEM_BONE_MEAL_USE, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				world.syncWorldEvent(WorldEvents.BONE_MEAL_USED, blockPos, 0);
-				return ActionResult.SUCCESS;
-			}
-			return ActionResult.PASS;
+	private void commonSetup(final FMLCommonSetupEvent event) {
+		BrewingRecipeRegistryInvoker.callAddMix(Potions.AWKWARD, GoodEndingBlocks.BIRCH_MUSHROOM.get().asItem(), GoodEndingPotions.IMMUNITY.get());
+		BrewingRecipeRegistryInvoker.callAddMix(GoodEndingPotions.IMMUNITY.get(), Items.REDSTONE, GoodEndingPotions.LONG_IMMUNITY.get());
+		event.enqueueWork(() -> {
+			GoodEndingStructureProcessors.init();
+			GoodEndingStructurePieceTypes.init();
+			GoodEndingStructureTypes.init();
+			GoodEndingWorldGen.init();
+			GoodEndingVanillaIntegration.init();
 		});
-
 	}
 
 }

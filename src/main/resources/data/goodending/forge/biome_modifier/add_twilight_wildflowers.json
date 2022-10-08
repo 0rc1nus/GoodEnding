@@ -1,0 +1,8 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#goodending:twilight_wildflower_generates",
+  "features": [
+    "goodending:patch_twilight_wildflowers"
+  ],
+  "step": "vegetal_decoration"
+}

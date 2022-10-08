@@ -1,33 +1,33 @@
 package net.orcinus.goodending.world.gen.features;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.Blocks;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.intprovider.UniformIntProvider;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.gen.feature.DefaultFeatureConfig;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.util.FeatureContext;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.orcinus.goodending.blocks.AlgaeBlock;
 import net.orcinus.goodending.init.GoodEndingBlocks;
 
-public class AlgaePatchFeature extends Feature<DefaultFeatureConfig> {
+public class AlgaePatchFeature extends Feature<NoneFeatureConfiguration> {
 
-    public AlgaePatchFeature(Codec<DefaultFeatureConfig> configCodec) {
+    public AlgaePatchFeature(Codec<NoneFeatureConfiguration> configCodec) {
         super(configCodec);
     }
 
     @Override
-    public boolean generate(FeatureContext<DefaultFeatureConfig> context) {
-        StructureWorldAccess world = context.getWorld();
-        BlockPos blockPos = context.getOrigin();
-        Random random = context.getRandom();
-        if (world.getBlockState(blockPos).isOf(Blocks.WATER) && (waterAtDirection(world, blockPos, Direction.NORTH) || waterAtDirection(world, blockPos, Direction.SOUTH) || waterAtDirection(world, blockPos, Direction.EAST) || waterAtDirection(world, blockPos, Direction.WEST))) {
-            int radius = UniformIntProvider.create(3, 6).get(random) + 1;
+    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+        WorldGenLevel world = context.level();
+        BlockPos blockPos = context.origin();
+        RandomSource random = context.random();
+        if (world.getBlockState(blockPos).is(Blocks.WATER) && (waterAtDirection(world, blockPos, Direction.NORTH) || waterAtDirection(world, blockPos, Direction.SOUTH) || waterAtDirection(world, blockPos, Direction.EAST) || waterAtDirection(world, blockPos, Direction.WEST))) {
+            int radius = UniformInt.of(3, 6).sample(random) + 1;
             for (int x = -radius; x <= radius; x++) {
                 for (int z = -radius; z <= radius; z++) {
                     boolean flag = x == -radius || x == radius;
@@ -35,10 +35,10 @@ public class AlgaePatchFeature extends Feature<DefaultFeatureConfig> {
                     if (flag && flag1) {
                         continue;
                     }
-                    BlockPos placePos = blockPos.add(x, 0, z);
-                    int distance = Math.max(1, Math.round(MathHelper.sqrt((float) blockPos.getSquaredDistance(placePos))));
-                    if (random.nextInt(distance) == 0 && world.isAir(blockPos.add(x, 1, z)) && world.getBlockState(placePos).isOf(Blocks.WATER)) {
-                        world.setBlockState(placePos, GoodEndingBlocks.ALGAE.getDefaultState().with(AlgaeBlock.WATERLOGGED, true), 2);
+                    BlockPos placePos = blockPos.offset(x, 0, z);
+                    int distance = Math.max(1, Math.round(Mth.sqrt((float) blockPos.distSqr(placePos))));
+                    if (random.nextInt(distance) == 0 && world.isEmptyBlock(blockPos.offset(x, 1, z)) && world.getBlockState(placePos).is(Blocks.WATER)) {
+                        world.setBlock(placePos, GoodEndingBlocks.ALGAE.get().defaultBlockState().setValue(AlgaeBlock.WATERLOGGED, true), 2);
                     }
                 }
             }
@@ -47,7 +47,7 @@ public class AlgaePatchFeature extends Feature<DefaultFeatureConfig> {
         return false;
     }
 
-    public boolean waterAtDirection(StructureWorldAccess world, BlockPos blockPos, Direction direction) {
-        return world.getBlockState(blockPos.offset(direction)).isIn(BlockTags.DIRT);
+    public boolean waterAtDirection(WorldGenLevel world, BlockPos blockPos, Direction direction) {
+        return world.getBlockState(blockPos.relative(direction)).is(BlockTags.DIRT);
     }
 }

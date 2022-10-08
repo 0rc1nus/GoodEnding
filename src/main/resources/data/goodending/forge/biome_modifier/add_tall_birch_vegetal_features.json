@@ -1,0 +1,9 @@
+{
+  "type": "forge:add_features",
+  "biomes": "minecraft:old_growth_birch_forest",
+  "features": [
+    "goodending:tall_birch_vegetation",
+    "goodending:patch_tall_grass_placed"
+  ],
+  "step": "vegetal_decoration"
+}

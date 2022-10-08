@@ -1,8 +1,8 @@
 package net.orcinus.goodending.util;
 
-import net.minecraft.util.SignType;
+import net.minecraft.world.level.block.state.properties.WoodType;
 
-public class GoodEndingSignType extends SignType {
+public class GoodEndingSignType extends WoodType {
     private final String id;
 
     public GoodEndingSignType(String name) {

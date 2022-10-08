@@ -1,0 +1,8 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#goodending:red_sandstone_boulder_generates",
+  "features": [
+    "goodending:red_sandstone_boulder"
+  ],
+  "step": "local_modifications"
+}

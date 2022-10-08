@@ -1,12 +1,12 @@
 package net.orcinus.goodending.effects;
 
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 
-public class ImmunityEffect extends StatusEffect {
+public class ImmunityEffect extends MobEffect {
 
     public ImmunityEffect() {
-        super(StatusEffectCategory.BENEFICIAL, 0xFFFFFFFF);
+        super(MobEffectCategory.BENEFICIAL, 0xFFFFFFFF);
     }
 
 }

@@ -1,0 +1,27 @@
+modLoader="javafml"
+loaderVersion="[39,)"
+license="All rights reserved"
+[[mods]]
+modId="goodending"
+version="1.19.2-1.0.0"
+displayName="Good Ending"
+logoFile= "icon.png"
+authors="Ninni, Orcinus"
+description='''
+This mod aims to improve the wild update
+'''
+credits='''
+bunten
+'''
+[[dependencies.goodending]]
+    modId="forge"
+    mandatory=true
+    versionRange="[39,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.goodending]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.19,1.20)"
+    ordering="NONE"
+    side="BOTH"

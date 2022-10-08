@@ -1,0 +1,11 @@
+{
+  "type": "forge:add_features",
+  "biomes": "goodending:oak_hammock_forest",
+  "features": [
+    "goodending:oak_hammock_trees_placed",
+    "goodending:oak_hammock_patch_tall_grass_placed",
+    "goodending:patch_fern_placed",
+    "goodending:patch_large_fern_placed"
+  ],
+  "step": "vegetal_decoration"
+}

@@ -1,35 +1,19 @@
 package net.orcinus.goodending.init;
 
-import com.google.common.collect.Maps;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.item.Items;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.Potions;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import net.orcinus.goodending.GoodEnding;
-import net.orcinus.goodending.mixin.invokers.BrewingRecipeRegistryInvoker;
 
-import java.util.Map;
-
+@Mod.EventBusSubscriber(modid = GoodEnding.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class GoodEndingPotions {
-    public static final Map<Identifier, Potion> POTIONS = Maps.newLinkedHashMap();
+    public static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(ForgeRegistries.POTIONS, GoodEnding.MODID);
 
-    public static final Potion IMMUNITY = registerPotion("immunity", new Potion(new StatusEffectInstance(GoodEndingStatusEffects.STRONG_IMMUNITY, 3600)));
-    public static final Potion LONG_IMMUNITY = registerPotion("long_immunity", new Potion(new StatusEffectInstance(GoodEndingStatusEffects.STRONG_IMMUNITY, 9600)));
+    public static final RegistryObject<Potion> IMMUNITY = POTIONS.register("immunity", () -> new Potion(new MobEffectInstance(GoodEndingStatusEffects.STRONG_IMMUNITY.get(), 3600)));
+    public static final RegistryObject<Potion> LONG_IMMUNITY = POTIONS.register("long_immunity", () -> new Potion(new MobEffectInstance(GoodEndingStatusEffects.STRONG_IMMUNITY.get(), 9600)));
 
-    public static Potion registerPotion(String name, Potion potion) {
-        POTIONS.put(new Identifier(GoodEnding.MODID, name), potion);
-        return potion;
-    }
-
-    public static void init() {
-        for (Identifier id : POTIONS.keySet()) {
-            Registry.register(Registry.POTION, id, POTIONS.get(id));
-        }
-
-        BrewingRecipeRegistryInvoker.callRegisterPotionRecipe(Potions.AWKWARD, GoodEndingBlocks.BIRCH_MUSHROOM.asItem(), IMMUNITY);
-        BrewingRecipeRegistryInvoker.callRegisterPotionRecipe(IMMUNITY, Items.REDSTONE, LONG_IMMUNITY);
-    }
 }
     

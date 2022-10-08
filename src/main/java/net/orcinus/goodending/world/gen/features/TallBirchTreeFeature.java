@@ -2,57 +2,57 @@ package net.orcinus.goodending.world.gen.features;
 
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
-import net.minecraft.block.BeehiveBlock;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.block.PillarBlock;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.EntityType;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.intprovider.UniformIntProvider;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.TreeFeatureConfig;
-import net.minecraft.world.gen.feature.util.DripstoneHelper;
-import net.minecraft.world.gen.feature.util.FeatureContext;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.BeehiveBlock;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.levelgen.feature.DripstoneUtils;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.orcinus.goodending.blocks.BirchMushroomPlantBlock;
 import net.orcinus.goodending.init.GoodEndingBlocks;
 
 import java.util.List;
 
-public class TallBirchTreeFeature extends Feature<TreeFeatureConfig> {
+public class TallBirchTreeFeature extends Feature<TreeConfiguration> {
 
-    public TallBirchTreeFeature(Codec<TreeFeatureConfig> configCodec) {
+    public TallBirchTreeFeature(Codec<TreeConfiguration> configCodec) {
         super(configCodec);
     }
 
     @Override
-    public boolean generate(FeatureContext<TreeFeatureConfig> context) {
-        StructureWorldAccess world = context.getWorld();
-        BlockPos blockPos = context.getOrigin();
-        Random random = context.getRandom();
-        int height = UniformIntProvider.create(6, 12).get(random);
+    public boolean place(FeaturePlaceContext<TreeConfiguration> context) {
+        WorldGenLevel world = context.level();
+        BlockPos blockPos = context.origin();
+        RandomSource random = context.random();
+        int height = UniformInt.of(6, 12).sample(random);
         if (random.nextInt(3) == 0 && height <= 10) {
             height *= 1.25;
         }
-        TreeFeatureConfig config = context.getConfig();
+        TreeConfiguration config = context.config();
         List<BlockPos> decorationPoses = Lists.newArrayList();
         List<BlockPos> branchPoses = Lists.newArrayList();
         List<BlockPos> leavePoses = Lists.newArrayList();
-        if (!(world.isAir(blockPos) || world.getBlockState(blockPos).isOf(Blocks.BIRCH_SAPLING))) {
+        if (!(world.isEmptyBlock(blockPos) || world.getBlockState(blockPos).is(Blocks.BIRCH_SAPLING))) {
             return false;
         }
         for (int i = 0; i <= height; i++) {
-            if (world.testBlockState(blockPos.up(i), blockState -> blockState.isOf(Blocks.BIRCH_SAPLING) || blockState.isAir() || blockState.isOf(Blocks.WATER) || blockState.isIn(BlockTags.LEAVES))) {
-                world.setBlockState(blockPos.up(i), config.trunkProvider.getBlockState(random, blockPos.up(i)), 19);
-                decorationPoses.add(blockPos.up(i));
+            if (world.isStateAtPosition(blockPos.above(i), blockState -> blockState.is(Blocks.BIRCH_SAPLING) || blockState.isAir() || blockState.is(Blocks.WATER) || blockState.is(BlockTags.LEAVES))) {
+                world.setBlock(blockPos.above(i), config.trunkProvider.getState(random, blockPos.above(i)), 19);
+                decorationPoses.add(blockPos.above(i));
                 if (i >= height / 2) {
-                    branchPoses.add(blockPos.up(i));
+                    branchPoses.add(blockPos.above(i));
                 }
             }
         }
@@ -60,32 +60,32 @@ public class TallBirchTreeFeature extends Feature<TreeFeatureConfig> {
             int radius = y <= -2 ? 1 : (y >= 1 ? 1 : 2);
             for (int x = -radius; x <= radius; x++) {
                 for (int z = -radius; z <= radius; z++) {
-                    BlockPos leavePos = blockPos.add(x, y + height, z);
-                    if (world.testBlockState(leavePos, DripstoneHelper::canGenerate)) {
+                    BlockPos leavePos = blockPos.offset(x, y + height, z);
+                    if (world.isStateAtPosition(leavePos, DripstoneUtils::isEmptyOrWater)) {
                         boolean flag = (x == radius || x == -radius) && (z == radius || z == -radius);
                         if (flag) {
                             if ((y >= -1 && y < 1) || y == 2 || y == -3) continue;
                         }
-                        world.setBlockState(leavePos, config.foliageProvider.getBlockState(random, leavePos).with(LeavesBlock.DISTANCE, 1), 19);
+                        world.setBlock(leavePos, config.foliageProvider.getState(random, leavePos).setValue(LeavesBlock.DISTANCE, 1), 19);
                         leavePoses.add(leavePos);
                     }
                 }
             }
         }
-        world.setBlockState(leavePoses.get(world.getRandom().nextInt(leavePoses.size())), GoodEndingBlocks.DENSE_BIRCH_LEAVES.getDefaultState().with(LeavesBlock.DISTANCE, 1), 19);
+        world.setBlock(leavePoses.get(world.getRandom().nextInt(leavePoses.size())), GoodEndingBlocks.DENSE_BIRCH_LEAVES.get().defaultBlockState().setValue(LeavesBlock.DISTANCE, 1), 19);
         decorationPoses.forEach(pos -> {
-            Direction direction = Direction.Type.HORIZONTAL.random(random);
-            BlockPos offset = pos.offset(direction);
-            if (random.nextInt(10) == 0 && world.isAir(offset)) {
-                world.setBlockState(offset, GoodEndingBlocks.BIRCH_MUSHROOM.getDefaultState().with(BirchMushroomPlantBlock.FACING, direction), 2);
+            Direction direction = Direction.Plane.HORIZONTAL.getRandomDirection(random);
+            BlockPos offset = pos.relative(direction);
+            if (random.nextInt(10) == 0 && world.isEmptyBlock(offset)) {
+                world.setBlock(offset, GoodEndingBlocks.BIRCH_MUSHROOM.get().defaultBlockState().setValue(BirchMushroomPlantBlock.FACING, direction), 2);
             }
         });
         branchPoses.forEach(branchPos -> {
-            Direction randomDirection = Direction.Type.HORIZONTAL.random(random);
-            BlockPos offsetPos = branchPos.offset(randomDirection);
-            if (random.nextInt(3) == 0 && world.isAir(offsetPos) && world.isAir(offsetPos.down())) {
-                world.setBlockState(offsetPos, config.trunkProvider.getBlockState(random, offsetPos).with(PillarBlock.AXIS, randomDirection.getAxis()), 19);
-                if (world.isAir(offsetPos.down()) && random.nextFloat() < 0.02F) {
+            Direction randomDirection = Direction.Plane.HORIZONTAL.getRandomDirection(random);
+            BlockPos offsetPos = branchPos.relative(randomDirection);
+            if (random.nextInt(3) == 0 && world.isEmptyBlock(offsetPos) && world.isEmptyBlock(offsetPos.below())) {
+                world.setBlock(offsetPos, config.trunkProvider.getState(random, offsetPos).setValue(RotatedPillarBlock.AXIS, randomDirection.getAxis()), 19);
+                if (world.isEmptyBlock(offsetPos.below()) && random.nextFloat() < 0.02F) {
                     this.setBeehive(world, random, offsetPos, randomDirection);
                 }
             }
@@ -93,17 +93,17 @@ public class TallBirchTreeFeature extends Feature<TreeFeatureConfig> {
         return true;
     }
 
-    private void setBeehive(StructureWorldAccess world, Random random, BlockPos offsetPos, Direction direction) {
-        if (world.getBlockState(offsetPos.offset(direction)).isIn(BlockTags.LOGS)) {
+    private void setBeehive(WorldGenLevel world, RandomSource random, BlockPos offsetPos, Direction direction) {
+        if (world.getBlockState(offsetPos.relative(direction)).is(BlockTags.LOGS)) {
             direction = direction.getOpposite();
         }
-        world.setBlockState(offsetPos.down(), Blocks.BEE_NEST.getDefaultState().with(BeehiveBlock.FACING, direction), 2);
-        world.getBlockEntity(offsetPos.down(), BlockEntityType.BEEHIVE).ifPresent(blockEntity -> {
+        world.setBlock(offsetPos.below(), Blocks.BEE_NEST.defaultBlockState().setValue(BeehiveBlock.FACING, direction), 2);
+        world.getBlockEntity(offsetPos.below(), BlockEntityType.BEEHIVE).ifPresent(blockEntity -> {
             int i = 2 + random.nextInt(2);
             for (int j = 0; j < i; ++j) {
-                NbtCompound nbtCompound = new NbtCompound();
-                nbtCompound.putString("id", Registry.ENTITY_TYPE.getId(EntityType.BEE).toString());
-                blockEntity.addBee(nbtCompound, random.nextInt(599), false);
+                CompoundTag nbtCompound = new CompoundTag();
+                nbtCompound.putString("id", Registry.ENTITY_TYPE.getKey(EntityType.BEE).toString());
+                blockEntity.storeBee(nbtCompound, random.nextInt(599), false);
             }
         });
     }

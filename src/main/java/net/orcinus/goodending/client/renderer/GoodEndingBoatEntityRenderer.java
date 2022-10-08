@@ -1,22 +1,22 @@
 package net.orcinus.goodending.client.renderer;
 
 import com.google.common.collect.ImmutableMap;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EntityRenderer;
-import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.model.BoatEntityModel;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Quaternion;
-import net.minecraft.util.math.Vec3f;
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.model.BoatModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.orcinus.goodending.GoodEnding;
 import net.orcinus.goodending.entities.GoodEndingBoatEntity;
 import net.orcinus.goodending.init.GoodEndingModelLayers;
@@ -24,19 +24,19 @@ import net.orcinus.goodending.init.GoodEndingModelLayers;
 import java.util.Map;
 import java.util.stream.Stream;
 
-@Environment(EnvType.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class GoodEndingBoatEntityRenderer extends EntityRenderer<GoodEndingBoatEntity> {
-    private final Map<GoodEndingBoatEntity.BoatType, Pair<Identifier, BoatEntityModel>> texturesAndModels;
+    private final Map<GoodEndingBoatEntity.BoatType, Pair<ResourceLocation, BoatModel>> texturesAndModels;
 
-    public GoodEndingBoatEntityRenderer(EntityRendererFactory.Context ctx, boolean chest) {
+    public GoodEndingBoatEntityRenderer(EntityRendererProvider.Context ctx, boolean chest) {
         super(ctx);
         this.shadowRadius = 0.8f;
-        this.texturesAndModels = Stream.of(GoodEndingBoatEntity.BoatType.values()).collect(ImmutableMap.toImmutableMap(type -> type, type -> Pair.of(new Identifier(GoodEnding.MODID, GoodEndingBoatEntityRenderer.getTexture(type, chest)), this.createModel(ctx, type, chest))));
+        this.texturesAndModels = Stream.of(GoodEndingBoatEntity.BoatType.values()).collect(ImmutableMap.toImmutableMap(type -> type, type -> Pair.of(new ResourceLocation(GoodEnding.MODID, GoodEndingBoatEntityRenderer.getTexture(type, chest)), this.createModel(ctx, type, chest))));
     }
 
-    private BoatEntityModel createModel(EntityRendererFactory.Context ctx, GoodEndingBoatEntity.BoatType type, boolean chest) {
-        EntityModelLayer entityModelLayer = chest ? GoodEndingModelLayers.createChestBoat(type) : GoodEndingModelLayers.createBoat(type);
-        return new BoatEntityModel(ctx.getPart(entityModelLayer), chest);
+    private BoatModel createModel(EntityRendererProvider.Context ctx, GoodEndingBoatEntity.BoatType type, boolean chest) {
+        ModelLayerLocation entityModelLayer = chest ? GoodEndingModelLayers.createChestBoat(type) : GoodEndingModelLayers.createBoat(type);
+        return new BoatModel(ctx.bakeLayer(entityModelLayer), chest);
     }
 
     private static String getTexture(GoodEndingBoatEntity.BoatType type, boolean chest) {
@@ -47,39 +47,39 @@ public class GoodEndingBoatEntityRenderer extends EntityRenderer<GoodEndingBoatE
     }
 
     @Override
-    public void render(GoodEndingBoatEntity boatEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i) {
-        matrixStack.push();
+    public void render(GoodEndingBoatEntity boatEntity, float f, float g, PoseStack matrixStack, MultiBufferSource vertexConsumerProvider, int i) {
+        matrixStack.pushPose();
         matrixStack.translate(0.0, 0.375, 0.0);
-        matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180.0f - f));
-        float h = (float)boatEntity.getDamageWobbleTicks() - g;
-        float j = boatEntity.getDamageWobbleStrength() - g;
+        matrixStack.mulPose(Vector3f.YP.rotationDegrees(180.0f - f));
+        float h = (float)boatEntity.getHurtTime() - g;
+        float j = boatEntity.getDamage() - g;
         if (j < 0.0f) {
             j = 0.0f;
         }
         if (h > 0.0f) {
-            matrixStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(MathHelper.sin(h) * h * j / 10.0f * (float)boatEntity.getDamageWobbleSide()));
+            matrixStack.mulPose(Vector3f.XP.rotationDegrees(Mth.sin(h) * h * j / 10.0f * (float)boatEntity.getHurtDir()));
         }
-        if (!MathHelper.approximatelyEquals(boatEntity.interpolateBubbleWobble(g), 0.0f)) {
-            matrixStack.multiply(new Quaternion(new Vec3f(1.0f, 0.0f, 1.0f), boatEntity.interpolateBubbleWobble(g), true));
+        if (!Mth.equal(boatEntity.getBubbleAngle(g), 0.0f)) {
+            matrixStack.mulPose(new Quaternion(new Vector3f(1.0f, 0.0f, 1.0f), boatEntity.getBubbleAngle(g), true));
         }
-        Pair<Identifier, BoatEntityModel> pair = this.texturesAndModels.get(boatEntity.getGoodEndingBoatType());
-        Identifier identifier = pair.getFirst();
-        BoatEntityModel boatEntityModel = pair.getSecond();
+        Pair<ResourceLocation, BoatModel> pair = this.texturesAndModels.get(boatEntity.getGoodEndingBoatType());
+        ResourceLocation identifier = pair.getFirst();
+        BoatModel boatEntityModel = pair.getSecond();
         matrixStack.scale(-1.0f, -1.0f, 1.0f);
-        matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90.0f));
-        boatEntityModel.setAngles(boatEntity, g, 0.0f, -0.1f, 0.0f, 0.0f);
-        VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(boatEntityModel.getLayer(identifier));
-        boatEntityModel.render(matrixStack, vertexConsumer, i, OverlayTexture.DEFAULT_UV, 1.0f, 1.0f, 1.0f, 1.0f);
-        if (!boatEntity.isSubmergedInWater()) {
-            VertexConsumer vertexConsumer2 = vertexConsumerProvider.getBuffer(RenderLayer.getWaterMask());
-            boatEntityModel.getWaterPatch().render(matrixStack, vertexConsumer2, i, OverlayTexture.DEFAULT_UV);
+        matrixStack.mulPose(Vector3f.YP.rotationDegrees(90.0f));
+        boatEntityModel.setupAnim(boatEntity, g, 0.0f, -0.1f, 0.0f, 0.0f);
+        VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(boatEntityModel.renderType(identifier));
+        boatEntityModel.renderToBuffer(matrixStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, 1.0f, 1.0f, 1.0f, 1.0f);
+        if (!boatEntity.isUnderWater()) {
+            VertexConsumer vertexConsumer2 = vertexConsumerProvider.getBuffer(RenderType.waterMask());
+            boatEntityModel.waterPatch().render(matrixStack, vertexConsumer2, i, OverlayTexture.NO_OVERLAY);
         }
-        matrixStack.pop();
+        matrixStack.popPose();
         super.render(boatEntity, f, g, matrixStack, vertexConsumerProvider, i);
     }
 
     @Override
-    public Identifier getTexture(GoodEndingBoatEntity boatEntity) {
+    public ResourceLocation getTextureLocation(GoodEndingBoatEntity boatEntity) {
         return this.texturesAndModels.get(boatEntity.getGoodEndingBoatType()).getFirst();
     }
 

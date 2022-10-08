@@ -4,7 +4,6 @@
   "package": "net.orcinus.goodending.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "BlockEntityTypeMixin",
     "ConfiguredFeaturesMixin",
     "ItemMixin",
     "LilyPadBlockMixin",
@@ -15,15 +14,10 @@
     "TreeFeatureConfigMixin",
     "VanillaBiomeParametersMixin",
     "VanillaSurfaceRulesMixin",
-    "accessor.BoatEntityAccessor",
     "invokers.BrewingRecipeRegistryInvoker",
-    "invokers.SignTypeInvoker",
-    "invokers.TreeDecoratorTypeInvoker",
     "invokers.VanillaBiomeParametersInvoker"
   ],
   "client": [
-    "client.EntityModelLayersMixin",
-    "client.TexturedRenderLayersMixin"
   ],
   "injectors": {
     "defaultRequire": 1

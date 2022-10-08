@@ -1,49 +1,50 @@
 package net.orcinus.goodending.blocks;
 
-import net.minecraft.block.AbstractPlantStemBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.VineLogic;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.WorldView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.GrowingPlantHeadBlock;
+import net.minecraft.world.level.block.NetherVines;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class HangingLeavesBlock extends AbstractPlantStemBlock {
-    protected static final VoxelShape SHAPE = Block.createCuboidShape(4.0, 9.0, 4.0, 12.0, 16.0, 12.0);
+public class HangingLeavesBlock extends GrowingPlantHeadBlock {
+    protected static final VoxelShape SHAPE = Block.box(4.0, 9.0, 4.0, 12.0, 16.0, 12.0);
     Block plant;
 
-    public HangingLeavesBlock(Settings settings, Block plant) {
+    public HangingLeavesBlock(BlockBehaviour.Properties settings, Block plant) {
         super(settings, Direction.DOWN, SHAPE, false, 0.1);
         this.plant = plant;
     }
 
     @Override
-    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
-        BlockPos blockPos = pos.offset(this.growthDirection.getOpposite());
+    public boolean canSurvive(BlockState p_53876_, LevelReader world, BlockPos pos) {
+        BlockPos blockPos = pos.relative(this.growthDirection.getOpposite());
         BlockState blockState = world.getBlockState(blockPos);
 
         if (!this.canAttachTo(blockState)) {
             return false;
         } else {
-            return blockState.isOf(this.getStem()) || blockState.isOf(this.getPlant()) || blockState.isIn(BlockTags.LEAVES);
+            return blockState.is(this.getHeadBlock()) || blockState.is(this.getBodyBlock()) || blockState.is(BlockTags.LEAVES);
         }
     }
 
     @Override
-    protected int getGrowthLength(Random random) {
-        return VineLogic.getGrowthLength(random);
+    protected int getBlocksToGrowWhenBonemealed(RandomSource random) {
+        return NetherVines.getBlocksToGrowWhenBonemealed(random);
     }
 
     @Override
-    protected Block getPlant() {
-        return plant;
+    protected boolean canGrowInto(BlockState state) {
+        return NetherVines.isValidGrowthState(state);
     }
 
     @Override
-    protected boolean chooseStemState(BlockState state) {
-        return VineLogic.isValidForWeepingStem(state);
+    protected Block getBodyBlock() {
+        return this.plant;
     }
 }

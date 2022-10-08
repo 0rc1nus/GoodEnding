@@ -1,11 +1,10 @@
 package net.orcinus.goodending.entities.ai;
 
-import net.minecraft.entity.EntityStatuses;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.FleeEntityGoal;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.orcinus.goodending.entities.MarshEntity;
 
-public class StrangerDangerGoal<T extends LivingEntity> extends FleeEntityGoal<T> {
+public class StrangerDangerGoal<T extends LivingEntity> extends AvoidEntityGoal<T> {
     private final MarshEntity marshEntity;
 
     public StrangerDangerGoal(MarshEntity mob, Class<T> fleeFromType) {
@@ -14,18 +13,18 @@ public class StrangerDangerGoal<T extends LivingEntity> extends FleeEntityGoal<T
     }
 
     @Override
-    public boolean canStart() {
-        return !this.marshEntity.isTrusted() && super.canStart();
+    public boolean canUse() {
+        return !this.marshEntity.isTrusted() && super.canUse();
     }
 
     @Override
-    public boolean shouldContinue() {
-        return !this.marshEntity.isTrusted() && super.shouldContinue();
+    public boolean canContinueToUse() {
+        return !this.marshEntity.isTrusted() && super.canContinueToUse();
     }
 
     @Override
     public void tick() {
         super.tick();
-        this.marshEntity.world.sendEntityStatus(this.marshEntity, EntityStatuses.ADD_SPLASH_PARTICLES);
+        this.marshEntity.level.broadcastEntityEvent(this.marshEntity, (byte) 42);
     }
 }

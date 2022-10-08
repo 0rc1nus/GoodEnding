@@ -1,0 +1,8 @@
+{
+  "type": "forge:add_features",
+  "biomes": "goodending:marshy_swamp",
+  "features": [
+    "goodending:patch_algae"
+  ],
+  "step": "underground_ores"
+}

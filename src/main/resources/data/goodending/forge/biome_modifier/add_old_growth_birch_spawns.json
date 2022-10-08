@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "minecraft:old_growth_birch_forest",
+  "spawners": [
+    {
+      "type": "goodending:woodpecker",
+      "weight": 40,
+      "minCount": 1,
+      "maxCount": 4
+    }
+  ]
+}
