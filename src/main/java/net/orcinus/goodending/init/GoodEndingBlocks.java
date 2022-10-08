@@ -109,7 +109,7 @@ public class GoodEndingBlocks {
     public static final RegistryObject<Block> HANGING_DARK_OAK_LEAVES = BLOCKS.register("hanging_dark_oak_leaves", () -> new HangingLeavesBlock(BlockBehaviour.Properties.copy(Blocks.OAK_LEAVES).randomTicks().noCollission().instabreak().sound(GoodEndingBlockSoundGroups.HANGING_LEAVES), HANGING_DARK_OAK_LEAVES_PLANT.get()));
 
     //Swamp related
-    public static final RegistryObject<Block> DUCKWEED = BLOCKS.register("duckweed", () -> new WaterlilyBlock(BlockBehaviour.Properties.of(Material.REPLACEABLE_PLANT).instabreak().sound(SoundType.MOSS_CARPET).noCollission().noOcclusion()));
+    public static final RegistryObject<Block> DUCKWEED = BLOCKS.register("duckweed", () -> new PlaceableOnWaterBlock(BlockBehaviour.Properties.of(Material.REPLACEABLE_PLANT).instabreak().sound(SoundType.MOSS_CARPET).noCollission().noOcclusion()));
     public static final RegistryObject<Block> ALGAE = BLOCKS.register("algae", () -> new AlgaeBlock(BlockBehaviour.Properties.of(Material.REPLACEABLE_PLANT).instabreak().sound(SoundType.SLIME_BLOCK).noOcclusion()));
     public static final RegistryObject<Block> CATTAIL = BLOCKS.register("cattail", () -> new CattailBlock(BlockBehaviour.Properties.of(Material.PLANT).noCollission().instabreak().sound(SoundType.SMALL_DRIPLEAF).offsetType(BlockBehaviour.OffsetType.XYZ)));
     public static final RegistryObject<Block> FIREFLY_LANTERN = BLOCKS.register("firefly_lantern", () -> new FireflyLanternBlock(BlockBehaviour.Properties.of(Material.METAL).requiresCorrectToolForDrops().strength(3.5F).sound(GoodEndingBlockSoundGroups.FIREFLY_LANTERN).lightLevel(state -> 4).noOcclusion()));

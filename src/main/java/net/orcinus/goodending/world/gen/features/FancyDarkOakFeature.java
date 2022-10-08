@@ -189,12 +189,12 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakTreeConfig> {
                             BlockPos placePos = pos.below(i);
                             if (i == branchHeight) {
                                 if (world.isStateAtPosition(placePos, BlockBehaviour.BlockStateBase::isAir)) {
-                                    world.setBlock(placePos, GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.get().defaultBlockState(), 19);
+                                    world.setBlock(placePos, GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.get().defaultBlockState().setValue(GrowingPlantHeadBlock.AGE, 25), 19);
                                     break;
                                 }
                             }
                             if (world.getBlockState(placePos.below()).is(BlockTags.LOGS)) {
-                                world.setBlock(placePos, GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.get().defaultBlockState().setValue(GrowingPlantHeadBlock.AGE, Mth.nextInt(random, 22, 25)), 19);
+                                world.setBlock(placePos, GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.get().defaultBlockState().setValue(GrowingPlantHeadBlock.AGE, 25), 19);
                                 break;
                             }
                             if (world.isStateAtPosition(placePos, BlockBehaviour.BlockStateBase::isAir)) {

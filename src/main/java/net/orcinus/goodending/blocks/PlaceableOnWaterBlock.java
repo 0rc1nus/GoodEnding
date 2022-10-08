@@ -2,12 +2,14 @@ package net.orcinus.goodending.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -25,6 +27,13 @@ public class PlaceableOnWaterBlock extends BushBlock {
     @Override
     protected boolean mayPlaceOn(BlockState floor, BlockGetter world, BlockPos pos) {
         FluidState fluidState = world.getFluidState(pos);
-        return fluidState.getType() == Fluids.WATER;
+        FluidState fluidState2 = world.getFluidState(pos.above());
+        return (fluidState.getType() == Fluids.WATER || floor.getMaterial() == Material.ICE) && fluidState2.getType() == Fluids.EMPTY;
+    }
+
+    @Override
+    public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+        BlockPos blockPos = pos.below();
+        return this.mayPlaceOn(world.getBlockState(blockPos), world, blockPos);
     }
 }
