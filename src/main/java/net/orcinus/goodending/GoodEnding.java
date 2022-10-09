@@ -11,7 +11,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.orcinus.goodending.events.MiscEvents;
 import net.orcinus.goodending.events.MobEvents;
-import net.orcinus.goodending.init.GoodEndingBiomeModifiers;
 import net.orcinus.goodending.init.GoodEndingBiomes;
 import net.orcinus.goodending.init.GoodEndingBlockEntityTypes;
 import net.orcinus.goodending.init.GoodEndingBlocks;
