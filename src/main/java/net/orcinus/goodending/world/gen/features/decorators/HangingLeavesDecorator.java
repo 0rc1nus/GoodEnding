@@ -11,7 +11,6 @@ import net.minecraft.world.TestableWorld;
 import net.minecraft.world.gen.treedecorator.TreeDecorator;
 import net.minecraft.world.gen.treedecorator.TreeDecoratorType;
 import net.orcinus.goodending.blocks.HangingLeavesBlock;
-import net.orcinus.goodending.blocks.HangingOakLeavesPlantBlock;
 import net.orcinus.goodending.init.GoodEndingBlocks;
 import net.orcinus.goodending.init.GoodEndingTreeDecorators;
 
