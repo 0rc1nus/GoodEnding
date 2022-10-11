@@ -1,4 +1,4 @@
-# Fabric Example Mod
+# Good Ending
 
 ## Setup
 
