@@ -3,6 +3,7 @@ package net.orcinus.goodending.mixin;
 import com.google.common.collect.Lists;
 import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
@@ -15,6 +16,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
+import net.orcinus.goodending.criterion.GoodEndingCriterion;
+import net.orcinus.goodending.init.GoodEndingCriteriaTriggers;
 import net.orcinus.goodending.init.GoodEndingStatusEffects;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -44,6 +47,9 @@ public class LivingEntityMixin {
                     MobEffectInstance instance = $this.getEffect(hierarchy);
                     $this.removeEffect(hierarchy);
                     if (instance != null) {
+                        if ($this instanceof ServerPlayer serverPlayer) {
+                            GoodEndingCriteriaTriggers.IMMUNITY.trigger(serverPlayer);
+                        }
                         $this.addEffect(new MobEffectInstance(finalResult.get(), instance.getDuration(), instance.getAmplifier(), instance.isAmbient(), instance.isVisible(), instance.showIcon()));
                     }
                 });
@@ -53,15 +59,15 @@ public class LivingEntityMixin {
             cir.setReturnValue(false);
         }
         if (effect.getEffect() == GoodEndingStatusEffects.STRONG_IMMUNITY.get()) {
-            if (!$this.hasEffect(GoodEndingStatusEffects.STRONG_IMMUNITY.get())) {
-                $this.playSound(SoundEvents.BEACON_ACTIVATE, 1.0F, 1.0F);
-            }
             if (this.containsImmunity($this)) {
                 cir.setReturnValue(false);
             }
             $this.getActiveEffects().stream().filter(this::isHarmful).toList().forEach(statusEffectInstance -> {
                 $this.removeEffect(statusEffectInstance.getEffect());
                 $this.addEffect(new MobEffectInstance(this.hierarchyResult($this, effect::getEffect).get(), effect.getDuration(), effect.getAmplifier(), effect.isAmbient(), effect.isVisible(), effect.showIcon()));
+                if ($this instanceof ServerPlayer serverPlayer) {
+                    GoodEndingCriteriaTriggers.IMMUNITY.trigger(serverPlayer);
+                }
                 cir.setReturnValue(true);
             });
         }

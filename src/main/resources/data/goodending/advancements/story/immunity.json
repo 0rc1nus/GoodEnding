@@ -1,0 +1,29 @@
+{
+  "parent": "minecraft:story/root",
+  "criteria": {
+    "immunity": {
+      "conditions": {},
+      "trigger": "goodending:immunity"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.story.immunity.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:potion"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.story.immunity.title"
+    }
+  },
+  "requirements": [
+    [
+      "immunity"
+    ]
+  ]
+}

@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -36,8 +37,10 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
+import net.orcinus.goodending.criterion.GoodEndingCriterion;
 import net.orcinus.goodending.entities.ai.FollowMobWithEffectGoal;
 import net.orcinus.goodending.entities.ai.StrangerDangerGoal;
+import net.orcinus.goodending.init.GoodEndingCriteriaTriggers;
 import net.orcinus.goodending.init.GoodEndingSoundEvents;
 import org.jetbrains.annotations.Nullable;
 
@@ -138,6 +141,10 @@ public class MarshEntity extends PathfinderMob {
                     }
                 }
 
+                if (player instanceof ServerPlayer serverPlayer) {
+                    GoodEndingCriteriaTriggers.BREW_POTION.trigger(serverPlayer);
+                }
+
                 this.setStoredPotion(PotionUtils.getPotion(itemStack));
                 this.brewingTicks = 20 * 90 + random.nextInt(20 * 60);
 
@@ -195,7 +202,7 @@ public class MarshEntity extends PathfinderMob {
             double d = this.random.nextGaussian() * 0.02;
             double e = this.random.nextGaussian() * 0.02;
             double f = this.random.nextGaussian() * 0.02;
-            this.level.addParticle(splash, this.getX(1.0), this.getRandomY() + x1, this.getZ(1.0), d, e, f);
+            this.level.addParticle(splash, this.getRandomX(1.0), this.getRandomY() + x1, this.getRandomZ(1.0), d, e, f);
         }
     }
 

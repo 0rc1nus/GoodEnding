@@ -1,0 +1,29 @@
+{
+  "parent": "minecraft:story/root",
+  "criteria": {
+    "brew_potion": {
+      "conditions": {},
+      "trigger": "goodending:brew_potion"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.story.brew_potion.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "minecraft:nether_wart"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.story.brew_potion.title"
+    }
+  },
+  "requirements": [
+    [
+      "brew_potion"
+    ]
+  ]
+}
