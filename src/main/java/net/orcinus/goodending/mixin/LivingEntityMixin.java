@@ -13,8 +13,10 @@ import net.minecraft.item.PotionItem;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtil;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Util;
+import net.orcinus.goodending.init.GoodEndingCriteriaTriggers;
 import net.orcinus.goodending.init.GoodEndingStatusEffects;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -81,6 +83,9 @@ public class LivingEntityMixin {
                     StatusEffectInstance instance = $this.getStatusEffect(hierarchy);
                     $this.removeStatusEffect(hierarchy);
                     if (instance != null) {
+                        if ($this instanceof ServerPlayerEntity serverPlayer) {
+                            GoodEndingCriteriaTriggers.IMMUNITY.trigger(serverPlayer);
+                        }
                         $this.addStatusEffect(new StatusEffectInstance(finalResult, instance.getDuration(), instance.getAmplifier(), instance.isAmbient(), instance.shouldShowParticles(), instance.shouldShowIcon()));
                     }
                 });
@@ -99,6 +104,9 @@ public class LivingEntityMixin {
             $this.getStatusEffects().stream().filter(instance -> instance.getEffectType().getCategory() == StatusEffectCategory.HARMFUL).toList().forEach(statusEffectInstance -> {
                 $this.removeStatusEffect(statusEffectInstance.getEffectType());
                 $this.addStatusEffect(new StatusEffectInstance(this.hierarchyResult($this, effect.getEffectType()), effect.getDuration(), effect.getAmplifier(), effect.isAmbient(), effect.shouldShowParticles(), effect.shouldShowIcon()));
+                if ($this instanceof ServerPlayerEntity serverPlayer) {
+                    GoodEndingCriteriaTriggers.IMMUNITY.trigger(serverPlayer);
+                }
                 cir.setReturnValue(true);
             });
         }

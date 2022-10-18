@@ -31,6 +31,7 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtil;
 import net.minecraft.potion.Potions;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
@@ -39,6 +40,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.orcinus.goodending.entities.ai.FollowMobWithEffectGoal;
 import net.orcinus.goodending.entities.ai.StrangerDangerGoal;
+import net.orcinus.goodending.init.GoodEndingCriteriaTriggers;
 import net.orcinus.goodending.init.GoodEndingSoundEvents;
 import org.jetbrains.annotations.Nullable;
 
@@ -137,6 +139,10 @@ public class MarshEntity extends PathAwareEntity {
                     if (!(item instanceof ThrowablePotionItem)) {
                         this.dropItem(Items.GLASS_BOTTLE, 1);
                     }
+                }
+
+                if (player instanceof ServerPlayerEntity serverPlayer) {
+                    GoodEndingCriteriaTriggers.BREW_POTION.trigger(serverPlayer);
                 }
 
                 this.setStoredPotion(PotionUtil.getPotion(itemStack));

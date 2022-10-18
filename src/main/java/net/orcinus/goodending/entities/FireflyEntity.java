@@ -24,6 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsage;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
@@ -38,6 +39,7 @@ import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import net.orcinus.goodending.entities.ai.FlyAroundGoal;
+import net.orcinus.goodending.init.GoodEndingCriteriaTriggers;
 import net.orcinus.goodending.init.GoodEndingItems;
 import net.orcinus.goodending.init.GoodEndingParticleTypes;
 import net.orcinus.goodending.init.GoodEndingSoundEvents;
@@ -138,6 +140,9 @@ public class FireflyEntity extends PathAwareEntity implements Flutterer {
         if (stack.isOf(Items.GLASS_BOTTLE) && this.getCount() > 0) {
             this.world.playSound(player, player.getX(), player.getY(), player.getZ(), GoodEndingSoundEvents.ITEM_FIREFLY_BOTTLE_FILL, SoundCategory.NEUTRAL, 2.0f, 1.0f);
             if (!this.world.isClient()) {
+                if (player instanceof ServerPlayerEntity serverPlayer) {
+                    GoodEndingCriteriaTriggers.CAPTURE_FIREFLY.trigger(serverPlayer);
+                }
                 this.setCount(this.getCount() - 1);
                 this.emitGameEvent(GameEvent.ENTITY_INTERACT);
                 player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, new ItemStack(GoodEndingItems.FIREFLY_BOTTLE)));

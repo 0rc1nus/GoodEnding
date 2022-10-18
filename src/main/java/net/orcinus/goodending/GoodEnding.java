@@ -20,6 +20,7 @@ import net.minecraft.world.WorldEvents;
 import net.orcinus.goodending.init.GoodEndingBiomeModifiers;
 import net.orcinus.goodending.init.GoodEndingBiomes;
 import net.orcinus.goodending.init.GoodEndingBlocks;
+import net.orcinus.goodending.init.GoodEndingCriteriaTriggers;
 import net.orcinus.goodending.init.GoodEndingFeatures;
 import net.orcinus.goodending.init.GoodEndingItems;
 import net.orcinus.goodending.init.GoodEndingParticleTypes;
@@ -52,6 +53,7 @@ public class GoodEnding implements ModInitializer {
 		);
 
 		GoodEndingBiomes.init();
+		GoodEndingCriteriaTriggers.init();
 		GoodEndingFeatures.init();
 		GoodEndingStatusEffects.init();
 		GoodEndingTreeDecorators.init();
