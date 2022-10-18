@@ -51,10 +51,7 @@
     "sounds": [
       "goodending:entity/marsh/idle1",
       "goodending:entity/marsh/idle2",
-      "goodending:entity/marsh/idle3",
-      "goodending:entity/marsh/idle4",
-      "goodending:entity/marsh/idle5",
-      "goodending:entity/marsh/idle6"
+      "goodending:entity/marsh/idle3"
     ],
     "subtitle": "subtitles.goodending.entity.marsh.idle"
   },
