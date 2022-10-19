@@ -1,6 +1,7 @@
 package net.orcinus.goodending.mixin;
 
 import com.mojang.datafixers.util.Pair;
+import io.netty.handler.ssl.OpenSslAsyncPrivateKeyMethod;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.source.util.MultiNoiseUtil;
@@ -83,6 +84,7 @@ public class VanillaBiomeParametersMixin {
                 ((VanillaBiomeParametersInvoker)this).callWriteBiomeParameters(parameters, parameterRange, parameterRange2, MultiNoiseUtil.ParameterRange.combine(this.coastContinentalness, this.farInlandContinentalness), this.erosionParameters[6], weirdness, 0.0f, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
                 ((VanillaBiomeParametersInvoker)this).callWriteBiomeParameters(parameters, parameterRange, parameterRange2, this.midInlandContinentalness, this.erosionParameters[3], weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
                 ((VanillaBiomeParametersInvoker)this).callWriteBiomeParameters(parameters, parameterRange, parameterRange2, MultiNoiseUtil.ParameterRange.combine(this.midInlandContinentalness, this.farInlandContinentalness), this.erosionParameters[5], weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
+                ((VanillaBiomeParametersInvoker)this).callWriteBiomeParameters(parameters, parameterRange, parameterRange2, this.midInlandContinentalness, MultiNoiseUtil.ParameterRange.combine(this.erosionParameters[1], this.erosionParameters[2]), weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
             }
         }
     }
@@ -99,7 +101,6 @@ public class VanillaBiomeParametersMixin {
             }
         }
     }
-
 
     //-2693824285148779362
     //2349 -40 2398
