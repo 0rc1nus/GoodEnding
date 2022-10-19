@@ -5,6 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -38,6 +39,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import net.orcinus.goodending.entities.ai.FlyAroundGoal;
+import net.orcinus.goodending.init.GoodEndingCriteriaTriggers;
 import net.orcinus.goodending.init.GoodEndingItems;
 import net.orcinus.goodending.init.GoodEndingParticleTypes;
 import net.orcinus.goodending.init.GoodEndingSoundEvents;
@@ -138,6 +140,9 @@ public class FireflyEntity extends PathfinderMob implements FlyingAnimal {
         if (stack.is(Items.GLASS_BOTTLE) && this.getCount() > 0) {
             this.level.playSound(player, player.getX(), player.getY(), player.getZ(), GoodEndingSoundEvents.ITEM_FIREFLY_BOTTLE_FILL.get(), SoundSource.NEUTRAL, 2.0f, 1.0f);
             if (!this.level.isClientSide()) {
+                if (player instanceof ServerPlayer serverPlayer) {
+                    GoodEndingCriteriaTriggers.CAPTURE_FIREFLY.trigger(serverPlayer);
+                }
                 this.setCount(this.getCount() - 1);
                 this.gameEvent(GameEvent.ENTITY_INTERACT);
                 player.setItemInHand(hand, ItemUtils.createFilledResult(stack, player, new ItemStack(GoodEndingItems.FIREFLY_BOTTLE.get())));

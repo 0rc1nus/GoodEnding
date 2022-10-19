@@ -81,6 +81,9 @@ public class VanillaBiomeParametersMixin {
                 ((VanillaBiomeParametersInvoker)this).callAddSurfaceBiome(parameters, parameterRange, parameterRange2, this.coastContinentalness, Climate.Parameter.span(this.erosions[1], this.erosions[3]), weirdness, 0.0f, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
                 ((VanillaBiomeParametersInvoker)this).callAddSurfaceBiome(parameters, parameterRange, parameterRange2, Climate.Parameter.span(this.coastContinentalness, this.farInlandContinentalness), this.erosions[4], weirdness, 0.0f, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
                 ((VanillaBiomeParametersInvoker)this).callAddSurfaceBiome(parameters, parameterRange, parameterRange2, Climate.Parameter.span(this.coastContinentalness, this.farInlandContinentalness), this.erosions[6], weirdness, 0.0f, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
+                ((VanillaBiomeParametersInvoker)this).callAddSurfaceBiome(parameters, parameterRange, parameterRange2, this.midInlandContinentalness, this.erosions[3], weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
+                ((VanillaBiomeParametersInvoker)this).callAddSurfaceBiome(parameters, parameterRange, parameterRange2, Climate.Parameter.span(this.midInlandContinentalness, this.farInlandContinentalness), this.erosions[5], weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
+                ((VanillaBiomeParametersInvoker)this).callAddSurfaceBiome(parameters, parameterRange, parameterRange2, this.midInlandContinentalness, Climate.Parameter.span(this.erosions[1], this.erosions[2]), weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
             }
         }
     }

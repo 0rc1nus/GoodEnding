@@ -1,0 +1,29 @@
+{
+  "parent": "minecraft:story/root",
+  "criteria": {
+    "capture_firefly": {
+      "conditions": {},
+      "trigger": "goodending:capture_firefly"
+    }
+  },
+  "display": {
+    "announce_to_chat": true,
+    "description": {
+      "translate": "advancements.story.capture_firefly.description"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "goodending:firefly_bottle"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.story.capture_firefly.title"
+    }
+  },
+  "requirements": [
+    [
+      "capture_firefly"
+    ]
+  ]
+}

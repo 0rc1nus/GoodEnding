@@ -10,5 +10,6 @@ public class GoodEndingCriteriaTriggers {
 
     public static final GoodEndingCriterion IMMUNITY = CriteriaTriggers.register(new GoodEndingCriterion("immunity"));
     public static final GoodEndingCriterion BREW_POTION = CriteriaTriggers.register(new GoodEndingCriterion("brew_potion"));
+    public static final GoodEndingCriterion CAPTURE_FIREFLY = CriteriaTriggers.register(new GoodEndingCriterion("capture_firefly"));
 
 }
