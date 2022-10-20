@@ -1,7 +1,6 @@
 package net.orcinus.goodending;
 
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraftforge.common.MinecraftForge;
@@ -28,16 +27,12 @@ import net.orcinus.goodending.init.GoodEndingTreeDecorators;
 import net.orcinus.goodending.init.GoodEndingVanillaIntegration;
 import net.orcinus.goodending.init.GoodEndingWorldGen;
 import net.orcinus.goodending.mixin.invokers.BrewingRecipeRegistryInvoker;
+import net.orcinus.goodending.util.GoodEndingCreativeModeTab;
 
 @Mod(GoodEnding.MODID)
 public class GoodEnding {
 	public static final String MODID = "goodending";
-	public static final CreativeModeTab TAB = new CreativeModeTab(MODID) {
-		@Override
-		public ItemStack makeIcon() {
-			return new ItemStack(GoodEndingItems.YELLOW_FLOWERING_LILY_PAD.get());
-		}
-	};
+	public static final CreativeModeTab TAB = new GoodEndingCreativeModeTab();
 
 	public GoodEnding() {
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
