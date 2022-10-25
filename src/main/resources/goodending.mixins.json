@@ -1,8 +1,9 @@
 {
   "required": true,
-  "minVersion": "0.8",
   "package": "net.orcinus.goodending.mixin",
   "compatibilityLevel": "JAVA_17",
+  "minVersion": "0.8",
+  "refmap": "goodending.refmap.json",
   "mixins": [
     "ConfiguredFeaturesMixin",
     "ItemMixin",

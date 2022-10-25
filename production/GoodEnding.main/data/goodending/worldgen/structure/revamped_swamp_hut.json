@@ -1,6 +1,0 @@
-{
-  "type": "goodending:revamped_swamp_hut",
-  "biomes": "#goodending:has_structure/revamped_swamp_hut",
-  "spawn_overrides": {},
-  "step": "surface_structures"
-}

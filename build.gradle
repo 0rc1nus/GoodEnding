@@ -95,7 +95,6 @@ repositories {
 
 dependencies {
 	minecraft "net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}"
-	implementation fg.deobf("curse.maven:cyanide-forge-541676:3832812")
 	annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
 }
 
