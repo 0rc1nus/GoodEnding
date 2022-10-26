@@ -12,6 +12,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
@@ -45,6 +46,12 @@ public class AlgaeBlock extends BushBlock implements SimpleWaterloggedBlock, Bon
     @Override
     protected boolean mayPlaceOn(BlockState p_51042_, BlockGetter world, BlockPos pos) {
         return (world.getFluidState(pos.above()).is(Fluids.WATER) && world.getFluidState(pos.above(2)).isEmpty());
+    }
+
+    @Override
+    public boolean canSurvive(BlockState p_51028_, LevelReader p_51029_, BlockPos blockpos) {
+        BlockPos belowPos = blockpos.below();
+        return this.mayPlaceOn(p_51029_.getBlockState(belowPos), p_51029_, belowPos);
     }
 
     @Override
