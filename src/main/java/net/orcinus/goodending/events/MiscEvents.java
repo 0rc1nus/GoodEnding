@@ -14,7 +14,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.SaplingGrowTreeEvent;
@@ -38,18 +37,21 @@ public class MiscEvents {
         BlockPos blockPos = event.getPos();
         Level world = event.getLevel();
         ItemStack stack = event.getItemStack();
-        if (world.getBlockState(blockPos).is(Blocks.LILY_PAD) && stack.is(Items.BONE_MEAL) && !world.isClientSide) {
-            if (!event.getEntity().getAbilities().instabuild) {
-                stack.shrink(1);
+        if (world.getBlockState(blockPos).is(Blocks.LILY_PAD) && stack.is(Items.BONE_MEAL)) {
+            if (!world.isClientSide) {
+                if (!event.getEntity().getAbilities().instabuild) {
+                    stack.shrink(1);
+                }
+                List<Block> list = Util.make(Lists.newArrayList(), block -> {
+                    block.add(GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD.get());
+                    block.add(GoodEndingBlocks.PINK_FLOWERING_LILY_PAD.get());
+                    block.add(GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD.get());
+                });
+                world.setBlock(blockPos, list.get(world.getRandom().nextInt(list.size())).defaultBlockState(), 2);
+                world.levelEvent(1505, blockPos, 0);
             }
-            List<Block> list = Util.make(Lists.newArrayList(), block -> {
-                block.add(GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD.get());
-                block.add(GoodEndingBlocks.PINK_FLOWERING_LILY_PAD.get());
-                block.add(GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD.get());
-            });
-            world.setBlock(blockPos, list.get(world.getRandom().nextInt(list.size())).defaultBlockState(), 2);
             world.playSound(null, blockPos, SoundEvents.BONE_MEAL_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
-            world.levelEvent(1505, blockPos, 0);
+            event.getEntity().swing(event.getHand());
         }
     }
 

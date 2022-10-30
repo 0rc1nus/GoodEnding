@@ -90,7 +90,7 @@ public class MuddyOakTreeFeature extends Feature<MuddyOakFeatureConfig> {
     }
 
     public void generateHangingVines(WorldGenLevel world, float probability, RandomSource random, List<BlockPos> leavePositions) {
-        leavePositions.forEach((pos) -> {
+        leavePositions.stream().filter(pos -> world.isEmptyBlock(pos.below()) && world.getBlockState(pos).is(Blocks.OAK_LEAVES)).forEach((pos) -> {
             BlockPos.MutableBlockPos mutable = pos.mutable();
             if (random.nextFloat() < probability) {
                 int length = Mth.nextInt(random, 1, 2);
