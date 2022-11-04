@@ -34,7 +34,7 @@ public class ShieldItemMixin {
                 });
             }
             if (nbt.getInt("Amount") > 0) {
-                tooltip.add(Text.translatable("item.goodending.retained_count.status_effect").append(" ").append(Text.translatable("" + nbt.getInt("Amount"))).formatted(Formatting.GRAY));
+                tooltip.add(Text.translatable("item.goodending.retained_count.status_effect").append(" ").append(Text.translatable("potion.goodending.level." + nbt.getInt("Amount"))).formatted(Formatting.GRAY));
             }
         }
     }
