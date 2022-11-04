@@ -31,7 +31,7 @@ public class ShieldItemMixin {
                 tooltip.add(mutableText.append(Component.translatable(statusEffectInstance.getEffect().getDescriptionId())).withStyle(nbt.getBoolean("Infinite") ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.BLUE));
             });
             if (nbt.getInt("Amount") > 0) {
-                tooltip.add(Component.translatable("item.goodending.retained_count.status_effect").append(" ").append(Component.translatable("" + nbt.getInt("Amount"))).withStyle(ChatFormatting.GRAY));
+                tooltip.add(Component.translatable("item.goodending.retained_count.status_effect").append(" ").append(Component.translatable("potion.goodending.level." + nbt.getInt("Amount"))).withStyle(ChatFormatting.GRAY));
             }
         }
     }
