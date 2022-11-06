@@ -41,9 +41,6 @@ public class ShallowWaterFeature extends Feature<ShallowWaterConfig> {
             for (int z = -1; z <= 1; z++) {
                 BlockPos pos = new BlockPos(blockPos.getX() + x, blockPos.getY(), blockPos.getZ() + z);
                 if (random.nextFloat() < config.chance() && world.getFluidState(pos).is(FluidTags.WATER) && world.getBlockState(pos.above()).isAir()) {
-                    if (config.water_surface()) {
-                        pos = pos;
-                    }
                     world.setBlock(pos, config.state().getState(random, pos), 2);
                     if (config.decorate() && world.getBlockState(pos.above()).isAir() && random.nextInt(3) == 0) {
                         Block placeState = random.nextInt(5) == 0 ? Blocks.AIR : Blocks.GRASS;
