@@ -34,6 +34,7 @@ public class FallenLogFeature extends Feature<FallenLogConfig> {
         Random random = context.getRandom();
         Direction direction = Direction.Type.HORIZONTAL.random(random);
         int logLength = MathHelper.nextInt(random, 4, 8);
+        int tries = 0;
         BlockPos.Mutable mut = blockPos.mutableCopy();
         List<BlockPos> decorationPoses = Lists.newArrayList();
         FallenLogConfig config = context.getConfig();
@@ -42,14 +43,23 @@ public class FallenLogFeature extends Feature<FallenLogConfig> {
                 direction = direction.rotateYClockwise();
             }
             for (int i = 0; i <= logLength; i++) {
+                if (tries > 0) {
+                    return false;
+                }
                 boolean flag = world.getBlockState(mut).getMaterial().isReplaceable() || world.testBlockState(mut, state -> state.isAir() || state.isOf(Blocks.WATER) || state.isIn(BlockTags.FLOWERS));
                 if (world.getBlockState(mut.down()).getMaterial().isReplaceable() || world.testBlockState(mut.down(), DripstoneHelper::canGenerate)) {
                     mut.move(Direction.DOWN);
                     world.setBlockState(mut, config.log.getBlockState(random, mut.toImmutable()).with(PillarBlock.AXIS, direction.getAxis()), 2);
+                    if (world.isAir(mut.down())) {
+                        tries++;
+                    }
                     decorationPoses.add(mut.toImmutable());
                 }
                 if (flag) {
                     world.setBlockState(mut, config.log.getBlockState(random, mut.toImmutable()).with(PillarBlock.AXIS, direction.getAxis()), 2);
+                    if (world.isAir(mut.down())) {
+                        tries++;
+                    }
                     decorationPoses.add(mut.toImmutable());
                 }
                 mut.move(direction);
