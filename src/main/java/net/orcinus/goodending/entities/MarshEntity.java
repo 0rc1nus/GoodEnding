@@ -42,15 +42,16 @@ import net.orcinus.goodending.entities.ai.FollowMobWithEffectGoal;
 import net.orcinus.goodending.entities.ai.StrangerDangerGoal;
 import net.orcinus.goodending.init.GoodEndingCriteriaTriggers;
 import net.orcinus.goodending.init.GoodEndingSoundEvents;
+import net.orcinus.goodending.init.GoodEndingTags;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
 public class MarshEntity extends PathAwareEntity {
     private static final TrackedData<Boolean> TRUSTED = DataTracker.registerData(MarshEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final TrackedData<Integer> BREWING = DataTracker.registerData(MarshEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    private static final TrackedData<Integer> BURPING = DataTracker.registerData(MarshEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private Potion potion = Potions.EMPTY;
-    public int brewingTicks = 1;
-    public int burpingTicks;
     private boolean infinite;
 
     public MarshEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
@@ -61,6 +62,8 @@ public class MarshEntity extends PathAwareEntity {
     protected void initDataTracker() {
         super.initDataTracker();
         this.dataTracker.startTracking(TRUSTED, false);
+        this.dataTracker.startTracking(BREWING, 0);
+        this.dataTracker.startTracking(BURPING, 0);
     }
 
     public static DefaultAttributeContainer.Builder createMarshAttributes() {
@@ -87,14 +90,13 @@ public class MarshEntity extends PathAwareEntity {
     @Override
     public void tickMovement() {
         super.tickMovement();
-
-        if (this.getStoredPotion() != Potions.EMPTY && this.brewingTicks > 0) {
+        if (this.getStoredPotion() != Potions.EMPTY && this.getBrewingTicks() > 0) {
             Collection<StatusEffectInstance> collection = this.getStoredPotion().getEffects();
             int i = PotionUtil.getColor(collection);
-
-            float f1 = random.nextFloat();
-            if (f1 > 0.35f) return;
-
+            float f1 = this.getRandom().nextFloat();
+            if (f1 > 0.35f) {
+                return;
+            }
             double d = (double)(i >> 16 & 0xFF) / 255.0;
             double e = (double)(i >> 8 & 0xFF) / 255.0;
             double f = (double)(i & 0xFF) / 255.0;
@@ -105,11 +107,16 @@ public class MarshEntity extends PathAwareEntity {
     @Override
     public void tick() {
         super.tick();
-        if (this.getStoredPotion() != Potions.EMPTY) {
-            this.brewingTicks--;
-        }
-        if (burpingTicks > 0) {
-            this.burpingTicks--;
+        if (!this.world.isClient()) {
+            if (this.getBrewingTicks() > 0) {
+                if (this.getBrewingTicks() == 1) {
+                    this.playSound(GoodEndingSoundEvents.ENTITY_MARSH_BURP, 1.0F, 1.0F);
+                }
+                this.setBrewingTicks(this.getBrewingTicks() - 1);
+            }
+            if (this.getBurpingTicks() > 0) {
+                this.setBurping(this.getBurpingTicks() - 1);
+            }
         }
     }
 
@@ -117,8 +124,7 @@ public class MarshEntity extends PathAwareEntity {
     protected ActionResult interactMob(PlayerEntity player, Hand hand) {
         ItemStack itemStack = player.getStackInHand(hand);
         Item item = itemStack.getItem();
-
-        if (item == Items.FERMENTED_SPIDER_EYE && !this.isTrusted()) {
+        if (itemStack.isIn(GoodEndingTags.MARSH_TRUSTED_ITEMS) && !this.isTrusted()) {
             if (!player.getAbilities().creativeMode) {
                 itemStack.decrement(1);
             }
@@ -126,59 +132,45 @@ public class MarshEntity extends PathAwareEntity {
             this.world.sendEntityStatus(this, EntityStatuses.ADD_BREEDING_PARTICLES);
             return ActionResult.success(world.isClient);
         }
-
         if (item instanceof PotionItem && this.getStoredPotion() == Potions.EMPTY && this.isTrusted()) {
-
             if (!PotionUtil.getPotion(itemStack).hasInstantEffect()) {
-
-                if (item instanceof LingeringPotionItem) {
-                    this.infinite = true;
-                }
+                this.setInfinite(item instanceof LingeringPotionItem);
                 if (!player.getAbilities().creativeMode) {
                     itemStack.decrement(1);
                     if (!(item instanceof ThrowablePotionItem)) {
                         this.dropItem(Items.GLASS_BOTTLE, 1);
                     }
                 }
-
                 if (player instanceof ServerPlayerEntity serverPlayer) {
                     GoodEndingCriteriaTriggers.BREW_POTION.trigger(serverPlayer);
                 }
-
                 this.setStoredPotion(PotionUtil.getPotion(itemStack));
-                this.brewingTicks = 20 * 90 + random.nextInt(20 * 60);
-
+                this.setBrewingTicks(1800 + this.getRandom().nextInt(1200));
                 return ActionResult.SUCCESS;
             }
         }
-
         if (item instanceof MilkBucketItem && this.getStoredPotion() != Potions.EMPTY && this.isTrusted()) {
             if (!player.getAbilities().creativeMode) {
                 player.setStackInHand(hand, Items.BUCKET.getDefaultStack());
             }
             this.setStoredPotion(Potions.EMPTY);
             this.playSound(SoundEvents.ENTITY_GENERIC_DRINK, 1, 1);
-            this.brewingTicks = 1;
-
+            this.setBrewingTicks(0);
             return ActionResult.SUCCESS;
         }
-
-        if (this.getStoredPotion() != Potions.EMPTY && itemStack.getNbt() != null && !itemStack.getNbt().contains("Potion") && this.getValidItems(item) && this.brewingTicks < 0) {
-
+        if (this.getStoredPotion() != Potions.EMPTY && itemStack.getNbt() != null && !itemStack.getNbt().contains("Potion") && this.getValidItems(item) && this.getBrewingTicks() == 0) {
             if (itemStack.getNbt() != null) {
-                if (this.infinite) {
+                if (this.isInfinite()) {
                     itemStack.getNbt().putBoolean("Infinite", true);
-                    this.infinite = false;
+                    this.setInfinite(false);
                 } else {
                     itemStack.getNbt().putInt("Amount", 20);
                 }
-
                 PotionUtil.setPotion(itemStack, this.getStoredPotion());
-                this.burpingTicks = 15;
+                this.setBurping(15);
                 this.playSound(GoodEndingSoundEvents.ENTITY_MARSH_BURP, 1, 1);
                 this.setStoredPotion(Potions.EMPTY);
-                this.brewingTicks = 1;
-
+                this.setBrewingTicks(0);
                 return ActionResult.SUCCESS;
             }
         }
@@ -222,16 +214,44 @@ public class MarshEntity extends PathAwareEntity {
     public void writeCustomDataToNbt(NbtCompound nbt) {
         super.writeCustomDataToNbt(nbt);
         nbt.putString("Potion", Registry.POTION.getId(this.getStoredPotion()).toString());
-        nbt.putBoolean("Infinite", this.infinite);
+        nbt.putBoolean("Infinite", this.isInfinite());
         nbt.putBoolean("Trusted", this.isTrusted());
+        nbt.putInt("BrewingTicks", this.getBrewingTicks());
+        nbt.putInt("BurpingTicks", this.getBurpingTicks());
     }
 
     @Override
     public void readCustomDataFromNbt(NbtCompound nbt) {
         super.readCustomDataFromNbt(nbt);
-        this.infinite = nbt.getBoolean("Infinite");
+        this.setInfinite(nbt.getBoolean("Infinite"));
         this.setTrusted(nbt.getBoolean("Trusted"));
         this.setStoredPotion(PotionUtil.getPotion(nbt));
+        this.setBrewingTicks(nbt.getInt("BrewingTicks"));
+        this.setBurping(nbt.getInt("BurpingTicks"));
+    }
+
+    public int getBurpingTicks() {
+        return this.dataTracker.get(BURPING);
+    }
+
+    public void setBurping(int burpingTicks) {
+        this.dataTracker.set(BURPING, burpingTicks);
+    }
+
+    public int getBrewingTicks() {
+        return this.dataTracker.get(BREWING);
+    }
+
+    public void setBrewingTicks(int brewingTicks) {
+        this.dataTracker.set(BREWING, brewingTicks);
+    }
+
+    public boolean isInfinite() {
+        return this.infinite;
+    }
+
+    public void setInfinite(boolean infinite) {
+        this.infinite = infinite;
     }
 
     @Override

@@ -52,5 +52,6 @@ public class LeafParticle extends AnimatedParticle {
         public Particle createParticle(DefaultParticleType defaultParticleType, ClientWorld clientWorld, double d, double e, double f, double g, double h, double i) {
             return new LeafParticle(clientWorld, d, e, f, this.spriteProvider);
         }
+
     }
 }

@@ -12,8 +12,14 @@ import net.minecraft.client.render.entity.model.SinglePartEntityModel;
 import net.minecraft.util.math.MathHelper;
 import net.orcinus.goodending.entities.MarshEntity;
 
-import static net.minecraft.client.render.entity.model.EntityModelPartNames.*;
-import static net.minecraft.util.math.MathHelper.*;
+import static net.minecraft.client.render.entity.model.EntityModelPartNames.BODY;
+import static net.minecraft.client.render.entity.model.EntityModelPartNames.LEFT_FIN;
+import static net.minecraft.client.render.entity.model.EntityModelPartNames.LEFT_LEG;
+import static net.minecraft.client.render.entity.model.EntityModelPartNames.RIGHT_FIN;
+import static net.minecraft.client.render.entity.model.EntityModelPartNames.RIGHT_LEG;
+import static net.minecraft.client.render.entity.model.EntityModelPartNames.TAIL;
+import static net.minecraft.util.math.MathHelper.clamp;
+import static net.minecraft.util.math.MathHelper.cos;
 
 @SuppressWarnings("FieldCanBeLocal, unused")
 @Environment(EnvType.CLIENT)
@@ -26,7 +32,6 @@ public class MarshEntityModel<T extends MarshEntity> extends SinglePartEntityMod
     private final ModelPart rightFin;
     private final ModelPart leftLeg;
     private final ModelPart rightLeg;
-
 
     public MarshEntityModel(ModelPart root) {
         this.root = root;

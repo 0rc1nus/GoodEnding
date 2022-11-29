@@ -11,8 +11,14 @@ import net.minecraft.entity.EntityPose;
 import net.orcinus.goodending.client.animations.WoodpeckerAnimations;
 import net.orcinus.goodending.entities.WoodpeckerEntity;
 
-import static net.minecraft.client.render.entity.model.EntityModelPartNames.*;
-import static net.minecraft.util.math.MathHelper.*;
+import static net.minecraft.client.render.entity.model.EntityModelPartNames.BODY;
+import static net.minecraft.client.render.entity.model.EntityModelPartNames.HEAD;
+import static net.minecraft.client.render.entity.model.EntityModelPartNames.LEFT_LEG;
+import static net.minecraft.client.render.entity.model.EntityModelPartNames.LEFT_WING;
+import static net.minecraft.client.render.entity.model.EntityModelPartNames.RIGHT_LEG;
+import static net.minecraft.client.render.entity.model.EntityModelPartNames.RIGHT_WING;
+import static net.minecraft.client.render.entity.model.EntityModelPartNames.TAIL;
+import static net.minecraft.util.math.MathHelper.clamp;
 
 public class WoodPeckerEntityModel extends SinglePartEntityModel<WoodpeckerEntity> {
 
@@ -28,14 +34,14 @@ public class WoodPeckerEntityModel extends SinglePartEntityModel<WoodpeckerEntit
     public WoodPeckerEntityModel(ModelPart root) {
         this.root = root;
 
-        this.body      = this.root.getChild(BODY);
-        this.head      = this.root.getChild(HEAD);
+        this.body = this.root.getChild(BODY);
+        this.head = this.root.getChild(HEAD);
 
-        this.leftLeg   = this.body.getChild(LEFT_LEG);
-        this.rightLeg  = this.body.getChild(RIGHT_LEG);
-        this.leftWing  = this.body.getChild(LEFT_WING);
+        this.leftLeg = this.body.getChild(LEFT_LEG);
+        this.rightLeg = this.body.getChild(RIGHT_LEG);
+        this.leftWing = this.body.getChild(LEFT_WING);
         this.rightWing = this.body.getChild(RIGHT_WING);
-        this.tail      = this.body.getChild(TAIL);
+        this.tail = this.body.getChild(TAIL);
     }
 
     @SuppressWarnings("unused")
@@ -116,7 +122,9 @@ public class WoodPeckerEntityModel extends SinglePartEntityModel<WoodpeckerEntit
     public void setAngles(WoodpeckerEntity entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
         this.getPart().traverse().forEach(ModelPart::resetTransform);
         limbDistance = clamp(limbDistance, -0.45F, 0.45F);
-        if (entity.getPose() != EntityPose.STANDING && entity.getPose() != EntityPose.DIGGING) this.setHeadAngle(headYaw, headPitch);
+        if (entity.getPose() != EntityPose.STANDING && entity.getPose() != EntityPose.DIGGING) {
+            this.setHeadAngle(headYaw, headPitch);
+        }
         this.setBodyAngles(limbDistance);
         this.updateAnimation(entity.standingAnimationState, WoodpeckerAnimations.WOODPECKER_STANDING, animationProgress);
         this.updateAnimation(entity.flyingAnimationState, WoodpeckerAnimations.WOODPECKER_FLY, animationProgress);
@@ -125,10 +133,10 @@ public class WoodPeckerEntityModel extends SinglePartEntityModel<WoodpeckerEntit
 
     private void setBodyAngles(float limbDistance) {
         float tilt = Math.min(limbDistance / 0.3f, 1.0f);
-        body.pitch += tilt * 0.7f;
-        head.pivotZ += tilt * -2.5f + 1.0F;
-        head.pivotY += tilt * 0.5f;
-        tail.pitch += tilt * -1f;
+        this.body.pitch += tilt * 0.7f;
+        this.head.pivotZ += tilt * -2.5f + 1.0F;
+        this.head.pivotY += tilt * 0.5f;
+        this.tail.pitch += tilt * -1f;
     }
 
     private void setHeadAngle(float yaw, float pitch) {

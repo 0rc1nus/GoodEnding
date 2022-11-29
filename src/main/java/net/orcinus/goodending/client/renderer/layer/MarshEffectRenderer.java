@@ -2,7 +2,10 @@ package net.orcinus.goodending.client.renderer.layer;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.util.math.MatrixStack;
@@ -29,8 +32,11 @@ public class MarshEffectRenderer extends FeatureRenderer<MarshEntity, MarshEntit
             int d = ((color >> 16 & 0xFF) / 100);
             int e = ((color >> 8 & 0xFF) / 100);
             int f = ((color & 0xFF) / 100);
-            if (entity.brewingTicks < 0) renderModel(this.getContextModel(), TEXTURE_READY, matrices, vertexConsumers, light, entity, d, e, f);
-            else renderModel(this.getContextModel(), TEXTURE_BREWING, matrices, vertexConsumers, light, entity, d, e, f);
+            int brewingTicks = entity.getBrewingTicks();
+            Identifier texture = brewingTicks == 0 ? TEXTURE_READY : TEXTURE_BREWING;
+            VertexConsumer vertexConsumer = vertexConsumers.getBuffer(brewingTicks == 0 ? RenderLayer.getEntityCutoutNoCull(texture) : RenderLayer.getEyes(texture));
+            this.getContextModel().render(matrices, vertexConsumer, light, LivingEntityRenderer.getOverlay(entity, 0.0f), d, e, f, 1.0f);
         }
     }
+
 }
