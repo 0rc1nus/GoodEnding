@@ -11,6 +11,7 @@ import net.minecraft.util.registry.RegistryEntry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
+import net.minecraft.world.biome.SpawnSettings;
 import net.minecraft.world.gen.GenerationStep;
 import net.minecraft.world.gen.feature.PlacedFeature;
 import net.minecraft.world.gen.feature.VegetationPlacedFeatures;
@@ -47,6 +48,7 @@ public class GoodEndingBiomeModifiers {
         addFeature(GoodEndingWorldGen.OAK_HAMMOCK_PATCH_TALL_GRASS_PLACED, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY, GenerationStep.Feature.VEGETAL_DECORATION);
         addFeature(GoodEndingWorldGen.PATCH_FERN_PLACED, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY, GenerationStep.Feature.VEGETAL_DECORATION);
         addFeature(GoodEndingWorldGen.PATCH_LARGE_FERN_PLACED, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY, GenerationStep.Feature.VEGETAL_DECORATION);
+        BiomeModifications.addSpawn(BiomeSelectors.includeByKey(GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY), SpawnGroup.CREATURE, EntityType.RABBIT, 10, 2, 3);
     }
 
     public static void addSwampVegetation() {
