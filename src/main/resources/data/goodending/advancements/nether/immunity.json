@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:story/root",
+  "parent": "minecraft:nether/obtain_blaze_rod",
   "criteria": {
     "immunity": {
       "conditions": {},
@@ -9,7 +9,7 @@
   "display": {
     "announce_to_chat": true,
     "description": {
-      "translate": "advancements.story.immunity.description"
+      "translate": "advancements.goodending.immunity.description"
     },
     "frame": "task",
     "hidden": false,
@@ -18,7 +18,7 @@
     },
     "show_toast": true,
     "title": {
-      "translate": "advancements.story.immunity.title"
+      "translate": "advancements.goodending.immunity.title"
     }
   },
   "requirements": [
