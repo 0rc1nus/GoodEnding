@@ -97,7 +97,6 @@ public class MoveToWoodGoal extends Goal {
 
     @Override
     public void tick() {
-
         BlockPos woodPos = this.woodpecker.getWoodPos();
         if (woodPos != null) {
             Direction attachedFace = this.woodpecker.getAttachedFace();
@@ -122,7 +121,10 @@ public class MoveToWoodGoal extends Goal {
                         double xPosition = pos.getX() + (attachedFace.getAxis() == Direction.Axis.Z ? 0.5D : (attachedFace == Direction.WEST ? -0.2D : 1.2D));
                         double yPosition = pos.getY() + 0.25D;
                         double zPosition = pos.getZ() + (attachedFace.getAxis() == Direction.Axis.X ? 0.5D : (attachedFace == Direction.NORTH ? -0.2D : 1.2D));
-                        this.woodpecker.refreshPositionAndAngles(xPosition, yPosition, zPosition, this.woodpecker.getYaw(), this.woodpecker.getPitch());
+                        float yaw = (float) (MathHelper.atan2(pos.getZ() + 0.5D - this.woodpecker.getZ(), pos.getX() + 0.5D - this.woodpecker.getX()) * (180.0F / Math.PI) - 90.0F);
+                        this.woodpecker.refreshPositionAndAngles(xPosition, yPosition, zPosition, this.woodpecker.getYaw(), yaw);
+                        this.woodpecker.setBodyYaw(yaw);
+                        this.woodpecker.setHeadYaw(yaw);
                         this.woodpecker.getNavigation().stop();
                         if (this.peckingTicks > 0) {
                             this.peckingTicks--;
