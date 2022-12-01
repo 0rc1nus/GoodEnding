@@ -37,20 +37,20 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
-import net.orcinus.goodending.criterion.GoodEndingCriterion;
 import net.orcinus.goodending.entities.ai.FollowMobWithEffectGoal;
 import net.orcinus.goodending.entities.ai.StrangerDangerGoal;
 import net.orcinus.goodending.init.GoodEndingCriteriaTriggers;
 import net.orcinus.goodending.init.GoodEndingSoundEvents;
+import net.orcinus.goodending.init.GoodEndingTags;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
 public class MarshEntity extends PathfinderMob {
     private static final EntityDataAccessor<Boolean> TRUSTED = SynchedEntityData.defineId(MarshEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> BREWING = SynchedEntityData.defineId(MarshEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> BURPING = SynchedEntityData.defineId(MarshEntity.class, EntityDataSerializers.INT);
     private Potion potion = Potions.EMPTY;
-    public int brewingTicks = 1;
-    public int burpingTicks;
     private boolean infinite;
 
     public MarshEntity(EntityType<? extends PathfinderMob> entityType, Level world) {
@@ -61,6 +61,8 @@ public class MarshEntity extends PathfinderMob {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(TRUSTED, false);
+        this.entityData.define(BREWING, 0);
+        this.entityData.define(BURPING, 0);
     }
 
     public static AttributeSupplier.Builder createMarshAttributes() {
@@ -87,13 +89,14 @@ public class MarshEntity extends PathfinderMob {
     @Override
     public void aiStep() {
         super.aiStep();
-
-        if (this.getStoredPotion() != Potions.EMPTY && this.brewingTicks > 0) {
+        if (this.getStoredPotion() != Potions.EMPTY && this.getBrewingTicks() > 0) {
             Collection<MobEffectInstance> collection = this.getStoredPotion().getEffects();
             int i = PotionUtils.getColor(collection);
 
-            float f1 = random.nextFloat();
-            if (f1 > 0.35f) return;
+            float f1 = this.getRandom().nextFloat();
+            if (f1 > 0.35f) {
+                return;
+            }
 
             double d = (double)(i >> 16 & 0xFF) / 255.0;
             double e = (double)(i >> 8 & 0xFF) / 255.0;
@@ -105,11 +108,16 @@ public class MarshEntity extends PathfinderMob {
     @Override
     public void tick() {
         super.tick();
-        if (this.getStoredPotion() != Potions.EMPTY) {
-            this.brewingTicks--;
-        }
-        if (burpingTicks > 0) {
-            this.burpingTicks--;
+        if (!this.level.isClientSide()) {
+            if (this.getBrewingTicks() > 0) {
+                if (this.getBrewingTicks() == 1) {
+                    this.playSound(GoodEndingSoundEvents.ENTITY_MARSH_BURP.get(), 1.0F, 1.0F);
+                }
+                this.setBrewingTicks(this.getBrewingTicks() - 1);
+            }
+            if (this.getBurpingTicks() > 0) {
+                this.setBurping(this.getBurpingTicks() - 1);
+            }
         }
     }
 
@@ -117,8 +125,7 @@ public class MarshEntity extends PathfinderMob {
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
         Item item = itemStack.getItem();
-
-        if (item == Items.FERMENTED_SPIDER_EYE && !this.isTrusted()) {
+        if (itemStack.is(GoodEndingTags.MARSH_TRUSTED_ITEMS) && !this.isTrusted()) {
             if (!player.getAbilities().instabuild) {
                 itemStack.shrink(1);
             }
@@ -126,63 +133,51 @@ public class MarshEntity extends PathfinderMob {
             this.level.broadcastEntityEvent(this, (byte) 18);
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
-
         if (item instanceof PotionItem && this.getStoredPotion() == Potions.EMPTY && this.isTrusted()) {
-
             if (!PotionUtils.getPotion(itemStack).hasInstantEffects()) {
-
-                if (item instanceof LingeringPotionItem) {
-                    this.infinite = true;
-                }
+                this.setInfinite(item instanceof LingeringPotionItem);
                 if (!player.getAbilities().instabuild) {
                     itemStack.shrink(1);
                     if (!(item instanceof ThrowablePotionItem)) {
                         this.spawnAtLocation(Items.GLASS_BOTTLE, 1);
                     }
                 }
-
                 if (player instanceof ServerPlayer serverPlayer) {
                     GoodEndingCriteriaTriggers.BREW_POTION.trigger(serverPlayer);
                 }
-
                 this.setStoredPotion(PotionUtils.getPotion(itemStack));
-                this.brewingTicks = 20 * 90 + random.nextInt(20 * 60);
+                this.setBrewingTicks(1800 + this.getRandom().nextInt(1200));
 
                 return InteractionResult.SUCCESS;
             }
         }
-
         if (item instanceof MilkBucketItem && this.getStoredPotion() != Potions.EMPTY && this.isTrusted()) {
             if (!player.getAbilities().instabuild) {
                 player.setItemInHand(hand, Items.BUCKET.getDefaultInstance());
             }
             this.setStoredPotion(Potions.EMPTY);
             this.playSound(SoundEvents.GENERIC_DRINK, 1, 1);
-            this.brewingTicks = 1;
+            this.setBrewingTicks(0);
 
             return InteractionResult.SUCCESS;
         }
-
-        if (this.getStoredPotion() != Potions.EMPTY && itemStack.getTag() != null && !itemStack.getTag().contains("Potion") && this.getValidItems(item) && this.brewingTicks < 0) {
-
+        if (this.getStoredPotion() != Potions.EMPTY && itemStack.getTag() != null && !itemStack.getTag().contains("Potion") && this.getValidItems(item) && this.getBrewingTicks() == 0) {
             if (itemStack.getTag() != null) {
-                if (this.infinite) {
+                if (this.isInfinite()) {
                     itemStack.getTag().putBoolean("Infinite", true);
-                    this.infinite = false;
+                    this.setInfinite(false);
                 } else {
                     itemStack.getTag().putInt("Amount", 20);
                 }
-
                 PotionUtils.setPotion(itemStack, this.getStoredPotion());
-                this.burpingTicks = 15;
+                this.setBurping(15);
                 this.playSound(GoodEndingSoundEvents.ENTITY_MARSH_BURP.get(), 1, 1);
                 this.setStoredPotion(Potions.EMPTY);
-                this.brewingTicks = 1;
+                this.setBrewingTicks(0);
 
                 return InteractionResult.SUCCESS;
             }
         }
-
         return super.mobInteract(player, hand);
     }
 
@@ -222,16 +217,44 @@ public class MarshEntity extends PathfinderMob {
     public void addAdditionalSaveData(CompoundTag nbt) {
         super.addAdditionalSaveData(nbt);
         nbt.putString("Potion", Registry.POTION.getKey(this.getStoredPotion()).toString());
-        nbt.putBoolean("Infinite", this.infinite);
+        nbt.putBoolean("Infinite", this.isInfinite());
         nbt.putBoolean("Trusted", this.isTrusted());
+        nbt.putInt("BrewingTicks", this.getBrewingTicks());
+        nbt.putInt("BurpingTicks", this.getBurpingTicks());
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag nbt) {
         super.readAdditionalSaveData(nbt);
-        this.infinite = nbt.getBoolean("Infinite");
+        this.setInfinite(nbt.getBoolean("Infinite"));
         this.setTrusted(nbt.getBoolean("Trusted"));
         this.setStoredPotion(PotionUtils.getPotion(nbt));
+        this.setBrewingTicks(nbt.getInt("BrewingTicks"));
+        this.setBurping(nbt.getInt("BurpingTicks"));
+    }
+
+    public int getBurpingTicks() {
+        return this.entityData.get(BURPING);
+    }
+
+    public void setBurping(int burpingTicks) {
+        this.entityData.set(BURPING, burpingTicks);
+    }
+
+    public int getBrewingTicks() {
+        return this.entityData.get(BREWING);
+    }
+
+    public void setBrewingTicks(int brewingTicks) {
+        this.entityData.set(BREWING, brewingTicks);
+    }
+
+    public boolean isInfinite() {
+        return this.infinite;
+    }
+
+    public void setInfinite(boolean infinite) {
+        this.infinite = infinite;
     }
 
     @Override

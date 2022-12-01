@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:story/root",
+  "parent": "minecraft:husbandry/root",
   "criteria": {
     "brew_potion": {
       "conditions": {},
@@ -9,7 +9,7 @@
   "display": {
     "announce_to_chat": true,
     "description": {
-      "translate": "advancements.story.brew_potion.description"
+      "translate": "advancements.goodending.brew_potion.description"
     },
     "frame": "task",
     "hidden": false,
@@ -18,7 +18,7 @@
     },
     "show_toast": true,
     "title": {
-      "translate": "advancements.story.brew_potion.title"
+      "translate": "advancements.goodending.brew_potion.title"
     }
   },
   "requirements": [

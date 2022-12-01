@@ -1,7 +1,10 @@
 package net.orcinus.goodending.client.renderer.layer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
@@ -29,8 +32,10 @@ public class MarshEffectRenderer extends RenderLayer<MarshEntity, MarshEntityMod
             int d = ((color >> 16 & 0xFF) / 100);
             int e = ((color >> 8 & 0xFF) / 100);
             int f = ((color & 0xFF) / 100);
-            if (entity.brewingTicks < 0) renderColoredCutoutModel(this.getParentModel(), TEXTURE_READY, matrices, vertexConsumers, light, entity, d, e, f);
-            else renderColoredCutoutModel(this.getParentModel(), TEXTURE_BREWING, matrices, vertexConsumers, light, entity, d, e, f);
+            int brewingTicks = entity.getBrewingTicks();
+            ResourceLocation texture = brewingTicks == 0 ? TEXTURE_READY : TEXTURE_BREWING;
+            VertexConsumer vertexConsumer = vertexConsumers.getBuffer(brewingTicks == 0 ? RenderType.entityCutoutNoCull(texture) : RenderType.eyes(texture));
+            this.getParentModel().renderToBuffer(matrices, vertexConsumer, light, LivingEntityRenderer.getOverlayCoords(entity, 0.0f), d, e, f, 1.0f);
         }
     }
 }

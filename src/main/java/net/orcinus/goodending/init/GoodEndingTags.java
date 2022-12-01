@@ -6,25 +6,25 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
-
-import static net.orcinus.goodending.GoodEnding.MODID;
+import net.orcinus.goodending.GoodEnding;
 
 @SuppressWarnings("unused")
 public interface GoodEndingTags {
 
     //Item tags
-    TagKey<Item> MUDDY_OAK_LOGS_ITEM = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(MODID, "muddy_oak_logs"));
-    TagKey<Item> CYPRESS_LOGS_ITEM = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(MODID, "cypress_logs"));
-    TagKey<Item> WILDFLOWERS_ITEM = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(MODID, "wildflowers"));
-    TagKey<Item> FLOWERING_LILY_PADS_ITEM = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(MODID, "flowering_lily_pads"));
+    TagKey<Item> MUDDY_OAK_LOGS_ITEM = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(GoodEnding.MODID, "muddy_oak_logs"));
+    TagKey<Item> CYPRESS_LOGS_ITEM = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(GoodEnding.MODID, "cypress_logs"));
+    TagKey<Item> WILDFLOWERS_ITEM = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(GoodEnding.MODID, "wildflowers"));
+    TagKey<Item> FLOWERING_LILY_PADS_ITEM = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(GoodEnding.MODID, "flowering_lily_pads"));
+    TagKey<Item> MARSH_TRUSTED_ITEMS = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(GoodEnding.MODID, "marsh_trusted_items"));
 
     //Block tags
-    TagKey<Block> CYPRESS_LOGS_BLOCK = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(MODID, "cypress_logs"));
-    TagKey<Block> MUDDY_OAK_LOGS_BLOCK = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(MODID, "muddy_oak_logs"));
-    TagKey<Block> CYPRESS_REPLACEABLES = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(MODID, "cypress_replaceables"));
-    TagKey<Block> WILDFLOWERS_BLOCK = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(MODID, "wildflowers"));
-    TagKey<Block> FLOWERING_LILY_PADS_BLOCK = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(MODID, "flowering_lily_pads"));
-    TagKey<Block> BASE_BOULDER = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(MODID, "base_boulder"));
+    TagKey<Block> CYPRESS_LOGS_BLOCK = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(GoodEnding.MODID, "cypress_logs"));
+    TagKey<Block> MUDDY_OAK_LOGS_BLOCK = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(GoodEnding.MODID, "muddy_oak_logs"));
+    TagKey<Block> CYPRESS_REPLACEABLES = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(GoodEnding.MODID, "cypress_replaceables"));
+    TagKey<Block> WILDFLOWERS_BLOCK = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(GoodEnding.MODID, "wildflowers"));
+    TagKey<Block> FLOWERING_LILY_PADS_BLOCK = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(GoodEnding.MODID, "flowering_lily_pads"));
+    TagKey<Block> BASE_BOULDER = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(GoodEnding.MODID, "base_boulder"));
 
     //Biome tags
     TagKey<Biome> PASTEL_WILDFLOWER_GENERATES = registerBiomeTag("pastel_wildflower_generates");
@@ -48,7 +48,7 @@ public interface GoodEndingTags {
     TagKey<Biome> REVAMPED_WITCH_HUT = registerBiomeTag("has_structure/revamped_witch_hut");
 
     private static TagKey<Biome> registerBiomeTag(String name) {
-        return TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(MODID, name));
+        return TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(GoodEnding.MODID, name));
     }
 
 }

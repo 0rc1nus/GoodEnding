@@ -2,7 +2,6 @@ package net.orcinus.goodending.client.renderer;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraftforge.api.distmarker.Dist;
@@ -25,17 +24,13 @@ public class MarshRenderer extends MobRenderer<MarshEntity, MarshEntityModel<Mar
     }
 
     @Override
-    protected int getBlockLightLevel(MarshEntity entity, BlockPos pos) {
-        return entity.getStoredPotion() != Potions.EMPTY ? 15 : super.getBlockLightLevel(entity, pos);
-    }
-
-    @Override
     public ResourceLocation getTextureLocation(MarshEntity entity) {
-        if (entity.burpingTicks > 0) return TEXTURE_BREWING;
-
-        if (entity.getStoredPotion() != Potions.EMPTY) {
-            return entity.brewingTicks < 0 ? TEXTURE_READY : TEXTURE_BREWING;
+        if (entity.getBurpingTicks() > 0) {
+            return TEXTURE_BREWING;
+        } else if (entity.getStoredPotion() != Potions.EMPTY) {
+            return entity.getBrewingTicks() == 0 ? TEXTURE_READY : TEXTURE_BREWING;
+        } else {
+            return TEXTURE;
         }
-        return TEXTURE;
     }
 }
