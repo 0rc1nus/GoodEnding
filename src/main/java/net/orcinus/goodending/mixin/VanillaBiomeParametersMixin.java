@@ -40,8 +40,7 @@ public class VanillaBiomeParametersMixin {
 
     @Inject(at = @At("RETURN"), method = "writeLowBiomes")
     private void GE$writeLowBiomes(Consumer<Pair<MultiNoiseUtil.NoiseHypercube, RegistryKey<Biome>>> parameters, MultiNoiseUtil.ParameterRange weirdness, CallbackInfo ci) {
-        for (int i = 0; i < this.temperatureParameters.length; ++i) {
-            MultiNoiseUtil.ParameterRange temperatureRange = this.temperatureParameters[i];
+        for (MultiNoiseUtil.ParameterRange temperatureRange : this.temperatureParameters) {
             for (MultiNoiseUtil.ParameterRange humidityRange : this.humidityParameters) {
                 addCustomBiome(parameters, temperatureRange, humidityRange, MultiNoiseUtil.ParameterRange.of(-0.11f, 0.3f), this.erosionParameters[6], weirdness, 0.0f, GoodEndingBiomes.MARSHY_SWAMP_KEY);
 
@@ -86,7 +85,6 @@ public class VanillaBiomeParametersMixin {
                 addCustomBiome(parameters, parameterRange, parameterRange2, MultiNoiseUtil.ParameterRange.combine(this.midInlandContinentalness, this.nearInlandContinentalness), this.erosionParameters[3], weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
                 addCustomBiome(parameters, parameterRange, parameterRange2, this.nearInlandContinentalness, this.erosionParameters[3], weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
                 addCustomBiome(parameters, parameterRange, parameterRange2, this.coastContinentalness, this.erosionParameters[3], weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
-                if (i != 0) continue;
             }
         }
     }
