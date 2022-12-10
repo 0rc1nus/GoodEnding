@@ -5,7 +5,8 @@
     "goodending:oak_hammock_trees_placed",
     "goodending:oak_hammock_patch_tall_grass_placed",
     "goodending:patch_fern_placed",
-    "goodending:patch_large_fern_placed"
+    "goodending:patch_large_fern_placed",
+    "goodending:oak_hammock_boulders"
   ],
   "step": "vegetal_decoration"
 }

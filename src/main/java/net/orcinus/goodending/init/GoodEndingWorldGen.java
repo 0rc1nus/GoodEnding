@@ -191,6 +191,8 @@ public class GoodEndingWorldGen {
     public static final Holder<ConfiguredFeature<BoulderConfig, ?>> MOSSIER_COBBLESTONE_BOULDER = register("mossier_cobblestone_boulder", GoodEndingFeatures.BOULDER.get(), new BoulderConfig(false, BlockStateProvider.simple(Blocks.MOSS_BLOCK), BlockStateProvider.simple(Blocks.MOSSY_COBBLESTONE), UniformFloat.of(2, 4.2F)));
     public static final Holder<PlacedFeature> MOSSIER_COBBLESTONE_BOULDER_PLACED = register("mossier_cobblestone_boulder", MOSSIER_COBBLESTONE_BOULDER, GoodEndingWorldGen.boulderModifier(19, PlacementUtils.HEIGHTMAP_WORLD_SURFACE));
 
+    public static final Holder<PlacedFeature> OAK_HAMMOCK_BOULDERS = register("oak_hammock_boulders", MOSSY_COBBLESTONE_BOULDER, GoodEndingWorldGen.boulderModifier(8, PlacementUtils.HEIGHTMAP_WORLD_SURFACE));
+
     public static List<PlacementModifier> boulderModifier(int chance, PlacementModifier heightmap) {
         return List.of(RarityFilter.onAverageOnceEvery(chance), CountPlacement.of(2), InSquarePlacement.spread(), heightmap, BiomeFilter.biome());
     }
