@@ -48,6 +48,7 @@ public class GoodEndingBiomeModifiers {
         addFeature(GoodEndingWorldGen.OAK_HAMMOCK_PATCH_TALL_GRASS_PLACED, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY, GenerationStep.Feature.VEGETAL_DECORATION);
         addFeature(GoodEndingWorldGen.PATCH_FERN_PLACED, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY, GenerationStep.Feature.VEGETAL_DECORATION);
         addFeature(GoodEndingWorldGen.PATCH_LARGE_FERN_PLACED, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY, GenerationStep.Feature.VEGETAL_DECORATION);
+        addFeature(GoodEndingWorldGen.OAK_HAMMOCK_BOULDERS, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY, GenerationStep.Feature.LOCAL_MODIFICATIONS);
         BiomeModifications.addSpawn(BiomeSelectors.includeByKey(GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY), SpawnGroup.CREATURE, EntityType.RABBIT, 10, 2, 3);
     }
 
