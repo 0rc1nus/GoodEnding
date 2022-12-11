@@ -33,11 +33,6 @@ public class PotionApplicationTooltipComponent implements TooltipComponent {
         return 15;
     }
 
-    /**
-     * I want to fucking hang myself
-     *
-     * @author 0rc1nus
-     */
     @Override
     public void drawItems(TextRenderer textRenderer, int x, int y, MatrixStack matrices, ItemRenderer itemRenderer, int z) {
         StatusEffectSpriteManager statusEffectSpriteManager = MinecraftClient.getInstance().getStatusEffectSpriteManager();
