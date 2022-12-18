@@ -1,13 +1,17 @@
 package net.orcinus.goodending;
 
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.orcinus.goodending.entities.FireflyEntity;
 import net.orcinus.goodending.events.MiscEvents;
 import net.orcinus.goodending.events.MobEvents;
 import net.orcinus.goodending.init.GoodEndingBiomes;
@@ -19,6 +23,7 @@ import net.orcinus.goodending.init.GoodEndingItems;
 import net.orcinus.goodending.init.GoodEndingParticleTypes;
 import net.orcinus.goodending.init.GoodEndingPotions;
 import net.orcinus.goodending.init.GoodEndingSoundEvents;
+import net.orcinus.goodending.init.GoodEndingSpawnPlacements;
 import net.orcinus.goodending.init.GoodEndingStatusEffects;
 import net.orcinus.goodending.init.GoodEndingStructurePieceTypes;
 import net.orcinus.goodending.init.GoodEndingStructureProcessors;
@@ -60,6 +65,7 @@ public class GoodEnding {
 		BrewingRecipeRegistryInvoker.callAddMix(Potions.AWKWARD, GoodEndingBlocks.BIRCH_MUSHROOM.get().asItem(), GoodEndingPotions.IMMUNITY.get());
 		BrewingRecipeRegistryInvoker.callAddMix(GoodEndingPotions.IMMUNITY.get(), Items.REDSTONE, GoodEndingPotions.LONG_IMMUNITY.get());
 		event.enqueueWork(() -> {
+			GoodEndingSpawnPlacements.init();
 			GoodEndingStructureProcessors.init();
 			GoodEndingStructurePieceTypes.init();
 			GoodEndingStructureTypes.init();

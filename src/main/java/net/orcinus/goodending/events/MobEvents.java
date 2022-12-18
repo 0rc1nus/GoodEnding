@@ -36,7 +36,7 @@ import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(modid = GoodEnding.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MobEvents {
-    //Fucking dumb forge making me converting every single thing to suppliers
+    //Fucking dumb forge making me convert every single thing to suppliers
     private static final LinkedList<Supplier<MobEffect>> IMMUNITY_HIERARCHY = Util.make(Lists.newLinkedList(), list -> {
         list.add(GoodEndingStatusEffects.STRONG_IMMUNITY);
         list.add(GoodEndingStatusEffects.CONTEMPORARY_IMMUNITY);
@@ -45,8 +45,6 @@ public class MobEvents {
 
     @SubscribeEvent
     public static void registerEntityAttribute(EntityAttributeCreationEvent event) {
-        SpawnPlacements.register(GoodEndingEntityTypes.FIREFLY_SWARM.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, FireflyEntity::canSpawn);
-        SpawnPlacements.register(GoodEndingEntityTypes.WOODPECKER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (p_217081_, world, p_217083_, pos, p_217085_) -> world.getBlockState(pos.below()).is(BlockTags.PARROTS_SPAWNABLE_ON));
         event.put(GoodEndingEntityTypes.MARSH.get(), MarshEntity.createMarshAttributes().build());
         event.put(GoodEndingEntityTypes.FIREFLY_SWARM.get(), FireflyEntity.createFireflyAttributes().build());
         event.put(GoodEndingEntityTypes.WOODPECKER.get(), WoodpeckerEntity.createWoodPeckerAttributes().build());
