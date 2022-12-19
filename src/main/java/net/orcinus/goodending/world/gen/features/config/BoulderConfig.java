@@ -8,7 +8,6 @@ import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvi
 
 
 public record BoulderConfig(Boolean coarseDirt, BlockStateProvider stone, BlockStateProvider secondaryStone, FloatProvider size) implements FeatureConfiguration {
-
     public static final Codec<BoulderConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         Codec.BOOL.fieldOf("coarse_dirt").forGetter(config -> config.coarseDirt),
         BlockStateProvider.CODEC.fieldOf("stone").forGetter(config -> config.stone),

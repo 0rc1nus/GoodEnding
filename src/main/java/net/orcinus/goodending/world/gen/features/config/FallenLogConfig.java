@@ -7,7 +7,6 @@ import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfigur
 import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
 
 public class FallenLogConfig implements FeatureConfiguration {
-
     public static final Codec<FallenLogConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         BlockStateProvider.CODEC.fieldOf("log").forGetter(config -> config.log),
         IntProvider.CODEC.fieldOf("length").forGetter(config -> config.length),
