@@ -41,8 +41,10 @@ public class CypressTreeFeature extends Feature<WaterTreeFeatureConfig> {
         List<BlockPos> branchPoses = Lists.newArrayList();
         int height = MathHelper.nextInt(random, 10, 15);
         Block cypressLog = GoodEndingBlocks.CYPRESS_LOG;
-        boolean flag = !context.getConfig().isPlanted && !world.getBlockState(blockPos).isOf(Blocks.WATER);
-        if (flag || !world.getBlockState(blockPos.down()).isIn(BlockTags.DIRT)) {
+        boolean isPlanted = context.getConfig().isPlanted;
+        boolean initialFlag = (!isPlanted && !world.getBlockState(blockPos).isOf(Blocks.WATER)) || !world.getBlockState(blockPos.down()).isIn(BlockTags.DIRT);
+        boolean initialFlag1 = isPlanted && !this.canGrow(world, blockPos.down());
+        if (initialFlag || initialFlag1) {
             return false;
         }
         BlockState cypressLogDefaultState = cypressLog.getDefaultState();
@@ -91,10 +93,10 @@ public class CypressTreeFeature extends Feature<WaterTreeFeatureConfig> {
         }
         list.forEach(pos -> {
             for (Direction direction : Direction.values()) {
-                if (world.getBlockState(pos.offset(direction)).isAir()) {
+                if (world.testBlockState(pos.offset(direction), DripstoneHelper::canGenerate)) {
                     for (int t = 0; t < MathHelper.nextInt(random, 2, 5); t++) {
                         BlockPos leavePose = pos.offset(direction).down(t);
-                        if (world.getBlockState(leavePose).isIn(GoodEndingTags.CYPRESS_REPLACEABLES) || world.getBlockState(leavePose).getMaterial().isReplaceable() || world.getBlockState(leavePose).isIn(BlockTags.LEAVES)){
+                        if (world.getBlockState(leavePose).isIn(GoodEndingTags.CYPRESS_REPLACEABLES) || world.getBlockState(leavePose).getMaterial().isReplaceable() || world.getBlockState(leavePose).isIn(BlockTags.LEAVES)) {
                             world.setBlockState(leavePose, leaveState.with(LeavesBlock.WATERLOGGED, world.getBlockState(leavePose).isOf(Blocks.WATER)), 19);
                             leavePoses.add(leavePose);
                         }
@@ -104,6 +106,21 @@ public class CypressTreeFeature extends Feature<WaterTreeFeatureConfig> {
         });
         this.generateVines(world, 0.25F, random, leavePoses);
         return true;
+    }
+
+    public boolean canGrow(StructureWorldAccess world, BlockPos blockPos) {
+        int range = 3;
+        boolean flag = false;
+        for (int x = -range; x <= range; x++) {
+            for (int z = -range; z <= range; z++) {
+                BlockPos pos = new BlockPos(blockPos.getX() + x, blockPos.getY(), blockPos.getZ() + z);
+                if (world.testBlockState(pos, DripstoneHelper::canGenerateOrLava)) {
+                    break;
+                }
+                flag = true;
+            }
+        }
+        return flag;
     }
 
     public boolean branchingRoot(StructureWorldAccess world, BlockPos blockPos, Block block, Random random, Direction direction, int tries) {

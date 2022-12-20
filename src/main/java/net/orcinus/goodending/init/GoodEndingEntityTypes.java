@@ -50,7 +50,7 @@ public class GoodEndingEntityTypes {
                                .entityFactory(WoodpeckerEntity::new)
                                .defaultAttributes(WoodpeckerEntity::createWoodPeckerAttributes)
                                .spawnGroup(SpawnGroup.CREATURE)
-                               .spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING, (type, world, spawnReason, pos, random) -> world.getBlockState(pos.down()).isIn(BlockTags.PARROTS_SPAWNABLE_ON))
+                               .spawnRestriction(SpawnRestriction.Location.ON_GROUND, Heightmap.Type.MOTION_BLOCKING, WoodpeckerEntity::canSpawn)
                                .dimensions(EntityDimensions.changing(0.35F, 0.65F)),
         new int[]{ 0xCB4613, 0xFFFFFF }
     );

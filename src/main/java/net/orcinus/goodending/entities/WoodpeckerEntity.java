@@ -5,6 +5,7 @@ import net.minecraft.entity.AnimationState;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.Flutterer;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.control.FlightMoveControl;
 import net.minecraft.entity.ai.goal.EscapeDangerGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
@@ -28,6 +29,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.random.Random;
+import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import net.orcinus.goodending.entities.ai.FindWoodGoal;
 import net.orcinus.goodending.entities.ai.FlyAroundGoal;
@@ -247,6 +250,10 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
 
     @Override
     protected void fall(double heightDifference, boolean onGround, BlockState state, BlockPos landedPosition) {
+    }
+
+    public static boolean canSpawn(EntityType<WoodpeckerEntity> entityType, ServerWorldAccess world, SpawnReason spawnType, BlockPos pos, Random randomSource) {
+        return world.getBlockState(pos.down()).isIn(BlockTags.PARROTS_SPAWNABLE_ON);
     }
 
 }
