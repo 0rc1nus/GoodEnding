@@ -93,7 +93,7 @@ public class CypressTreeFeature extends Feature<WaterTreeFeatureConfig> {
         }
         list.forEach(pos -> {
             for (Direction direction : Direction.values()) {
-                if (world.getBlockState(pos.relative(direction)).isAir()) {
+                if (world.isStateAtPosition(pos.relative(direction), DripstoneUtils::isEmptyOrWater)) {
                     for (int t = 0; t < Mth.nextInt(random, 2, 5); t++) {
                         BlockPos leavePose = pos.relative(direction).below(t);
                         if (world.getBlockState(leavePose).is(GoodEndingTags.CYPRESS_REPLACEABLES) || world.getBlockState(leavePose).getMaterial().isReplaceable() || world.getBlockState(leavePose).is(BlockTags.LEAVES)){
