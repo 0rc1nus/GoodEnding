@@ -47,7 +47,7 @@ public class FireflyLanternBlock extends LanternBlock {
     }
 
     @Override
-    public VoxelShape getShape(BlockState p_153474_, BlockGetter p_153475_, BlockPos p_153476_, CollisionContext p_153477_) {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return STANDING_SHAPE;
     }
 
