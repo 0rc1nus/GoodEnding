@@ -59,37 +59,41 @@ public class FireflyLanternBlock extends LanternBlock {
         return InteractionResult.sidedSuccess(world.isClientSide());
     }
 
-
     @Override
     public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
-        if ((!state.getValue(OPEN)) || (state.getValue(OPEN) && world.getDayTime() < 12000 && world.getDayTime() > 0)) {
-            for (int l = 0; l < 1; ++l) {
-                double x = pos.getX() + 0.5D;
-
-                double y = pos.getY();
-                double z = pos.getZ() + 0.5D;
-                double xVelocity = random.nextFloat() / 45.0F * (random.nextBoolean() ? -1 : 1);
-                double yVelocity = random.nextFloat() / 100.0F * (state.getValue(HANGING) ? 2 : -1);
-                double zVelocity = random.nextFloat() / 45.0F * (random.nextBoolean() ? -1 : 1);
-                world.addParticle(GoodEndingParticleTypes.FIREFLY.get(), x, y + 0.4, z, xVelocity, yVelocity, zVelocity);
-            }
+        boolean flag = state.getValue(OPEN) && (!world.canSeeSky(pos) || world.getDayTime() >= 13000 && world.getDayTime() < 24000);
+        if (flag) {
+            this.addExteriorFireflies(state, world, pos, random);
+        } else {
+            this.addInteriorFireflies(state, world, pos, random);
         }
+    }
 
-        if (state.getValue(OPEN) && world.getDayTime() > 12000 && world.getDayTime() < 24000) {
-            int i = pos.getX();
-            int j = pos.getY() + (state.getValue(HANGING) ? -1 : 6);
-            int k = pos.getZ();
-            BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
-            for (int l = 0; l < 10; ++l) {
-                mutable.set(i + Mth.nextInt(random, -6, 6), j - random.nextInt(6), k + Mth.nextInt(random, -6, 6));
-                BlockState blockState = world.getBlockState(mutable);
-                if (blockState.isCollisionShapeFullBlock(world, mutable)) continue;
-
-                double velx = random.nextGaussian() * 0.025;
-                double vely = random.nextGaussian() * 0.025;
-                double velz = random.nextGaussian() * 0.025;
-                world.addParticle(GoodEndingParticleTypes.FIREFLY.get(), (double) mutable.getX() + random.nextDouble(), (double) mutable.getY() + random.nextDouble(), (double) mutable.getZ() + random.nextDouble(), velx, vely, velz);
+    private void addExteriorFireflies(BlockState state, Level world, BlockPos pos, RandomSource random) {
+        int i = pos.getX();
+        int j = pos.getY() + (state.getValue(HANGING) ? -1 : 6);
+        int k = pos.getZ();
+        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
+        for (int l = 0; l < 10; ++l) {
+            mutable.set(i + Mth.nextInt(random, -6, 6), j - random.nextInt(6), k + Mth.nextInt(random, -6, 6));
+            BlockState blockState = world.getBlockState(mutable);
+            if (blockState.isCollisionShapeFullBlock(world, mutable)) {
+                continue;
             }
+            double velx = random.nextGaussian() * 0.025;
+            double vely = random.nextGaussian() * 0.025;
+            double velz = random.nextGaussian() * 0.025;
+            world.addParticle(GoodEndingParticleTypes.FIREFLY.get(), (double) mutable.getX() + random.nextDouble(), (double) mutable.getY() + random.nextDouble(), (double) mutable.getZ() + random.nextDouble(), velx, vely, velz);
         }
+    }
+
+    private void addInteriorFireflies(BlockState state, Level world, BlockPos pos, RandomSource random) {
+        double x = pos.getX() + 0.5D;
+        double y = pos.getY();
+        double z = pos.getZ() + 0.5D;
+        double xVelocity = random.nextFloat() / 45.0F * (random.nextBoolean() ? -1 : 1);
+        double yVelocity = random.nextFloat() / 100.0F * (state.getValue(HANGING) ? 2 : -1);
+        double zVelocity = random.nextFloat() / 45.0F * (random.nextBoolean() ? -1 : 1);
+        world.addParticle(GoodEndingParticleTypes.FIREFLY.get(), x, y + 0.4, z, xVelocity, yVelocity, zVelocity);
     }
 }
