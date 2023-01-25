@@ -3,12 +3,12 @@ loaderVersion="[39,)"
 license="All rights reserved"
 [[mods]]
 modId="goodending"
-version="1.19.2-1.0.0"
+version="1.19.2-1.0.2"
 displayName="Good Ending"
 logoFile= "icon.png"
 authors="Ninni, Orcinus"
 description='''
-This mod aims to improve the wild update
+This mod aims to improve minecraft's wilderness by enhancing existing vanilla biomes and adding new ones at the same time
 '''
 credits='''
 bunten
