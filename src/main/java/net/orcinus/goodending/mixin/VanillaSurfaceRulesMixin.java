@@ -1,10 +1,10 @@
 package net.orcinus.goodending.mixin;
 
-import net.minecraft.world.biome.BiomeKeys;
-import net.minecraft.world.gen.YOffset;
-import net.minecraft.world.gen.noise.NoiseParametersKeys;
-import net.minecraft.world.gen.surfacebuilder.MaterialRules;
-import net.minecraft.world.gen.surfacebuilder.VanillaSurfaceRules;
+import net.minecraft.data.worldgen.SurfaceRuleData;
+import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.levelgen.Noises;
+import net.minecraft.world.level.levelgen.SurfaceRules;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.orcinus.goodending.init.GoodEndingBiomes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,28 +12,28 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-@Mixin(VanillaSurfaceRules.class)
+@Mixin(SurfaceRuleData.class)
 public class VanillaSurfaceRulesMixin {
 
     @Shadow
     @Final
-    private static MaterialRules.MaterialRule WATER;
+    private static SurfaceRules.RuleSource WATER;
 
-    @Shadow @Final private static MaterialRules.MaterialRule COARSE_DIRT;
+    @Shadow @Final private static SurfaceRules.RuleSource COARSE_DIRT;
 
-    @Shadow @Final private static MaterialRules.MaterialRule PODZOL;
+    @Shadow @Final private static SurfaceRules.RuleSource PODZOL;
 
-    @Shadow @Final private static MaterialRules.MaterialRule MUD;
+    @Shadow @Final private static SurfaceRules.RuleSource MUD;
 
-    @ModifyVariable(at = @At("STORE"), method = "createDefaultRule", ordinal = 8)
-    private static MaterialRules.MaterialRule GE$createDefaultRule(MaterialRules.MaterialRule materialRule) {
-        MaterialRules.MaterialRule condition = MaterialRules.condition(MaterialRules.biome(GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY), MaterialRules.sequence(MaterialRules.condition(surfaceNoiseThreshold(1.75), COARSE_DIRT), MaterialRules.condition(surfaceNoiseThreshold(-0.75), PODZOL), COARSE_DIRT));
-        MaterialRules.MaterialRule swamp = MaterialRules.sequence(MaterialRules.condition(MaterialRules.biome(GoodEndingBiomes.MARSHY_SWAMP_KEY), MaterialRules.condition(MaterialRules.aboveY(YOffset.fixed(62), 0), MaterialRules.condition(MaterialRules.not(MaterialRules.aboveY(YOffset.fixed(63), 0)), MaterialRules.condition(MaterialRules.noiseThreshold(NoiseParametersKeys.SURFACE_SWAMP, 0.0), WATER)))));
-        return MaterialRules.sequence(MaterialRules.condition(MaterialRules.STONE_DEPTH_FLOOR, MaterialRules.condition(MaterialRules.biome(BiomeKeys.SWAMP), MaterialRules.sequence(MaterialRules.condition(MaterialRules.noiseThreshold(NoiseParametersKeys.SURFACE, -0.0575, 0.0575), MUD), MaterialRules.condition(MaterialRules.aboveY(YOffset.fixed(62), 0), MaterialRules.condition(MaterialRules.not(MaterialRules.aboveY(YOffset.fixed(63), 0)), MaterialRules.condition(MaterialRules.noiseThreshold(NoiseParametersKeys.SURFACE_SWAMP, 0.0), WATER)))))), MaterialRules.condition(MaterialRules.STONE_DEPTH_FLOOR, swamp), MaterialRules.condition(MaterialRules.STONE_DEPTH_FLOOR, condition), materialRule);
+    @ModifyVariable(at = @At("STORE"), method = "overworldLike", ordinal = 8)
+    private static SurfaceRules.RuleSource GE$createDefaultRule(SurfaceRules.RuleSource materialRule) {
+        SurfaceRules.RuleSource ifTrue = SurfaceRules.ifTrue(SurfaceRules.isBiome(GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY), SurfaceRules.sequence(SurfaceRules.ifTrue(surfaceNoiseThreshold(1.75), COARSE_DIRT), SurfaceRules.ifTrue(surfaceNoiseThreshold(-0.75), PODZOL), COARSE_DIRT));
+        SurfaceRules.RuleSource swamp = SurfaceRules.sequence(SurfaceRules.ifTrue(SurfaceRules.isBiome(GoodEndingBiomes.MARSHY_SWAMP_KEY), SurfaceRules.ifTrue(SurfaceRules.yBlockCheck(VerticalAnchor.absolute(62), 0), SurfaceRules.ifTrue(SurfaceRules.not(SurfaceRules.yBlockCheck(VerticalAnchor.absolute(63), 0)), SurfaceRules.ifTrue(SurfaceRules.noiseCondition(Noises.SWAMP, 0.0), WATER)))));
+        return SurfaceRules.sequence(SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, SurfaceRules.ifTrue(SurfaceRules.isBiome(Biomes.SWAMP), SurfaceRules.sequence(SurfaceRules.ifTrue(SurfaceRules.noiseCondition(Noises.SURFACE, -0.0575, 0.0575), MUD), SurfaceRules.ifTrue(SurfaceRules.yBlockCheck(VerticalAnchor.absolute(62), 0), SurfaceRules.ifTrue(SurfaceRules.not(SurfaceRules.yBlockCheck(VerticalAnchor.absolute(63), 0)), SurfaceRules.ifTrue(SurfaceRules.noiseCondition(Noises.SWAMP, 0.0), WATER)))))), SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, swamp), SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, ifTrue), materialRule);
     }
 
-    private static MaterialRules.MaterialCondition surfaceNoiseThreshold(double min) {
-        return MaterialRules.noiseThreshold(NoiseParametersKeys.SURFACE, min / 8.25, Double.MAX_VALUE);
+    private static SurfaceRules.ConditionSource surfaceNoiseThreshold(double min) {
+        return SurfaceRules.noiseCondition(Noises.SURFACE, min / 8.25, Double.MAX_VALUE);
     }
 
 }

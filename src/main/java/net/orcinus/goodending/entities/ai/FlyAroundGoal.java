@@ -1,43 +1,43 @@
 package net.orcinus.goodending.entities.ai;
 
-import net.minecraft.entity.ai.NoPenaltySolidTargeting;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.util.AirAndWaterRandomPos;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumSet;
 
 public class FlyAroundGoal extends Goal {
-    private final PathAwareEntity fireflyEntity;
+    private final PathfinderMob fireflyEntity;
 
-    public FlyAroundGoal(PathAwareEntity fireflyEntity) {
+    public FlyAroundGoal(PathfinderMob fireflyEntity) {
         this.fireflyEntity = fireflyEntity;
-        this.setControls(EnumSet.of(Control.MOVE));
+        this.setFlags(EnumSet.of(Flag.MOVE));
     }
 
     @Override
-    public boolean canStart() {
-        return this.fireflyEntity.getNavigation().isIdle() && this.fireflyEntity.getRandom().nextInt(10) == 0;
+    public boolean canUse() {
+        return this.fireflyEntity.getNavigation().isDone() && this.fireflyEntity.getRandom().nextInt(10) == 0;
     }
 
     @Override
-    public boolean shouldContinue() {
-        return this.fireflyEntity.getNavigation().isFollowingPath();
+    public boolean canContinueToUse() {
+        return this.fireflyEntity.getNavigation().isInProgress();
     }
 
     @Override
     public void start() {
-        Vec3d vec3d = this.getRandomLocation();
+        Vec3 vec3d = this.getRandomLocation();
         if (vec3d != null) {
-            this.fireflyEntity.getNavigation().startMovingAlong(this.fireflyEntity.getNavigation().findPathTo(new BlockPos(vec3d), 1), 1.0);
+            this.fireflyEntity.getNavigation().moveTo(this.fireflyEntity.getNavigation().createPath(BlockPos.containing(vec3d), 1), 1.0);
         }
     }
 
     @Nullable
-    private Vec3d getRandomLocation() {
-        Vec3d vec3 = this.fireflyEntity.getRotationVec(0.0f);
-        return NoPenaltySolidTargeting.find(this.fireflyEntity, 10, 7, -2, vec3.x, vec3.z, 1.5707963705062866);
+    private Vec3 getRandomLocation() {
+        Vec3 vec3 = this.fireflyEntity.getViewVector(0.0f);
+        return AirAndWaterRandomPos.getPos(this.fireflyEntity, 10, 7, -2, vec3.x, vec3.z, 1.5707963705062866);
     }
 }

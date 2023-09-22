@@ -2,19 +2,18 @@ package net.orcinus.goodending.world.gen.features;
 
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.PillarBlock;
-import net.minecraft.block.VineBlock;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.util.DripstoneHelper;
-import net.minecraft.world.gen.feature.util.FeatureContext;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.VineBlock;
+import net.minecraft.world.level.levelgen.feature.DripstoneUtils;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.orcinus.goodending.blocks.BirchMushroomPlantBlock;
 import net.orcinus.goodending.init.GoodEndingBlocks;
 import net.orcinus.goodending.world.gen.features.config.FallenLogConfig;
@@ -28,54 +27,54 @@ public class FallenLogFeature extends Feature<FallenLogConfig> {
     }
 
     @Override
-    public boolean generate(FeatureContext<FallenLogConfig> context) {
-        StructureWorldAccess world = context.getWorld();
-        BlockPos blockPos = context.getOrigin();
-        Random random = context.getRandom();
-        Direction direction = Direction.Type.HORIZONTAL.random(random);
-        int logLength = MathHelper.nextInt(random, 4, 8);
+    public boolean place(FeaturePlaceContext<FallenLogConfig> context) {
+        WorldGenLevel world = context.level();
+        BlockPos blockPos = context.origin();
+        RandomSource random = context.random();
+        Direction direction = Direction.Plane.HORIZONTAL.getRandomDirection(random);
+        int logLength = Mth.nextInt(random, 4, 8);
         int tries = 0;
-        BlockPos.Mutable mut = blockPos.mutableCopy();
+        BlockPos.MutableBlockPos mut = blockPos.mutable();
         List<BlockPos> decorationPoses = Lists.newArrayList();
-        FallenLogConfig config = context.getConfig();
-        if (world.getBlockState(blockPos.down()).isIn(BlockTags.DIRT) && world.testBlockState(blockPos, DripstoneHelper::canGenerate)) {
-            if (!world.testBlockState(blockPos.offset(direction), DripstoneHelper::canGenerate)) {
-                direction = direction.rotateYClockwise();
+        FallenLogConfig config = context.config();
+        if (world.getBlockState(blockPos.below()).is(BlockTags.DIRT) && world.isStateAtPosition(blockPos, DripstoneUtils::isEmptyOrWater)) {
+            if (!world.isStateAtPosition(blockPos.relative(direction), DripstoneUtils::isEmptyOrWater)) {
+                direction = direction.getClockWise();
             }
             for (int i = 0; i <= logLength; i++) {
                 if (tries > 0) {
                     return false;
                 }
-                boolean flag = world.getBlockState(mut).getMaterial().isReplaceable() || world.testBlockState(mut, state -> state.isAir() || state.isOf(Blocks.WATER) || state.isIn(BlockTags.FLOWERS));
-                if (world.getBlockState(mut.down()).getMaterial().isReplaceable() || world.testBlockState(mut.down(), DripstoneHelper::canGenerate)) {
+                boolean flag = world.getBlockState(mut).canBeReplaced() || world.isStateAtPosition(mut, state -> state.isAir() || state.is(Blocks.WATER) || state.is(BlockTags.FLOWERS));
+                if (world.getBlockState(mut.below()).canBeReplaced() || world.isStateAtPosition(mut.below(), DripstoneUtils::isEmptyOrWater)) {
                     mut.move(Direction.DOWN);
-                    world.setBlockState(mut, config.log.getBlockState(random, mut.toImmutable()).with(PillarBlock.AXIS, direction.getAxis()), 2);
-                    if (world.isAir(mut.down())) {
+                    world.setBlock(mut, config.log.getState(random, mut.immutable()).setValue(RotatedPillarBlock.AXIS, direction.getAxis()), 2);
+                    if (world.isEmptyBlock(mut.below())) {
                         tries++;
                     }
-                    decorationPoses.add(mut.toImmutable());
+                    decorationPoses.add(mut.immutable());
                 }
                 if (flag) {
-                    world.setBlockState(mut, config.log.getBlockState(random, mut.toImmutable()).with(PillarBlock.AXIS, direction.getAxis()), 2);
-                    if (world.isAir(mut.down())) {
+                    world.setBlock(mut, config.log.getState(random, mut.immutable()).setValue(RotatedPillarBlock.AXIS, direction.getAxis()), 2);
+                    if (world.isEmptyBlock(mut.below())) {
                         tries++;
                     }
-                    decorationPoses.add(mut.toImmutable());
+                    decorationPoses.add(mut.immutable());
                 }
                 mut.move(direction);
             }
             for (BlockPos pos : decorationPoses) {
-                if (world.getBlockState(pos.up()).isAir() && random.nextInt(5) == 0 && config.brown_mushroom) {
-                    world.setBlockState(pos.up(), Blocks.BROWN_MUSHROOM.getDefaultState(), 2);
+                if (world.getBlockState(pos.above()).isAir() && random.nextInt(5) == 0 && config.brown_mushroom) {
+                    world.setBlock(pos.above(), Blocks.BROWN_MUSHROOM.defaultBlockState(), 2);
                 }
-                for (Direction directions : Direction.Type.HORIZONTAL) {
-                    if (world.getBlockState(pos.offset(directions)).isAir() && random.nextInt(5) == 0 && config.vines) {
-                        world.setBlockState(pos.offset(directions), Blocks.VINE.getDefaultState().with(VineBlock.getFacingProperty(directions.getOpposite()), true), 2);
+                for (Direction directions : Direction.Plane.HORIZONTAL) {
+                    if (world.getBlockState(pos.relative(directions)).isAir() && random.nextInt(5) == 0 && config.vines) {
+                        world.setBlock(pos.relative(directions), Blocks.VINE.defaultBlockState().setValue(VineBlock.getPropertyForFace(directions.getOpposite()), true), 2);
                     }
                 }
-                Direction dir = Direction.Type.HORIZONTAL.random(random);
-                if (world.isAir(pos.offset(dir)) && random.nextInt(3) == 0 && config.shelf_mushroom) {
-                    world.setBlockState(pos.offset(dir), GoodEndingBlocks.BIRCH_MUSHROOM.getDefaultState().with(BirchMushroomPlantBlock.FACING, dir), 2);
+                Direction dir = Direction.Plane.HORIZONTAL.getRandomDirection(random);
+                if (world.isEmptyBlock(pos.relative(dir)) && random.nextInt(3) == 0 && config.shelf_mushroom) {
+                    world.setBlock(pos.relative(dir), GoodEndingBlocks.BIRCH_MUSHROOM.defaultBlockState().setValue(BirchMushroomPlantBlock.FACING, dir), 2);
                 }
             }
             return true;

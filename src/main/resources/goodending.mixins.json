@@ -5,6 +5,8 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "BlockEntityTypeMixin",
+    "accessor.BlockSetTypeAccessor",
+    "accessor.BoatAccessor",
     "ConfiguredFeaturesMixin",
     "ItemMixin",
     "LilyPadBlockMixin",
@@ -15,9 +17,7 @@
     "TreeFeatureConfigMixin",
     "VanillaBiomeParametersMixin",
     "VanillaSurfaceRulesMixin",
-    "accessor.BoatEntityAccessor",
     "invokers.BrewingRecipeRegistryInvoker",
-    "invokers.SignTypeInvoker",
     "invokers.TreeDecoratorTypeInvoker",
     "invokers.VanillaBiomeParametersInvoker"
   ],

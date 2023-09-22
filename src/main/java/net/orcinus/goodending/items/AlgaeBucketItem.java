@@ -1,55 +1,54 @@
 package net.orcinus.goodending.items;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.FluidModificationItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsageContext;
-import net.minecraft.item.Items;
-import net.minecraft.item.PlaceableOnWaterItem;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.RaycastContext;
-import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.DispensibleContainerItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
-public class AlgaeBucketItem extends BlockItem implements FluidModificationItem {
+public class AlgaeBucketItem extends BlockItem implements DispensibleContainerItem {
     private final SoundEvent placeSound;
 
-    public AlgaeBucketItem(Block block, Settings settings, SoundEvent placeSound) {
+    public AlgaeBucketItem(Block block, Properties settings, SoundEvent placeSound) {
         super(block, settings);
         this.placeSound = placeSound;
     }
 
     @Override
-    public ActionResult useOnBlock(ItemUsageContext context) {
-        return ActionResult.PASS;
+    public InteractionResult useOn(UseOnContext context) {
+        return InteractionResult.PASS;
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand) {
+    public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
 
-        BlockHitResult blockHitResult = PlaceableOnWaterItem.raycast(world, user, RaycastContext.FluidHandling.SOURCE_ONLY);
-        BlockHitResult blockHitResult2 = blockHitResult.withBlockPos(blockHitResult.getBlockPos());
-        ActionResult actionResult = super.useOnBlock(new ItemUsageContext(user, hand, blockHitResult2));
+        BlockHitResult blockHitResult = AlgaeBucketItem.getPlayerPOVHitResult(world, user, ClipContext.Fluid.SOURCE_ONLY);
+        BlockHitResult blockHitResult2 = blockHitResult.withPosition(blockHitResult.getBlockPos());
+        InteractionResult actionResult = super.useOn(new UseOnContext(user, hand, blockHitResult2));
 
-        if (actionResult.isAccepted() && user != null && !user.isCreative()) {
-            user.setStackInHand(hand, Items.BUCKET.getDefaultStack());
+        if (actionResult.consumesAction() && !user.isCreative()) {
+            user.setItemInHand(hand, Items.BUCKET.getDefaultInstance());
         }
-        return new TypedActionResult<>(actionResult, user.getStackInHand(hand));
+        return new InteractionResultHolder<>(actionResult, user.getItemInHand(hand));
     }
 
     @Override
-    public String getTranslationKey() {
-        return this.getOrCreateTranslationKey();
+    public String getDescriptionId() {
+        return this.getOrCreateDescriptionId();
     }
 
     @Override
@@ -58,15 +57,16 @@ public class AlgaeBucketItem extends BlockItem implements FluidModificationItem 
     }
 
     @Override
-    public boolean placeFluid(@Nullable PlayerEntity player, World world, BlockPos pos, @Nullable BlockHitResult hitResult) {
-        if (world.isInBuildLimit(pos) && world.isWater(pos)) {
-            if (!world.isClient) {
-                world.setBlockState(pos, this.getBlock().getDefaultState(), Block.NOTIFY_ALL);
+    public boolean emptyContents(@Nullable Player player, Level world, BlockPos pos, @Nullable BlockHitResult hitResult) {
+        if (world.isInWorldBounds(pos) && world.isWaterAt(pos)) {
+            if (!world.isClientSide()) {
+                world.setBlock(pos, this.getBlock().defaultBlockState(), 3);
             }
-            world.emitGameEvent(player, GameEvent.FLUID_PLACE, pos);
-            world.playSound(player, pos, this.placeSound, SoundCategory.BLOCKS, 1.0f, 1.0f);
+            world.gameEvent(player, GameEvent.FLUID_PLACE, pos);
+            world.playSound(player, pos, this.placeSound, SoundSource.BLOCKS, 1.0f, 1.0f);
             return true;
         }
         return false;
     }
+
 }

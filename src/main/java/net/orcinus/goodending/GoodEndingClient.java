@@ -7,15 +7,16 @@ import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.TooltipComponentCallback;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.client.color.block.BlockColorProvider;
-import net.minecraft.client.color.world.BiomeColors;
-import net.minecraft.client.color.world.FoliageColors;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.entity.model.BoatEntityModel;
-import net.minecraft.item.BlockItem;
+import net.minecraft.client.color.block.BlockColor;
+import net.minecraft.client.model.BoatModel;
+import net.minecraft.client.model.ChestBoatModel;
+import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.level.FoliageColor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.orcinus.goodending.client.gui.tooltip.PotionApplicationTooltipComponent;
 import net.orcinus.goodending.client.gui.tooltip.PotionApplicationTooltipData;
 import net.orcinus.goodending.client.models.MarshEntityModel;
@@ -45,7 +46,7 @@ public class GoodEndingClient implements ClientModInitializer {
             return null;
         });
 
-        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(),
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(),
                 GoodEndingBlocks.ALGAE,
                 GoodEndingBlocks.BIRCH_MUSHROOM,
                 GoodEndingBlocks.CATTAIL,
@@ -82,18 +83,18 @@ public class GoodEndingClient implements ClientModInitializer {
         EntityRendererRegistry.register(GoodEndingEntityTypes.WOODPECKER, WoodpeckerRenderer::new);
 
         Arrays.stream(GoodEndingBoatEntity.BoatType.values()).forEach(type -> {
-            EntityModelLayerRegistry.registerModelLayer(GoodEndingModelLayers.createBoat(type), () -> BoatEntityModel.getTexturedModelData(false));
-            EntityModelLayerRegistry.registerModelLayer(GoodEndingModelLayers.createChestBoat(type), () -> BoatEntityModel.getTexturedModelData(true));
+            EntityModelLayerRegistry.registerModelLayer(GoodEndingModelLayers.createBoat(type), BoatModel::createBodyModel);
+            EntityModelLayerRegistry.registerModelLayer(GoodEndingModelLayers.createChestBoat(type), ChestBoatModel::createBodyModel);
         });
-        EntityModelLayerRegistry.registerModelLayer(GoodEndingModelLayers.MARSH, MarshEntityModel::getTexturedModelData);
-        EntityModelLayerRegistry.registerModelLayer(GoodEndingModelLayers.WOODPECKER, WoodPeckerEntityModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(GoodEndingModelLayers.MARSH, MarshEntityModel::getLayerDefinition);
+        EntityModelLayerRegistry.registerModelLayer(GoodEndingModelLayers.WOODPECKER, WoodPeckerEntityModel::getLayerDefinition);
 
-        ColorProviderRegistry<Block, BlockColorProvider> blockColor = ColorProviderRegistry.BLOCK;
+        ColorProviderRegistry<Block, BlockColor> blockColor = ColorProviderRegistry.BLOCK;
         blockColor.register((state, world, pos, tintIndex) -> {
                     if (world == null || pos == null) {
-                        return FoliageColors.getDefaultColor();
+                        return FoliageColor.getDefaultColor();
                     }
-                    return BiomeColors.getFoliageColor(world, pos);
+                    return BiomeColors.getAverageFoliageColor(world, pos);
                 },
                 GoodEndingBlocks.CYPRESS_LEAVES,
                 GoodEndingBlocks.HANGING_OAK_LEAVES,
@@ -108,10 +109,10 @@ public class GoodEndingClient implements ClientModInitializer {
                 GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD
         );
 
-        blockColor.register((state, world, pos, tintIndex) -> FoliageColors.getBirchColor(), GoodEndingBlocks.DENSE_BIRCH_LEAVES);
+        blockColor.register((state, world, pos, tintIndex) -> FoliageColor.getBirchColor(), GoodEndingBlocks.DENSE_BIRCH_LEAVES);
 
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
-                    BlockState blockState = ((BlockItem)stack.getItem()).getBlock().getDefaultState();
+                    BlockState blockState = ((BlockItem)stack.getItem()).getBlock().defaultBlockState();
                     return blockColor.get(((BlockItem)stack.getItem()).getBlock()).getColor(blockState, null, null, tintIndex);
                 },
                 GoodEndingBlocks.DENSE_BIRCH_LEAVES,
@@ -124,7 +125,7 @@ public class GoodEndingClient implements ClientModInitializer {
         );
 
         ColorProviderRegistry.ITEM.register((stack, tintIndex) -> {
-                BlockState blockState = ((BlockItem)stack.getItem()).getBlock().getDefaultState();
+                BlockState blockState = ((BlockItem)stack.getItem()).getBlock().defaultBlockState();
                 return tintIndex > 0 ? -1 : blockColor.get(((BlockItem)stack.getItem()).getBlock()).getColor(blockState, null, null, tintIndex);
             },
             GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD,

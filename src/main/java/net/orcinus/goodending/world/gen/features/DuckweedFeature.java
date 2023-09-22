@@ -1,28 +1,28 @@
 package net.orcinus.goodending.world.gen.features;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.intprovider.UniformIntProvider;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.gen.feature.DefaultFeatureConfig;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.util.FeatureContext;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.orcinus.goodending.init.GoodEndingBlocks;
 
-public class DuckweedFeature extends Feature<DefaultFeatureConfig> {
+public class DuckweedFeature extends Feature<NoneFeatureConfiguration> {
 
-    public DuckweedFeature(Codec<DefaultFeatureConfig> configCodec) {
+    public DuckweedFeature(Codec<NoneFeatureConfiguration> configCodec) {
         super(configCodec);
     }
 
     @Override
-    public boolean generate(FeatureContext<DefaultFeatureConfig> context) {
-        StructureWorldAccess world = context.getWorld();
-        BlockPos blockPos = context.getOrigin();
-        Random random = context.getRandom();
-        if (world.getBlockState(blockPos.down()).isOf(Blocks.WATER) && world.getBlockState(blockPos).getMaterial().isReplaceable()) {
+    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+        WorldGenLevel world = context.level();
+        BlockPos blockPos = context.origin();
+        RandomSource random = context.random();
+        if (world.getBlockState(blockPos.below()).is(Blocks.WATER) && world.getBlockState(blockPos).canBeReplaced()) {
             DuckweedFeature.generateDuckweed(world, blockPos, random);
             return true;
         } else {
@@ -30,13 +30,13 @@ public class DuckweedFeature extends Feature<DefaultFeatureConfig> {
         }
     }
 
-    public static void generateDuckweed(StructureWorldAccess world, BlockPos blockPos, Random random) {
-        BlockPos.Mutable spreadPos = new BlockPos.Mutable();
-        int tries = UniformIntProvider.create(30, 80).get(random);
+    public static void generateDuckweed(WorldGenLevel world, BlockPos blockPos, RandomSource random) {
+        BlockPos.MutableBlockPos spreadPos = new BlockPos.MutableBlockPos();
+        int tries = UniformInt.of(30, 80).sample(random);
         for (int i = 0; i < tries; i++) {
-            spreadPos.set(blockPos, random.nextInt(3) - random.nextInt(3), 0, random.nextInt(3) - random.nextInt(3));
-            if (random.nextFloat() < 0.23242F && world.getBlockState(spreadPos).getMaterial().isReplaceable() && world.getBlockState(spreadPos.down()).isOf(Blocks.WATER)) {
-                world.setBlockState(spreadPos, random.nextInt(50) == 0 ? GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD.getDefaultState() : GoodEndingBlocks.DUCKWEED.getDefaultState(), 2);
+            spreadPos.setWithOffset(blockPos, random.nextInt(3) - random.nextInt(3), 0, random.nextInt(3) - random.nextInt(3));
+            if (random.nextFloat() < 0.23242F && world.getBlockState(spreadPos).canBeReplaced() && world.getBlockState(spreadPos.below()).is(Blocks.WATER)) {
+                world.setBlock(spreadPos, random.nextInt(50) == 0 ? GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD.defaultBlockState() : GoodEndingBlocks.DUCKWEED.defaultBlockState(), 2);
             }
         }
     }

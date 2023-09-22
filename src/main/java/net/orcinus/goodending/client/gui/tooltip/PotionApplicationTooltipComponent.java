@@ -1,22 +1,19 @@
 package net.orcinus.goodending.client.gui.tooltip;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen;
-import net.minecraft.client.gui.tooltip.TooltipComponent;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.texture.Sprite;
-import net.minecraft.client.texture.StatusEffectSpriteManager;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.MobEffectTextureManager;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 
 @Environment(EnvType.CLIENT)
-public class PotionApplicationTooltipComponent implements TooltipComponent {
+public class PotionApplicationTooltipComponent implements ClientTooltipComponent {
     private final PotionApplicationTooltipData data;
 
     public PotionApplicationTooltipComponent(PotionApplicationTooltipData data) {
@@ -29,23 +26,35 @@ public class PotionApplicationTooltipComponent implements TooltipComponent {
     }
 
     @Override
-    public int getWidth(TextRenderer textRenderer) {
+    public int getWidth(Font font) {
         return 15;
     }
 
     @Override
-    public void drawItems(TextRenderer textRenderer, int x, int y, MatrixStack matrices, ItemRenderer itemRenderer, int z) {
-        StatusEffectSpriteManager statusEffectSpriteManager = MinecraftClient.getInstance().getStatusEffectSpriteManager();
-        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+    public void renderImage(Font font, int x, int y, GuiGraphics guiGraphics) {
+        MobEffectTextureManager manager = Minecraft.getInstance().getMobEffectTextures();
+        LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
-        for (StatusEffectInstance statusEffectInstance : this.data.getPotion().getEffects()) {
-            StatusEffect statusEffect = statusEffectInstance.getEffectType();
-            Sprite sprite = statusEffectSpriteManager.getSprite(statusEffect);
-
-            RenderSystem.setShaderTexture(0, sprite.getAtlas().getId());
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            AbstractInventoryScreen.drawSprite(matrices, x, y - 1, z, 12, 12, sprite);
-
+        for (MobEffectInstance mobEffectInstance : this.data.getPotion().getEffects()) {
+            MobEffect mobEffect = mobEffectInstance.getEffect();
+            TextureAtlasSprite textureAtlasSprite = manager.get(mobEffect);
+            guiGraphics.blit(x, y - 1, 0, 12, 12, textureAtlasSprite);
         }
     }
+
+//    @Override
+//    public void drawItems(TextRenderer textRenderer, int x, int y, MatrixStack matrices, ItemRenderer itemRenderer, int z) {
+//        StatusEffectSpriteManager statusEffectSpriteManager = MinecraftClient.getInstance().getStatusEffectSpriteManager();
+//        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+//        if (player == null) return;
+//        for (StatusEffectInstance statusEffectInstance : this.data.getPotion().getEffects()) {
+//            StatusEffect statusEffect = statusEffectInstance.getEffectType();
+//            Sprite sprite = statusEffectSpriteManager.getSprite(statusEffect);
+//
+//            RenderSystem.setShaderTexture(0, sprite.getAtlas().getId());
+//            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+//            AbstractInventoryScreen.drawSprite(matrices, x, y - 1, z, 12, 12, sprite);
+//
+//        }
+//    }
 }

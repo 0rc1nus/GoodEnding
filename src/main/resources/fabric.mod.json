@@ -24,6 +24,9 @@
 		],
 		"client": [
 			"net.orcinus.goodending.GoodEndingClient"
+		],
+		"fabric-datagen": [
+			"net.orcinus.goodending.data.GoodEndingDataGenerator"
 		]
 	},
 	"mixins": [
@@ -32,7 +35,7 @@
 	"depends": {
 		"fabricloader": ">=0.14.6",
 		"fabric": "*",
-		"minecraft": "~1.19",
+		"minecraft": "~1.20",
 		"java": ">=17"
 	},
 	"suggests": {

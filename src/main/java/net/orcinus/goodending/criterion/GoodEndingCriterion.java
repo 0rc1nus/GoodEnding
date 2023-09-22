@@ -1,39 +1,39 @@
 package net.orcinus.goodending.criterion;
 
 import com.google.gson.JsonObject;
-import net.minecraft.advancement.criterion.AbstractCriterion;
-import net.minecraft.advancement.criterion.AbstractCriterionConditions;
-import net.minecraft.predicate.entity.AdvancementEntityPredicateDeserializer;
-import net.minecraft.predicate.entity.EntityPredicate;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.Identifier;
+import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
+import net.minecraft.advancements.critereon.DeserializationContext;
+import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.orcinus.goodending.GoodEnding;
 
-public class GoodEndingCriterion extends AbstractCriterion<GoodEndingCriterion.TriggerInstance> {
-    private final Identifier ID;
+public class GoodEndingCriterion extends SimpleCriterionTrigger<GoodEndingCriterion.TriggerInstance> {
+    private final ResourceLocation ID;
 
     public GoodEndingCriterion(String name) {
-        ID = new Identifier(GoodEnding.MODID, name);
+        ID = new ResourceLocation(GoodEnding.MODID, name);
     }
 
     @Override
-    public Identifier getId() {
+    public ResourceLocation getId() {
         return ID;
     }
 
-    public void trigger(ServerPlayerEntity player) {
+    public void trigger(ServerPlayer player) {
         this.trigger(player, conditions -> true);
     }
 
     @Override
-    protected TriggerInstance conditionsFromJson(JsonObject obj, EntityPredicate.Extended playerPredicate, AdvancementEntityPredicateDeserializer predicateDeserializer) {
-        return new TriggerInstance(ID, playerPredicate);
+    protected TriggerInstance createInstance(JsonObject jsonObject, ContextAwarePredicate contextAwarePredicate, DeserializationContext deserializationContext) {
+        return new TriggerInstance(ID, contextAwarePredicate);
     }
 
-    public static class TriggerInstance extends AbstractCriterionConditions {
+    public static class TriggerInstance extends AbstractCriterionTriggerInstance {
 
-        public TriggerInstance(Identifier id, EntityPredicate.Extended entity) {
-            super(id, entity);
+        public TriggerInstance(ResourceLocation id, ContextAwarePredicate contextAwarePredicate) {
+            super(id, contextAwarePredicate);
         }
 
     }

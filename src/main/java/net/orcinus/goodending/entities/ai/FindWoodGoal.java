@@ -1,16 +1,16 @@
 package net.orcinus.goodending.entities.ai;
 
 import com.google.common.collect.Lists;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RaycastContext;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.orcinus.goodending.entities.WoodpeckerEntity;
 
 import java.util.Comparator;
@@ -25,7 +25,7 @@ public class FindWoodGoal extends Goal {
     }
 
     @Override
-    public boolean canStart() {
+    public boolean canUse() {
         if (!(this.woodpecker.getAttachedFace() == Direction.UP || this.woodpecker.getAttachedFace() == Direction.DOWN)) {
             return false;
         }
@@ -45,26 +45,26 @@ public class FindWoodGoal extends Goal {
         for (int x = -range; x <= range; x++) {
             for (int z = -range; z <= range; z++) {
                 for (int y = -range; y <= range; y++) {
-                    BlockPos pos = new BlockPos(this.woodpecker.getX() + x, this.woodpecker.getY() + y, this.woodpecker.getZ() + z);
-                    BlockState state = this.woodpecker.world.getBlockState(pos);
-                    if (state.isIn(BlockTags.LOGS)) {
+                    BlockPos pos = BlockPos.containing(this.woodpecker.getX() + x, this.woodpecker.getY() + y, this.woodpecker.getZ() + z);
+                    BlockState state = this.woodpecker.level().getBlockState(pos);
+                    if (state.is(BlockTags.LOGS)) {
                         poses.add(pos);
                     }
                 }
             }
         }
         if (!poses.isEmpty()) {
-            poses.sort(Comparator.comparingDouble(this.woodpecker.getBlockPos()::getSquaredDistance));
+            poses.sort(Comparator.comparingDouble(this.woodpecker.blockPosition()::distSqr));
             for (BlockPos pos : poses) {
                 double x = pos.getX() + 0.5F - this.woodpecker.getX();
                 double z = pos.getZ() + 0.5F - this.woodpecker.getZ();
                 double distance = x * x + z * z;
-                Vec3d blockVec = Vec3d.ofCenter(pos);
-                BlockHitResult result = this.woodpecker.world.raycast(new RaycastContext(this.woodpecker.getEyePos(), blockVec, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, this.woodpecker));
-                List<WoodpeckerEntity> woodpeckerEntities = this.woodpecker.world.getNonSpectatingEntities(WoodpeckerEntity.class, new Box(result.getBlockPos().offset(result.getSide())));
-                if (this.woodpecker.world.getBlockState(result.getBlockPos()).isIn(BlockTags.LOGS) && this.woodpecker.world.getBlockState(result.getBlockPos().offset(result.getSide())).isAir() && result.getType() != HitResult.Type.MISS && distance > 4 && result.getSide().getAxis() != Direction.Axis.Y && woodpeckerEntities.size() == 0) {
+                Vec3 blockVec = Vec3.atCenterOf(pos);
+                BlockHitResult result = this.woodpecker.level().clip(new ClipContext(this.woodpecker.getEyePosition(), blockVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.woodpecker));
+                List<WoodpeckerEntity> woodpeckerEntities = this.woodpecker.level().getEntitiesOfClass(WoodpeckerEntity.class, new AABB(result.getBlockPos().relative(result.getDirection())));
+                if (this.woodpecker.level().getBlockState(result.getBlockPos()).is(BlockTags.LOGS) && this.woodpecker.level().getBlockState(result.getBlockPos().relative(result.getDirection())).isAir() && result.getType() != HitResult.Type.MISS && distance > 4 && result.getDirection().getAxis() != Direction.Axis.Y && woodpeckerEntities.size() == 0) {
                     this.pos = result.getBlockPos();
-                    this.woodpecker.setAttachedFace(result.getSide());
+                    this.woodpecker.setAttachedFace(result.getDirection());
                     return true;
                 }
             }

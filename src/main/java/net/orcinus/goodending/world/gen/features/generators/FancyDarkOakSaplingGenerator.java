@@ -1,24 +1,23 @@
 package net.orcinus.goodending.world.gen.features.generators;
 
-import net.minecraft.block.sapling.LargeTreeSaplingGenerator;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.registry.RegistryEntry;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.orcinus.goodending.init.GoodEndingWorldGen;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.block.grower.AbstractMegaTreeGrower;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.orcinus.goodending.init.GoodEndingConfiguredFeatures;
 import org.jetbrains.annotations.Nullable;
 
-public class FancyDarkOakSaplingGenerator extends LargeTreeSaplingGenerator {
+public class FancyDarkOakSaplingGenerator extends AbstractMegaTreeGrower {
 
     @Nullable
     @Override
-    protected RegistryEntry<? extends ConfiguredFeature<?, ?>> getLargeTreeFeature(Random random) {
-        return random.nextFloat() < 0.25F ? GoodEndingWorldGen.BIG_FANCY_DARK_OAK_PLANTED : GoodEndingWorldGen.FANCY_DARK_OAK_PLANTED;
+    protected ResourceKey<ConfiguredFeature<?, ?>> getConfiguredMegaFeature(RandomSource randomSource) {
+        return randomSource.nextFloat() < 0.25F ? GoodEndingConfiguredFeatures.BIG_FANCY_DARK_OAK_PLANTED : GoodEndingConfiguredFeatures.FANCY_DARK_OAK_PLANTED;
     }
 
     @Nullable
     @Override
-    protected RegistryEntry<? extends ConfiguredFeature<?, ?>> getTreeFeature(Random random, boolean bees) {
+    protected ResourceKey<ConfiguredFeature<?, ?>> getConfiguredFeature(RandomSource randomSource, boolean bl) {
         return null;
     }
-
 }

@@ -2,22 +2,22 @@ package net.orcinus.goodending.world.gen.features;
 
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.block.PillarBlock;
-import net.minecraft.block.VineBlock;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.util.DripstoneHelper;
-import net.minecraft.world.gen.feature.util.FeatureContext;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.VineBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.levelgen.feature.DripstoneUtils;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.orcinus.goodending.init.GoodEndingBlocks;
 import net.orcinus.goodending.init.GoodEndingTags;
 import net.orcinus.goodending.world.gen.features.config.WaterTreeFeatureConfig;
@@ -32,72 +32,72 @@ public class CypressTreeFeature extends Feature<WaterTreeFeatureConfig> {
     }
 
     @Override
-    public boolean generate(FeatureContext<WaterTreeFeatureConfig> context) {
-        StructureWorldAccess world = context.getWorld();
-        BlockPos blockPos = context.getOrigin();
-        Random random = context.getRandom();
+    public boolean place(FeaturePlaceContext<WaterTreeFeatureConfig> context) {
+        WorldGenLevel world = context.level();
+        BlockPos blockPos = context.origin();
+        RandomSource random = context.random();
         List<BlockPos> list = Lists.newArrayList();
         List<BlockPos> leavePoses = Lists.newArrayList();
         List<BlockPos> branchPoses = Lists.newArrayList();
-        int height = MathHelper.nextInt(random, 10, 15);
+        int height = Mth.nextInt(random, 10, 15);
         Block cypressLog = GoodEndingBlocks.CYPRESS_LOG;
-        boolean isPlanted = context.getConfig().isPlanted;
-        boolean initialFlag = (!isPlanted && !world.getBlockState(blockPos).isOf(Blocks.WATER)) || !world.getBlockState(blockPos.down()).isIn(BlockTags.DIRT);
-        boolean initialFlag1 = isPlanted && !this.canGrow(world, blockPos.down());
+        boolean isPlanted = context.config().isPlanted;
+        boolean initialFlag = (!isPlanted && !world.getBlockState(blockPos).is(Blocks.WATER)) || !world.getBlockState(blockPos.below()).is(BlockTags.DIRT);
+        boolean initialFlag1 = isPlanted && !this.canGrow(world, blockPos.below());
         if (initialFlag || initialFlag1) {
             return false;
         }
-        BlockState cypressLogDefaultState = cypressLog.getDefaultState();
+        BlockState cypressLogDefaultState = cypressLog.defaultBlockState();
         for (int i = 0; i <= height; i++) {
-            if (world.getBlockState(blockPos.up(i)).getMaterial().isReplaceable() || world.getBlockState(blockPos.up(i)).isIn(GoodEndingTags.CYPRESS_REPLACEABLES) || world.getBlockState(blockPos.up(i)).isOf(Blocks.MUD)) {
-                world.setBlockState(blockPos.up(i), cypressLogDefaultState, 19);
+            if (world.getBlockState(blockPos.above(i)).canBeReplaced() || world.getBlockState(blockPos.above(i)).is(GoodEndingTags.CYPRESS_REPLACEABLES) || world.getBlockState(blockPos.above(i)).is(Blocks.MUD)) {
+                world.setBlock(blockPos.above(i), cypressLogDefaultState, 19);
                 if (random.nextInt(3) == 0 && i < height - 3 && i > 3) {
-                    branchPoses.add(blockPos.up(i));
+                    branchPoses.add(blockPos.above(i));
                 }
             }
         }
-        Direction randomDirection = Direction.Type.HORIZONTAL.random(random);
-        BlockState leaveState = GoodEndingBlocks.CYPRESS_LEAVES.getDefaultState().with(LeavesBlock.DISTANCE, 1);
-        branchPoses.stream().map(position -> position.offset(randomDirection)).forEach(brancingPos -> {
-            if (world.getBlockState(brancingPos).getMaterial().isReplaceable() || world.getBlockState(brancingPos).isIn(GoodEndingTags.CYPRESS_REPLACEABLES)) {
-                world.setBlockState(brancingPos, cypressLogDefaultState.with(PillarBlock.AXIS, randomDirection.getAxis()), 2);
+        Direction randomDirection = Direction.Plane.HORIZONTAL.getRandomDirection(random);
+        BlockState leaveState = GoodEndingBlocks.CYPRESS_LEAVES.defaultBlockState().setValue(LeavesBlock.DISTANCE, 1);
+        branchPoses.stream().map(position -> position.relative(randomDirection)).forEach(brancingPos -> {
+            if (world.getBlockState(brancingPos).canBeReplaced() || world.getBlockState(brancingPos).is(GoodEndingTags.CYPRESS_REPLACEABLES)) {
+                world.setBlock(brancingPos, cypressLogDefaultState.setValue(RotatedPillarBlock.AXIS, randomDirection.getAxis()), 2);
                 Arrays.stream(Direction.values()).forEach(direction -> {
-                    for (int i = 0; i <= MathHelper.nextInt(random, 1, 4); i++) {
-                        BlockPos relativeOffset = brancingPos.offset(direction).down(i);
-                        if (world.testBlockState(relativeOffset, DripstoneHelper::canGenerate) || world.getBlockState(relativeOffset).getMaterial().isReplaceable() || world.getBlockState(brancingPos).isIn(GoodEndingTags.CYPRESS_REPLACEABLES)) {
-                            world.setBlockState(relativeOffset, leaveState.with(LeavesBlock.WATERLOGGED, world.getBlockState(relativeOffset).isOf(Blocks.WATER)), 2);
+                    for (int i = 0; i <= Mth.nextInt(random, 1, 4); i++) {
+                        BlockPos relativeOffset = brancingPos.relative(direction).below(i);
+                        if (world.isStateAtPosition(relativeOffset, DripstoneUtils::isEmptyOrWater) || world.getBlockState(relativeOffset).canBeReplaced() || world.getBlockState(brancingPos).is(GoodEndingTags.CYPRESS_REPLACEABLES)) {
+                            world.setBlock(relativeOffset, leaveState.setValue(LeavesBlock.WATERLOGGED, world.getBlockState(relativeOffset).is(Blocks.WATER)), 2);
                             leavePoses.add(relativeOffset);
                         }
                     }
                 });
             }
         });
-        for (Direction direction : Direction.Type.HORIZONTAL) {
-            if (world.getBlockState(blockPos.offset(direction)).getMaterial().isReplaceable() || world.getBlockState(blockPos.offset(direction)).isIn(GoodEndingTags.CYPRESS_REPLACEABLES)) {
-                world.setBlockState(blockPos.offset(direction), cypressLogDefaultState, 19);
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
+            if (world.getBlockState(blockPos.relative(direction)).canBeReplaced() || world.getBlockState(blockPos.relative(direction)).is(GoodEndingTags.CYPRESS_REPLACEABLES)) {
+                world.setBlock(blockPos.relative(direction), cypressLogDefaultState, 19);
             }
-            this.branchingRoot(world, blockPos.offset(direction), cypressLog, random, direction, 0);
+            this.branchingRoot(world, blockPos.relative(direction), cypressLog, random, direction, 0);
         }
-        if (world.getBlockState(blockPos.down()).isOf(Blocks.WATER) && world.getBlockState(blockPos).isAir()) {
+        if (world.getBlockState(blockPos.below()).is(Blocks.WATER) && world.getBlockState(blockPos).isAir()) {
             DuckweedFeature.generateDuckweed(world, blockPos, random);
         }
-        for (Direction direction : Direction.Type.HORIZONTAL) {
-            for (int length = 0; length < MathHelper.nextInt(random, 2, 5); length++) {
-                BlockPos dirPos = blockPos.up(height).offset(direction, length);
-                if (world.getBlockState(dirPos).getMaterial().isReplaceable() || world.getBlockState(dirPos).isIn(GoodEndingTags.CYPRESS_REPLACEABLES)) {
-                    world.setBlockState(dirPos, cypressLogDefaultState.with(PillarBlock.AXIS, direction.getAxis()), 19);
-                    list.add(blockPos.up(height));
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
+            for (int length = 0; length < Mth.nextInt(random, 2, 5); length++) {
+                BlockPos dirPos = blockPos.above(height).relative(direction, length);
+                if (world.getBlockState(dirPos).canBeReplaced() || world.getBlockState(dirPos).is(GoodEndingTags.CYPRESS_REPLACEABLES)) {
+                    world.setBlock(dirPos, cypressLogDefaultState.setValue(RotatedPillarBlock.AXIS, direction.getAxis()), 19);
+                    list.add(blockPos.above(height));
                     list.add(dirPos);
                 }
             }
         }
         list.forEach(pos -> {
             for (Direction direction : Direction.values()) {
-                if (world.testBlockState(pos.offset(direction), DripstoneHelper::canGenerate)) {
-                    for (int t = 0; t < MathHelper.nextInt(random, 2, 5); t++) {
-                        BlockPos leavePose = pos.offset(direction).down(t);
-                        if (world.getBlockState(leavePose).isIn(GoodEndingTags.CYPRESS_REPLACEABLES) || world.getBlockState(leavePose).getMaterial().isReplaceable() || world.getBlockState(leavePose).isIn(BlockTags.LEAVES)) {
-                            world.setBlockState(leavePose, leaveState.with(LeavesBlock.WATERLOGGED, world.getBlockState(leavePose).isOf(Blocks.WATER)), 19);
+                if (world.isStateAtPosition(pos.relative(direction), DripstoneUtils::isEmptyOrWater)) {
+                    for (int t = 0; t < Mth.nextInt(random, 2, 5); t++) {
+                        BlockPos leavePose = pos.relative(direction).below(t);
+                        if (world.getBlockState(leavePose).is(GoodEndingTags.CYPRESS_REPLACEABLES) || world.getBlockState(leavePose).canBeReplaced() || world.getBlockState(leavePose).is(BlockTags.LEAVES)){
+                            world.setBlock(leavePose, leaveState.setValue(LeavesBlock.WATERLOGGED, world.getBlockState(leavePose).is(Blocks.WATER)), 19);
                             leavePoses.add(leavePose);
                         }
                     }
@@ -108,13 +108,13 @@ public class CypressTreeFeature extends Feature<WaterTreeFeatureConfig> {
         return true;
     }
 
-    public boolean canGrow(StructureWorldAccess world, BlockPos blockPos) {
+    public boolean canGrow(WorldGenLevel world, BlockPos blockPos) {
         int range = 3;
         boolean flag = false;
         for (int x = -range; x <= range; x++) {
             for (int z = -range; z <= range; z++) {
                 BlockPos pos = new BlockPos(blockPos.getX() + x, blockPos.getY(), blockPos.getZ() + z);
-                if (world.testBlockState(pos, DripstoneHelper::canGenerateOrLava)) {
+                if (world.isStateAtPosition(pos, DripstoneUtils::isEmptyOrWaterOrLava)) {
                     break;
                 }
                 flag = true;
@@ -123,12 +123,12 @@ public class CypressTreeFeature extends Feature<WaterTreeFeatureConfig> {
         return flag;
     }
 
-    public boolean branchingRoot(StructureWorldAccess world, BlockPos blockPos, Block block, Random random, Direction direction, int tries) {
-        BlockPos belowPos = blockPos.down();
+    public boolean branchingRoot(WorldGenLevel world, BlockPos blockPos, Block block, RandomSource random, Direction direction, int tries) {
+        BlockPos belowPos = blockPos.below();
         if (tries == 2) return this.repeatPlace(world, blockPos, block);
-        BlockPos finalPos = random.nextInt(3) != 0 ? belowPos : blockPos.offset(direction);
-        if ((world.getBlockState(finalPos).isIn(GoodEndingTags.CYPRESS_REPLACEABLES) || world.getBlockState(finalPos).getMaterial().isReplaceable() || world.getBlockState(finalPos).isOf(Blocks.WATER)) && tries < 2) {
-            world.setBlockState(finalPos, block.getDefaultState(), 19);
+        BlockPos finalPos = random.nextInt(3) != 0 ? belowPos : blockPos.relative(direction);
+        if ((world.getBlockState(finalPos).is(GoodEndingTags.CYPRESS_REPLACEABLES) || world.getBlockState(finalPos).canBeReplaced() || world.getBlockState(finalPos).is(Blocks.WATER)) && tries < 2) {
+            world.setBlock(finalPos, block.defaultBlockState(), 19);
             tries++;
             return branchingRoot(world, finalPos, block, random, direction, tries);
         } else {
@@ -136,43 +136,43 @@ public class CypressTreeFeature extends Feature<WaterTreeFeatureConfig> {
         }
     }
 
-    public boolean repeatPlace(StructureWorldAccess world, BlockPos blockPos, Block block) {
-        BlockPos belowPos = blockPos.down();
-        if (world.getBlockState(belowPos).isIn(GoodEndingTags.CYPRESS_REPLACEABLES) || world.getBlockState(belowPos).isOf(Blocks.WATER) || world.getBlockState(belowPos).getMaterial().isReplaceable()) {
-            world.setBlockState(belowPos, block.getDefaultState(), 19);
+    public boolean repeatPlace(WorldGenLevel world, BlockPos blockPos, Block block) {
+        BlockPos belowPos = blockPos.below();
+        if (world.getBlockState(belowPos).is(GoodEndingTags.CYPRESS_REPLACEABLES) || world.getBlockState(belowPos).is(Blocks.WATER) || world.getBlockState(belowPos).canBeReplaced()) {
+            world.setBlock(belowPos, block.defaultBlockState(), 19);
             return this.repeatPlace(world, belowPos, block);
         } else {
             return true;
         }
     }
 
-    public void generateVines(StructureWorldAccess world, float probability, Random random, List<BlockPos> leavePositions) {
+    public void generateVines(WorldGenLevel world, float probability, RandomSource random, List<BlockPos> leavePositions) {
         leavePositions.forEach((pos) -> {
             BlockPos blockPos;
             if (random.nextFloat() < probability) {
                 blockPos = pos.west();
-                if (world.isAir(blockPos)) {
+                if (world.isEmptyBlock(blockPos)) {
                     placeVines(blockPos, VineBlock.EAST, world);
                 }
             }
 
             if (random.nextFloat() < probability) {
                 blockPos = pos.east();
-                if (world.isAir(blockPos)) {
+                if (world.isEmptyBlock(blockPos)) {
                     placeVines(blockPos, VineBlock.WEST, world);
                 }
             }
 
             if (random.nextFloat() < probability) {
                 blockPos = pos.north();
-                if (world.isAir(blockPos)) {
+                if (world.isEmptyBlock(blockPos)) {
                     placeVines(blockPos, VineBlock.SOUTH, world);
                 }
             }
 
             if (random.nextFloat() < probability) {
                 blockPos = pos.south();
-                if (world.isAir(blockPos)) {
+                if (world.isEmptyBlock(blockPos)) {
                     placeVines(blockPos, VineBlock.NORTH, world);
                 }
             }
@@ -180,13 +180,13 @@ public class CypressTreeFeature extends Feature<WaterTreeFeatureConfig> {
         });
     }
 
-    private static void placeVines(BlockPos pos, BooleanProperty faceProperty, StructureWorldAccess world) {
-        world.setBlockState(pos, Blocks.VINE.getDefaultState().with(faceProperty, true), 19);
+    private static void placeVines(BlockPos pos, BooleanProperty faceProperty, WorldGenLevel world) {
+        world.setBlock(pos, Blocks.VINE.defaultBlockState().setValue(faceProperty, true), 19);
         int i = 4;
 
-        for (pos = pos.down(); world.isAir(pos) && i > 0; --i) {
-            world.setBlockState(pos, Blocks.VINE.getDefaultState().with(faceProperty, true), 19);
-            pos = pos.down();
+        for (pos = pos.below(); world.isEmptyBlock(pos) && i > 0; --i) {
+            world.setBlock(pos, Blocks.VINE.defaultBlockState().setValue(faceProperty, true), 19);
+            pos = pos.below();
         }
 
     }

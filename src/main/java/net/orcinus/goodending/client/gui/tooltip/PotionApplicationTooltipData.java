@@ -1,9 +1,9 @@
 package net.orcinus.goodending.client.gui.tooltip;
 
-import net.minecraft.client.item.TooltipData;
-import net.minecraft.potion.Potion;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
+import net.minecraft.world.item.alchemy.Potion;
 
-public class PotionApplicationTooltipData implements TooltipData {
+public class PotionApplicationTooltipData implements TooltipComponent {
     private final Potion potion;
 
     public PotionApplicationTooltipData(Potion potion) {

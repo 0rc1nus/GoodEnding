@@ -1,45 +1,45 @@
 package net.orcinus.goodending.entities;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityData;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Flutterer;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.control.FlightMoveControl;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.pathing.BirdNavigation;
-import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUsage;
-import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.intprovider.UniformIntProvider;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.LightType;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.FlyingMoveControl;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.animal.FlyingAnimal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.AABB;
 import net.orcinus.goodending.entities.ai.FlyAroundGoal;
 import net.orcinus.goodending.init.GoodEndingCriteriaTriggers;
 import net.orcinus.goodending.init.GoodEndingItems;
@@ -49,128 +49,127 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-public class FireflyEntity extends PathAwareEntity implements Flutterer {
-    private static final TrackedData<Integer> COUNT = DataTracker.registerData(FireflyEntity.class, TrackedDataHandlerRegistry.INTEGER);
-    private static final TrackedData<Boolean> FROM_BOTTLE = DataTracker.registerData(FireflyEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+public class FireflyEntity extends PathfinderMob implements FlyingAnimal {
+    private static final EntityDataAccessor<Integer> COUNT = SynchedEntityData.defineId(FireflyEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> FROM_BOTTLE = SynchedEntityData.defineId(FireflyEntity.class, EntityDataSerializers.BOOLEAN);
 
-    public FireflyEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
+    public FireflyEntity(EntityType<? extends PathfinderMob> entityType, Level world) {
         super(entityType, world);
-        this.moveControl = new FlightMoveControl(this, 20, true);
+        this.moveControl = new FlyingMoveControl(this, 20, true);
     }
 
     @Nullable
     @Override
-    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt) {
-        this.setCount(this.getRandom().nextBetween(1,3));
-        return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType spawnReason, @Nullable SpawnGroupData entityData, @Nullable CompoundTag entityNbt) {
+        this.setCount(this.getRandom().nextIntBetweenInclusive(1,3));
+        return super.finalizeSpawn(world, difficulty, spawnReason, entityData, entityNbt);
     }
 
     @Override
-    protected void initDataTracker() {
-        super.initDataTracker();
-        this.dataTracker.startTracking(COUNT, 1);
-        this.dataTracker.startTracking(FROM_BOTTLE, false);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(COUNT, 1);
+        this.entityData.define(FROM_BOTTLE, false);
     }
 
     @Override
-    public void writeCustomDataToNbt(NbtCompound nbt) {
-        super.writeCustomDataToNbt(nbt);
+    public void addAdditionalSaveData(CompoundTag nbt) {
+        super.addAdditionalSaveData(nbt);
         nbt.putInt("Count", this.getCount());
         nbt.putBoolean("FromBottle", this.isFromBottle());
     }
 
     @Override
-    public void readCustomDataFromNbt(NbtCompound nbt) {
-        super.readCustomDataFromNbt(nbt);
+    public void readAdditionalSaveData(CompoundTag nbt) {
+        super.readAdditionalSaveData(nbt);
         this.setCount(nbt.getInt("Count"));
         this.setFromBottle(nbt.getBoolean("FromBottle"));
     }
 
     public boolean isFromBottle() {
-        return this.dataTracker.get(FROM_BOTTLE);
+        return this.entityData.get(FROM_BOTTLE);
     }
 
     public void setFromBottle(boolean fromBottle) {
-        this.dataTracker.set(FROM_BOTTLE, fromBottle);
+        this.entityData.set(FROM_BOTTLE, fromBottle);
     }
 
     public void setCount(int count) {
-        this.dataTracker.set(COUNT, count);
+        this.entityData.set(COUNT, count);
     }
 
     public int getCount() {
-        return this.dataTracker.get(COUNT);
+        return this.entityData.get(COUNT);
     }
 
     @Override
-    protected EntityNavigation createNavigation(World world) {
-        BirdNavigation birdNavigation = new BirdNavigation(this, world);
-        birdNavigation.setCanPathThroughDoors(false);
-        birdNavigation.setCanSwim(true);
-        birdNavigation.setCanEnterOpenDoors(true);
+    protected PathNavigation createNavigation(Level world) {
+        FlyingPathNavigation birdNavigation = new FlyingPathNavigation(this, world);
+        birdNavigation.setCanOpenDoors(false);
+        birdNavigation.setCanFloat(true);
+        birdNavigation.setCanPassDoors(true);
         return birdNavigation;
     }
 
     @Override
-    public boolean handleFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource) {
+    public boolean causeFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource) {
         return false;
     }
 
     @Override
-    protected void fall(double heightDifference, boolean onGround, BlockState state, BlockPos landedPosition) {
+    protected void checkFallDamage(double heightDifference, boolean onGround, BlockState state, BlockPos landedPosition) {
     }
 
     @Override
-    protected void initGoals() {
-        this.goalSelector.add(1, new FlyAroundGoal(this));
-        this.goalSelector.add(2, new SwimGoal(this));
+    protected void registerGoals() {
+        this.goalSelector.addGoal(1, new FlyAroundGoal(this));
+        this.goalSelector.addGoal(2, new FloatGoal(this));
     }
 
     @Override
-    public boolean doesNotCollide(double offsetX, double offsetY, double offsetZ) {
+    public boolean isFree(double p_20230_, double p_20231_, double p_20232_) {
         return true;
     }
 
     @Override
-    protected void knockback(LivingEntity target) {
-        target.takeKnockback(0, this.getX(), this.getZ());
+    protected void blockedByShield(LivingEntity target) {
+        target.knockback(0, this.getX(), this.getZ());
     }
 
     @Override
-    protected ActionResult interactMob(PlayerEntity player, Hand hand) {
-        ItemStack stack = player.getStackInHand(hand);
-        if (stack.isOf(Items.GLASS_BOTTLE) && this.getCount() > 0) {
-            this.world.playSound(player, player.getX(), player.getY(), player.getZ(), GoodEndingSoundEvents.ITEM_FIREFLY_BOTTLE_FILL, SoundCategory.NEUTRAL, 2.0f, 1.0f);
-            if (!this.world.isClient()) {
-                if (player instanceof ServerPlayerEntity serverPlayer) {
+    protected InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack stack = player.getItemInHand(hand);
+        if (stack.is(Items.GLASS_BOTTLE) && this.getCount() > 0) {
+            this.level().playSound(player, player.getX(), player.getY(), player.getZ(), GoodEndingSoundEvents.ITEM_FIREFLY_BOTTLE_FILL, SoundSource.NEUTRAL, 2.0f, 1.0f);
+            if (!this.level().isClientSide()) {
+                if (player instanceof ServerPlayer serverPlayer) {
                     GoodEndingCriteriaTriggers.CAPTURE_FIREFLY.trigger(serverPlayer);
                 }
                 this.setCount(this.getCount() - 1);
-                this.emitGameEvent(GameEvent.ENTITY_INTERACT);
-                player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, new ItemStack(GoodEndingItems.FIREFLY_BOTTLE)));
+                this.gameEvent(GameEvent.ENTITY_INTERACT);
+                player.setItemInHand(hand, ItemUtils.createFilledResult(stack, player, new ItemStack(GoodEndingItems.FIREFLY_BOTTLE)));
                 if (this.getCount() == 0) this.discard();
             }
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        if (stack.isOf(GoodEndingItems.FIREFLY_BOTTLE) && this.getCount() < 3 && !this.world.isClient()) {
-            if (!this.world.isClient()) {
+        if (stack.is(GoodEndingItems.FIREFLY_BOTTLE) && this.getCount() < 3 && !this.level().isClientSide()) {
+            if (!this.level().isClientSide()) {
                 this.setCount(this.getCount() + 1);
-                this.emitGameEvent(GameEvent.ENTITY_INTERACT);
+                this.gameEvent(GameEvent.ENTITY_INTERACT);
                 this.setFromBottle(true);
-                player.setStackInHand(hand, ItemUsage.exchangeStack(stack, player, new ItemStack(Items.GLASS_BOTTLE)));
+                player.setItemInHand(hand, ItemUtils.createFilledResult(stack, player, new ItemStack(Items.GLASS_BOTTLE)));
             }
-            this.world.playSound(null, this.getBlockPos(), GoodEndingSoundEvents.ITEM_FIREFLY_BOTTLE_EMPTY, SoundCategory.NEUTRAL, 2.0F, 1.0F);
-            return ActionResult.SUCCESS;
+            this.level().playSound(null, this.blockPosition(), GoodEndingSoundEvents.ITEM_FIREFLY_BOTTLE_EMPTY, SoundSource.NEUTRAL, 2.0F, 1.0F);
+            return InteractionResult.SUCCESS;
         }
-
-        return super.interactMob(player, hand);
+        return super.mobInteract(player, hand);
     }
 
     @Override
-    public void tickMovement() {
-        super.tickMovement();
-        if (this.world.isDay() && !this.world.isClient()) {
-            this.world.getNonSpectatingEntities(PlayerEntity.class, new Box(this.getBlockPos()).expand(16.0D)).stream().filter(Objects::isNull).forEach(player -> this.discard());
+    public void aiStep() {
+        super.aiStep();
+        if (this.level().isDay() && !this.level().isClientSide) {
+            this.level().getEntitiesOfClass(Player.class, new AABB(this.blockPosition()).inflate(16.0D)).stream().filter(Objects::isNull).forEach(player -> this.discard());
         }
     }
 
@@ -179,22 +178,22 @@ public class FireflyEntity extends PathAwareEntity implements Flutterer {
         super.tick();
 
         int count = this.getCount();
-        BlockPos.Mutable mutable = new BlockPos.Mutable();
+        BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
         float width = 1 + (count - 1) * 0.5F;
-        Random random = this.getWorld().random;
+        RandomSource random = this.level().random;
         double j = random.nextGaussian() * 0.025;
         double k = random.nextGaussian() * 0.025;
         double l = random.nextGaussian() * 0.025;
 
         if (this.isAlive()) {
-            if (world.getTimeOfDay() < 12000 && world.getTimeOfDay() > 0) {
-                mutable.set(this.getX() + MathHelper.nextBetween(random, -0.25f, 0.25f), this.getBlockPos().getY(), this.getZ() + MathHelper.nextBetween(random, -0.25f, 0.25f));
+            if (this.level().getDayTime() < 12000 && this.level().getDayTime() > 0) {
+                mutable.set(this.getX() + Mth.randomBetween(random, -0.25f, 0.25f), this.blockPosition().getY(), this.getZ() + Mth.randomBetween(random, -0.25f, 0.25f));
                 for (int i = 0; i < 0.5; i++) {
                     if (this.random.nextFloat() < 0.01F) this.addParticle(mutable, random, j, k, l);
                 }
             }
             else {
-                mutable.set(this.getX() + MathHelper.nextBetween(random, -width, width), this.getBlockPos().getY(), this.getZ() + MathHelper.nextBetween(random, -width, width));
+                mutable.set(this.getX() + Mth.randomBetween(random, -width, width), this.blockPosition().getY(), this.getZ() + Mth.randomBetween(random, -width, width));
                 for (int i = 0; i < count; i++) {
                     if (this.random.nextFloat() < 0.1F) {
                         this.addParticle(mutable, random, j, k, l);
@@ -205,33 +204,33 @@ public class FireflyEntity extends PathAwareEntity implements Flutterer {
         }
     }
 
-    private void addParticle(BlockPos.Mutable mutable, Random random, double j, double k, double l) {
-        this.world.addParticle(GoodEndingParticleTypes.FIREFLY, mutable.getX() + random.nextDouble(), this.getY() + random.nextDouble(), mutable.getZ() + random.nextDouble(), j, k, l);
+    private void addParticle(BlockPos.MutableBlockPos mutable, RandomSource random, double j, double k, double l) {
+        this.level().addParticle(GoodEndingParticleTypes.FIREFLY, mutable.getX() + random.nextDouble(), this.getY() + random.nextDouble(), mutable.getZ() + random.nextDouble(), j, k, l);
     }
 
-    public static DefaultAttributeContainer.Builder createFireflyAttributes() {
-        return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 6.0).add(EntityAttributes.GENERIC_FLYING_SPEED, 0.1f).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.1f).add(EntityAttributes.GENERIC_FOLLOW_RANGE, 48.0);
+    public static AttributeSupplier.Builder createFireflyAttributes() {
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 6.0).add(Attributes.FLYING_SPEED, 0.1f).add(Attributes.MOVEMENT_SPEED, 0.1f).add(Attributes.FOLLOW_RANGE, 48.0);
     }
 
-    public static boolean canSpawn(EntityType<FireflyEntity> entity, ServerWorldAccess world, SpawnReason reason, BlockPos pos, Random random) {
-        return world.toServerWorld().isNight() && world.getLightLevel(LightType.BLOCK, pos) < UniformIntProvider.create(0, 7).get(random) && world.getBlockState(pos.down()).isIn(BlockTags.ANIMALS_SPAWNABLE_ON);
-    }
-
-    @Override
-    protected void pushAway(Entity entity) {
+    public static boolean canSpawn(EntityType<FireflyEntity> entity, ServerLevelAccessor world, MobSpawnType reason, BlockPos pos, RandomSource random) {
+        return world.getLevel().isNight() && world.getBrightness(LightLayer.BLOCK, pos) < UniformInt.of(0, 7).sample(random) && world.getBlockState(pos.below()).is(BlockTags.ANIMALS_SPAWNABLE_ON);
     }
 
     @Override
-    protected void tickCramming() {
+    protected void doPush(Entity p_20971_) {
     }
 
     @Override
-    public boolean canBeLeashedBy(PlayerEntity player) {
+    protected void pushEntities() {
+    }
+
+    @Override
+    public boolean canBeLeashed(Player p_21418_) {
         return false;
     }
 
     @Override
-    protected boolean canStartRiding(Entity entity) {
+    public boolean startRiding(Entity p_20330_) {
         return false;
     }
 
@@ -241,39 +240,39 @@ public class FireflyEntity extends PathAwareEntity implements Flutterer {
     }
 
     @Override
-    public boolean cannotDespawn() {
-        return true;
+    public boolean removeWhenFarAway(double p_21542_) {
+        return !this.isFromBottle();
     }
 
     @Override
-    public boolean canImmediatelyDespawn(double distanceSquared) {
-        return !this.isFromBottle();
+    public boolean requiresCustomPersistence() {
+        return true;
     }
 
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        if (world.getTimeOfDay() < 12000 && world.getTimeOfDay() > 0) return null;
+        if (this.level().getDayTime() < 12000 && this.level().getDayTime() > 0) return null;
         return GoodEndingSoundEvents.ENTITY_FIREFLY_SWARM_IDLE;
     }
 
     @Override
-    public int getMinAmbientSoundDelay() {
+    public int getAmbientSoundInterval() {
         return 200;
     }
 
     @Override
-    public boolean isInAir() {
-        return !this.onGround;
+    public boolean isFlying() {
+        return !this.onGround();
     }
 
     @Override
-    public boolean occludeVibrationSignals() {
+    public boolean dampensVibrations() {
         return true;
     }
 
     @Override
-    protected MoveEffect getMoveEffect() {
-        return MoveEffect.NONE;
+    protected MovementEmission getMovementEmission() {
+        return MovementEmission.NONE;
     }
 }

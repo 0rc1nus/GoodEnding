@@ -1,7 +1,7 @@
 package net.orcinus.goodending.entities.ai;
 
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.orcinus.goodending.entities.MarshEntity;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,18 +14,18 @@ public class FollowMobWithEffectGoal extends Goal {
 
     public FollowMobWithEffectGoal(MarshEntity marsh) {
         this.marsh = marsh;
-        this.setControls(EnumSet.of(Goal.Control.MOVE, Goal.Control.LOOK));
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
     @Override
-    public boolean canStart() {
+    public boolean canUse() {
         this.entity = this.findMate();
         return this.entity != null;
     }
 
     @Override
-    public boolean shouldContinue() {
-        return this.entity.isAlive() && !this.entity.getActiveStatusEffects().isEmpty();
+    public boolean canContinueToUse() {
+        return this.entity.isAlive() && !this.entity.getActiveEffectsMap().isEmpty();
     }
 
     @Override
@@ -35,18 +35,18 @@ public class FollowMobWithEffectGoal extends Goal {
 
     @Override
     public void tick() {
-        this.marsh.getLookControl().lookAt(this.entity, 10.0f, this.marsh.getMaxLookPitchChange());
-        this.marsh.getNavigation().startMovingTo(this.entity, 1.2D);
+        this.marsh.getLookControl().setLookAt(this.entity, 10.0f, this.marsh.getMaxHeadXRot());
+        this.marsh.getNavigation().moveTo(this.entity, 1.2D);
     }
 
     @Nullable
     private LivingEntity findMate() {
         double d = Double.MAX_VALUE;
         LivingEntity target = null;
-        for (LivingEntity targets : this.marsh.world.getEntitiesByClass(LivingEntity.class, this.marsh.getBoundingBox().expand(8.0D), livingEntity -> livingEntity.getUuid() != this.marsh.getUuid() && !livingEntity.getActiveStatusEffects().isEmpty())) {
-            if (!(this.marsh.squaredDistanceTo(targets) < d)) continue;
+        for (LivingEntity targets : this.marsh.level().getEntitiesOfClass(LivingEntity.class, this.marsh.getBoundingBox().inflate(8.0D), livingEntity -> livingEntity.getUUID() != this.marsh.getUUID() && !livingEntity.getActiveEffectsMap().isEmpty())) {
+            if (!(this.marsh.distanceToSqr(targets) < d)) continue;
             target = targets;
-            d = this.marsh.squaredDistanceTo(targets);
+            d = this.marsh.distanceToSqr(targets);
         }
         return target;
     }

@@ -2,25 +2,25 @@ package net.orcinus.goodending.mixin.client;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.TexturedRenderLayers;
-import net.minecraft.client.util.SpriteIdentifier;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.SignType;
+import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.state.properties.WoodType;
 import net.orcinus.goodending.GoodEnding;
-import net.orcinus.goodending.util.GoodEndingSignType;
+import net.orcinus.goodending.init.GoodEndingSignTypes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Environment(EnvType.CLIENT)
-@Mixin(TexturedRenderLayers.class)
+@Mixin(Sheets.class)
 public class TexturedRenderLayersMixin {
 
-    @Inject(at = @At("HEAD"), method = "createSignTextureId", cancellable = true)
-    private static void GE$createSignTextureId(SignType type, CallbackInfoReturnable<SpriteIdentifier> cir) {
-        if (type instanceof GoodEndingSignType signType) {
-            cir.setReturnValue(new SpriteIdentifier(TexturedRenderLayers.SIGNS_ATLAS_TEXTURE, new Identifier(GoodEnding.MODID, "entity/signs/%s".formatted(signType.getId()))));
+    @Inject(at = @At("HEAD"), method = "createSignMaterial", cancellable = true)
+    private static void GE$createSignTextureId(WoodType type, CallbackInfoReturnable<Material> cir) {
+        if (GoodEndingSignTypes.VALUES.contains(type)) {
+            cir.setReturnValue(new Material(Sheets.SIGN_SHEET, new ResourceLocation(GoodEnding.MODID, "entity/signs/%s".formatted(type.name()))));
         }
     }
 

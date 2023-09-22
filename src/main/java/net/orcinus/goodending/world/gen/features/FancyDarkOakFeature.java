@@ -2,21 +2,21 @@ package net.orcinus.goodending.world.gen.features;
 
 import com.google.common.collect.Lists;
 import com.mojang.serialization.Codec;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.LeavesBlock;
-import net.minecraft.block.PillarBlock;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.intprovider.UniformIntProvider;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.StructureWorldAccess;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.util.DripstoneHelper;
-import net.minecraft.world.gen.feature.util.FeatureContext;
-import net.orcinus.goodending.blocks.HangingLeavesBlock;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.GrowingPlantHeadBlock;
+import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.levelgen.feature.DripstoneUtils;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.orcinus.goodending.init.GoodEndingBlocks;
 import net.orcinus.goodending.world.gen.features.config.FancyDarkOakTreeConfig;
 
@@ -30,13 +30,13 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakTreeConfig> {
     }
 
     @Override
-    public boolean generate(FeatureContext<FancyDarkOakTreeConfig> context) {
-        BlockPos blockPos = context.getOrigin();
-        Random random = context.getRandom();
-        StructureWorldAccess world = context.getWorld();
+    public boolean place(FeaturePlaceContext<FancyDarkOakTreeConfig> context) {
+        BlockPos blockPos = context.origin();
+        RandomSource random = context.random();
+        WorldGenLevel world = context.level();
         boolean huge = false;
         int height = 7;
-        if (context.getConfig().isFancy) {
+        if (context.config().isFancy) {
             height *= 2;
             huge = true;
         }
@@ -44,10 +44,10 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakTreeConfig> {
         List<BlockPos> list = Lists.newArrayList();
         List<BlockPos> leavePoses = Lists.newArrayList();
         List<BlockPos> stemPoses = Lists.newArrayList();
-        if (!world.getBlockState(blockPos.down()).isIn(BlockTags.DIRT)) {
+        if (!world.getBlockState(blockPos.below()).is(BlockTags.DIRT)) {
             return false;
         } else {
-            Optional<BlockPos> initialPos = this.getInitialPos(context.getConfig(), world, blockPos, baseRadius, 1);
+            Optional<BlockPos> initialPos = this.getInitialPos(context.config(), world, blockPos, baseRadius, 1);
             if (initialPos.isEmpty()) {
                 return false;
             } else {
@@ -65,24 +65,27 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakTreeConfig> {
                                 boolean logFlag2 = (x == corner || x == -corner) && (z == corner || z == -corner) && y > 3;
                                 if (logFlag || logFlag1 || logFlag2) continue;
                                 if (y > 5 && ((x == -corner && z == 0) || (x == corner && z == 0) || (x == 0 && z == -corner) || (x == 0 && z == corner))) {
-                                    for (Direction direction : Direction.Type.HORIZONTAL) {
-                                        BlockPos branchPos = blockPos.up(height - 1).offset(direction);
-                                        final int length = UniformIntProvider.create(1, 3).get(random);
+                                    for (Direction direction : Direction.Plane.HORIZONTAL) {
+                                        BlockPos branchPos = blockPos.above(height - 1).relative(direction);
+                                        final int length = UniformInt.of(1, 3).sample(random);
                                         for (int i = 0; i < length; i++) {
-                                            if (world.isAir(branchPos.offset(direction, i)) || world.getBlockState(branchPos.offset(direction, i)).getMaterial().isReplaceable()) {
-                                                world.setBlockState(branchPos.offset(direction, i), Blocks.DARK_OAK_LOG.getDefaultState().with(PillarBlock.AXIS, direction.getAxis()), 2);
+                                            if (world.isEmptyBlock(branchPos.relative(direction, i)) || world.getBlockState(branchPos.relative(direction, i)).canBeReplaced()) {
+                                                world.setBlock(branchPos.relative(direction, i), Blocks.DARK_OAK_LOG.defaultBlockState().setValue(RotatedPillarBlock.AXIS, direction.getAxis()), 2);
                                                 for (int t = 0; t < length; t++) {
-                                                    if (world.isAir(branchPos.offset(direction, length).up(t)) || world.getBlockState(branchPos.offset(direction, length).up(t)).getMaterial().isReplaceable()) {
-                                                        world.setBlockState(branchPos.offset(direction, length).up(t), Blocks.DARK_OAK_LOG.getDefaultState(), 19);
-                                                        list.add(branchPos.offset(direction, length).up(length));
+                                                    if (world.isEmptyBlock(branchPos.relative(direction, length).above(t)) || world.getBlockState(branchPos.relative(direction, length).above(t)).canBeReplaced()) {
+                                                        world.setBlock(branchPos.relative(direction, length).above(t), Blocks.DARK_OAK_LOG.defaultBlockState(), 19);
+                                                        /*
+                                                         * adding the branchPos to the list since it will be used to generate leaves later
+                                                         */
+                                                        list.add(branchPos.relative(direction, length).above(length));
                                                     }
                                                 }
                                             }
                                         }
                                     }
                                 }
-                                if (world.isAir(pos) || world.getBlockState(pos).getMaterial().isReplaceable()) {
-                                    world.setBlockState(pos, Blocks.DARK_OAK_LOG.getDefaultState(), 19);
+                                if (world.isEmptyBlock(pos) || world.getBlockState(pos).canBeReplaced()) {
+                                    world.setBlock(pos, Blocks.DARK_OAK_LOG.defaultBlockState(), 19);
                                     if (huge && y > height - 2) {
                                         stemPoses.add(pos);
                                     }
@@ -94,12 +97,12 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakTreeConfig> {
                 for (BlockPos stemPos : stemPoses) {
                     for (int x = -2; x <= 2; x++) {
                         for (int z = -2; z <= 2; z++) {
-                            int stemLength = MathHelper.nextInt(random, 1, 4);
+                            int stemLength = Mth.nextInt(random, 1, 4);
                             for (int y = 0; y <= stemLength; y++) {
                                 BlockPos pos = new BlockPos(stemPos.getX() + x, stemPos.getY() - y, stemPos.getZ() + z);
                                 if (!(x * x + z * z <= 4)) continue;
-                                if (world.isAir(pos)) {
-                                    world.setBlockState(pos, Blocks.DARK_OAK_LOG.getDefaultState(), 19);
+                                if (world.isEmptyBlock(pos)) {
+                                    world.setBlock(pos, Blocks.DARK_OAK_LOG.defaultBlockState(), 19);
                                 }
                             }
                         }
@@ -115,8 +118,8 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakTreeConfig> {
                                 boolean flag1 = y == 1 && !(x > -leaveRadius + random.nextInt(2) && x < leaveRadius - random.nextInt(2) && z > -leaveRadius + random.nextInt(2) && z < leaveRadius - random.nextInt(2));
                                 boolean flag2 = y == -1 && !(x * x + z * z <= 4);
                                 if (flag || flag1 || flag2) continue;
-                                if (world.testBlockState(leavePos, DripstoneHelper::canGenerate)) {
-                                    world.setBlockState(leavePos, Blocks.DARK_OAK_LEAVES.getDefaultState().with(LeavesBlock.DISTANCE, 1), 19);
+                                if (world.isStateAtPosition(leavePos, DripstoneUtils::isEmptyOrWater)) {
+                                    world.setBlock(leavePos, Blocks.DARK_OAK_LEAVES.defaultBlockState().setValue(LeavesBlock.DISTANCE, 1), 19);
                                 }
                                 leavePoses.add(leavePos);
                             }
@@ -124,26 +127,26 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakTreeConfig> {
                     }
                 }
                 for (BlockPos densePos : leavePoses) {
-                    world.setBlockState(densePos, GoodEndingBlocks.DENSE_DARK_OAK_LEAVES.getDefaultState().with(LeavesBlock.DISTANCE, 1), 19);
+                    world.setBlock(densePos, GoodEndingBlocks.DENSE_DARK_OAK_LEAVES.defaultBlockState().setValue(LeavesBlock.DISTANCE, 1), 19);
                     break;
                 }
                 for (BlockPos pos : leavePoses) {
-                    if (random.nextFloat() < 0.15F && world.testBlockState(pos.down(), AbstractBlock.AbstractBlockState::isAir) && world.testBlockState(pos, blockState -> blockState.isOf(Blocks.DARK_OAK_LEAVES))) {
-                        int branchHeight = (int) MathHelper.nextFloat(random, height * 0.25F, height * 0.75F);
+                    if (random.nextFloat() < 0.15F && world.isStateAtPosition(pos.below(), BlockBehaviour.BlockStateBase::isAir) && world.isStateAtPosition(pos, blockState -> blockState.is(Blocks.DARK_OAK_LEAVES))) {
+                        int branchHeight = (int) Mth.nextFloat(random, height * 0.25F, height * 0.75F);
                         for (int i = 0; i <= branchHeight; i++) {
-                            BlockPos placePos = pos.down(i);
+                            BlockPos placePos = pos.below(i);
                             if (i == branchHeight) {
-                                if (world.testBlockState(placePos, AbstractBlock.AbstractBlockState::isAir)) {
-                                    world.setBlockState(placePos, GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.getDefaultState().with(HangingLeavesBlock.AGE, 25), 19);
+                                if (world.isStateAtPosition(placePos, BlockBehaviour.BlockStateBase::isAir)) {
+                                    world.setBlock(placePos, GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.defaultBlockState().setValue(GrowingPlantHeadBlock.AGE, 25), 19);
                                     break;
                                 }
                             }
-                            if (world.getBlockState(placePos.down()).isIn(BlockTags.LOGS)) {
-                                world.setBlockState(placePos, GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.getDefaultState().with(HangingLeavesBlock.AGE, 25), 19);
+                            if (world.getBlockState(placePos.below()).is(BlockTags.LOGS)) {
+                                world.setBlock(placePos, GoodEndingBlocks.HANGING_DARK_OAK_LEAVES.defaultBlockState().setValue(GrowingPlantHeadBlock.AGE, 25), 19);
                                 break;
                             }
-                            if (world.testBlockState(placePos, AbstractBlock.AbstractBlockState::isAir)) {
-                                world.setBlockState(placePos, GoodEndingBlocks.HANGING_DARK_OAK_LEAVES_PLANT.getDefaultState(), 19);
+                            if (world.isStateAtPosition(placePos, BlockBehaviour.BlockStateBase::isAir)) {
+                                world.setBlock(placePos, GoodEndingBlocks.HANGING_DARK_OAK_LEAVES_PLANT.defaultBlockState(), 19);
                             }
                         }
                     }
@@ -153,19 +156,19 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakTreeConfig> {
         }
     }
 
-    public Optional<BlockPos> getInitialPos(FancyDarkOakTreeConfig config, StructureWorldAccess world, BlockPos originPos, int baseRadius, int count) {
+    public Optional<BlockPos> getInitialPos(FancyDarkOakTreeConfig config, WorldGenLevel world, BlockPos originPos, int baseRadius, int count) {
         if (config.planted) {
             return Optional.of(originPos);
         }
         for (int x = -baseRadius; x <= baseRadius; x++) {
             for (int z = -baseRadius; z <= baseRadius; z++) {
                 BlockPos pos = new BlockPos(originPos.getX() + x, originPos.getY(), originPos.getZ() + z);
-                if (world.isAir(pos.down())) {
+                if (world.isEmptyBlock(pos.below())) {
                     if (count > 4) {
                         return Optional.empty();
                     }
                     count++;
-                    return this.getInitialPos(config, world, originPos.down(), baseRadius, count);
+                    return this.getInitialPos(config, world, originPos.below(), baseRadius, count);
                 }
             }
         }

@@ -1,45 +1,45 @@
 package net.orcinus.goodending.entities;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.AnimationState;
-import net.minecraft.entity.EntityPose;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.Flutterer;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.ai.control.FlightMoveControl;
-import net.minecraft.entity.ai.goal.EscapeDangerGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.ai.pathing.BirdNavigation;
-import net.minecraft.entity.ai.pathing.EntityNavigation;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.entity.mob.PathAwareEntity;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtHelper;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.util.Formatting;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.AnimationState;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.FlyingMoveControl;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.PanicGoal;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.animal.FlyingAnimal;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.orcinus.goodending.entities.ai.FindWoodGoal;
 import net.orcinus.goodending.entities.ai.FlyAroundGoal;
 import net.orcinus.goodending.entities.ai.MoveToWoodGoal;
 import net.orcinus.goodending.init.GoodEndingSoundEvents;
 import org.jetbrains.annotations.Nullable;
 
-public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
-    protected static final TrackedData<Direction> ATTACHED_FACE = DataTracker.registerData(WoodpeckerEntity.class, TrackedDataHandlerRegistry.FACING);
+public class WoodpeckerEntity extends PathfinderMob implements FlyingAnimal {
+    protected static final EntityDataAccessor<Direction> ATTACHED_FACE = SynchedEntityData.defineId(WoodpeckerEntity.class, EntityDataSerializers.DIRECTION);
     public float flapProgress;
     public float maxWingDeviation;
     public float prevMaxWingDeviation;
@@ -53,51 +53,51 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
     public final AnimationState standingAnimationState = new AnimationState();
     public final AnimationState flyingAnimationState = new AnimationState();
 
-    public WoodpeckerEntity(EntityType<? extends PathAwareEntity> entityType, World world) {
+    public WoodpeckerEntity(EntityType<? extends PathfinderMob> entityType, Level world) {
         super(entityType, world);
-        this.moveControl = new FlightMoveControl(this, 20, true);
-        this.setPose(EntityPose.FALL_FLYING);
+        this.moveControl = new FlyingMoveControl(this, 20, true);
+        this.setPose(Pose.FALL_FLYING);
     }
 
-    public static DefaultAttributeContainer.Builder createWoodPeckerAttributes() {
-        return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_MAX_HEALTH, 6.0)
-                .add(EntityAttributes.GENERIC_FLYING_SPEED, 0.4f)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.2f);
+    public static AttributeSupplier.Builder createWoodPeckerAttributes() {
+        return Mob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 6.0)
+                .add(Attributes.FLYING_SPEED, 0.4f)
+                .add(Attributes.MOVEMENT_SPEED, 0.2f);
     }
 
     @Override
-    protected void initDataTracker() {
-        super.initDataTracker();
-        this.dataTracker.startTracking(ATTACHED_FACE, Direction.DOWN);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(ATTACHED_FACE, Direction.DOWN);
     }
 
     public Direction getAttachedFace() {
-        return this.dataTracker.get(ATTACHED_FACE);
+        return this.entityData.get(ATTACHED_FACE);
     }
 
     public void setAttachedFace(Direction attachedFace) {
-        this.dataTracker.set(ATTACHED_FACE, attachedFace);
+        this.entityData.set(ATTACHED_FACE, attachedFace);
     }
 
     @Override
-    public void readCustomDataFromNbt(NbtCompound nbt) {
+    public void readAdditionalSaveData(CompoundTag nbt) {
         this.setWoodPos(null);
         if (nbt.contains("WoodPos")) {
-            this.setWoodPos(NbtHelper.toBlockPos(nbt.getCompound("WoodPos")));
+            this.setWoodPos(NbtUtils.readBlockPos(nbt.getCompound("WoodPos")));
         }
-        this.setAttachedFace(Direction.byId(nbt.getByte("AttachFace")));
+        this.setAttachedFace(Direction.from3DDataValue(nbt.getByte("AttachFace")));
         this.setPeckingWoodCooldown(nbt.getInt("PeckingWoodCooldownTicks"));
-        super.readCustomDataFromNbt(nbt);
+        super.readAdditionalSaveData(nbt);
     }
 
     @Override
-    public void writeCustomDataToNbt(NbtCompound nbt) {
-        super.writeCustomDataToNbt(nbt);
+    public void addAdditionalSaveData(CompoundTag nbt) {
+        super.addAdditionalSaveData(nbt);
         if (this.hasWood()) {
-            nbt.put("WoodPos", NbtHelper.fromBlockPos(this.getBlockPos()));
+            nbt.put("WoodPos", NbtUtils.writeBlockPos(this.blockPosition()));
         }
-        nbt.putByte("AttachFace", (byte) this.getAttachedFace().getId());
+        nbt.putByte("AttachFace", (byte) this.getAttachedFace().get3DDataValue());
         nbt.putInt("PeckingWoodCooldownTicks", this.getPeckingWoodCooldown());
     }
 
@@ -124,19 +124,19 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
 
     @Override
     public void tick() {
-        if (this.world.isClient()) {
-            if (this.getPose() == EntityPose.FALL_FLYING) {
-                this.flyingAnimationState.startIfNotRunning(this.age);
+        if (this.level().isClientSide) {
+            if (this.getPose() == Pose.FALL_FLYING) {
+                this.flyingAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.flyingAnimationState.stop();
             }
-            if (this.getPose() == EntityPose.STANDING) {
-                this.standingAnimationState.startIfNotRunning(this.age);
+            if (this.getPose() == Pose.STANDING) {
+                this.standingAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.standingAnimationState.stop();
             }
-            if (this.getPose() == EntityPose.DIGGING) {
-                this.peckingAnimationState.startIfNotRunning(this.age);
+            if (this.getPose() == Pose.DIGGING) {
+                this.peckingAnimationState.startIfStopped(this.tickCount);
             } else {
                 this.peckingAnimationState.stop();
             }
@@ -147,7 +147,7 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
             if (this.getWoodPos() == null && this.getAttachedFace() != Direction.DOWN) {
                 this.setAttachedFace(Direction.DOWN);
             }
-            if (this.getWoodPos() != null && !this.world.getBlockState(this.getWoodPos()).isIn(BlockTags.LOGS)) {
+            if (this.getWoodPos() != null && !this.level().getBlockState(this.getWoodPos()).is(BlockTags.LOGS)) {
                 this.setWoodPos(null);
             }
         }
@@ -155,50 +155,49 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
     }
 
     @Override
-    protected EntityNavigation createNavigation(World world) {
-        BirdNavigation birdNavigation = new BirdNavigation(this, world);
-        birdNavigation.setCanPathThroughDoors(false);
-        birdNavigation.setCanSwim(true);
-        birdNavigation.setCanEnterOpenDoors(true);
+    protected PathNavigation createNavigation(Level world) {
+        FlyingPathNavigation birdNavigation = new FlyingPathNavigation(this, world);
+        birdNavigation.setCanPassDoors(false);
+        birdNavigation.setCanFloat(true);
+        birdNavigation.setCanOpenDoors(true);
         return birdNavigation;
     }
 
     @Override
-    public void tickMovement() {
-        super.tickMovement();
+    public void aiStep() {
+        super.aiStep();
         this.flapWings();
     }
 
     @Override
-    protected void initGoals() {
-        this.goalSelector.add(1, new EscapeDangerGoal(this, 2.0));
-        this.goalSelector.add(2, new FlyAroundGoal(this));
-        this.goalSelector.add(3, new SwimGoal(this));
-        this.goalSelector.add(4, new FindWoodGoal(this));
-        this.goalSelector.add(5, new MoveToWoodGoal(this, random));
+    protected void registerGoals() {
+        this.goalSelector.addGoal(1, new PanicGoal(this, 2.0));
+        this.goalSelector.addGoal(2, new FlyAroundGoal(this));
+        this.goalSelector.addGoal(3, new FloatGoal(this));
+        this.goalSelector.addGoal(4, new FindWoodGoal(this));
+        this.goalSelector.addGoal(5, new MoveToWoodGoal(this, random));
     }
 
     private void flapWings() {
         this.prevFlapProgress = this.flapProgress;
         this.prevMaxWingDeviation = this.maxWingDeviation;
-        this.maxWingDeviation += (float)(this.onGround || this.hasVehicle() ? -1 : 4) * 0.3f;
-        this.maxWingDeviation = MathHelper.clamp(this.maxWingDeviation, 0.0f, 1.0f);
-        if (!this.onGround && this.flapSpeed < 1.0f) {
+        this.maxWingDeviation += (float)(this.onGround() || this.isPassenger() ? -1 : 4) * 0.3f;
+        this.maxWingDeviation = Mth.clamp(this.maxWingDeviation, 0.0f, 1.0f);
+        if (!this.onGround() && this.flapSpeed < 1.0f) {
             this.flapSpeed = 1.0f;
         }
         this.flapSpeed *= 0.9f;
-        Vec3d vec3d = this.getVelocity();
-        if (!this.onGround && vec3d.y < 0.0) {
-            this.setVelocity(vec3d.multiply(1.0, 0.6, 1.0));
+        Vec3 vec3d = this.getDeltaMovement();
+        if (!this.onGround() && vec3d.y < 0.0) {
+            this.setDeltaMovement(vec3d.multiply(1.0, 0.6, 1.0));
         }
         this.flapProgress += this.flapSpeed * 2.0f;
     }
 
     @Override
-    protected boolean hasWings() {
-        return this.speed > this.field_28640;
+    protected boolean isFlapping() {
+        return this.flyDist > this.field_28640;
     }
-
 
     @Override
     protected float getSoundVolume() {
@@ -209,7 +208,7 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
     @Override
     protected SoundEvent getAmbientSound() {
         if (this.hasCustomName()) {
-            String string = Formatting.strip(this.getName().getString());
+            String string = ChatFormatting.stripFormatting(this.getName().getString());
             if ("woody".equalsIgnoreCase(string)) return GoodEndingSoundEvents.ENTITY_WOODPECKER_WOODY_IDLE;
         }
         return GoodEndingSoundEvents.ENTITY_WOODPECKER_IDLE;
@@ -229,31 +228,31 @@ public class WoodpeckerEntity extends PathAwareEntity implements Flutterer {
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState state) {
-        this.playSound(SoundEvents.ENTITY_PARROT_STEP, 0.15f, 1.0f);
+        this.playSound(SoundEvents.PARROT_STEP, 0.15f, 1.0f);
     }
 
     @Override
-    protected void addFlapEffects() {
+    protected void onFlap() {
         this.playSound(GoodEndingSoundEvents.ENTITY_WOODPECKER_FLY, 0.15f, 1.0f);
-        this.field_28640 = this.speed + this.maxWingDeviation / 2.0f;
+        this.field_28640 = this.flyDist + this.flapSpeed / 2.0f;
     }
 
     @Override
-    public boolean isInAir() {
-        return !this.onGround;
+    public boolean isFlying() {
+        return !this.onGround();
     }
 
     @Override
-    public boolean handleFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource) {
+    public boolean causeFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource) {
         return false;
     }
 
     @Override
-    protected void fall(double heightDifference, boolean onGround, BlockState state, BlockPos landedPosition) {
+    protected void checkFallDamage(double heightDifference, boolean onGround, BlockState state, BlockPos landedPosition) {
     }
 
-    public static boolean canSpawn(EntityType<WoodpeckerEntity> entityType, ServerWorldAccess world, SpawnReason spawnType, BlockPos pos, Random randomSource) {
-        return world.getBlockState(pos.down()).isIn(BlockTags.PARROTS_SPAWNABLE_ON);
+    public static boolean canSpawn(EntityType<WoodpeckerEntity> entityType, ServerLevelAccessor world, MobSpawnType spawnType, BlockPos pos, RandomSource randomSource) {
+        return world.getBlockState(pos.below()).is(BlockTags.PARROTS_SPAWNABLE_ON);
     }
 
 }
