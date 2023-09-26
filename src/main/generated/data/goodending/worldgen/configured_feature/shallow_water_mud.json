@@ -1,0 +1,15 @@
+{
+  "type": "goodending:shallow_water",
+  "config": {
+    "chance": 0.25,
+    "decorate": true,
+    "max_tries": 6,
+    "state": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:mud"
+      }
+    },
+    "water_surface": false
+  }
+}

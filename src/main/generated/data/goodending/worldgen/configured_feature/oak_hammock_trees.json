@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:random_selector",
+  "config": {
+    "default": {
+      "feature": "goodending:fancy_dark_oak",
+      "placement": []
+    },
+    "features": [
+      {
+        "chance": 0.2,
+        "feature": "minecraft:fancy_oak_checked"
+      },
+      {
+        "chance": 0.8,
+        "feature": {
+          "feature": "goodending:fancy_dark_oak",
+          "placement": []
+        }
+      },
+      {
+        "chance": 0.78,
+        "feature": {
+          "feature": "goodending:big_fancy_dark_oak",
+          "placement": []
+        }
+      }
+    ]
+  }
+}

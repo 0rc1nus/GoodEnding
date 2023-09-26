@@ -5,6 +5,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.biome.OverworldBiomeBuilder;
+import net.orcinus.goodending.init.GoodEndingBiomes;
 import net.orcinus.goodending.mixin.invokers.VanillaBiomeParametersInvoker;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -39,9 +40,9 @@ public class VanillaBiomeParametersMixin {
             Climate.Parameter temperatureParameter = this.temperatures[i];
             for (int j = 0; j < this.humidities.length; ++j) {
                 Climate.Parameter humidityParameter = this.humidities[j];
-//                addCustomBiome(consumer, temperatureParameter, humidityParameter, Climate.Parameter.span(-0.11f, 0.3f), this.erosions[6], weirdness, 0.0f, GoodEndingBiomes.MARSHY_SWAMP_KEY);
+                addCustomBiome(consumer, temperatureParameter, humidityParameter, Climate.Parameter.span(-0.11f, 0.3f), this.erosions[6], weirdness, 0.0f, GoodEndingBiomes.MARSHY_SWAMP_KEY);
                 if (i == 3 && j == 2) {
-//                    addCustomBiome(consumer, temperatureParameter, humidityParameter, Climate.Parameter.span(this.nearInlandContinentalness, this.midInlandContinentalness), this.erosions[4], weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
+                    addCustomBiome(consumer, temperatureParameter, humidityParameter, Climate.Parameter.span(this.nearInlandContinentalness, this.midInlandContinentalness), this.erosions[4], weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
                     //remedy for -5673436505571856945 & 14 78 -662
                 }
             }
@@ -57,8 +58,8 @@ public class VanillaBiomeParametersMixin {
                 if (i == 3 && j == 2) {
                     //1968 86 9127
                     //3576410170704156714
-////                    addCustomBiome(parameters, temperatureParameter, humidityParameter, this.nearInlandContinentalness, this.erosions[4], weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
-//                    addCustomBiome(parameters, temperatureParameter, humidityParameter, Climate.Parameter.span(this.nearInlandContinentalness, this.midInlandContinentalness), this.erosions[4], weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
+//                    addCustomBiome(parameters, temperatureParameter, humidityParameter, this.nearInlandContinentalness, this.erosions[4], weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
+                    addCustomBiome(parameters, temperatureParameter, humidityParameter, Climate.Parameter.span(this.nearInlandContinentalness, this.midInlandContinentalness), this.erosions[4], weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
                 }
             }
         }
@@ -73,13 +74,13 @@ public class VanillaBiomeParametersMixin {
                 //6012941714076729884
                 //-586 94 -1515
                 if (i == 3 && j == 2) {
-////                    addCustomBiome(parameters, temperatureParameter, humidityParameter, this.nearInlandContinentalness, this.erosions[4], weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
-//                    addCustomBiome(parameters, temperatureParameter, humidityParameter, Climate.Parameter.span(this.nearInlandContinentalness, this.midInlandContinentalness), this.erosions[4], weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
-//                    addCustomBiome(parameters, temperatureParameter, humidityParameter, this.midInlandContinentalness, this.erosions[4], weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
-//                    addCustomBiome(parameters, temperatureParameter, humidityParameter, Climate.Parameter.span(this.coastContinentalness, this.farInlandContinentalness), this.erosions[4], weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
+//                    addCustomBiome(parameters, temperatureParameter, humidityParameter, this.nearInlandContinentalness, this.erosions[4], weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
+                    addCustomBiome(parameters, temperatureParameter, humidityParameter, Climate.Parameter.span(this.nearInlandContinentalness, this.midInlandContinentalness), this.erosions[4], weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
+                    addCustomBiome(parameters, temperatureParameter, humidityParameter, this.midInlandContinentalness, this.erosions[4], weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
+                    addCustomBiome(parameters, temperatureParameter, humidityParameter, Climate.Parameter.span(this.coastContinentalness, this.farInlandContinentalness), this.erosions[4], weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
 
                     //Remedy for seed -5947534612827330122 & -1274 116 40169
-//                    addCustomBiome(parameters, temperatureParameter, humidityParameter, Climate.Parameter.span(this.coastContinentalness, this.nearInlandContinentalness), this.erosions[4], weirdness, 0.0f, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
+                    addCustomBiome(parameters, temperatureParameter, humidityParameter, Climate.Parameter.span(this.coastContinentalness, this.nearInlandContinentalness), this.erosions[4], weirdness, 0.0f, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
                 }
             }
         }
@@ -92,7 +93,7 @@ public class VanillaBiomeParametersMixin {
             for (int j = 0; j < this.humidities.length; j++) {
                 Climate.Parameter humidityRange = this.humidities[j];
                 if (i == 3 && j == 2) {
-//                    addCustomBiome(parameters, temperatureRange, humidityRange, Climate.Parameter.span(this.coastContinentalness, this.nearInlandContinentalness), this.erosions[4], weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
+                    addCustomBiome(parameters, temperatureRange, humidityRange, Climate.Parameter.span(this.coastContinentalness, this.nearInlandContinentalness), this.erosions[4], weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
                 }
             }
         }
@@ -102,7 +103,7 @@ public class VanillaBiomeParametersMixin {
     private void GE$writeValleyBiomes(Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> parameters, Climate.Parameter weirdness, CallbackInfo ci) {
         for (Climate.Parameter temperatureRange : this.temperatures) {
             for (Climate.Parameter parameterRange : this.humidities) {
-//                addCustomBiome(parameters, temperatureRange, parameterRange, Climate.Parameter.span(-0.11f, 0.3f), this.erosions[6], weirdness, 0.0F, GoodEndingBiomes.MARSHY_SWAMP_KEY);
+                addCustomBiome(parameters, temperatureRange, parameterRange, Climate.Parameter.span(-0.11f, 0.3f), this.erosions[6], weirdness, 0.0F, GoodEndingBiomes.MARSHY_SWAMP_KEY);
             }
         }
     }

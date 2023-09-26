@@ -17,12 +17,12 @@ import net.orcinus.goodending.GoodEnding;
 public class GoodEndingBiomeModifiers {
 
     public static void init() {
-//        addSwampVegetation();
-//        addMangroveSwampVegetation();
-//        addOldGrowthBirchVegetation();
-//        addFallenLogs();
-//        addWildFlowers();
-//        addBoulders();
+        addSwampVegetation();
+        addMangroveSwampVegetation();
+        addOldGrowthBirchVegetation();
+        addFallenLogs();
+        addWildFlowers();
+        addBoulders();
     }
 
     public static void addOldGrowthBirchVegetation() {

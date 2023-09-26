@@ -11,6 +11,4 @@ public interface BoatAccessor {
     @Accessor("lastYd")
     void setLastYd(double lastYd);
 
-    @Accessor
-    Boat.Status getStatus();
 }

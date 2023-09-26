@@ -67,41 +67,6 @@ public class GoodEndingBoatEntity extends Boat {
         this.entityData.set(BOAT_TYPE, type.ordinal());
     }
 
-    @Override
-    protected void checkFallDamage(double heightDifference, boolean onGround, BlockState state, BlockPos landedPosition) {
-        ((BoatAccessor)this).setLastYd(this.getDeltaMovement().y);
-        if (!this.isPassenger()) {
-            if (onGround) {
-                if (this.fallDistance > 3.0F) {
-                    if (((BoatAccessor)this).getStatus() != Boat.Status.ON_LAND) {
-                        this.resetFallDistance();
-                        return;
-                    }
-
-                    this.causeFallDamage(this.fallDistance, 1.0F, this.damageSources().fall());
-                    if (!this.level().isClientSide && !this.isRemoved()) {
-                        this.kill();
-                        if (this.level().getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
-                            int i;
-                            for(i = 0; i < 3; ++i) {
-                                this.spawnAtLocation(this.getGoodEndingBoatType().getPlanks());
-                            }
-
-                            for(i = 0; i < 2; ++i) {
-                                this.spawnAtLocation(Items.STICK);
-                            }
-                        }
-                    }
-                }
-
-                this.resetFallDistance();
-            } else if (!this.level().getFluidState(this.blockPosition().below()).is(FluidTags.WATER) && heightDifference < 0.0) {
-                this.fallDistance -= (float)heightDifference;
-            }
-
-        }
-    }
-
     public enum BoatType {
         MUDDY_OAK(GoodEndingBlocks.MUDDY_OAK_PLANKS, "muddy_oak"),
         CYPRESS(GoodEndingBlocks.CYPRESS_PLANKS, "cypress");
