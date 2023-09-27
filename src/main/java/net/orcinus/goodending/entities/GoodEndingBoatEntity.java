@@ -1,23 +1,17 @@
 package net.orcinus.goodending.entities;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.orcinus.goodending.init.GoodEndingBlocks;
 import net.orcinus.goodending.init.GoodEndingEntityTypes;
 import net.orcinus.goodending.init.GoodEndingItems;
-import net.orcinus.goodending.mixin.accessor.BoatAccessor;
 
 public class GoodEndingBoatEntity extends Boat {
     private static final EntityDataAccessor<Integer> BOAT_TYPE = SynchedEntityData.defineId(GoodEndingBoatEntity.class, EntityDataSerializers.INT);

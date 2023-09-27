@@ -98,7 +98,7 @@ public class GoodEndingBiomes {
         builder2.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, GoodEndingPlacedFeatures.MARSHY_SWAMP_VEGETATION);
         builder2.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, GoodEndingPlacedFeatures.MARSH_SWAMP_TREE_PLACED);
         Music musicSound = Musics.createGameMusic(SoundEvents.MUSIC_BIOME_SWAMP);
-        return new Biome.BiomeBuilder().hasPrecipitation(true).temperature(0.8f).downfall(0.9f).specialEffects(new BiomeSpecialEffects.Builder().waterColor(5082501).waterFogColor(335132).fogColor(11852004).skyColor(getSkyColor(0.8f)).foliageColorOverride(10662207).ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).backgroundMusic(musicSound).build()).mobSpawnSettings(builder.build()).generationSettings(builder2.build()).build();
+        return new Biome.BiomeBuilder().hasPrecipitation(true).temperature(0.8f).downfall(0.9f).specialEffects(new BiomeSpecialEffects.Builder().waterColor(5082501).waterFogColor(335132).fogColor(11852004).skyColor(getSkyColor(0.8f)).foliageColorOverride(7507260).ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).backgroundMusic(musicSound).build()).mobSpawnSettings(builder.build()).generationSettings(builder2.build()).build();
     }
 
     protected static int getSkyColor(float temperature) {

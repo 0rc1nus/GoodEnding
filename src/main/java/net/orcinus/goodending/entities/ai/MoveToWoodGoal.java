@@ -97,7 +97,6 @@ public class MoveToWoodGoal extends Goal {
 
     @Override
     public void tick() {
-
         BlockPos woodPos = this.woodpecker.getWoodPos();
         if (woodPos != null) {
             Direction attachedFace = this.woodpecker.getAttachedFace();

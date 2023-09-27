@@ -16,14 +16,11 @@
     "VanillaBiomeParametersMixin",
     "VanillaSurfaceRulesMixin",
     "accessor.BlockSetTypeAccessor",
-    "accessor.BoatAccessor",
     "invokers.BrewingRecipeRegistryInvoker",
     "invokers.TreeDecoratorTypeInvoker",
     "invokers.VanillaBiomeParametersInvoker"
   ],
   "client": [
-    "client.EntityModelLayersMixin",
-    "client.TexturedRenderLayersMixin"
   ],
   "injectors": {
     "defaultRequire": 1

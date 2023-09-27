@@ -7,10 +7,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DoubleHighBlockItem;
+import net.minecraft.world.item.HangingSignItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.PlaceOnWaterBlockItem;
 import net.minecraft.world.item.SignItem;
+import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.level.block.Blocks;
 import net.orcinus.goodending.entities.GoodEndingBoatEntity;
 import net.orcinus.goodending.items.AlgaeBucketItem;
 import net.orcinus.goodending.items.FireflyBottleItem;
@@ -21,6 +24,10 @@ import static net.orcinus.goodending.GoodEnding.MODID;
 
 @SuppressWarnings("unused")
 public class GoodEndingItems {
+
+    public static final Item FIREFLY_SWARM_SPAWN_EGG = register("firefly_swarm_spawn_egg", new SpawnEggItem(GoodEndingEntityTypes.FIREFLY_SWARM, 0x000000, 0xFFF4A4, new Item.Properties()));
+    public static final Item MARSH_SPAWN_EGG = register("marsh_spawn_egg", new SpawnEggItem(GoodEndingEntityTypes.MARSH, 3423006, 6979129 , new Item.Properties()));
+    public static final Item WOODPECKER_SPAWN_EGG = register("woodpecker_spawn_egg", new SpawnEggItem(GoodEndingEntityTypes.WOODPECKER, 0xCB4613, 0xFFFFFF , new Item.Properties()));
 
     //Muddy oak wood set
     public static final Item MUDDY_OAK_PLANKS = register("muddy_oak_planks", new BlockItem(GoodEndingBlocks.MUDDY_OAK_PLANKS, new Item.Properties()));
@@ -37,6 +44,7 @@ public class GoodEndingItems {
     public static final Item MUDDY_OAK_TRAPDOOR = register("muddy_oak_trapdoor", new BlockItem(GoodEndingBlocks.MUDDY_OAK_TRAPDOOR, new Item.Properties()));
     public static final Item MUDDY_OAK_FENCE_GATE = register("muddy_oak_fence_gate", new BlockItem(GoodEndingBlocks.MUDDY_OAK_FENCE_GATE, new Item.Properties()));
     public static final Item MUDDY_OAK_SIGN = register("muddy_oak_sign", new SignItem(new Item.Properties().stacksTo(16), GoodEndingBlocks.MUDDY_OAK_SIGN, GoodEndingBlocks.MUDDY_OAK_WALL_SIGN));
+    public static final Item MUDDY_OAK_HANGING_SIGN = register("muddy_oak_hanging_sign", new HangingSignItem(GoodEndingBlocks.MUDDY_OAK_HANGING_SIGN, GoodEndingBlocks.MUDDY_OAK_WALL_HANGING_SIGN, new Item.Properties().stacksTo(16)));
     public static final Item MUDDY_OAK_BOAT = register("muddy_oak_boat", new GoodEndingBoatItem(false, GoodEndingBoatEntity.BoatType.MUDDY_OAK, new Item.Properties().stacksTo(1)));
     public static final Item MUDDY_OAK_CHEST_BOAT = register("muddy_oak_chest_boat", new GoodEndingBoatItem(true, GoodEndingBoatEntity.BoatType.MUDDY_OAK, new Item.Properties().stacksTo(1)));
 
@@ -57,6 +65,7 @@ public class GoodEndingItems {
     public static final Item CYPRESS_TRAPDOOR = register("cypress_trapdoor", new BlockItem(GoodEndingBlocks.CYPRESS_TRAPDOOR, new Item.Properties()));
     public static final Item CYPRESS_FENCE_GATE = register("cypress_fence_gate", new BlockItem(GoodEndingBlocks.CYPRESS_FENCE_GATE, new Item.Properties()));
     public static final Item CYPRESS_SIGN = register("cypress_sign", new SignItem(new Item.Properties().stacksTo(16), GoodEndingBlocks.CYPRESS_SIGN, GoodEndingBlocks.CYPRESS_WALL_SIGN));
+    public static final Item CYPRESS_HANGING_SIGN = register("cypress_hanging_sign", new HangingSignItem(GoodEndingBlocks.CYPRESS_HANGING_SIGN, GoodEndingBlocks.CYPRESS_WALL_HANGING_SIGN, new Item.Properties().stacksTo(16)));
     public static final Item CYPRESS_BOAT = register("cypress_boat", new GoodEndingBoatItem(false, GoodEndingBoatEntity.BoatType.CYPRESS, new Item.Properties().stacksTo(1)));
     public static final Item CYPRESS_CHEST_BOAT = register("cypress_chest_boat", new GoodEndingBoatItem(true, GoodEndingBoatEntity.BoatType.CYPRESS, new Item.Properties().stacksTo(1)));
 

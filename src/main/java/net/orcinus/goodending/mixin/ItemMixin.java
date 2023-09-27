@@ -30,8 +30,8 @@ public class ItemMixin  {
 
     @Inject(at = @At("HEAD"), method = "inventoryTick")
     private void GE$inventoryTick(ItemStack stack, Level world, Entity entity, int slot, boolean selected, CallbackInfo ci) {
-        if (stack.getItem() instanceof SwordItem || stack.getItem() instanceof ShieldItem) {
-            if (stack.getTag() != null && stack.getTag().contains("Amount") && stack.getTag().getInt("Amount") == 0) {
+        if (stack.hasTag() && (stack.getItem() instanceof SwordItem || stack.getItem() instanceof ShieldItem)) {
+            if (stack.getTag().contains("Amount") && stack.getTag().getInt("Amount") == 0) {
                 stack.getTag().remove("Amount");
             }
             if (!stack.getTag().contains("Amount") && !stack.getTag().contains("Infinite") && stack.getTag().contains("Potion")) {
@@ -48,7 +48,7 @@ public class ItemMixin  {
             if (nbt != null) {
                 String toolEffect = nbt.getString("Potion");
                 Potion potion = PotionUtils.getPotion(nbt);
-                if (toolEffect != null) {
+                if (!toolEffect.isEmpty()) {
                     potion.getEffects().forEach(statusEffectInstance -> {
                         MutableComponent mutableText = Component.translatable("item.goodending.inflict_tool.status_effect").append(" ");
                         tooltip.add(mutableText.append(Component.translatable(statusEffectInstance.getEffect().getDescriptionId())).withStyle(nbt.getBoolean("Infinite") ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.RED));

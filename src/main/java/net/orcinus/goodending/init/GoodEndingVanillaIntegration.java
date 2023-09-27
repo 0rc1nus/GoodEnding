@@ -1,13 +1,16 @@
 package net.orcinus.goodending.init;
 
+import net.fabricmc.fabric.api.object.builder.v1.villager.VillagerTypeHelper;
 import net.fabricmc.fabric.api.registry.FlammableBlockRegistry;
 import net.fabricmc.fabric.api.registry.StrippableBlockRegistry;
+import net.minecraft.world.entity.npc.VillagerType;
 
 public class GoodEndingVanillaIntegration {
 
     public static void init() {
         registerCompostables();
         registerFlammables();
+        VillagerTypeHelper.addVillagerTypeToBiome(GoodEndingBiomes.MARSHY_SWAMP_KEY, VillagerType.SWAMP);
     }
 
     public static void registerFlammables() {

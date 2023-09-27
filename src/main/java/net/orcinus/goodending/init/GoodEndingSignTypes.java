@@ -1,20 +1,13 @@
 package net.orcinus.goodending.init;
 
-import com.google.common.collect.Lists;
+import net.fabricmc.fabric.api.object.builder.v1.block.type.WoodTypeRegistry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.properties.WoodType;
-
-import java.util.LinkedList;
-import java.util.List;
+import net.orcinus.goodending.GoodEnding;
 
 public class GoodEndingSignTypes {
-    public static final List<WoodType> VALUES = Lists.newArrayList();
 
-    public static final WoodType CYPRESS = register(new WoodType("cypress", GoodEndingBlockSetTypes.MUDDY_OAK));
-    public static final WoodType MUDDY_OAK = register(new WoodType("muddy_oak", GoodEndingBlockSetTypes.CYPRESS));
-
-    private static WoodType register(WoodType woodType) {
-        VALUES.add(woodType);
-        return woodType;
-    }
+    public static final WoodType CYPRESS = WoodTypeRegistry.register(new ResourceLocation(GoodEnding.MODID, "cypress"), GoodEndingBlockSetTypes.MUDDY_OAK);
+    public static final WoodType MUDDY_OAK = WoodTypeRegistry.register(new ResourceLocation(GoodEnding.MODID, "muddy_oak"), GoodEndingBlockSetTypes.CYPRESS);
 
 }

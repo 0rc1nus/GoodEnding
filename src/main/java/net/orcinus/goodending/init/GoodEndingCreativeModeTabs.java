@@ -19,6 +19,9 @@ public class GoodEndingCreativeModeTabs {
                 .icon(GoodEndingItems.YELLOW_FLOWERING_LILY_PAD::getDefaultInstance)
                 .title(Component.translatable("itemGroup.goodending.goodending"))
                 .displayItems((itemDisplayParameters, output) -> {
+                    output.accept(GoodEndingItems.FIREFLY_SWARM_SPAWN_EGG);
+                    output.accept(GoodEndingItems.MARSH_SPAWN_EGG);
+                    output.accept(GoodEndingItems.WOODPECKER_SPAWN_EGG);
                     output.accept(GoodEndingItems.MUDDY_OAK_PLANKS);
                     output.accept(GoodEndingItems.MUDDY_OAK_LOG);
                     output.accept(GoodEndingItems.STRIPPED_MUDDY_OAK_LOG);
@@ -33,6 +36,7 @@ public class GoodEndingCreativeModeTabs {
                     output.accept(GoodEndingItems.MUDDY_OAK_TRAPDOOR);
                     output.accept(GoodEndingItems.MUDDY_OAK_FENCE_GATE);
                     output.accept(GoodEndingItems.MUDDY_OAK_SIGN);
+                    output.accept(GoodEndingItems.MUDDY_OAK_HANGING_SIGN);
                     output.accept(GoodEndingItems.MUDDY_OAK_BOAT);
                     output.accept(GoodEndingItems.MUDDY_OAK_CHEST_BOAT);
                     output.accept(GoodEndingItems.CYPRESS_PLANKS);
@@ -51,6 +55,7 @@ public class GoodEndingCreativeModeTabs {
                     output.accept(GoodEndingItems.CYPRESS_TRAPDOOR);
                     output.accept(GoodEndingItems.CYPRESS_FENCE_GATE);
                     output.accept(GoodEndingItems.CYPRESS_SIGN);
+                    output.accept(GoodEndingItems.CYPRESS_HANGING_SIGN);
                     output.accept(GoodEndingItems.CYPRESS_BOAT);
                     output.accept(GoodEndingItems.CYPRESS_CHEST_BOAT);
                     output.accept(GoodEndingItems.LARGE_LILY_PAD);
