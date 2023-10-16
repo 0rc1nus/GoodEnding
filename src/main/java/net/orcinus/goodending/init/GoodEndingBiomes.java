@@ -15,11 +15,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.level.biome.AmbientMoodSettings;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.BiomeGenerationSettings;
-import net.minecraft.world.level.biome.BiomeSpecialEffects;
-import net.minecraft.world.level.biome.MobSpawnSettings;
+import net.minecraft.world.level.FoliageColor;
+import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
@@ -98,7 +95,23 @@ public class GoodEndingBiomes {
         builder2.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, GoodEndingPlacedFeatures.MARSHY_SWAMP_VEGETATION);
         builder2.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, GoodEndingPlacedFeatures.MARSH_SWAMP_TREE_PLACED);
         Music musicSound = Musics.createGameMusic(SoundEvents.MUSIC_BIOME_SWAMP);
-        return new Biome.BiomeBuilder().hasPrecipitation(true).temperature(0.8f).downfall(0.9f).specialEffects(new BiomeSpecialEffects.Builder().waterColor(5082501).waterFogColor(335132).fogColor(11852004).skyColor(getSkyColor(0.8f)).foliageColorOverride(7507260).ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS).backgroundMusic(musicSound).build()).mobSpawnSettings(builder.build()).generationSettings(builder2.build()).build();
+        return new Biome.BiomeBuilder()
+                .hasPrecipitation(true)
+                .temperature(0.8f)
+                .downfall(0.9f)
+                .specialEffects(
+                        new BiomeSpecialEffects.Builder()
+                                .waterColor(3832426)
+                                .waterFogColor(5077600)
+                                .fogColor(7777678)
+                                .skyColor(11262403)
+                                .grassColorModifier(BiomeSpecialEffects.GrassColorModifier.NONE)
+                                .grassColorOverride(8559170)
+                                .foliageColorOverride(8495653)
+                                .ambientMoodSound(AmbientMoodSettings.LEGACY_CAVE_SETTINGS)
+                                .backgroundMusic(musicSound).build())
+                .mobSpawnSettings(builder.build()).generationSettings(builder2.build())
+                .build();
     }
 
     protected static int getSkyColor(float temperature) {
