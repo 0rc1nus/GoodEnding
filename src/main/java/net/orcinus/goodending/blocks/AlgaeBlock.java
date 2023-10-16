@@ -4,81 +4,74 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BonemealableBlock;
-import net.minecraft.world.level.block.BucketPickup;
-import net.minecraft.world.level.block.BushBlock;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.EntityCollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import net.orcinus.goodending.init.GoodEndingBlocks;
 import net.orcinus.goodending.init.GoodEndingItems;
-import org.jetbrains.annotations.Nullable;
 
-@SuppressWarnings("deprecation")
-public class AlgaeBlock extends BushBlock implements SimpleWaterloggedBlock, BonemealableBlock, BucketPickup {
-    protected static final VoxelShape SHAPE = Block.box(0, 11.5, 0, 16, 14.5, 16);
-    public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+public class AlgaeBlock extends MultifaceBlock implements BonemealableBlock, SimpleWaterloggedBlock, BucketPickup {
+    public static final Property<Boolean> WATERLOGGED = BlockStateProperties.WATERLOGGED;
+    private final MultifaceSpreader spreader = new MultifaceSpreader(this);
 
-    public AlgaeBlock(Properties settings) {
-        super(settings);
-        this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false));
+    public AlgaeBlock(BlockBehaviour.Properties properties) {
+        super(properties);
+        this.registerDefaultState(this.defaultBlockState().setValue(WATERLOGGED, false));
     }
 
     @Override
-    protected boolean mayPlaceOn(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos) {
-        return blockGetter.getFluidState(blockPos.above()).is(Fluids.WATER) && blockGetter.getFluidState(blockPos.above(2)).isEmpty();
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
+        builder.add(WATERLOGGED);
     }
 
     @Override
-    public VoxelShape getShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
-        return SHAPE;
+    public boolean canSurvive(BlockState blockState, LevelReader levelReader, BlockPos blockPos) {
+        return super.canSurvive(blockState, levelReader, blockPos) && levelReader.getBlockState(blockPos).getFluidState().is(Fluids.WATER);
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext context) {
-        if (context instanceof EntityCollisionContext entityShapeContext) {
-            if (entityShapeContext.getEntity() != null && entityShapeContext.getEntity() instanceof LivingEntity livingEntity && livingEntity.getItemBySlot(EquipmentSlot.FEET).is(Items.LEATHER_BOOTS)) {
-                return super.getCollisionShape(blockState, blockGetter, blockPos, context);
-            }
-            if (!context.isDescending()) {
-                return Shapes.empty();
-            }
+    public BlockState updateShape(BlockState blockState, Direction direction, BlockState blockState2, LevelAccessor levelAccessor, BlockPos blockPos, BlockPos blockPos2) {
+        if (blockState.getValue(WATERLOGGED)) {
+            levelAccessor.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
         }
-        return super.getCollisionShape(blockState, blockGetter, blockPos, context);
+
+        return super.updateShape(blockState, direction, blockState2, levelAccessor, blockPos, blockPos2);
     }
 
     @Override
-    public VoxelShape getVisualShape(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos, CollisionContext collisionContext) {
-        return Shapes.empty();
+    public boolean canBeReplaced(BlockState blockState, BlockPlaceContext blockPlaceContext) {
+        return !blockPlaceContext.getItemInHand().is(GoodEndingItems.ALGAE_BUCKET) || super.canBeReplaced(blockState, blockPlaceContext);
     }
 
     @Override
     public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState blockState, boolean bl) {
-        return true;
+        return Direction.stream().anyMatch((direction) -> this.spreader.canSpreadInAnyDirection(blockState, levelReader, blockPos, direction.getOpposite()));
     }
 
     @Override
     public boolean isBonemealSuccess(Level level, RandomSource randomSource, BlockPos blockPos, BlockState blockState) {
         return true;
+    }
+
+    @Override
+    public void performBonemeal(ServerLevel serverLevel, RandomSource randomSource, BlockPos blockPos, BlockState blockState) {
+        this.spreader.spreadFromRandomFaceTowardRandomDirection(blockState, serverLevel, blockPos, randomSource);
+    }
+
+    @Override
+    public FluidState getFluidState(BlockState blockState) {
+        return blockState.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(blockState);
     }
 
     @Override
@@ -90,64 +83,14 @@ public class AlgaeBlock extends BushBlock implements SimpleWaterloggedBlock, Bon
         return new ItemStack(GoodEndingItems.ALGAE_BUCKET);
     }
 
+
     @Override
-    public void performBonemeal(ServerLevel world, RandomSource random, BlockPos pos, BlockState state) {
-        if (world.getBlockState(pos).getFluidState().is(Fluids.WATER)) {
-            int j = 1;
-            int l = 0;
-            int m = pos.getX() - 2;
-            int n = 0;
-
-            for (int o = 0; o < 5; ++o) {
-                for (int p = 0; p < j; ++p) {
-                    int q = 2 + pos.getY();
-                    for (int r = q - 2; r < q; ++r) {
-                        BlockPos blockPos = new BlockPos(m + o, r, pos.getZ() - n + p);
-                        if (blockPos == pos
-                                || random.nextInt(4) != 0
-                                || world.getBlockState(blockPos).is(GoodEndingBlocks.LARGE_LILY_PAD)
-                                || !world.getBlockState(pos).getFluidState().is(Fluids.WATER)
-                                || !world.getBlockState(blockPos).getBlock().defaultBlockState().is(Blocks.WATER))
-                            continue;
-
-                        world.setBlock(blockPos, state, 3);
-                    }
-                }
-                if (l < 2) {
-                    j += 2;
-                    ++n;
-                } else {
-                    j -= 2;
-                    --n;
-                }
-                ++l;
-            }
-            world.setBlock(pos, state, 2);
-        }
+    public boolean propagatesSkylightDown(BlockState blockState, BlockGetter blockGetter, BlockPos blockPos) {
+        return blockState.getFluidState().isEmpty();
     }
 
     @Override
-    public BlockState updateShape(BlockState blockState, Direction direction, BlockState blockState2, LevelAccessor levelAccessor, BlockPos blockPos, BlockPos blockPos2) {
-        if (blockState.getValue(WATERLOGGED)) {
-            levelAccessor.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
-        }
-        return super.updateShape(blockState, direction, blockState2, levelAccessor, blockPos, blockPos2);
+    public MultifaceSpreader getSpreader() {
+        return this.spreader;
     }
-
-    @Nullable
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext blockPlaceContext) {
-        return this.defaultBlockState().setValue(WATERLOGGED, blockPlaceContext.getLevel().getFluidState(blockPlaceContext.getClickedPos()).is(Fluids.WATER));
-    }
-
-    @Override
-    public FluidState getFluidState(BlockState blockState) {
-        return blockState.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(blockState);
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(WATERLOGGED);
-    }
-
 }

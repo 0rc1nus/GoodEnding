@@ -5,20 +5,9 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.DoubleHighBlockItem;
-import net.minecraft.world.item.HangingSignItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.PlaceOnWaterBlockItem;
-import net.minecraft.world.item.SignItem;
-import net.minecraft.world.item.SpawnEggItem;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.*;
 import net.orcinus.goodending.entities.GoodEndingBoatEntity;
-import net.orcinus.goodending.items.AlgaeBucketItem;
-import net.orcinus.goodending.items.FireflyBottleItem;
-import net.orcinus.goodending.items.GoodEndingBoatItem;
-import net.orcinus.goodending.items.PlaceableUnderWaterItem;
+import net.orcinus.goodending.items.*;
 
 import static net.orcinus.goodending.GoodEnding.MODID;
 
@@ -93,7 +82,7 @@ public class GoodEndingItems {
 
     //Swamp related
     public static final Item DUCKWEED = register("duckweed", new PlaceOnWaterBlockItem(GoodEndingBlocks.DUCKWEED, new Item.Properties()));
-    public static final Item ALGAE_BUCKET = register("algae_bucket", new AlgaeBucketItem(GoodEndingBlocks.ALGAE, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1), SoundEvents.LILY_PAD_PLACE));
+    public static final Item ALGAE_BUCKET = register("algae_bucket", new AlgaeBucketItem(GoodEndingBlocks.ALGAE, SoundEvents.LILY_PAD_PLACE, new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(16)));
     public static final Item CATTAIL = register("cattail", new DoubleHighBlockItem(GoodEndingBlocks.CATTAIL, new Item.Properties()));
     public static final Item FIREFLY_BOTTLE = register("firefly_bottle", new FireflyBottleItem(new Item.Properties().stacksTo(16)));
     public static final Item FIREFLY_LANTERN = register("firefly_lantern", new BlockItem(GoodEndingBlocks.FIREFLY_LANTERN, new Item.Properties()));

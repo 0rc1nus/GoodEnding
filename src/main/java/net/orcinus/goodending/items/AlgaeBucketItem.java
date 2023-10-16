@@ -3,16 +3,10 @@ package net.orcinus.goodending.items;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.DispensibleContainerItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,27 +17,21 @@ import org.jetbrains.annotations.Nullable;
 public class AlgaeBucketItem extends BlockItem implements DispensibleContainerItem {
     private final SoundEvent placeSound;
 
-    public AlgaeBucketItem(Block block, Properties settings, SoundEvent placeSound) {
-        super(block, settings);
-        this.placeSound = placeSound;
+    public AlgaeBucketItem(Block block, SoundEvent soundEvent, Item.Properties properties) {
+        super(block, properties);
+        this.placeSound = soundEvent;
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext context) {
-        return InteractionResult.PASS;
-    }
-
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player user, InteractionHand hand) {
-
-        BlockHitResult blockHitResult = AlgaeBucketItem.getPlayerPOVHitResult(world, user, ClipContext.Fluid.SOURCE_ONLY);
-        BlockHitResult blockHitResult2 = blockHitResult.withPosition(blockHitResult.getBlockPos());
-        InteractionResult actionResult = super.useOn(new UseOnContext(user, hand, blockHitResult2));
-
-        if (actionResult.consumesAction() && !user.isCreative()) {
-            user.setItemInHand(hand, Items.BUCKET.getDefaultInstance());
+    public InteractionResult useOn(UseOnContext useOnContext) {
+        InteractionResult interactionResult = super.useOn(useOnContext);
+        Player player = useOnContext.getPlayer();
+        if (interactionResult.consumesAction() && player != null && !player.isCreative()) {
+            if (player.getInventory().getFreeSlot() != -1) player.addItem(Items.BUCKET.getDefaultInstance());
+            else player.drop(Items.BUCKET.getDefaultInstance(), true);
         }
-        return new InteractionResultHolder<>(actionResult, user.getItemInHand(hand));
+
+        return interactionResult;
     }
 
     @Override
@@ -52,21 +40,22 @@ public class AlgaeBucketItem extends BlockItem implements DispensibleContainerIt
     }
 
     @Override
-    protected SoundEvent getPlaceSound(BlockState state) {
+    protected SoundEvent getPlaceSound(BlockState blockState) {
         return this.placeSound;
     }
 
     @Override
-    public boolean emptyContents(@Nullable Player player, Level world, BlockPos pos, @Nullable BlockHitResult hitResult) {
-        if (world.isInWorldBounds(pos) && world.isWaterAt(pos)) {
-            if (!world.isClientSide()) {
-                world.setBlock(pos, this.getBlock().defaultBlockState(), 3);
+    public boolean emptyContents(@Nullable Player player, Level level, BlockPos blockPos, @Nullable BlockHitResult blockHitResult) {
+        if (level.isInWorldBounds(blockPos) && level.isEmptyBlock(blockPos)) {
+            if (!level.isClientSide) {
+                level.setBlock(blockPos, this.getBlock().defaultBlockState(), 3);
             }
-            world.gameEvent(player, GameEvent.FLUID_PLACE, pos);
-            world.playSound(player, pos, this.placeSound, SoundSource.BLOCKS, 1.0f, 1.0f);
-            return true;
-        }
-        return false;
-    }
 
+            level.gameEvent(player, GameEvent.FLUID_PLACE, blockPos);
+            level.playSound(player, blockPos, this.placeSound, SoundSource.BLOCKS, 1.0F, 1.0F);
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

@@ -1,19 +1,16 @@
 {
+	"ambientocclusion": false,
 	"textures": {
-		"0": "goodending:block/algae",
-		"particle": "goodending:block/algae"
+		"particle": "goodending:block/algae",
+		"algae": "goodending:block/algae"
 	},
 	"elements": [
 		{
-			"from": [0, 12, 0],
-			"to": [16, 12, 16],
+			"from": [-0.1, -0.1, 0.1],
+			"to": [16.1, 16.1, 0.1],
 			"faces": {
-				"north": {"uv": [0, 0, 16, 0], "texture": "#0"},
-				"east": {"uv": [0, 0, 16, 0], "texture": "#0"},
-				"south": {"uv": [0, 0, 16, 0], "texture": "#0"},
-				"west": {"uv": [0, 0, 16, 0], "texture": "#0"},
-				"up": {"uv": [0, 0, 16, 16], "texture": "#0"},
-				"down": {"uv": [0, 0, 16, 16], "texture": "#0"}
+				"north": {"uv": [16, 0, 0, 16], "texture": "#algae"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#algae"}
 			}
 		}
 	]

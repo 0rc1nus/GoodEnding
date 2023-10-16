@@ -47,7 +47,6 @@ public class GoodEndingClient implements ClientModInitializer {
         });
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.cutout(),
-                GoodEndingBlocks.ALGAE,
                 GoodEndingBlocks.BIRCH_MUSHROOM,
                 GoodEndingBlocks.CATTAIL,
                 GoodEndingBlocks.LARGE_LILY_PAD,
@@ -70,6 +69,10 @@ public class GoodEndingClient implements ClientModInitializer {
                 GoodEndingBlocks.CYPRESS_SAPLING,
                 GoodEndingBlocks.POTTED_CYPRESS_SAPLING,
                 GoodEndingBlocks.POLLENFLAKE
+        );
+
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderType.translucent(),
+                GoodEndingBlocks.ALGAE
         );
 
         ParticleFactoryRegistry.getInstance().register(GoodEndingParticleTypes.FIREFLY, FireflyParticle.Factory::new);

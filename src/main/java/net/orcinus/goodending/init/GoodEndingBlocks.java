@@ -114,7 +114,7 @@ public class GoodEndingBlocks {
 
     //Swamp related
     public static final Block DUCKWEED = register("duckweed", new WaterlilyBlock(BlockBehaviour.Properties.of().instabreak().sound(SoundType.MOSS_CARPET).noCollission().noOcclusion()));
-    public static final Block ALGAE = register("algae", new AlgaeBlock(BlockBehaviour.Properties.of().instabreak().sound(GoodEndingSoundTypes.ALGAE).noOcclusion()));
+    public static final Block ALGAE = register("algae", new AlgaeBlock(BlockBehaviour.Properties.of().sound(GoodEndingSoundTypes.ALGAE).replaceable().noCollission().strength(0.2F).pushReaction(PushReaction.DESTROY)));
     public static final Block CATTAIL = register("cattail", new CattailBlock(BlockBehaviour.Properties.of().noCollission().instabreak().sound(SoundType.SMALL_DRIPLEAF).offsetType(BlockBehaviour.OffsetType.XYZ)));
     public static final Block FIREFLY_LANTERN = register("firefly_lantern", new FireflyLanternBlock(BlockBehaviour.Properties.of().requiresCorrectToolForDrops().strength(3.5F).sound(GoodEndingSoundTypes.FIREFLY_LANTERN).lightLevel(state -> 4).noOcclusion()));
 
