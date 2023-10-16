@@ -3,6 +3,7 @@ package net.orcinus.goodending.mixin;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.biome.OverworldBiomeBuilder;
 import net.orcinus.goodending.init.GoodEndingBiomes;
@@ -34,13 +35,15 @@ public class VanillaBiomeParametersMixin {
 
     @Shadow @Final private Climate.Parameter midInlandContinentalness;
 
+    @Shadow @Final private Climate.Parameter FULL_RANGE;
+
     @Inject(at = @At("RETURN"), method = "addLowSlice")
     private void GE$writeLowBiomes(Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> consumer, Climate.Parameter weirdness, CallbackInfo ci) {
+        addCustomBiome(consumer, Climate.Parameter.span(this.temperatures[3], this.temperatures[4]), this.FULL_RANGE, Climate.Parameter.span(this.nearInlandContinentalness, this.midInlandContinentalness), this.erosions[6], weirdness, 0.0f, GoodEndingBiomes.MARSHY_SWAMP_KEY);
         for (int i = 0; i < this.temperatures.length; ++i) {
             Climate.Parameter temperatureParameter = this.temperatures[i];
             for (int j = 0; j < this.humidities.length; ++j) {
                 Climate.Parameter humidityParameter = this.humidities[j];
-                addCustomBiome(consumer, temperatureParameter, humidityParameter, Climate.Parameter.span(-0.11f, 0.3f), this.erosions[6], weirdness, 0.0f, GoodEndingBiomes.MARSHY_SWAMP_KEY);
                 if (i == 3 && j == 2) {
                     addCustomBiome(consumer, temperatureParameter, humidityParameter, Climate.Parameter.span(this.nearInlandContinentalness, this.midInlandContinentalness), this.erosions[4], weirdness, 0.0F, GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY);
                     //remedy for -5673436505571856945 & 14 78 -662
@@ -101,11 +104,7 @@ public class VanillaBiomeParametersMixin {
 
     @Inject(at = @At("RETURN"), method = "addValleys")
     private void GE$writeValleyBiomes(Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> parameters, Climate.Parameter weirdness, CallbackInfo ci) {
-        for (Climate.Parameter temperatureRange : this.temperatures) {
-            for (Climate.Parameter parameterRange : this.humidities) {
-                addCustomBiome(parameters, temperatureRange, parameterRange, Climate.Parameter.span(-0.11f, 0.3f), this.erosions[6], weirdness, 0.0F, GoodEndingBiomes.MARSHY_SWAMP_KEY);
-            }
-        }
+        addCustomBiome(parameters, Climate.Parameter.span(this.temperatures[3], this.temperatures[4]), this.FULL_RANGE, Climate.Parameter.span(this.nearInlandContinentalness, this.midInlandContinentalness), this.erosions[6], weirdness, 0.0f, GoodEndingBiomes.MARSHY_SWAMP_KEY);
     }
 
     @Unique
