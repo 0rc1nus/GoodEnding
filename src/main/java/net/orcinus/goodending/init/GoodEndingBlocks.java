@@ -27,7 +27,6 @@ import net.minecraft.world.level.block.WallSignBlock;
 import net.minecraft.world.level.block.WaterlilyBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
-import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.orcinus.goodending.blocks.AlgaeBlock;
@@ -61,10 +60,10 @@ public class GoodEndingBlocks {
     public static final Block MUDDY_OAK_DOOR = register("muddy_oak_door", new DoorBlock(BlockBehaviour.Properties.of().mapColor(MUDDY_OAK_PLANKS.defaultMapColor()).strength(3.0f).sound(SoundType.WOOD).noOcclusion(), GoodEndingBlockSetTypes.MUDDY_OAK));
     public static final Block MUDDY_OAK_TRAPDOOR = register("muddy_oak_trapdoor", new TrapDoorBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GREEN).strength(3.0f).sound(SoundType.WOOD).noOcclusion().isValidSpawn((state, world, pos, type) -> false), GoodEndingBlockSetTypes.MUDDY_OAK));
     public static final Block MUDDY_OAK_FENCE_GATE = register("muddy_oak_fence_gate", new FenceGateBlock(BlockBehaviour.Properties.of().mapColor(MUDDY_OAK_PLANKS.defaultMapColor()).strength(3.0f).sound(SoundType.WOOD).noOcclusion(), GoodEndingSignTypes.MUDDY_OAK));
-    public static final Block MUDDY_OAK_SIGN = register("muddy_oak_sign", new StandingSignBlock(FabricBlockSettings.of().mapColor(MUDDY_OAK_LOG.defaultMapColor()).noCollission().strength(1.0F).sound(SoundType.WOOD), GoodEndingSignTypes.MUDDY_OAK));
+    public static final Block MUDDY_OAK_SIGN = register("muddy_oak_sign", new StandingSignBlock(BlockBehaviour.Properties.of().mapColor(MUDDY_OAK_LOG.defaultMapColor()).noCollission().strength(1.0F).sound(SoundType.WOOD), GoodEndingSignTypes.MUDDY_OAK));
     public static final Block MUDDY_OAK_WALL_SIGN = register("muddy_oak_wall_sign", new WallSignBlock(BlockBehaviour.Properties.of().mapColor(MUDDY_OAK_LOG.defaultMapColor()).noCollission().strength(1.0F).sound(SoundType.WOOD).dropsLike(MUDDY_OAK_SIGN), GoodEndingSignTypes.MUDDY_OAK));
     public static final Block MUDDY_OAK_HANGING_SIGN = register("muddy_oak_hanging_sign", new CeilingHangingSignBlock(BlockBehaviour.Properties.of().mapColor(MUDDY_OAK_LOG.defaultMapColor()).forceSolidOn().instrument(NoteBlockInstrument.BASS).noCollission().strength(1.0f).ignitedByLava(), GoodEndingSignTypes.MUDDY_OAK));
-    public static final Block MUDDY_OAK_WALL_HANGING_SIGN = register("muddy_oak_wall_hanging_sign", new WallHangingSignBlock(BlockBehaviour.Properties.of().mapColor(MUDDY_OAK_LOG.defaultMapColor()).forceSolidOn().instrument(NoteBlockInstrument.BASS).noCollission().strength(1.0f).ignitedByLava().dropsLike(MUDDY_OAK_WOOD), GoodEndingSignTypes.MUDDY_OAK));
+    public static final Block MUDDY_OAK_WALL_HANGING_SIGN = register("muddy_oak_wall_hanging_sign", new WallHangingSignBlock(BlockBehaviour.Properties.of().mapColor(MUDDY_OAK_LOG.defaultMapColor()).forceSolidOn().instrument(NoteBlockInstrument.BASS).noCollission().strength(1.0f).ignitedByLava().dropsLike(MUDDY_OAK_HANGING_SIGN), GoodEndingSignTypes.MUDDY_OAK));
 
     //Cypress wood set
     public static final Block CYPRESS_PLANKS = register("cypress_planks", new Block(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BROWN).strength(2.0f, 3.0f).sound(SoundType.WOOD)));
@@ -83,10 +82,10 @@ public class GoodEndingBlocks {
     public static final Block CYPRESS_DOOR = register("cypress_door", new DoorBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BROWN).strength(3.0f).sound(SoundType.WOOD).noOcclusion(), GoodEndingBlockSetTypes.CYPRESS));
     public static final Block CYPRESS_TRAPDOOR = register("cypress_trapdoor", new TrapDoorBlock(BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_BROWN).strength(3.0f).sound(SoundType.WOOD).noOcclusion().isValidSpawn((state, world, pos, type) -> false), GoodEndingBlockSetTypes.CYPRESS));
     public static final Block CYPRESS_FENCE_GATE = register("cypress_fence_gate", new FenceGateBlock(BlockBehaviour.Properties.of().mapColor(CYPRESS_PLANKS.defaultMapColor()).strength(3.0f).sound(SoundType.WOOD).noOcclusion(), GoodEndingSignTypes.CYPRESS));
-    public static final Block CYPRESS_SIGN = register("cypress_sign", new StandingSignBlock(FabricBlockSettings.of().mapColor(CYPRESS_LOG.defaultMapColor()).noCollission().strength(1.0F).sound(SoundType.WOOD), GoodEndingSignTypes.CYPRESS));
+    public static final Block CYPRESS_SIGN = register("cypress_sign", new StandingSignBlock(BlockBehaviour.Properties.of().mapColor(CYPRESS_LOG.defaultMapColor()).noCollission().strength(1.0F).sound(SoundType.WOOD), GoodEndingSignTypes.CYPRESS));
     public static final Block CYPRESS_WALL_SIGN = register("cypress_wall_sign", new WallSignBlock(BlockBehaviour.Properties.of().mapColor(CYPRESS_LOG.defaultMapColor()).noCollission().strength(1.0F).sound(SoundType.WOOD).dropsLike(CYPRESS_SIGN), GoodEndingSignTypes.CYPRESS));
     public static final Block CYPRESS_HANGING_SIGN = register("cypress_hanging_sign", new CeilingHangingSignBlock(BlockBehaviour.Properties.of().mapColor(CYPRESS_LOG.defaultMapColor()).forceSolidOn().instrument(NoteBlockInstrument.BASS).noCollission().strength(1.0f).ignitedByLava(), GoodEndingSignTypes.CYPRESS));
-    public static final Block CYPRESS_WALL_HANGING_SIGN = register("cypress_wall_hanging_sign", new WallHangingSignBlock(BlockBehaviour.Properties.of().mapColor(CYPRESS_LOG.defaultMapColor()).forceSolidOn().instrument(NoteBlockInstrument.BASS).noCollission().strength(1.0f).ignitedByLava().dropsLike(MUDDY_OAK_WOOD), GoodEndingSignTypes.CYPRESS));
+    public static final Block CYPRESS_WALL_HANGING_SIGN = register("cypress_wall_hanging_sign", new WallHangingSignBlock(BlockBehaviour.Properties.of().mapColor(CYPRESS_LOG.defaultMapColor()).forceSolidOn().instrument(NoteBlockInstrument.BASS).noCollission().strength(1.0f).ignitedByLava().dropsLike(CYPRESS_HANGING_SIGN), GoodEndingSignTypes.CYPRESS));
 
     //Lily pads
     public static final Block LARGE_LILY_PAD = register("large_lily_pad", new LargeLilyPadBlock(BlockBehaviour.Properties.copy(Blocks.LILY_PAD)));
