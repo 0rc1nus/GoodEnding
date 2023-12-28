@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.Nullable;
 
 @OnlyIn(Dist.CLIENT)
 public class LeafParticle extends SimpleAnimatedParticle {
@@ -33,24 +34,24 @@ public class LeafParticle extends SimpleAnimatedParticle {
     @Override
     public void tick() {
         super.tick();
-        this.setSpriteFromAge(spriteProvider);
+        this.setSpriteFromAge(this.spriteProvider);
     }
 
     @Override
-    public int getLightColor(float p_107655_) {
-        BlockPos blockPos = new BlockPos(this.x, this.y, this.z);
+    public int getLightColor(float f) {
+        BlockPos blockPos = BlockPos.containing(this.x, this.y, this.z);
         if (this.level.hasChunkAt(blockPos)) {
             return LevelRenderer.getLightColor(this.level, blockPos);
         }
-        return 0;
+        return super.getLightColor(f);
     }
 
     @OnlyIn(Dist.CLIENT)
     public record Factory(SpriteSet spriteProvider) implements ParticleProvider<SimpleParticleType> {
-
+        @Nullable
         @Override
-        public Particle createParticle(SimpleParticleType defaultParticleType, ClientLevel clientWorld, double d, double e, double f, double g, double h, double i) {
-            return new LeafParticle(clientWorld, d, e, f, this.spriteProvider);
+        public Particle createParticle(SimpleParticleType particleOptions, ClientLevel clientLevel, double d, double e, double f, double g, double h, double i) {
+            return new LeafParticle(clientLevel, d, e, f, this.spriteProvider);
         }
     }
 }

@@ -67,26 +67,34 @@ public class GoodEndingChestBoatEntity extends GoodEndingBoatEntity implements H
     @Override
     public void destroy(DamageSource source) {
         super.destroy(source);
-        this.chestVehicleDestroyed(source, this.level, this);
+        this.chestVehicleDestroyed(source, this.level(), this);
     }
 
     @Override
     public void remove(RemovalReason reason) {
-        if (!this.level.isClientSide && reason.shouldDestroy()) {
-            Containers.dropContents(this.level, this, this);
+        if (!this.level().isClientSide && reason.shouldDestroy()) {
+            Containers.dropContents(this.level(), this, this);
         }
         super.remove(reason);
     }
 
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
-        return this.canAddPassenger(player) && !player.isSecondaryUseActive() ? super.interact(player, hand) : this.interactWithChestVehicle(this::gameEvent, player);
+        if (!this.canAddPassenger(player) || player.isSecondaryUseActive()) {
+            InteractionResult interactionResult = this.interactWithContainerVehicle(player);
+            if (interactionResult.consumesAction()) {
+                this.gameEvent(GameEvent.CONTAINER_OPEN, player);
+                PiglinAi.angerNearbyPiglins(player, true);
+            }
+            return interactionResult;
+        }
+        return super.interact(player, hand);
     }
 
     @Override
     public void openCustomInventoryScreen(Player player) {
         player.openMenu(this);
-        if (!player.level.isClientSide) {
+        if (!player.level().isClientSide) {
             this.gameEvent(GameEvent.CONTAINER_OPEN, player);
             PiglinAi.angerNearbyPiglins(player, true);
         }
@@ -141,7 +149,7 @@ public class GoodEndingChestBoatEntity extends GoodEndingBoatEntity implements H
         return this.isChestVehicleStillValid(player);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     public AbstractContainerMenu createMenu(int p_219910_, Inventory p_219911_, Player p_219912_) {
         if (this.lootTableId != null && p_219912_.isSpectator()) {
             return null;
@@ -151,16 +159,16 @@ public class GoodEndingChestBoatEntity extends GoodEndingBoatEntity implements H
         }
     }
 
-    public void unpackLootTable(@javax.annotation.Nullable Player p_219914_) {
+    public void unpackLootTable(@Nullable Player p_219914_) {
         this.unpackChestVehicleLootTable(p_219914_);
     }
 
-    @javax.annotation.Nullable
+    @Nullable
     public ResourceLocation getLootTable() {
         return this.lootTableId;
     }
 
-    public void setLootTable(@javax.annotation.Nullable ResourceLocation p_219890_) {
+    public void setLootTable(@Nullable ResourceLocation p_219890_) {
         this.lootTableId = p_219890_;
     }
 

@@ -36,7 +36,6 @@ import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(modid = GoodEnding.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MobEvents {
-    //Fucking dumb forge making me convert every single thing to suppliers
     private static final LinkedList<Supplier<MobEffect>> IMMUNITY_HIERARCHY = Util.make(Lists.newLinkedList(), list -> {
         list.add(GoodEndingStatusEffects.STRONG_IMMUNITY);
         list.add(GoodEndingStatusEffects.CONTEMPORARY_IMMUNITY);

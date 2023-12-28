@@ -140,8 +140,8 @@ public class FireflyEntity extends PathfinderMob implements FlyingAnimal {
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (stack.is(Items.GLASS_BOTTLE) && this.getCount() > 0) {
-            this.level.playSound(player, player.getX(), player.getY(), player.getZ(), GoodEndingSoundEvents.ITEM_FIREFLY_BOTTLE_FILL.get(), SoundSource.NEUTRAL, 2.0f, 1.0f);
-            if (!this.level.isClientSide()) {
+            this.level().playSound(player, player.getX(), player.getY(), player.getZ(), GoodEndingSoundEvents.ITEM_FIREFLY_BOTTLE_FILL.get(), SoundSource.NEUTRAL, 2.0f, 1.0f);
+            if (!this.level().isClientSide()) {
                 if (player instanceof ServerPlayer serverPlayer) {
                     GoodEndingCriteriaTriggers.CAPTURE_FIREFLY.trigger(serverPlayer);
                 }
@@ -152,14 +152,14 @@ public class FireflyEntity extends PathfinderMob implements FlyingAnimal {
             }
             return InteractionResult.SUCCESS;
         }
-        if (stack.is(GoodEndingItems.FIREFLY_BOTTLE.get()) && this.getCount() < 3 && !this.level.isClientSide()) {
-            if (!this.level.isClientSide()) {
+        if (stack.is(GoodEndingItems.FIREFLY_BOTTLE.get()) && this.getCount() < 3 && !this.level().isClientSide()) {
+            if (!this.level().isClientSide()) {
                 this.setCount(this.getCount() + 1);
                 this.gameEvent(GameEvent.ENTITY_INTERACT);
                 this.setFromBottle(true);
                 player.setItemInHand(hand, ItemUtils.createFilledResult(stack, player, new ItemStack(Items.GLASS_BOTTLE)));
             }
-            this.level.playSound(null, this.blockPosition(), GoodEndingSoundEvents.ITEM_FIREFLY_BOTTLE_EMPTY.get(), SoundSource.NEUTRAL, 2.0F, 1.0F);
+            this.level().playSound(null, this.blockPosition(), GoodEndingSoundEvents.ITEM_FIREFLY_BOTTLE_EMPTY.get(), SoundSource.NEUTRAL, 2.0F, 1.0F);
             return InteractionResult.SUCCESS;
         }
         return super.mobInteract(player, hand);
@@ -168,8 +168,8 @@ public class FireflyEntity extends PathfinderMob implements FlyingAnimal {
     @Override
     public void aiStep() {
         super.aiStep();
-        if (this.level.isDay() && !this.level.isClientSide) {
-            this.level.getEntitiesOfClass(Player.class, new AABB(this.blockPosition()).inflate(16.0D)).stream().filter(Objects::isNull).forEach(player -> this.discard());
+        if (this.level().isDay() && !this.level().isClientSide) {
+            this.level().getEntitiesOfClass(Player.class, new AABB(this.blockPosition()).inflate(16.0D)).stream().filter(Objects::isNull).forEach(player -> this.discard());
         }
     }
 
@@ -180,13 +180,13 @@ public class FireflyEntity extends PathfinderMob implements FlyingAnimal {
         int count = this.getCount();
         BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
         float width = 1 + (count - 1) * 0.5F;
-        RandomSource random = this.getLevel().random;
+        RandomSource random = this.level().random;
         double j = random.nextGaussian() * 0.025;
         double k = random.nextGaussian() * 0.025;
         double l = random.nextGaussian() * 0.025;
 
         if (this.isAlive()) {
-            if (this.level.getDayTime() < 12000 && this.level.getDayTime() > 0) {
+            if (this.level().getDayTime() < 12000 && this.level().getDayTime() > 0) {
                 mutable.set(this.getX() + Mth.randomBetween(random, -0.25f, 0.25f), this.blockPosition().getY(), this.getZ() + Mth.randomBetween(random, -0.25f, 0.25f));
                 for (int i = 0; i < 0.5; i++) {
                     if (this.random.nextFloat() < 0.01F) this.addParticle(mutable, random, j, k, l);
@@ -205,7 +205,7 @@ public class FireflyEntity extends PathfinderMob implements FlyingAnimal {
     }
 
     private void addParticle(BlockPos.MutableBlockPos mutable, RandomSource random, double j, double k, double l) {
-        this.level.addParticle(GoodEndingParticleTypes.FIREFLY.get(), mutable.getX() + random.nextDouble(), this.getY() + random.nextDouble(), mutable.getZ() + random.nextDouble(), j, k, l);
+        this.level().addParticle(GoodEndingParticleTypes.FIREFLY.get(), mutable.getX() + random.nextDouble(), this.getY() + random.nextDouble(), mutable.getZ() + random.nextDouble(), j, k, l);
     }
 
     public static AttributeSupplier.Builder createFireflyAttributes() {
@@ -252,7 +252,7 @@ public class FireflyEntity extends PathfinderMob implements FlyingAnimal {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        if (this.level.getDayTime() < 12000 && this.level.getDayTime() > 0) return null;
+        if (this.level().getDayTime() < 12000 && this.level().getDayTime() > 0) return null;
         return GoodEndingSoundEvents.ENTITY_FIREFLY_SWARM_IDLE.get();
     }
 
@@ -263,7 +263,7 @@ public class FireflyEntity extends PathfinderMob implements FlyingAnimal {
 
     @Override
     public boolean isFlying() {
-        return !this.onGround;
+        return !this.onGround();
     }
 
     @Override

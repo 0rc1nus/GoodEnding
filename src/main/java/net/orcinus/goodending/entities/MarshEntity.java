@@ -3,6 +3,8 @@ package net.orcinus.goodending.entities;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -101,14 +103,14 @@ public class MarshEntity extends PathfinderMob {
             double d = (double)(i >> 16 & 0xFF) / 255.0;
             double e = (double)(i >> 8 & 0xFF) / 255.0;
             double f = (double)(i & 0xFF) / 255.0;
-            this.level.addParticle(ParticleTypes.ENTITY_EFFECT, this.getX(), this.getY() + 1f, this.getZ(), d, e, f);
+            this.level().addParticle(ParticleTypes.ENTITY_EFFECT, this.getX(), this.getY() + 1f, this.getZ(), d, e, f);
         }
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide()) {
+        if (!this.level().isClientSide()) {
             if (this.getBrewingTicks() > 0) {
                 if (this.getBrewingTicks() == 1) {
                     this.playSound(GoodEndingSoundEvents.ENTITY_MARSH_BURP.get(), 1.0F, 1.0F);
@@ -130,8 +132,8 @@ public class MarshEntity extends PathfinderMob {
                 itemStack.shrink(1);
             }
             this.setTrusted(true);
-            this.level.broadcastEntityEvent(this, (byte) 18);
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            this.level().broadcastEntityEvent(this, (byte) 18);
+            return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
         if (item instanceof PotionItem && this.getStoredPotion() == Potions.EMPTY && this.isTrusted()) {
             if (!PotionUtils.getPotion(itemStack).hasInstantEffects()) {
@@ -197,7 +199,7 @@ public class MarshEntity extends PathfinderMob {
             double d = this.random.nextGaussian() * 0.02;
             double e = this.random.nextGaussian() * 0.02;
             double f = this.random.nextGaussian() * 0.02;
-            this.level.addParticle(splash, this.getRandomX(1.0), this.getRandomY() + x1, this.getRandomZ(1.0), d, e, f);
+            this.level().addParticle(splash, this.getRandomX(1.0), this.getRandomY() + x1, this.getRandomZ(1.0), d, e, f);
         }
     }
 
@@ -216,7 +218,7 @@ public class MarshEntity extends PathfinderMob {
     @Override
     public void addAdditionalSaveData(CompoundTag nbt) {
         super.addAdditionalSaveData(nbt);
-        nbt.putString("Potion", Registry.POTION.getKey(this.getStoredPotion()).toString());
+        nbt.putString("Potion", BuiltInRegistries.POTION.getKey(this.getStoredPotion()).toString());
         nbt.putBoolean("Infinite", this.isInfinite());
         nbt.putBoolean("Trusted", this.isTrusted());
         nbt.putInt("BrewingTicks", this.getBrewingTicks());

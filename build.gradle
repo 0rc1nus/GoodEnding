@@ -25,7 +25,7 @@ mixin {
 
 version = "${project.minecraft_version}-${project.mod_version}"
 group = 'net.orcinus.goodending'
-archivesBaseName = 'Good Ending'
+archivesBaseName = 'goodending'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
@@ -96,17 +96,18 @@ repositories {
 dependencies {
 	minecraft "net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}"
 	annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
+	implementation fg.deobf('com.github.glitchfiend:TerraBlender-forge:1.20-3.0.0.163')
 }
 
 jar {
 	manifest {
 		attributes([
 				"Specification-Title"     : "Good Ending",
-				"Specification-Vendor"    : "Ninni, Orcinus",
+				"Specification-Vendor"    : "Orcinus",
 				"Specification-Version"   : "1",
 				"Implementation-Title"    : "Good Ending",
 				"Implementation-Version"  : "1.0.0",
-				"Implementation-Vendor"   : "Ninni, Orcinus",
+				"Implementation-Vendor"   : "Orcinus",
 				"Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
 				"MixinConfigs"            : "goodending.mixins.json"
 		])

@@ -45,8 +45,8 @@ public class FindWoodGoal extends Goal {
         for (int x = -range; x <= range; x++) {
             for (int z = -range; z <= range; z++) {
                 for (int y = -range; y <= range; y++) {
-                    BlockPos pos = new BlockPos(this.woodpecker.getX() + x, this.woodpecker.getY() + y, this.woodpecker.getZ() + z);
-                    BlockState state = this.woodpecker.level.getBlockState(pos);
+                    BlockPos pos = BlockPos.containing(this.woodpecker.getX() + x, this.woodpecker.getY() + y, this.woodpecker.getZ() + z);
+                    BlockState state = this.woodpecker.level().getBlockState(pos);
                     if (state.is(BlockTags.LOGS)) {
                         poses.add(pos);
                     }
@@ -60,9 +60,9 @@ public class FindWoodGoal extends Goal {
                 double z = pos.getZ() + 0.5F - this.woodpecker.getZ();
                 double distance = x * x + z * z;
                 Vec3 blockVec = Vec3.atCenterOf(pos);
-                BlockHitResult result = this.woodpecker.level.clip(new ClipContext(this.woodpecker.getEyePosition(), blockVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.woodpecker));
-                List<WoodpeckerEntity> woodpeckerEntities = this.woodpecker.level.getEntitiesOfClass(WoodpeckerEntity.class, new AABB(result.getBlockPos().relative(result.getDirection())));
-                if (this.woodpecker.level.getBlockState(result.getBlockPos()).is(BlockTags.LOGS) && this.woodpecker.level.getBlockState(result.getBlockPos().relative(result.getDirection())).isAir() && result.getType() != HitResult.Type.MISS && distance > 4 && result.getDirection().getAxis() != Direction.Axis.Y && woodpeckerEntities.size() == 0) {
+                BlockHitResult result = this.woodpecker.level().clip(new ClipContext(this.woodpecker.getEyePosition(), blockVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this.woodpecker));
+                List<WoodpeckerEntity> woodpeckerEntities = this.woodpecker.level().getEntitiesOfClass(WoodpeckerEntity.class, new AABB(result.getBlockPos().relative(result.getDirection())));
+                if (this.woodpecker.level().getBlockState(result.getBlockPos()).is(BlockTags.LOGS) && this.woodpecker.level().getBlockState(result.getBlockPos().relative(result.getDirection())).isAir() && result.getType() != HitResult.Type.MISS && distance > 4 && result.getDirection().getAxis() != Direction.Axis.Y && woodpeckerEntities.size() == 0) {
                     this.pos = result.getBlockPos();
                     this.woodpecker.setAttachedFace(result.getDirection());
                     return true;

@@ -3,7 +3,7 @@ loaderVersion="[39,)"
 license="All rights reserved"
 [[mods]]
 modId="goodending"
-version="1.19.2-1.0.2"
+version="1.20.1-1.0.0"
 displayName="Good Ending"
 logoFile= "icon.png"
 authors="Ninni, Orcinus"
@@ -22,6 +22,6 @@ bunten
 [[dependencies.goodending]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19,1.20)"
+    versionRange="[1.20,1.21)"
     ordering="NONE"
     side="BOTH"

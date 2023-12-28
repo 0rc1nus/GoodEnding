@@ -69,10 +69,10 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakTreeConfig> {
                                         BlockPos branchPos = blockPos.above(height - 1).relative(direction);
                                         final int length = UniformInt.of(1, 3).sample(random);
                                         for (int i = 0; i < length; i++) {
-                                            if (world.isEmptyBlock(branchPos.relative(direction, i)) || world.getBlockState(branchPos.relative(direction, i)).getMaterial().isReplaceable()) {
+                                            if (world.isEmptyBlock(branchPos.relative(direction, i)) || world.getBlockState(branchPos.relative(direction, i)).canBeReplaced()) {
                                                 world.setBlock(branchPos.relative(direction, i), Blocks.DARK_OAK_LOG.defaultBlockState().setValue(RotatedPillarBlock.AXIS, direction.getAxis()), 2);
                                                 for (int t = 0; t < length; t++) {
-                                                    if (world.isEmptyBlock(branchPos.relative(direction, length).above(t)) || world.getBlockState(branchPos.relative(direction, length).above(t)).getMaterial().isReplaceable()) {
+                                                    if (world.isEmptyBlock(branchPos.relative(direction, length).above(t)) || world.getBlockState(branchPos.relative(direction, length).above(t)).canBeReplaced()) {
                                                         world.setBlock(branchPos.relative(direction, length).above(t), Blocks.DARK_OAK_LOG.defaultBlockState(), 19);
                                                         /*
                                                          * adding the branchPos to the list since it will be used to generate leaves later
@@ -84,7 +84,7 @@ public class FancyDarkOakFeature extends Feature<FancyDarkOakTreeConfig> {
                                         }
                                     }
                                 }
-                                if (world.isEmptyBlock(pos) || world.getBlockState(pos).getMaterial().isReplaceable()) {
+                                if (world.isEmptyBlock(pos) || world.getBlockState(pos).canBeReplaced()) {
                                     world.setBlock(pos, Blocks.DARK_OAK_LOG.defaultBlockState(), 19);
                                     if (huge && y > height - 2) {
                                         stemPoses.add(pos);

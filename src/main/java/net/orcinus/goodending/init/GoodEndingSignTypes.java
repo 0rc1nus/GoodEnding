@@ -8,8 +8,8 @@ import net.orcinus.goodending.GoodEnding;
 
 public class GoodEndingSignTypes {
 
-    public static final WoodType MUDDY_OAK = WoodType.register(new WoodType(GoodEnding.MODID + ":muddy_oak"));
-    public static final WoodType CYPRESS = WoodType.register(new WoodType(GoodEnding.MODID + ":cypress"));
+    public static final WoodType MUDDY_OAK = WoodType.register(new WoodType(GoodEnding.MODID + ":muddy_oak", GoodEndingBlockSetTypes.MUDDY_OAK));
+    public static final WoodType CYPRESS = WoodType.register(new WoodType(GoodEnding.MODID + ":cypress", GoodEndingBlockSetTypes.CYPRESS));
 
     @OnlyIn(Dist.CLIENT)
     public static void init() {

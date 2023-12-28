@@ -2,6 +2,7 @@ package net.orcinus.goodending.init;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
@@ -17,7 +18,7 @@ public class GoodEndingStructureProcessors {
     public static final StructureProcessorType<LeverProcessor> LEVER_PROCESSOR = register("lever", LeverProcessor.CODEC);
 
     public static <P extends StructureProcessor> StructureProcessorType<P> register(String id, Codec<P> codec) {
-        return Registry.register(Registry.STRUCTURE_PROCESSOR, new ResourceLocation(GoodEnding.MODID, id), () -> codec);
+        return Registry.register(BuiltInRegistries.STRUCTURE_PROCESSOR, new ResourceLocation(GoodEnding.MODID, id), () -> codec);
     }
 
 }

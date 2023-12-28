@@ -2,6 +2,7 @@ package net.orcinus.goodending.criterion;
 
 import com.google.gson.JsonObject;
 import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.DeserializationContext;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
@@ -17,11 +18,6 @@ public class GoodEndingCriterion extends SimpleCriterionTrigger<GoodEndingCriter
     }
 
     @Override
-    protected TriggerInstance createInstance(JsonObject jsonObject, EntityPredicate.Composite composite, DeserializationContext deserializationContext) {
-        return new TriggerInstance(ID, composite);
-    }
-
-    @Override
     public ResourceLocation getId() {
         return ID;
     }
@@ -30,11 +26,15 @@ public class GoodEndingCriterion extends SimpleCriterionTrigger<GoodEndingCriter
         this.trigger(player, conditions -> true);
     }
 
+    @Override
+    protected TriggerInstance createInstance(JsonObject jsonObject, ContextAwarePredicate contextAwarePredicate, DeserializationContext deserializationContext) {
+        return new TriggerInstance(ID, contextAwarePredicate);
+    }
+
     public static class TriggerInstance extends AbstractCriterionTriggerInstance {
 
-        public TriggerInstance(ResourceLocation resourceLocation, EntityPredicate.Composite composite) {
-            super(resourceLocation, composite);
+        public TriggerInstance(ResourceLocation id, ContextAwarePredicate predicate) {
+            super(id, predicate);
         }
-
     }
 }

@@ -22,7 +22,7 @@ public class DuckweedFeature extends Feature<NoneFeatureConfiguration> {
         WorldGenLevel world = context.level();
         BlockPos blockPos = context.origin();
         RandomSource random = context.random();
-        if (world.getBlockState(blockPos.below()).is(Blocks.WATER) && world.getBlockState(blockPos).getMaterial().isReplaceable()) {
+        if (world.getBlockState(blockPos.below()).is(Blocks.WATER) && world.getBlockState(blockPos).canBeReplaced()) {
             DuckweedFeature.generateDuckweed(world, blockPos, random);
             return true;
         } else {
@@ -35,7 +35,7 @@ public class DuckweedFeature extends Feature<NoneFeatureConfiguration> {
         int tries = UniformInt.of(30, 80).sample(random);
         for (int i = 0; i < tries; i++) {
             spreadPos.setWithOffset(blockPos, random.nextInt(3) - random.nextInt(3), 0, random.nextInt(3) - random.nextInt(3));
-            if (random.nextFloat() < 0.23242F && world.getBlockState(spreadPos).getMaterial().isReplaceable() && world.getBlockState(spreadPos.below()).is(Blocks.WATER)) {
+            if (random.nextFloat() < 0.23242F && world.getBlockState(spreadPos).canBeReplaced() && world.getBlockState(spreadPos.below()).is(Blocks.WATER)) {
                 world.setBlock(spreadPos, random.nextInt(50) == 0 ? GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD.get().defaultBlockState() : GoodEndingBlocks.DUCKWEED.get().defaultBlockState(), 2);
             }
         }

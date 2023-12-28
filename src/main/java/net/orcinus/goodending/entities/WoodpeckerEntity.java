@@ -124,7 +124,7 @@ public class WoodpeckerEntity extends PathfinderMob implements FlyingAnimal {
 
     @Override
     public void tick() {
-        if (this.level.isClientSide) {
+        if (this.level().isClientSide) {
             if (this.getPose() == Pose.FALL_FLYING) {
                 this.flyingAnimationState.startIfStopped(this.tickCount);
             } else {
@@ -147,7 +147,7 @@ public class WoodpeckerEntity extends PathfinderMob implements FlyingAnimal {
             if (this.getWoodPos() == null && this.getAttachedFace() != Direction.DOWN) {
                 this.setAttachedFace(Direction.DOWN);
             }
-            if (this.getWoodPos() != null && !this.level.getBlockState(this.getWoodPos()).is(BlockTags.LOGS)) {
+            if (this.getWoodPos() != null && !this.level().getBlockState(this.getWoodPos()).is(BlockTags.LOGS)) {
                 this.setWoodPos(null);
             }
         }
@@ -181,14 +181,14 @@ public class WoodpeckerEntity extends PathfinderMob implements FlyingAnimal {
     private void flapWings() {
         this.prevFlapProgress = this.flapProgress;
         this.prevMaxWingDeviation = this.maxWingDeviation;
-        this.maxWingDeviation += (float)(this.onGround || this.isPassenger() ? -1 : 4) * 0.3f;
+        this.maxWingDeviation += (float)(this.onGround() || this.isPassenger() ? -1 : 4) * 0.3f;
         this.maxWingDeviation = Mth.clamp(this.maxWingDeviation, 0.0f, 1.0f);
-        if (!this.onGround && this.flapSpeed < 1.0f) {
+        if (!this.onGround() && this.flapSpeed < 1.0f) {
             this.flapSpeed = 1.0f;
         }
         this.flapSpeed *= 0.9f;
         Vec3 vec3d = this.getDeltaMovement();
-        if (!this.onGround && vec3d.y < 0.0) {
+        if (!this.onGround() && vec3d.y < 0.0) {
             this.setDeltaMovement(vec3d.multiply(1.0, 0.6, 1.0));
         }
         this.flapProgress += this.flapSpeed * 2.0f;
@@ -239,7 +239,7 @@ public class WoodpeckerEntity extends PathfinderMob implements FlyingAnimal {
 
     @Override
     public boolean isFlying() {
-        return !this.onGround;
+        return !this.onGround();
     }
 
     @Override

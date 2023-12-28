@@ -40,7 +40,7 @@ public class BoulderFeature extends Feature<BoulderConfig> {
                 for (float z = -size; z < size; z++) {
                     double distance = Math.sqrt(x * x + y * y + z * z);
                     if (distance <= size * ((size - y) / 4)) {
-                        BlockPos pos = origin.offset(x, y, z);
+                        BlockPos pos = BlockPos.containing(origin.getX() + x, origin.getY() + y, origin.getZ() + z);
                         BlockState state = y + 1 > 0 && random.nextFloat() > 0.25F ? config.stone().getState(random, pos) : config.secondaryStone().getState(random, pos);
                         world.setBlock(pos, state, 3);
                     }

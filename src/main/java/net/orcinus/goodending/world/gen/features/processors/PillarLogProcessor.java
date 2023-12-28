@@ -24,14 +24,14 @@ public class PillarLogProcessor extends StructureProcessor {
     @Nullable
     @Override
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader world, BlockPos pos, BlockPos pivot, StructureTemplate.StructureBlockInfo originalBlockInfo, StructureTemplate.StructureBlockInfo currentBlockInfo, StructurePlaceSettings data) {
-        if (currentBlockInfo.state.getBlock() == Blocks.MAGENTA_GLAZED_TERRACOTTA) {
+        if (currentBlockInfo.state().getBlock() == Blocks.MAGENTA_GLAZED_TERRACOTTA) {
             BlockState muddyOakLog = GoodEndingBlocks.MUDDY_OAK_LOG.get().defaultBlockState().setValue(RotatedPillarBlock.AXIS, Direction.Axis.Y);
-            currentBlockInfo = new StructureTemplate.StructureBlockInfo(currentBlockInfo.pos, muddyOakLog, currentBlockInfo.nbt);
+            currentBlockInfo = new StructureTemplate.StructureBlockInfo(currentBlockInfo.pos(), muddyOakLog, currentBlockInfo.nbt());
             for (int i = 0; i < world.getHeight(); i++) {
-                BlockPos down = currentBlockInfo.pos.below(i);
-                ChunkAccess chunk = world.getChunk(currentBlockInfo.pos);
+                BlockPos down = currentBlockInfo.pos().below(i);
+                ChunkAccess chunk = world.getChunk(currentBlockInfo.pos());
                 BlockState blockState = world.getBlockState(down);
-                if ((blockState.getFluidState().is(Fluids.WATER) || world.isEmptyBlock(down)) && currentBlockInfo.pos.getY() > world.getMinBuildHeight() + 1) {
+                if ((blockState.getFluidState().is(Fluids.WATER) || world.isEmptyBlock(down)) && currentBlockInfo.pos().getY() > world.getMinBuildHeight() + 1) {
                     chunk.setBlockState(down, muddyOakLog, false);
                 }
             }

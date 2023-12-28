@@ -1,22 +1,16 @@
 package net.orcinus.goodending;
 
-import net.minecraft.tags.BlockTags;
-import net.minecraft.world.entity.SpawnPlacements;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.orcinus.goodending.entities.FireflyEntity;
 import net.orcinus.goodending.events.MiscEvents;
 import net.orcinus.goodending.events.MobEvents;
-import net.orcinus.goodending.init.GoodEndingBiomes;
-import net.orcinus.goodending.init.GoodEndingBlockEntityTypes;
 import net.orcinus.goodending.init.GoodEndingBlocks;
+import net.orcinus.goodending.init.GoodEndingCreativeModeTabs;
 import net.orcinus.goodending.init.GoodEndingEntityTypes;
 import net.orcinus.goodending.init.GoodEndingFeatures;
 import net.orcinus.goodending.init.GoodEndingItems;
@@ -30,22 +24,18 @@ import net.orcinus.goodending.init.GoodEndingStructureProcessors;
 import net.orcinus.goodending.init.GoodEndingStructureTypes;
 import net.orcinus.goodending.init.GoodEndingTreeDecorators;
 import net.orcinus.goodending.init.GoodEndingVanillaIntegration;
-import net.orcinus.goodending.init.GoodEndingWorldGen;
 import net.orcinus.goodending.mixin.invokers.BrewingRecipeRegistryInvoker;
-import net.orcinus.goodending.util.GoodEndingCreativeModeTab;
 
 @Mod(GoodEnding.MODID)
 public class GoodEnding {
 	public static final String MODID = "goodending";
-	public static final CreativeModeTab TAB = new GoodEndingCreativeModeTab();
 
 	public GoodEnding() {
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		IEventBus eventBus = MinecraftForge.EVENT_BUS;
 
 		GoodEndingBlocks.BLOCKS.register(modEventBus);
-		GoodEndingBlockEntityTypes.BLOCK_ENTITY_TYPES.register(modEventBus);
-		GoodEndingBiomes.BIOMES.register(modEventBus);
+		GoodEndingCreativeModeTabs.CREATIVE_MODE_TABS.register(modEventBus);
 		GoodEndingItems.ITEMS.register(modEventBus);
 		GoodEndingEntityTypes.ENTITY_TYPES.register(modEventBus);
 		GoodEndingFeatures.FEATURES.register(modEventBus);
@@ -69,7 +59,6 @@ public class GoodEnding {
 			GoodEndingStructureProcessors.init();
 			GoodEndingStructurePieceTypes.init();
 			GoodEndingStructureTypes.init();
-			GoodEndingWorldGen.init();
 			GoodEndingVanillaIntegration.init();
 		});
 	}

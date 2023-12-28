@@ -20,9 +20,9 @@ public class LeverProcessor extends StructureProcessor {
     @Nullable
     @Override
     public StructureTemplate.StructureBlockInfo processBlock(LevelReader world, BlockPos pos, BlockPos pivot, StructureTemplate.StructureBlockInfo originalBlockInfo, StructureTemplate.StructureBlockInfo currentBlockInfo, StructurePlaceSettings data) {
-        BlockState state = currentBlockInfo.state;
-        if (state.getBlock() == Blocks.LEVER && !state.getValue(LeverBlock.POWERED) && data.getRandom(currentBlockInfo.pos).nextFloat() < 0.5F) {
-            currentBlockInfo = new StructureTemplate.StructureBlockInfo(currentBlockInfo.pos, state.setValue(LeverBlock.POWERED, true), currentBlockInfo.nbt);
+        BlockState state = currentBlockInfo.state();
+        if (state.getBlock() == Blocks.LEVER && !state.getValue(LeverBlock.POWERED) && data.getRandom(currentBlockInfo.pos()).nextFloat() < 0.5F) {
+            currentBlockInfo = new StructureTemplate.StructureBlockInfo(currentBlockInfo.pos(), state.setValue(LeverBlock.POWERED, true), currentBlockInfo.nbt());
         }
         return currentBlockInfo;
     }

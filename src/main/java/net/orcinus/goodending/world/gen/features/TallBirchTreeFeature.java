@@ -20,6 +20,7 @@ import net.minecraft.world.level.levelgen.feature.DripstoneUtils;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.orcinus.goodending.blocks.BirchMushroomPlantBlock;
 import net.orcinus.goodending.init.GoodEndingBlocks;
 
@@ -102,7 +103,7 @@ public class TallBirchTreeFeature extends Feature<TreeConfiguration> {
             int i = 2 + random.nextInt(2);
             for (int j = 0; j < i; ++j) {
                 CompoundTag nbtCompound = new CompoundTag();
-                nbtCompound.putString("id", Registry.ENTITY_TYPE.getKey(EntityType.BEE).toString());
+                nbtCompound.putString("id", ForgeRegistries.ENTITY_TYPES.getKey(EntityType.BEE).toString());
                 blockEntity.storeBee(nbtCompound, random.nextInt(599), false);
             }
         });

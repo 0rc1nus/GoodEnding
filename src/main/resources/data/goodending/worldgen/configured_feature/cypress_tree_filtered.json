@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:random_selector",
+  "config": {
+    "default": "goodending:cypress_tree_checked",
+    "features": [
+      {
+        "chance": 0.8,
+        "feature": "goodending:cypress_tree_checked"
+      }
+    ]
+  }
+}

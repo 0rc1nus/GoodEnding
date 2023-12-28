@@ -45,8 +45,8 @@ public class FallenLogFeature extends Feature<FallenLogConfig> {
                 if (tries > 0) {
                     return false;
                 }
-                boolean flag = world.getBlockState(mut).getMaterial().isReplaceable() || world.isStateAtPosition(mut, state -> state.isAir() || state.is(Blocks.WATER) || state.is(BlockTags.FLOWERS));
-                if (world.getBlockState(mut.below()).getMaterial().isReplaceable() || world.isStateAtPosition(mut.below(), DripstoneUtils::isEmptyOrWater)) {
+                boolean flag = world.getBlockState(mut).canBeReplaced() || world.isStateAtPosition(mut, state -> state.isAir() || state.is(Blocks.WATER) || state.is(BlockTags.FLOWERS));
+                if (world.getBlockState(mut.below()).canBeReplaced() || world.isStateAtPosition(mut.below(), DripstoneUtils::isEmptyOrWater)) {
                     mut.move(Direction.DOWN);
                     world.setBlock(mut, config.log.getState(random, mut.immutable()).setValue(RotatedPillarBlock.AXIS, direction.getAxis()), 2);
                     if (world.isEmptyBlock(mut.below())) {

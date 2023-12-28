@@ -1,0 +1,25 @@
+{
+  "type": "goodending:boulder",
+  "config": {
+    "coarse_dirt": true,
+    "secondary_stone": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:red_sandstone"
+      }
+    },
+    "size": {
+      "type": "minecraft:uniform",
+      "value": {
+        "max_exclusive": 3.5,
+        "min_inclusive": 2.0
+      }
+    },
+    "stone": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:red_sandstone"
+      }
+    }
+  }
+}

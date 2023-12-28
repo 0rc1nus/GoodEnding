@@ -31,7 +31,7 @@ public class FlyAroundGoal extends Goal {
     public void start() {
         Vec3 vec3d = this.getRandomLocation();
         if (vec3d != null) {
-            this.fireflyEntity.getNavigation().moveTo(this.fireflyEntity.getNavigation().createPath(new BlockPos(vec3d), 1), 1.0);
+            this.fireflyEntity.getNavigation().moveTo(this.fireflyEntity.getNavigation().createPath(BlockPos.containing(vec3d), 1), 1.0);
         }
     }
 

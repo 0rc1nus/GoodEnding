@@ -43,7 +43,7 @@ public class MoveToWoodGoal extends Goal {
     public boolean canUse() {
         BlockPos woodPos = this.woodpecker.getWoodPos();
         if (woodPos != null) {
-            List<WoodpeckerEntity> woodpeckerEntities = this.woodpecker.level.getEntitiesOfClass(WoodpeckerEntity.class, new AABB(woodPos.relative(this.woodpecker.getAttachedFace())));
+            List<WoodpeckerEntity> woodpeckerEntities = this.woodpecker.level().getEntitiesOfClass(WoodpeckerEntity.class, new AABB(woodPos.relative(this.woodpecker.getAttachedFace())));
             if (woodpeckerEntities.size() > 1) {
                 return false;
             }
@@ -51,7 +51,7 @@ public class MoveToWoodGoal extends Goal {
         if (this.woodpecker.getLastHurtByMob() != null) {
             return false;
         }
-        return this.woodpecker.getWoodPos() != null && this.woodpecker.level.getBlockState(this.woodpecker.getWoodPos()).is(BlockTags.LOGS) && this.woodpecker.getPeckingWoodCooldown() == 0;
+        return this.woodpecker.getWoodPos() != null && this.woodpecker.level().getBlockState(this.woodpecker.getWoodPos()).is(BlockTags.LOGS) && this.woodpecker.getPeckingWoodCooldown() == 0;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class MoveToWoodGoal extends Goal {
     public boolean canContinueToUse() {
         BlockPos woodPos = this.woodpecker.getWoodPos();
         if (woodPos != null) {
-            List<WoodpeckerEntity> woodpeckerEntities = this.woodpecker.level.getEntitiesOfClass(WoodpeckerEntity.class, new AABB(woodPos.relative(this.woodpecker.getAttachedFace())));
+            List<WoodpeckerEntity> woodpeckerEntities = this.woodpecker.level().getEntitiesOfClass(WoodpeckerEntity.class, new AABB(woodPos.relative(this.woodpecker.getAttachedFace())));
             if (woodpeckerEntities.size() > 1 && this.peckingTicks == 100) {
                 this.cancel = true;
                 this.woodpecker.setPeckingWoodCooldown(200);
@@ -83,7 +83,7 @@ public class MoveToWoodGoal extends Goal {
         if (this.peckingTicks == 0) {
             return false;
         }
-        return this.woodpecker.getWoodPos() != null && this.woodpecker.level.getBlockState(this.woodpecker.getWoodPos()).is(BlockTags.LOGS);
+        return this.woodpecker.getWoodPos() != null && this.woodpecker.level().getBlockState(this.woodpecker.getWoodPos()).is(BlockTags.LOGS);
     }
 
     @Override
@@ -111,13 +111,13 @@ public class MoveToWoodGoal extends Goal {
                 this.woodpecker.getNavigation().moveTo(center.x(), center.y(), center.z(), 1.2F);
                 double squaredDistance = Mth.sqrt((float) this.woodpecker.blockPosition().distToCenterSqr(Vec3.atBottomCenterOf(woodPos)));
                 if (squaredDistance <= 1.2D) {
-                    BlockHitResult blockHitResult = this.woodpecker.level.isBlockInLine(new ClipBlockStateContext(this.woodpecker.position(), Vec3.atCenterOf(woodPos), state -> state.is(BlockTags.LOGS)));
+                    BlockHitResult blockHitResult = this.woodpecker.level().isBlockInLine(new ClipBlockStateContext(this.woodpecker.position(), Vec3.atCenterOf(woodPos), state -> state.is(BlockTags.LOGS)));
                     this.woodpecker.setDeltaMovement(Vec3.ZERO);
                     this.woodpecker.getLookControl().setLookAt(Vec3.atCenterOf(woodPos));
                     if (blockHitResult.getType() == HitResult.Type.BLOCK) {
-                        List<WoodpeckerEntity> woodpeckerEntities = this.woodpecker.level.getEntitiesOfClass(WoodpeckerEntity.class, new AABB(woodPos.relative(this.woodpecker.getAttachedFace())));
+                        List<WoodpeckerEntity> woodpeckerEntities = this.woodpecker.level().getEntitiesOfClass(WoodpeckerEntity.class, new AABB(woodPos.relative(this.woodpecker.getAttachedFace())));
                         if (woodpeckerEntities.size() > 1 && this.peckingTicks > this.initialPeckingTicks - 10) this.cancel = true;
-                        BlockPos pos = new BlockPos(Vec3.atBottomCenterOf(woodPos));
+                        BlockPos pos = BlockPos.containing(Vec3.atBottomCenterOf(woodPos));
                         this.woodpecker.getLookControl().setLookAt(Vec3.atCenterOf(pos));
                         double xPosition = pos.getX() + (attachedFace.getAxis() == Direction.Axis.Z ? 0.5D : (attachedFace == Direction.WEST ? -0.2D : 1.2D));
                         double yPosition = pos.getY() + 0.25D;
@@ -159,12 +159,12 @@ public class MoveToWoodGoal extends Goal {
     }
 
     private void peckWood(BlockPos woodPos) {
-        BlockState blockState = this.woodpecker.level.getBlockState(woodPos);
+        BlockState blockState = this.woodpecker.level().getBlockState(woodPos);
         for (int i = 0; i < 10; ++i) {
             double d = woodPos.getX() + 0.5D;
             double e = woodPos.getY() + 0.5D;
             double f = woodPos.getZ() + 0.5D;
-            ((ServerLevel) this.woodpecker.level).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, blockState), d, e, f, 1, 0.5, 0.25, 0.5, 0.0);
+            ((ServerLevel) this.woodpecker.level()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, blockState), d, e, f, 1, 0.5, 0.25, 0.5, 0.0);
         }
     }
 

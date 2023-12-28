@@ -1,6 +1,7 @@
 package net.orcinus.goodending.init;
 
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import net.orcinus.goodending.GoodEnding;
@@ -17,7 +18,7 @@ public class GoodEndingStructurePieceTypes {
     }
 
     private static StructurePieceType register(StructurePieceType type, String id) {
-        return Registry.register(Registry.STRUCTURE_PIECE, new ResourceLocation(GoodEnding.MODID, id), type);
+        return Registry.register(BuiltInRegistries.STRUCTURE_PIECE, new ResourceLocation(GoodEnding.MODID, id), type);
     }
 
 }

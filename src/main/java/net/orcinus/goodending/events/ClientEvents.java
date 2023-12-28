@@ -1,17 +1,11 @@
 package net.orcinus.goodending.events;
 
 import net.minecraft.client.model.BoatModel;
-import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.ChestBoatModel;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.SignRenderer;
-import net.minecraft.client.renderer.entity.BoatRenderer;
-import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.DyeableLeatherItem;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -21,8 +15,6 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
-import net.minecraftforge.client.event.RenderTooltipEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -38,9 +30,9 @@ import net.orcinus.goodending.client.renderer.GoodEndingBoatEntityRenderer;
 import net.orcinus.goodending.client.renderer.MarshRenderer;
 import net.orcinus.goodending.client.renderer.WoodpeckerRenderer;
 import net.orcinus.goodending.entities.GoodEndingBoatEntity;
-import net.orcinus.goodending.init.GoodEndingBlockEntityTypes;
 import net.orcinus.goodending.init.GoodEndingBlocks;
 import net.orcinus.goodending.init.GoodEndingEntityTypes;
+import net.orcinus.goodending.init.GoodEndingItems;
 import net.orcinus.goodending.init.GoodEndingModelLayers;
 import net.orcinus.goodending.init.GoodEndingParticleTypes;
 import net.orcinus.goodending.init.GoodEndingSignTypes;
@@ -87,22 +79,21 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void registerEntityModelLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        Arrays.stream(GoodEndingBoatEntity.BoatType.values()).forEach(type -> {
+            event.registerLayerDefinition(GoodEndingModelLayers.createBoat(type), BoatModel::createBodyModel);
+            event.registerLayerDefinition(GoodEndingModelLayers.createChestBoat(type), ChestBoatModel::createBodyModel);
+        });
         event.registerLayerDefinition(GoodEndingModelLayers.MARSH, MarshEntityModel::getLayerDefinition);
         event.registerLayerDefinition(GoodEndingModelLayers.WOODPECKER, WoodPeckerEntityModel::getLayerDefinition);
-        Arrays.stream(GoodEndingBoatEntity.BoatType.values()).forEach(type -> {
-            event.registerLayerDefinition(GoodEndingModelLayers.createBoat(type), () -> BoatModel.createBodyModel(false));
-            event.registerLayerDefinition(GoodEndingModelLayers.createChestBoat(type), () -> BoatModel.createBodyModel(true));
-        });
     }
 
     @SubscribeEvent
     public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(GoodEndingBlockEntityTypes.GE_SIGN.get(), SignRenderer::new);
+        event.registerEntityRenderer(GoodEndingEntityTypes.BOAT.get(), ctx -> new GoodEndingBoatEntityRenderer(ctx, false));
+        event.registerEntityRenderer(GoodEndingEntityTypes.CHEST_BOAT.get(), ctx -> new GoodEndingBoatEntityRenderer(ctx, true));
         event.registerEntityRenderer(GoodEndingEntityTypes.FIREFLY_SWARM.get(), FireflyRenderer::new);
         event.registerEntityRenderer(GoodEndingEntityTypes.MARSH.get(), MarshRenderer::new);
         event.registerEntityRenderer(GoodEndingEntityTypes.WOODPECKER.get(), WoodpeckerRenderer::new);
-        event.registerEntityRenderer(GoodEndingEntityTypes.BOAT.get(), ctx -> new GoodEndingBoatEntityRenderer(ctx, false));
-        event.registerEntityRenderer(GoodEndingEntityTypes.CHEST_BOAT.get(), ctx -> new GoodEndingBoatEntityRenderer(ctx, true));
     }
 
     @SubscribeEvent
@@ -152,9 +143,9 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void registerParticles(RegisterParticleProvidersEvent event) {
-        event.register(GoodEndingParticleTypes.FIREFLY.get(), FireflyParticle.Factory::new);
-        event.register(GoodEndingParticleTypes.BIRCH_LEAF.get(), LeafParticle.Factory::new);
-        event.register(GoodEndingParticleTypes.DARK_OAK_LEAF.get(), LeafParticle.Factory::new);
+        event.registerSpriteSet(GoodEndingParticleTypes.FIREFLY.get(), FireflyParticle.Factory::new);
+        event.registerSpriteSet(GoodEndingParticleTypes.BIRCH_LEAF.get(), LeafParticle.Factory::new);
+        event.registerSpriteSet(GoodEndingParticleTypes.DARK_OAK_LEAF.get(), LeafParticle.Factory::new);
     }
 
 }

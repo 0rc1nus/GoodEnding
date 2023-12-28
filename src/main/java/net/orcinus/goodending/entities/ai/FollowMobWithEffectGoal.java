@@ -43,7 +43,7 @@ public class FollowMobWithEffectGoal extends Goal {
     private LivingEntity findMate() {
         double d = Double.MAX_VALUE;
         LivingEntity target = null;
-        for (LivingEntity targets : this.marsh.level.getEntitiesOfClass(LivingEntity.class, this.marsh.getBoundingBox().inflate(8.0D), livingEntity -> livingEntity.getUUID() != this.marsh.getUUID() && !livingEntity.getActiveEffectsMap().isEmpty())) {
+        for (LivingEntity targets : this.marsh.level().getEntitiesOfClass(LivingEntity.class, this.marsh.getBoundingBox().inflate(8.0D), livingEntity -> livingEntity.getUUID() != this.marsh.getUUID() && !livingEntity.getActiveEffectsMap().isEmpty())) {
             if (!(this.marsh.distanceToSqr(targets) < d)) continue;
             target = targets;
             d = this.marsh.distanceToSqr(targets);

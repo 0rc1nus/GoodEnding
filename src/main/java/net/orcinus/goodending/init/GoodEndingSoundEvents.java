@@ -48,7 +48,7 @@ public class GoodEndingSoundEvents {
     private static RegistryObject<SoundEvent> block(String block, String type) { return register("block." + block + "." + type); }
 
     private static RegistryObject<SoundEvent> register(String id) {
-        return SOUND_EVENTS.register(id, () -> new SoundEvent(new ResourceLocation(GoodEnding.MODID, id)));
+        return SOUND_EVENTS.register(id, () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(GoodEnding.MODID, id)));
     }
 
 }

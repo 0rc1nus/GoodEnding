@@ -1,0 +1,24 @@
+{
+  "type": "goodending:fallen_log",
+  "config": {
+    "brown_mushroom": false,
+    "length": {
+      "type": "minecraft:uniform",
+      "value": {
+        "max_inclusive": 6,
+        "min_inclusive": 4
+      }
+    },
+    "log": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "minecraft:acacia_log",
+        "Properties": {
+          "axis": "y"
+        }
+      }
+    },
+    "shelf_mushroom": false,
+    "vines": false
+  }
+}

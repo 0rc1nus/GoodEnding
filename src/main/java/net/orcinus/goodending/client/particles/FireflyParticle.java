@@ -1,8 +1,7 @@
 package net.orcinus.goodending.client.particles;
 
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.math.Axis;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.Particle;
@@ -14,6 +13,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 @OnlyIn(Dist.CLIENT)
 public class FireflyParticle extends SimpleAnimatedParticle {
@@ -57,7 +58,7 @@ public class FireflyParticle extends SimpleAnimatedParticle {
 
     @Override
     public void render(VertexConsumer vertexConsumer, Camera camera, float tickDelta) {
-        Quaternion quaternion;
+        Quaternionf quaternion;
         Vec3 vec3d = camera.getPosition();
         float f = (float)(Mth.lerp(tickDelta, this.xo, this.x) - vec3d.x());
         float g = (float)(Mth.lerp(tickDelta, this.yo, this.y) - vec3d.y());
@@ -65,17 +66,17 @@ public class FireflyParticle extends SimpleAnimatedParticle {
         if (this.roll == 0.0f) {
             quaternion = camera.rotation();
         } else {
-            quaternion = new Quaternion(camera.rotation());
+            quaternion = new Quaternionf(camera.rotation());
             float i = Mth.lerp(tickDelta, this.oRoll, this.roll);
-            quaternion.mul(Vector3f.ZP.rotation(i));
+            quaternion.mul(Axis.ZP.rotation(i));
         }
         Vector3f vec3f = new Vector3f(-1.0f, -1.0f, 0.0f);
-        vec3f.transform(quaternion);
+        vec3f.rotate(quaternion);
         Vector3f[] vec3fs = new Vector3f[]{new Vector3f(-1.0f, -1.0f, 0.0f), new Vector3f(-1.0f, 1.0f, 0.0f), new Vector3f(1.0f, 1.0f, 0.0f), new Vector3f(1.0f, -1.0f, 0.0f)};
         float j = this.getQuadSize(tickDelta);
         for (int k = 0; k < 4; ++k) {
             Vector3f vec3f2 = vec3fs[k];
-            vec3f2.transform(quaternion);
+            vec3f2.rotate(quaternion);
             vec3f2.mul(j);
             vec3f2.add(f, g, h);
         }

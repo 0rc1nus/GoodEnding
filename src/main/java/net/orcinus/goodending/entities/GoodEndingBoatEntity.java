@@ -1,19 +1,14 @@
 package net.orcinus.goodending.entities;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.orcinus.goodending.init.GoodEndingBlocks;
 import net.orcinus.goodending.init.GoodEndingEntityTypes;
 import net.orcinus.goodending.init.GoodEndingItems;
@@ -64,41 +59,6 @@ public class GoodEndingBoatEntity extends Boat {
 
     public void setGoodEndingBoatType(BoatType type) {
         this.entityData.set(BOAT_TYPE, type.ordinal());
-    }
-
-    @Override
-    protected void checkFallDamage(double heightDifference, boolean onGround, BlockState state, BlockPos landedPosition) {
-        this.lastYd = this.getDeltaMovement().y;
-        if (!this.isPassenger()) {
-            if (onGround) {
-                if (this.fallDistance > 3.0F) {
-                    if (this.status != Boat.Status.ON_LAND) {
-                        this.resetFallDistance();
-                        return;
-                    }
-
-                    this.causeFallDamage(this.fallDistance, 1.0F, DamageSource.FALL);
-                    if (!this.level.isClientSide && !this.isRemoved()) {
-                        this.kill();
-                        if (this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
-                            int i;
-                            for(i = 0; i < 3; ++i) {
-                                this.spawnAtLocation(this.getGoodEndingBoatType().getPlanks());
-                            }
-
-                            for(i = 0; i < 2; ++i) {
-                                this.spawnAtLocation(Items.STICK);
-                            }
-                        }
-                    }
-                }
-
-                this.resetFallDistance();
-            } else if (!this.canBoatInFluid(this.level.getFluidState(this.blockPosition().below())) && heightDifference < 0.0) {
-                this.fallDistance -= (float)heightDifference;
-            }
-
-        }
     }
 
     public enum BoatType {

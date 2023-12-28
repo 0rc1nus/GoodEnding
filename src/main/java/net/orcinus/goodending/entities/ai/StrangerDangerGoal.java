@@ -25,6 +25,6 @@ public class StrangerDangerGoal<T extends LivingEntity> extends AvoidEntityGoal<
     @Override
     public void tick() {
         super.tick();
-        this.marshEntity.level.broadcastEntityEvent(this.marshEntity, (byte) 42);
+        this.marshEntity.level().broadcastEntityEvent(this.marshEntity, (byte) 42);
     }
 }
