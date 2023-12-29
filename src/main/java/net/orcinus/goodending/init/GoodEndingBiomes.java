@@ -91,6 +91,8 @@ public class GoodEndingBiomes {
         builder2.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, GoodEndingPlacedFeatures.BIG_LILY_PADS_PLACED);
         builder2.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, GoodEndingPlacedFeatures.PATCH_FLOWERING_WATERLILY_PLACED);
         builder2.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, GoodEndingPlacedFeatures.MARSHY_SWAMP_VEGETATION);
+        builder2.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, GoodEndingPlacedFeatures.PATCH_FERN_PLACED);
+        builder2.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, GoodEndingPlacedFeatures.PATCH_LARGE_FERN_PLACED);
         builder2.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, GoodEndingPlacedFeatures.MARSH_SWAMP_TREE_PLACED);
         Music musicSound = Musics.createGameMusic(SoundEvents.MUSIC_BIOME_SWAMP);
         return new Biome.BiomeBuilder()

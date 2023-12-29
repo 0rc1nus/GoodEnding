@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "goodending:algae_bucket"
+      "item": "goodending:algae"
     },
     {
       "item": "minecraft:wheat"

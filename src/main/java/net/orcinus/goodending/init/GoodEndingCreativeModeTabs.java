@@ -78,7 +78,7 @@ public class GoodEndingCreativeModeTabs {
                     output.accept(HANGING_OAK_LEAVES);
                     output.accept(HANGING_DARK_OAK_LEAVES);
                     output.accept(DUCKWEED);
-                    output.accept(ALGAE_BUCKET);
+                    output.accept(ALGAE);
                     output.accept(CATTAIL);
                     output.accept(FIREFLY_BOTTLE);
                     output.accept(FIREFLY_LANTERN);
@@ -131,7 +131,7 @@ public class GoodEndingCreativeModeTabs {
                     YELLOW_FLOWERING_LILY_PAD,
                     LARGE_LILY_PAD,
                     DUCKWEED,
-                    ALGAE_BUCKET
+                    ALGAE
             );
             entries.addAfter(Items.PEONY, POLLENFLAKE, CATTAIL);
             entries.addAfter(Items.OAK_LEAVES, HANGING_OAK_LEAVES);

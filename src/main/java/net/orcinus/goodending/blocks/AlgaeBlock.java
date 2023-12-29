@@ -51,7 +51,7 @@ public class AlgaeBlock extends MultifaceBlock implements BonemealableBlock, Sim
 
     @Override
     public boolean canBeReplaced(BlockState blockState, BlockPlaceContext blockPlaceContext) {
-        return !blockPlaceContext.getItemInHand().is(GoodEndingItems.ALGAE_BUCKET) || super.canBeReplaced(blockState, blockPlaceContext);
+        return !blockPlaceContext.getItemInHand().is(GoodEndingItems.ALGAE) || super.canBeReplaced(blockState, blockPlaceContext);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class AlgaeBlock extends MultifaceBlock implements BonemealableBlock, Sim
         if (!world.isClientSide()) {
             world.levelEvent(2001, pos, Block.getId(blockState));
         }
-        return new ItemStack(GoodEndingItems.ALGAE_BUCKET);
+        return new ItemStack(GoodEndingItems.ALGAE);
     }
 
 
