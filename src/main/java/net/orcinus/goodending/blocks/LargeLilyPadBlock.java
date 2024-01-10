@@ -1,5 +1,7 @@
 package net.orcinus.goodending.blocks;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -11,6 +13,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
@@ -26,6 +29,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.orcinus.goodending.init.GoodEndingBlocks;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.HashSet;
+import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class LargeLilyPadBlock extends BushBlock implements SimpleWaterloggedBlock, BonemealableBlock {
@@ -62,48 +68,34 @@ public class LargeLilyPadBlock extends BushBlock implements SimpleWaterloggedBlo
 
     @Override
     public boolean isBonemealSuccess(Level level, RandomSource randomSource, BlockPos blockPos, BlockState blockState) {
-        return true;
+        return !this.canGrow(level, blockPos).isEmpty();
     }
 
     @Override
     public boolean isValidBonemealTarget(LevelReader levelReader, BlockPos blockPos, BlockState blockState, boolean bl) {
-        return true;
+        return !this.canGrow((Level) levelReader, blockPos).isEmpty();
     }
 
     @Override
     public void performBonemeal(ServerLevel world, RandomSource random, BlockPos pos, BlockState state) {
-        if (world.getBlockState(pos).getFluidState().is(Fluids.WATER)) {
-            int j = 1;
-            int l = 0;
-            int m = pos.getX() - 2;
-            int n = 0;
-
-            for (int o = 0; o < 5; ++o) {
-                for (int p = 0; p < j; ++p) {
-                    int q = 2 + pos.getY();
-                    for (int r = q - 2; r < q; ++r) {
-                        BlockPos blockPos = new BlockPos(m + o, r, pos.getZ() - n + p);
-                        if (blockPos == pos
-                                || random.nextInt(4) != 0
-                                || world.getBlockState(blockPos).getBlock().defaultBlockState().is(GoodEndingBlocks.LARGE_LILY_PAD)
-                                || !world.getBlockState(pos).getFluidState().is(Fluids.WATER)
-                                || !world.getBlockState(blockPos).getBlock().defaultBlockState().is(Blocks.WATER))
-                            continue;
-
-                        world.setBlock(blockPos, state, 3);
-                    }
-                }
-                if (l < 2) {
-                    j += 2;
-                    ++n;
-                } else {
-                    j -= 2;
-                    --n;
-                }
-                ++l;
-            }
-            world.setBlock(pos, state, 2);
+        List<BlockPos> list = this.canGrow(world, pos);
+        if (!list.isEmpty()) {
+            world.setBlock(list.get(random.nextInt(list.size())), GoodEndingBlocks.LARGE_LILY_PAD.defaultBlockState().setValue(WATERLOGGED, true), 2);
         }
+    }
+
+    private List<BlockPos> canGrow(Level world, BlockPos pos) {
+        List<BlockPos> list = Lists.newArrayList();
+        for (int x = -1; x <= 1; x++) {
+            for (int z = -1; z <= 1; z++) {
+                BlockPos blockPos = new BlockPos(pos.getX() + x, pos.getY(), pos.getZ() + z);
+                BlockState blockState = world.getBlockState(blockPos);
+                if (blockState.is(Blocks.WATER) || blockState.canBeReplaced()) {
+                    list.add(blockPos);
+                }
+            }
+        }
+        return list;
     }
 
     @Override

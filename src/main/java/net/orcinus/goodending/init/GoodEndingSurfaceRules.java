@@ -16,8 +16,9 @@ public class GoodEndingSurfaceRules {
     public static SurfaceRules.RuleSource makeRules() {
         SurfaceRules.RuleSource ifTrue = SurfaceRules.ifTrue(SurfaceRules.isBiome(GoodEndingBiomes.OAK_HAMMOCK_FOREST_KEY), SurfaceRules.sequence(SurfaceRules.ifTrue(surfaceNoiseThreshold(1.75), COARSE_DIRT), SurfaceRules.ifTrue(surfaceNoiseThreshold(-0.75), PODZOL), COARSE_DIRT));
         SurfaceRules.RuleSource swamp = SurfaceRules.sequence(SurfaceRules.ifTrue(SurfaceRules.isBiome(GoodEndingBiomes.MARSHY_SWAMP_KEY), SurfaceRules.ifTrue(SurfaceRules.yBlockCheck(VerticalAnchor.absolute(62), 0), SurfaceRules.ifTrue(SurfaceRules.not(SurfaceRules.yBlockCheck(VerticalAnchor.absolute(63), 0)), SurfaceRules.ifTrue(SurfaceRules.noiseCondition(Noises.SWAMP, 0.0), WATER)))));
+        SurfaceRules.ConditionSource conditionSource9 = SurfaceRules.abovePreliminarySurface();
         return SurfaceRules.sequence(
-                SurfaceRules.ifTrue(
+                SurfaceRules.ifTrue(conditionSource9, SurfaceRules.ifTrue(
                         SurfaceRules.ON_FLOOR,
                         SurfaceRules.ifTrue(
                                 SurfaceRules.isBiome(Biomes.SWAMP),
@@ -33,9 +34,11 @@ public class GoodEndingSurfaceRules {
                                                         SurfaceRules.ifTrue(
                                                                 SurfaceRules.noiseCondition(Noises.SWAMP, 0.0), WATER
                                                         ))
-                                        )))),
-                SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, swamp),
-                SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, ifTrue));
+                                        ))
+                        ))),
+                SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, SurfaceRules.ifTrue(conditionSource9, swamp)),
+                SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, SurfaceRules.ifTrue(conditionSource9, ifTrue))
+        );
     }
 
     private static SurfaceRules.ConditionSource surfaceNoiseThreshold(double min) {

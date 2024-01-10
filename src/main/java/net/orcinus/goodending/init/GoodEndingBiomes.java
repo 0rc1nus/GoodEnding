@@ -79,7 +79,6 @@ public class GoodEndingBiomes {
         BiomeDefaultFeatures.addSwampClayDisk(builder2);
         builder2.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.FLOWER_SWAMP);
         builder2.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.PATCH_GRASS_NORMAL);
-        builder2.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.PATCH_DEAD_BUSH);
         builder2.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.PATCH_WATERLILY);
         builder2.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.BROWN_MUSHROOM_SWAMP);
         builder2.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.RED_MUSHROOM_SWAMP);
@@ -91,8 +90,6 @@ public class GoodEndingBiomes {
         builder2.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, GoodEndingPlacedFeatures.BIG_LILY_PADS_PLACED);
         builder2.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, GoodEndingPlacedFeatures.PATCH_FLOWERING_WATERLILY_PLACED);
         builder2.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, GoodEndingPlacedFeatures.MARSHY_SWAMP_VEGETATION);
-        builder2.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, GoodEndingPlacedFeatures.PATCH_FERN_PLACED);
-        builder2.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, GoodEndingPlacedFeatures.PATCH_LARGE_FERN_PLACED);
         builder2.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, GoodEndingPlacedFeatures.MARSH_SWAMP_TREE_PLACED);
         Music musicSound = Musics.createGameMusic(SoundEvents.MUSIC_BIOME_SWAMP);
         return new Biome.BiomeBuilder()

@@ -60,11 +60,18 @@ public class FireflyLanternBlock extends LanternBlock {
 
     @Override
     public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
+        int step = random.nextBoolean() ? -1 : 1;
         boolean flag = state.getValue(OPEN) && (!world.canSeeSky(pos) || world.getDayTime() >= 13000 && world.getDayTime() < 24000);
         if (flag) {
+            if (!state.getValue(HANGING)) {
+                world.addParticle(GoodEndingParticleTypes.FIREFLY, pos.getX() + 0.5D, pos.getY() + 0.7F, pos.getZ() + 0.5D, 0.1F * random.nextFloat() * step, random.nextFloat() / random.nextInt(2, 10), 0.1F * random.nextFloat() * step);
+            }
             this.addExteriorFireflies(state, world, pos, random);
         } else {
             this.addInteriorFireflies(state, world, pos, random);
+        }
+        if (random.nextDouble() < 0.1D) {
+            world.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), GoodEndingSoundEvents.ENTITY_FIREFLY_SWARM_IDLE, SoundSource.BLOCKS, 1.0F, 1.0F, false);
         }
     }
 

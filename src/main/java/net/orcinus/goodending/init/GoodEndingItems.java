@@ -93,23 +93,23 @@ public class GoodEndingItems {
     }
 
     static {
-        CompostingChanceRegistry.INSTANCE.add(GoodEndingBlocks.CYPRESS_LEAVES, 0.3F);
-        CompostingChanceRegistry.INSTANCE.add(GoodEndingBlocks.DUCKWEED, 0.5F);
-        CompostingChanceRegistry.INSTANCE.add(GoodEndingBlocks.CATTAIL, 0.3F);
-        CompostingChanceRegistry.INSTANCE.add(GoodEndingBlocks.CYPRESS_SAPLING, 0.3F);
-        CompostingChanceRegistry.INSTANCE.add(GoodEndingBlocks.PASTEL_WILDFLOWERS, 0.65F);
-        CompostingChanceRegistry.INSTANCE.add(GoodEndingBlocks.TWILIGHT_WILDFLOWERS, 0.65F);
-        CompostingChanceRegistry.INSTANCE.add(GoodEndingBlocks.SPICY_WILDFLOWERS, 0.65F);
-        CompostingChanceRegistry.INSTANCE.add(GoodEndingBlocks.BALMY_WILDFLOWERS, 0.65F);
-        CompostingChanceRegistry.INSTANCE.add(GoodEndingBlocks.BIRCH_MUSHROOM, 0.65F);
-        CompostingChanceRegistry.INSTANCE.add(GoodEndingBlocks.PURPLE_FLOWERING_LILY_PAD, 0.65F);
-        CompostingChanceRegistry.INSTANCE.add(GoodEndingBlocks.PINK_FLOWERING_LILY_PAD, 0.65F);
-        CompostingChanceRegistry.INSTANCE.add(GoodEndingBlocks.YELLOW_FLOWERING_LILY_PAD, 0.65F);
-        CompostingChanceRegistry.INSTANCE.add(GoodEndingBlocks.LARGE_LILY_PAD, 0.65F);
-        CompostingChanceRegistry.INSTANCE.add(GoodEndingBlocks.DENSE_BIRCH_LEAVES, 0.3F);
-        CompostingChanceRegistry.INSTANCE.add(GoodEndingBlocks.DENSE_DARK_OAK_LEAVES, 0.3F);
-        CompostingChanceRegistry.INSTANCE.add(GoodEndingBlocks.HANGING_OAK_LEAVES, 0.3F);
-        CompostingChanceRegistry.INSTANCE.add(GoodEndingBlocks.HANGING_DARK_OAK_LEAVES, 0.65F);
-        CompostingChanceRegistry.INSTANCE.add(GoodEndingBlocks.POLLENFLAKE, 0.65F);
+        CompostingChanceRegistry.INSTANCE.add(GoodEndingItems.CYPRESS_LEAVES, 0.3F);
+        CompostingChanceRegistry.INSTANCE.add(GoodEndingItems.DUCKWEED, 0.5F);
+        CompostingChanceRegistry.INSTANCE.add(GoodEndingItems.CATTAIL, 0.3F);
+        CompostingChanceRegistry.INSTANCE.add(GoodEndingItems.CYPRESS_SAPLING, 0.3F);
+        CompostingChanceRegistry.INSTANCE.add(GoodEndingItems.PASTEL_WILDFLOWERS, 0.65F);
+        CompostingChanceRegistry.INSTANCE.add(GoodEndingItems.TWILIGHT_WILDFLOWERS, 0.65F);
+        CompostingChanceRegistry.INSTANCE.add(GoodEndingItems.SPICY_WILDFLOWERS, 0.65F);
+        CompostingChanceRegistry.INSTANCE.add(GoodEndingItems.BALMY_WILDFLOWERS, 0.65F);
+        CompostingChanceRegistry.INSTANCE.add(GoodEndingItems.BIRCH_MUSHROOM, 0.65F);
+        CompostingChanceRegistry.INSTANCE.add(GoodEndingItems.PURPLE_FLOWERING_LILY_PAD, 0.65F);
+        CompostingChanceRegistry.INSTANCE.add(GoodEndingItems.PINK_FLOWERING_LILY_PAD, 0.65F);
+        CompostingChanceRegistry.INSTANCE.add(GoodEndingItems.YELLOW_FLOWERING_LILY_PAD, 0.65F);
+        CompostingChanceRegistry.INSTANCE.add(GoodEndingItems.LARGE_LILY_PAD, 0.65F);
+        CompostingChanceRegistry.INSTANCE.add(GoodEndingItems.DENSE_BIRCH_LEAVES, 0.3F);
+        CompostingChanceRegistry.INSTANCE.add(GoodEndingItems.DENSE_DARK_OAK_LEAVES, 0.3F);
+        CompostingChanceRegistry.INSTANCE.add(GoodEndingItems.HANGING_OAK_LEAVES, 0.3F);
+        CompostingChanceRegistry.INSTANCE.add(GoodEndingItems.HANGING_DARK_OAK_LEAVES, 0.65F);
+        CompostingChanceRegistry.INSTANCE.add(GoodEndingItems.POLLENFLAKE, 0.65F);
     }
 }

@@ -83,7 +83,6 @@
       "minecraft:glow_lichen",
       "minecraft:flower_swamp",
       "minecraft:patch_grass_normal",
-      "minecraft:patch_dead_bush",
       "minecraft:patch_waterlily",
       "minecraft:brown_mushroom_swamp",
       "minecraft:red_mushroom_swamp",
@@ -95,8 +94,6 @@
       "goodending:big_lily_pads_placed",
       "goodending:patch_flowering_waterlily",
       "goodending:marshy_swamp_vegetation",
-      "goodending:patch_fern_placed",
-      "goodending:patch_large_fern_placed",
       "goodending:marsh_swamp_tree"
     ],
     [
